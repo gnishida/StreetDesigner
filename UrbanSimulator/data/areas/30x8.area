@@ -1,0 +1,10 @@
+<areas roads="30x8.area.gsm">
+    <area>
+        <point x="-5800" y="3200"/>
+        <point x="200" y="3200"/>
+        <point x="200" y="1600"/>
+        <point x="-5800" y="1600"/>
+        <point x="-5800" y="1600"/>
+        <point x="-5800" y="3200"/>
+    </area>
+</areas>

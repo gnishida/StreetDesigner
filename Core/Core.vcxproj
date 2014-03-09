@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BBox.cpp" />
+    <ClCompile Include="Block.cpp" />
+    <ClCompile Include="BlockRenderer.cpp" />
+    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="BuildingFactory.cpp" />
+    <ClCompile Include="BuildingRenderer.cpp" />
+    <ClCompile Include="camera_3d.cpp" />
+    <ClCompile Include="ColorTable.cpp" />
+    <ClCompile Include="ElevationColorTable.cpp" />
+    <ClCompile Include="GeometryObject.cpp" />
+    <ClCompile Include="global.cpp" />
+    <ClCompile Include="HeatMapColorTable.cpp" />
+    <ClCompile Include="InfoLayer.cpp" />
+    <ClCompile Include="InfoLayerManager.cpp" />
+    <ClCompile Include="InfoLayerRenderer.cpp" />
+    <ClCompile Include="Noncopyable.cpp" />
+    <ClCompile Include="ParcelRenderer.cpp" />
+    <ClCompile Include="RenderableCircle.cpp" />
+    <ClCompile Include="RenderableConcave.cpp" />
+    <ClCompile Include="RenderableCylinder.cpp" />
+    <ClCompile Include="RenderableQuad.cpp" />
+    <ClCompile Include="RenderableQuadList.cpp" />
+    <ClCompile Include="RenderableTriangle.cpp" />
+    <ClCompile Include="RenderableTriangleList.cpp" />
+    <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Parcel.cpp" />
+    <ClCompile Include="Polygon3D.cpp" />
+    <ClCompile Include="Renderable.cpp" />
+    <ClCompile Include="SimpleBuilding.cpp" />
+    <ClCompile Include="SimpleBuildingFactory.cpp" />
+    <ClCompile Include="SimpleBuildingRenderer.cpp" />
+    <ClCompile Include="SimpleFlatTerrain.cpp" />
+    <ClCompile Include="SimpleSkyBox.cpp" />
+    <ClCompile Include="SkyBox.cpp" />
+    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="SimpleFlatTerrainRenderer.cpp" />
+    <ClCompile Include="TerrainRenderer.cpp" />
+    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="WaterRenderer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BBox.h" />
+    <ClInclude Include="Block.h" />
+    <ClInclude Include="BlockRenderer.h" />
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="BuildingFactory.h" />
+    <ClInclude Include="BuildingRenderer.h" />
+    <ClInclude Include="camera_3d.h" />
+    <ClInclude Include="ColorTable.h" />
+    <ClInclude Include="ElevationColorTable.h" />
+    <ClInclude Include="GeometryObject.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="HeatMapColorTable.h" />
+    <ClInclude Include="InfoLayer.h" />
+    <ClInclude Include="InfoLayerManager.h" />
+    <ClInclude Include="InfoLayerRenderer.h" />
+    <ClInclude Include="Noncopyable.h" />
+    <ClInclude Include="ParcelRenderer.h" />
+    <ClInclude Include="RenderableCircle.h" />
+    <ClInclude Include="RenderableConcave.h" />
+    <ClInclude Include="RenderableCylinder.h" />
+    <ClInclude Include="RenderableQuad.h" />
+    <ClInclude Include="RenderableQuadList.h" />
+    <ClInclude Include="RenderableTriangle.h" />
+    <ClInclude Include="RenderableTriangleList.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Parcel.h" />
+    <ClInclude Include="Polygon3D.h" />
+    <ClInclude Include="Renderable.h" />
+    <ClInclude Include="SimpleBuilding.h" />
+    <ClInclude Include="SimpleBuildingFactory.h" />
+    <ClInclude Include="SimpleBuildingRenderer.h" />
+    <ClInclude Include="SimpleFlatTerrain.h" />
+    <ClInclude Include="SimpleSkyBox.h" />
+    <ClInclude Include="SkyBox.h" />
+    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="SimpleFlatTerrainRenderer.h" />
+    <ClInclude Include="TerrainRenderer.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="WaterRenderer.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0E268364-6BAB-4539-9E8F-F161463DAC78}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>UrbanCore</RootNamespace>
+    <ProjectName>Core</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_OPENGL_LIB;URBANMAIN_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_ROOT);.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BOOST_ROOT);.;$(QTDIR)\include;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtOpenGL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

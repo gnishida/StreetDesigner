@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{4bcc35a7-7cc3-4275-af98-d9ffafcb5182}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{9d6806d0-b38c-4246-86e6-ee849d4303a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generated Files\Releaes">
+      <UniqueIdentifier>{e1fc176f-421f-45ac-95f0-9fdcdea7191b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BBox.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingFactory.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="camera_3d.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Parcel.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon3D.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderable.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleBuilding.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleFlatTerrain.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyBox.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleBuildingRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleFlatTerrainRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlockRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParcelRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildingRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleBuildingFactory.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleSkyBox.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorTable.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ElevationColorTable.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HeatMapColorTable.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Noncopyable.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryObject.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableQuad.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableQuadList.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableConcave.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableTriangleList.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableTriangle.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableCylinder.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderableCircle.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="global.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoLayer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoLayerManager.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InfoLayerRenderer.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BBox.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingFactory.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="camera_3d.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Parcel.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon3D.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderable.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleBuilding.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleFlatTerrain.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SkyBox.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleBuildingRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleFlatTerrainRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParcelRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleBuildingFactory.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleSkyBox.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorTable.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ElevationColorTable.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeatMapColorTable.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryObject.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableQuad.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableQuadList.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableConcave.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableTriangleList.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableCylinder.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableTriangle.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderableCircle.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoLayer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoLayerManager.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InfoLayerRenderer.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
