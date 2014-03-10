@@ -276,7 +276,7 @@ void RoadGraph::adaptToTerrain(MyTerrain* terrain) {
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
 		float z = terrain->getValue(graph[*vi]->pt.x(), graph[*vi]->pt.y());
-		graph[*vi]->pt3D = QVector3D(graph[*vi]->pt.x(), graph[*vi]->pt.y(), z + 1);
+		graph[*vi]->pt3D = QVector3D(graph[*vi]->pt.x(), graph[*vi]->pt.y(), z + 10);
 	}
 
 	RoadEdgeIter ei, eend;
@@ -285,7 +285,7 @@ void RoadGraph::adaptToTerrain(MyTerrain* terrain) {
 
 		for (int i = 0; i < graph[*ei]->polyline.size(); ++i) {
 			float z = terrain->getValue(graph[*ei]->polyline[i].x(), graph[*ei]->polyline[i].y());
-			graph[*ei]->polyline3D.push_back(QVector3D(graph[*ei]->polyline[i].x(), graph[*ei]->polyline[i].y(), z + 1));
+			graph[*ei]->polyline3D.push_back(QVector3D(graph[*ei]->polyline[i].x(), graph[*ei]->polyline[i].y(), z + 10));
 		}
 	}
 
