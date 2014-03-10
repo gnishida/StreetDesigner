@@ -85,6 +85,9 @@ void MyUrbanGeometry::generateRoads(RoadFeature &rf) {
 	KDERoadGenerator::generateRoadNetwork(areas.selectedArea().roads, areas.selectedArea().area, dynamic_cast<KDEFeature&>(*rf.features[0]));
 
 	areas.selectedArea().roads.adaptToTerrain(terrain);
+
+	// temporary
+	GraphUtil::mergeRoads(roads, areas.selectedArea().roads);
 }
 
 /**
@@ -109,7 +112,7 @@ void MyUrbanGeometry::render(ucore::TextureManager* textureManager) {
 
 	roadGraphRenderer.render(&roads, textureManager);
 
-	// draw the building area
+	// draw the area which is now being defined
 	if (areaBuilder.selecting()) {
 		areaBuilder.adaptToTerrain(terrain);
 		renderer.renderPolyline(areaBuilder.polyline3D(), QColor(0, 0, 255), GL_LINE_STIPPLE);
@@ -117,7 +120,7 @@ void MyUrbanGeometry::render(ucore::TextureManager* textureManager) {
 
 	// draw the areas
 	for (int i = 0; i < areas.size(); ++i) {
-		areas[i].adaptToTerrain(terrain);
+		//areas[i].adaptToTerrain(terrain);
 		if (i == areas.selectedIndex) {
 			renderer.renderPolyline(areas[i].area3D, QColor(0, 0, 255), GL_LINE_STIPPLE);
 		} else {
@@ -235,8 +238,22 @@ void MyUrbanGeometry::loadRoads(const QString &filename) {
 	roads.adaptToTerrain(terrain);
 }
 
+void MyUrbanGeometry::saveRoads(const QString &filename) {
+	QFile file(filename);
+	if (!file.open(QIODevice::ReadOnly)) {
+		std::cerr << "MyUrbanGeometry::loadInfoLayers... The file is not accessible: " << filename.toUtf8().constData() << endl;
+		throw "The file is not accessible: " + filename;
+	}
+
+	GraphUtil::saveRoads(roads, filename);
+}
+
 void MyUrbanGeometry::loadAreas(const QString &filename) {
 	areas.load(filename);
+}
+
+void MyUrbanGeometry::saveAreas(const QString &filename) {
+	areas.save(filename);
 }
 
 void MyUrbanGeometry::renderBlock(ucore::Block* block, ucore::TextureManager* textureManager) {

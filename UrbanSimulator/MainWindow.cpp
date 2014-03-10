@@ -1,4 +1,4 @@
-//#include <road/GraphUtil.h>
+#include <road/GraphUtil.h>
 #include "MainWindow.h"
 
 
@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	// setup the docking widgets
 	controlWidget = new ControlWidget(this);
-	//propertyWidget = new PropertyWidget(this);
+	propertyWidget = new PropertyWidget(this);
 
 	// setup the toolbar
 	ui.fileToolBar->addAction(ui.actionNewTerrain);
@@ -36,15 +36,15 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionAreaSelect, SIGNAL(triggered()), this, SLOT(onAreaSelect()));
 	*/
 	connect(ui.actionAreaCreate, SIGNAL(triggered()), this, SLOT(onAreaCreate()));
-	/*
 	connect(ui.actionHighwaySketch, SIGNAL(triggered()), this, SLOT(onHighwaySketch()));
+	/*
 	connect(ui.actionBoulevardSketch, SIGNAL(triggered()), this, SLOT(onBoulevardSketch()));
 	connect(ui.action3DView, SIGNAL(triggered()), this, SLOT(on3DView()));
 	connect(ui.actionTerrain, SIGNAL(triggered()), this, SLOT(onTerrain()));
 	connect(ui.actionDebug, SIGNAL(triggered()), this, SLOT(onDebug()));
 	*/
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
-	//connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
+	connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
 
 	// setup the GL widget
 	glWidget = new GLWidget3D(this);
@@ -76,7 +76,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* e) {
 }
 
 void MainWindow::onNewTerrain() {
-	urbanGeometry->newTerrain(15000, 15000, 500);
+	urbanGeometry->newTerrain(6000, 6000, 100);
 
 	glWidget->updateGL();
 }
@@ -124,14 +124,9 @@ void MainWindow::onSaveRoads() {
 	}
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
-	RoadGraph roads;
-	/*
-	GraphUtil::mergeRoads(roads, glWidget->areas.roads);
-	for (int i = 0; i < glWidget->areas.size(); ++i) {
-		GraphUtil::mergeRoads(roads, glWidget->areas[i].roads);
-	}
-	GraphUtil::saveRoads(roads, filename);
-	*/
+
+	urbanGeometry->saveRoads(filename);
+
 	QApplication::restoreOverrideCursor();
 }
 
@@ -156,18 +151,12 @@ void MainWindow::onSaveAreas() {
 	}
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
-	RoadGraph roads;
-	/*
-	GraphUtil::mergeRoads(roads, glWidget->areas.roads);
-	for (int i = 0; i < glWidget->areas.size(); ++i) {
-		GraphUtil::mergeRoads(roads, glWidget->areas[i].roads);
-	}
-	GraphUtil::saveRoads(roads, filename);
-	*/
+
+	urbanGeometry->saveAreas(filename);
+
 	QApplication::restoreOverrideCursor();
 }
 
-/*
 void MainWindow::onAreaMenu() {
 	ui.actionAreaSelect->setChecked(mode == MODE_AREA_SELECT);
 	ui.actionAreaCreate->setChecked(mode == MODE_AREA_CREATE);
@@ -187,7 +176,6 @@ void MainWindow::onAreaSelect() {
 	ui.actionTerrain->setChecked(false);
 	ui.actionDebug->setChecked(false);
 }
-*/
 
 void MainWindow::onAreaCreate() {
 	mode = MODE_AREA_CREATE;
@@ -199,7 +187,6 @@ void MainWindow::onAreaCreate() {
 	ui.actionDebug->setChecked(false);
 }
 
-/*
 void MainWindow::onHighwaySketch() {
 	mode = MODE_HIGHWAY_SKETCH;
 	ui.actionAreaCreate->setChecked(false);
@@ -210,6 +197,7 @@ void MainWindow::onHighwaySketch() {
 	ui.actionDebug->setChecked(false);
 }
 
+/*
 void MainWindow::onBoulevardSketch() {
 	mode = MODE_BOULEVARD_SKETCH;
 	ui.actionAreaCreate->setChecked(false);
@@ -256,10 +244,8 @@ void MainWindow::onShowControlWidget() {
 	addDockWidget(Qt::LeftDockWidgetArea, controlWidget);
 }
 
-/*
 void MainWindow::onShowPropertyWidget() {
 	propertyWidget->show();
 	addDockWidget(Qt::RightDockWidgetArea, propertyWidget);
 }
-*/
 

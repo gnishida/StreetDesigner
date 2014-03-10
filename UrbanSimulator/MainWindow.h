@@ -3,7 +3,7 @@
 #include <QtGui/QMainWindow>
 #include "ui_MainWindow.h"
 #include "ControlWidget.h"
-//#include "PropertyWidget.h"
+#include "PropertyWidget.h"
 #include "GLWidget3D.h"
 #include "MyUrbanGeometry.h"
 #include <QToolBar>
@@ -19,7 +19,7 @@ public:
 public:
 	Ui::MainWindow ui;
 	ControlWidget* controlWidget;
-	//PropertyWidget* propertyWidget;
+	PropertyWidget* propertyWidget;
 	GLWidget3D* glWidget;
 	MyUrbanGeometry* urbanGeometry;
 
@@ -41,19 +41,17 @@ public slots:
 	void onSaveRoads();
 	void onLoadAreas();
 	void onSaveAreas();
-	/*
 	void onAreaMenu();
 	void onAreaSelect();
-	*/
 	void onAreaCreate();
-	/*
 	void onHighwaySketch();
+	/*
 	void onBoulevardSketch();
 	void on3DView();
 	void onTerrain();
 	void onDebug();
 	*/
 	void onShowControlWidget();
-	//void onShowPropertyWidget();
+	void onShowPropertyWidget();
 };
 

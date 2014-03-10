@@ -169,6 +169,15 @@
     <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp">
       <Filter>mylib\road\generator</Filter>
     </ClCompile>
+    <ClCompile Include="PropertyWidget.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PropertyWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PropertyWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -184,6 +193,12 @@
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ControlWidget.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PropertyWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PropertyWidget.h">
       <Filter>Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -292,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h">
       <Filter>mylib\road\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_PropertyWidget.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

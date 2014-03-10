@@ -26,7 +26,7 @@ This file is part of QtUrban.
 GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuffers), (QWidget*)mainWin) {
 	this->mainWin = mainWin;
 
-	spaceRadius=32000.0;
+	spaceRadius=30000.0;
 	farPlaneToSpaceRadiusFactor=5.0f;//N 5.0f
 
 	rotationSensitivity = 0.4f;
@@ -38,7 +38,7 @@ GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuf
 	keyMPressed=false;
 
 	myCam.setRotation(0, 0, 0);
-	myCam.setTranslation(0, 0, 18000);
+	myCam.setTranslation(0, 0, 8000);
 }
 
 GLWidget3D::~GLWidget3D() {
@@ -133,32 +133,33 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *event) {
 	float dy = (float)(event->y() - lastPos.y());
 	float camElevation = myCam.getCamElevation();
 
-	if (altPressed) {	// editing
-		float change = 5;
-		if (event->buttons() & Qt::RightButton) {
-			change = -change;
-		}
-		mainWin->urbanGeometry->terrain->addValue(pos.x(), pos.y(), change);
-		//mainWin->urbanGeometry->adaptToTerrain();
-	} else if (event->buttons() & Qt::LeftButton) {	// Rotate
-		changeXRotation(rotationSensitivity * dy);
-		changeZRotation(-rotationSensitivity * dx);    
-		lastPos = event->pos();
-	} else if (event->buttons() & Qt::MidButton) {
-		changeXYZTranslation(-dx, dy, 0);
-		lastPos = event->pos();
-	} else if (event->buttons() & Qt::RightButton) {	// Zoom
-		changeXYZTranslation(0, 0, -zoomSensitivity * dy);
-		lastPos = event->pos();
-	} else {
-		switch (mainWin->mode) {
-		case MainWindow::MODE_AREA_CREATE:
-			if (mainWin->urbanGeometry->areaBuilder.selecting()) {	// Move the last point of the selected polygonal area
-				mainWin->urbanGeometry->areaBuilder.moveLastPoint(pos);
+	switch (mainWin->mode) {
+	case MainWindow::MODE_AREA_SELECT:
+		if (altPressed) {	// editing
+			float change = 5;
+			if (event->buttons() & Qt::RightButton) {
+				change = -change;
 			}
-
-			break;
+			mainWin->urbanGeometry->terrain->addValue(pos.x(), pos.y(), change);
+			//mainWin->urbanGeometry->adaptToTerrain();
+		} else if (event->buttons() & Qt::LeftButton) {	// Rotate
+			changeXRotation(rotationSensitivity * dy);
+			changeZRotation(-rotationSensitivity * dx);    
+			lastPos = event->pos();
+		} else if (event->buttons() & Qt::MidButton) {
+			changeXYZTranslation(-dx, dy, 0);
+			lastPos = event->pos();
+		} else if (event->buttons() & Qt::RightButton) {	// Zoom
+			changeXYZTranslation(0, 0, -zoomSensitivity * dy);
+			lastPos = event->pos();
 		}
+		break;
+	case MainWindow::MODE_AREA_CREATE:
+		if (mainWin->urbanGeometry->areaBuilder.selecting()) {	// Move the last point of the selected polygonal area
+			mainWin->urbanGeometry->areaBuilder.moveLastPoint(pos);
+		}
+
+		break;
 	}
 
 	updateGL();
@@ -172,7 +173,8 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 		mainWin->urbanGeometry->areaBuilder.end();
 		mainWin->urbanGeometry->areas.add(RoadArea(mainWin->urbanGeometry->areaBuilder.polygon()));
 		mainWin->urbanGeometry->areas.selectLastArea();
-		mainWin->urbanGeometry->areas.selectedArea().roads.setZ(myCam.dz);
+		mainWin->urbanGeometry->areas.selectedArea().adaptToTerrain(mainWin->urbanGeometry->terrain);
+		//mainWin->urbanGeometry->areas.selectedArea().roads.setZ(myCam.dz);
 
 		mainWin->mode = MainWindow::MODE_AREA_SELECT;
 		mainWin->ui.actionAreaSelect->setChecked(true);
@@ -264,7 +266,6 @@ void GLWidget3D::paintGL() {
 }
 
 void GLWidget3D::drawScene() {
-	printf("drawScene()...\n");
 	static GLfloat lightPosition[4] = { 10.0f, 100.0f, 100.0f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
@@ -273,15 +274,11 @@ void GLWidget3D::drawScene() {
 	//Sky
 	skyBox->render(&myCam, textureManager);
 
-	// define the height for other items
-	float height = 500.0f;//(float)((int)(myCam.dz * 0.012f)) * 0.15f;
-
 	//disable depth buffer 
 	glDepthFunc(GL_ALWAYS);
 	glDisable(GL_TEXTURE_2D);
 
 	glFlush();
-	printf("...drawScene()\n");
 }	
 
 void GLWidget3D::keyPressEvent( QKeyEvent *e ){

@@ -117,7 +117,10 @@ public:
 	void saveTerrain(const QString &filename);
 
 	void loadRoads(const QString &filename);
+	void saveRoads(const QString &filename);
+
 	void loadAreas(const QString &filename);
+	void saveAreas(const QString &filename);
 
 private:
 	void renderBlock(ucore::Block* block, ucore::TextureManager* textureManager);
