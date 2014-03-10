@@ -107,7 +107,7 @@ void ControlWidget::generateKDE() {
 	}
 
 	if (areaScaling) {
-		rf.scale(mainWin->urbanGeometry->areas.selectedArea().area);
+		rf.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
 	}
 
 
@@ -120,7 +120,7 @@ void ControlWidget::generateKDE() {
 
 void ControlWidget::clear() {
 	if (mainWin->urbanGeometry->areas.selectedIndex >= 0) {
-		mainWin->urbanGeometry->areas.selectedArea().roads.clear();
+		mainWin->urbanGeometry->areas.selectedArea()->roads.clear();
 	}
 
 	mainWin->glWidget->updateGL();

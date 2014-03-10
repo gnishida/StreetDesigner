@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/shared_ptr.hpp>
 #include "../common/Polygon2D.h"
 #include "../common/Polyline3D.h"
 #include "RoadGraph.h"
@@ -22,3 +23,4 @@ public:
 	void adaptToTerrain(MyTerrain* terrain);
 };
 
+typedef boost::shared_ptr<RoadArea> RoadAreaPtr;

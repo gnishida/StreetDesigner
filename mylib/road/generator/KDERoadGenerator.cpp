@@ -793,10 +793,10 @@ bool KDERoadGenerator::growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc,
 void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, float dist_threshold, float angle_threshold) {
 	for (int i = 0; i < areas.size(); ++i) {
 		RoadVertexIter vi, vend;
-		for (boost::tie(vi, vend) = vertices(areas.areas[i].roads.graph); vi != vend; ++vi) {
-			if (!areas.areas[i].roads.graph[*vi]->valid) continue;
+		for (boost::tie(vi, vend) = vertices(areas.areas[i]->roads.graph); vi != vend; ++vi) {
+			if (!areas.areas[i]->roads.graph[*vi]->valid) continue;
 
-			if (!areas.areas[i].roads.graph[*vi]->onBoundary) continue;
+			if (!areas.areas[i]->roads.graph[*vi]->onBoundary) continue;
 
 			connectRoads2(areas, i, *vi, dist_threshold, angle_threshold);
 		}
@@ -831,18 +831,18 @@ void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, int area_id, RoadVertex
 	// v_descの、もう一端の頂点を取得
 	RoadVertexDesc v2_desc;
 	RoadOutEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = out_edges(v_desc, areas.areas[area_id].roads.graph); ei != eend; ++ei) {
-		if (!areas.areas[area_id].roads.graph[*ei]->valid) continue;
+	for (boost::tie(ei, eend) = out_edges(v_desc, areas.areas[area_id]->roads.graph); ei != eend; ++ei) {
+		if (!areas.areas[area_id]->roads.graph[*ei]->valid) continue;
 
-		v2_desc = boost::target(*ei, areas.areas[area_id].roads.graph);
+		v2_desc = boost::target(*ei, areas.areas[area_id]->roads.graph);
 	}
 
 	for (int i = 0; i < areas.size(); ++i) {
 		if (i == area_id) continue;
 
 		RoadVertexIter vi, vend;
-		for (boost::tie(vi, vend) = vertices(areas.areas[i].roads.graph); vi != vend; ++vi) {
-			if (!areas.areas[i].roads.graph[*vi]->valid) continue;
+		for (boost::tie(vi, vend) = vertices(areas.areas[i]->roads.graph); vi != vend; ++vi) {
+			if (!areas.areas[i]->roads.graph[*vi]->valid) continue;
 
 			//if (!roads.graph[*vi]->onBoundary) continue;
 
@@ -855,7 +855,7 @@ void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, int area_id, RoadVertex
 			}
 			*/
 
-			float dist = (areas.areas[i].roads.graph[*vi]->pt - areas.areas[area_id].roads.graph[v_desc]->pt).lengthSquared();
+			float dist = (areas.areas[i]->roads.graph[*vi]->pt - areas.areas[area_id]->roads.graph[v_desc]->pt).lengthSquared();
 			if (dist < min_dist) {
 				min_dist = dist;
 				min_area_id = i;
@@ -867,10 +867,10 @@ void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, int area_id, RoadVertex
 	//if (min_dist > dist_threshold2) return;
 
 	// スナップにより、角度が大幅に変わる場合は、スナップさせない
-	float angle = Util::diffAngle(areas.areas[area_id].roads.graph[v_desc]->pt - areas.areas[area_id].roads.graph[v2_desc]->pt, areas.areas[min_area_id].roads.graph[min_desc]->pt - areas.areas[area_id].roads.graph[v2_desc]->pt);
+	float angle = Util::diffAngle(areas.areas[area_id]->roads.graph[v_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt, areas.areas[min_area_id]->roads.graph[min_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt);
 	if (angle > angle_threshold) return;
 
-	GraphUtil::moveVertex(areas.areas[area_id].roads, v_desc, areas.areas[min_area_id].roads.graph[min_desc]->pt);
-	areas.areas[area_id].roads.graph[v_desc]->onBoundary = false;
-	areas.areas[min_area_id].roads.graph[min_desc]->onBoundary = false;
+	GraphUtil::moveVertex(areas.areas[area_id]->roads, v_desc, areas.areas[min_area_id]->roads.graph[min_desc]->pt);
+	areas.areas[area_id]->roads.graph[v_desc]->onBoundary = false;
+	areas.areas[min_area_id]->roads.graph[min_desc]->onBoundary = false;
 }

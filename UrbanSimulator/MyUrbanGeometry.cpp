@@ -82,12 +82,12 @@ void MyUrbanGeometry::generate() {
 void MyUrbanGeometry::generateRoads(RoadFeature &rf) {
 	if (areas.selectedIndex == -1) return;
 
-	KDERoadGenerator::generateRoadNetwork(areas.selectedArea().roads, areas.selectedArea().area, dynamic_cast<KDEFeature&>(*rf.features[0]));
+	KDERoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
 
-	areas.selectedArea().roads.adaptToTerrain(terrain);
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
 
 	// temporary
-	GraphUtil::mergeRoads(roads, areas.selectedArea().roads);
+	//GraphUtil::mergeRoads(roads, areas.selectedArea()->roads);
 }
 
 /**
@@ -122,13 +122,13 @@ void MyUrbanGeometry::render(ucore::TextureManager* textureManager) {
 	for (int i = 0; i < areas.size(); ++i) {
 		//areas[i].adaptToTerrain(terrain);
 		if (i == areas.selectedIndex) {
-			renderer.renderPolyline(areas[i].area3D, QColor(0, 0, 255), GL_LINE_STIPPLE);
+			renderer.renderPolyline(areas[i]->area3D, QColor(0, 0, 255), GL_LINE_STIPPLE);
 		} else {
-			renderer.renderPolyline(areas[i].area3D, QColor(196, 196, 255), GL_LINE_STIPPLE);
+			renderer.renderPolyline(areas[i]->area3D, QColor(196, 196, 255), GL_LINE_STIPPLE);
 		}
 
 		// draw the road graph
-		roadGraphRenderer.render(&areas[i].roads, textureManager);
+		roadGraphRenderer.render(&areas[i]->roads, textureManager);
 		//areas[i].roads.generateMesh();
 		//renderer.render(areas[i].roads.renderables);
 	}

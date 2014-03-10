@@ -171,10 +171,10 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 	switch (mainWin->mode) {
 	case MainWindow::MODE_AREA_CREATE:
 		mainWin->urbanGeometry->areaBuilder.end();
-		mainWin->urbanGeometry->areas.add(RoadArea(mainWin->urbanGeometry->areaBuilder.polygon()));
+		mainWin->urbanGeometry->areas.add(RoadAreaPtr(new RoadArea(mainWin->urbanGeometry->areaBuilder.polygon())));
 		mainWin->urbanGeometry->areas.selectLastArea();
-		mainWin->urbanGeometry->areas.selectedArea().adaptToTerrain(mainWin->urbanGeometry->terrain);
-		//mainWin->urbanGeometry->areas.selectedArea().roads.setZ(myCam.dz);
+		mainWin->urbanGeometry->areas.selectedArea()->adaptToTerrain(mainWin->urbanGeometry->terrain);
+		//mainWin->urbanGeometry->areas.selectedArea()->roads.setZ(myCam.dz);
 
 		mainWin->mode = MainWindow::MODE_AREA_SELECT;
 		mainWin->ui.actionAreaSelect->setChecked(true);
@@ -184,13 +184,6 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 }
 
 void GLWidget3D::initializeGL() {
-	/*
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-	}
-	*/
-
 	qglClearColor(QColor(113, 112, 117));
 	glClearDepth(1.0f);
 

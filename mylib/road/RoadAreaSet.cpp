@@ -8,11 +8,11 @@ const size_t RoadAreaSet::size() const {
 	return areas.size();
 }
 
-RoadArea& RoadAreaSet::operator[](int index) {
+RoadAreaPtr RoadAreaSet::operator[](int index) {
 	return areas[index];
 }
 
-void RoadAreaSet::add(const RoadArea &area) {
+void RoadAreaSet::add(RoadAreaPtr area) {
 	areas.push_back(area);
 }
 
@@ -27,7 +27,7 @@ void RoadAreaSet::remove(int index) {
 
 bool RoadAreaSet::contains(const QVector2D &pt) const {
 	for (int i = 0; i < areas.size(); ++i) {
-		if (areas[i].area.contains(pt)) return true;
+		if (areas[i]->area.contains(pt)) return true;
 	}
 
 	return false;
@@ -50,7 +50,7 @@ Polygon2D RoadAreaSet::unionArea() const {
 		output.clear();
 		
 		//Polygon2D temp;
-		boost::geometry::model::polygon<boost::geometry::model::d2::point_xy<double> > b = areas[i].area.convertToBoostPolygon();
+		boost::geometry::model::polygon<boost::geometry::model::d2::point_xy<double> > b = areas[i]->area.convertToBoostPolygon();
 		boost::geometry::union_(temp, b, output);
 	}
 
@@ -64,7 +64,7 @@ Polygon2D RoadAreaSet::unionArea() const {
 void RoadAreaSet::selectArea(const QVector2D &pt) {
 	selectedIndex = -1;
 	for (int i = 0; i < areas.size(); ++i) {
-		if (areas[i].area.contains(pt)) {
+		if (areas[i]->area.contains(pt)) {
 			selectedIndex = i;
 			break;
 		}
@@ -75,14 +75,14 @@ void RoadAreaSet::selectLastArea() {
 	selectedIndex = areas.size() - 1;
 }
 
-RoadArea& RoadAreaSet::selectedArea() {
+RoadAreaPtr RoadAreaSet::selectedArea() {
 	return areas[selectedIndex];
 }
 
 void RoadAreaSet::setZ(float z) {
 	roads.setZ(z);
 	for (int i = 0; i < areas.size(); ++i) {
-		areas[i].roads.setZ(z);
+		areas[i]->roads.setZ(z);
 	}
 }
 
@@ -94,8 +94,8 @@ void RoadAreaSet::addRoads(int roadType, int lanes, bool oneWay, const Polyline2
 
 void RoadAreaSet::mergeRoads() {
 	for (int i = 0; i < areas.size(); ++i) {
-		GraphUtil::mergeRoads(roads, areas[i].roads);
-		areas[i].roads.clear();
+		GraphUtil::mergeRoads(roads, areas[i]->roads);
+		areas[i]->roads.clear();
 	}
 }
 
@@ -124,8 +124,8 @@ void RoadAreaSet::load(QString filename) {
 	QDomNode node = root.firstChild();
 	while (!node.isNull()) {
 		if (node.toElement().tagName() == "area") {
-			RoadArea area;
-			area.load(node);
+			RoadAreaPtr area = RoadAreaPtr(new RoadArea());
+			area->load(node);
 			areas.push_back(area);
 		}
 
@@ -153,7 +153,7 @@ void RoadAreaSet::save(QString filepath) {
 	doc.appendChild(root);
 
 	for (int i = 0; i < areas.size(); ++i) {
-		areas[i].save(doc, root);
+		areas[i]->save(doc, root);
 	}
 
 	// write the dom to the file

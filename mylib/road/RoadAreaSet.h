@@ -5,7 +5,7 @@
 class RoadAreaSet {
 public:
 	RoadGraph roads;
-	std::vector<RoadArea> areas;
+	std::vector<RoadAreaPtr> areas;
 	int selectedIndex;
 
 public:
@@ -13,8 +13,8 @@ public:
 	~RoadAreaSet() {}
 
 	const size_t size() const;
-	RoadArea& operator[](int index);
-	void add(const RoadArea &area);
+	RoadAreaPtr operator[](int index);
+	void add(RoadAreaPtr area);
 	void clear();
 	void remove(int index);
 	bool contains(const QVector2D &pt) const;
@@ -22,7 +22,7 @@ public:
 
 	void selectArea(const QVector2D &pt);
 	void selectLastArea();
-	RoadArea& selectedArea();
+	RoadAreaPtr selectedArea();
 
 	void setZ(float z);
 
