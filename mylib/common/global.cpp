@@ -10,6 +10,8 @@
 
 #include "global.h"
 
+namespace ucore {
+
 QHash<QString,QVariant> G::g;
 
 G& G::global(){
@@ -17,5 +19,5 @@ G& G::global(){
 	return instance;
 }
 
-
+} // namespace US
 	

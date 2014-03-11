@@ -19,9 +19,9 @@ This file is part of QtUrban.
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include "../Core/camera_3d.h"
-#include "../Core/TextureManager.h"
-#include "../Core/SkyBox.h"
+#include <render/camera_3d.h>
+#include <render/TextureManager.h>
+#include <render/SimpleSkyBox.h>
 #include <road/RoadAreaSet.h>
 
 
@@ -32,7 +32,7 @@ protected:
 	MainWindow* mainWin;
 	ucore::Camera3D myCam;
 	ucore::TextureManager* textureManager;
-	ucore::SkyBox* skyBox;
+	ucore::SimpleSkyBox* skyBox;
 	bool shiftPressed;
 	bool controlPressed;
 	bool altPressed;

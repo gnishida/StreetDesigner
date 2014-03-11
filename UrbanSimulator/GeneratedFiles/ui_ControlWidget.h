@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Tue Mar 11 10:49:03 2014
+** Created: Tue Mar 11 14:05:11 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -68,7 +68,7 @@ public:
     QRadioButton *radioButtonPolarCoordinate;
     QGroupBox *groupBox_5;
     QPushButton *pushButtonConnect;
-    QPushButton *pushButtonRemoveDeadend;
+    QPushButton *pushButtonMerge;
     QPushButton *pushButtonClear;
     QButtonGroup *buttonGroup;
     QButtonGroup *buttonGroup_2;
@@ -212,10 +212,10 @@ public:
         groupBox_5->setGeometry(QRect(10, 780, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
-        pushButtonConnect->setGeometry(QRect(20, 30, 131, 31));
-        pushButtonRemoveDeadend = new QPushButton(groupBox_5);
-        pushButtonRemoveDeadend->setObjectName(QString::fromUtf8("pushButtonRemoveDeadend"));
-        pushButtonRemoveDeadend->setGeometry(QRect(20, 60, 131, 31));
+        pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
+        pushButtonMerge = new QPushButton(groupBox_5);
+        pushButtonMerge->setObjectName(QString::fromUtf8("pushButtonMerge"));
+        pushButtonMerge->setGeometry(QRect(20, 20, 131, 31));
         pushButtonClear = new QPushButton(dockWidgetContents);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
         pushButtonClear->setGeometry(QRect(30, 730, 131, 31));
@@ -259,7 +259,7 @@ public:
         radioButtonPolarCoordinate->setText(QApplication::translate("ControlWidget", "Polar Coordinates", 0, QApplication::UnicodeUTF8));
         groupBox_5->setTitle(QApplication::translate("ControlWidget", "Finalize", 0, QApplication::UnicodeUTF8));
         pushButtonConnect->setText(QApplication::translate("ControlWidget", "Connect", 0, QApplication::UnicodeUTF8));
-        pushButtonRemoveDeadend->setText(QApplication::translate("ControlWidget", "Remove Deadends", 0, QApplication::UnicodeUTF8));
+        pushButtonMerge->setText(QApplication::translate("ControlWidget", "Merge", 0, QApplication::UnicodeUTF8));
         pushButtonClear->setText(QApplication::translate("ControlWidget", "Clear", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi

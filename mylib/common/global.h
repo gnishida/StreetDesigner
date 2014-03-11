@@ -15,6 +15,8 @@
 #include <Qvariant>
 #include <QVector3D>
 
+namespace ucore {
+
 class G{
 public:
 
@@ -42,3 +44,5 @@ private:
 	G(G const&){};             // copy constructor is private
 	G& operator=(G const&){};  // assignment operator is private
 };
+
+} // namespace US

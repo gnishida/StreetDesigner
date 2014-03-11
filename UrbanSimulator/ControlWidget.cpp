@@ -1,7 +1,7 @@
 ﻿#include "ControlWidget.h"
 #include "MainWindow.h"
 #include "GLWidget3D.h"
-#include "../Core/global.h"
+#include <common/global.h>
 #include <road/GraphUtil.h>
 //#include <road/feature/GridFeature.h>
 //#include <road/feature/RadialFeature.h>
@@ -23,6 +23,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.checkBoxLocalStreets->setChecked(false);
 	ui.checkBoxInvadingCheck->setChecked(false);
 	ui.radioButtonMultiSeeds->setChecked(true);
+	ui.checkBoxConnectAvenues->setChecked(true);
+	ui.checkBoxCropping->setChecked(true);
 	ui.radioButtonCartesianCoordinate->setChecked(true);
 	ui.lineEditWeightEdge->setText("1");
 	ui.lineEditWeightLocation->setText("1");
@@ -39,10 +41,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.pushButtonGenerateKDE, SIGNAL(clicked()), this, SLOT(generateKDE()));
 	connect(ui.pushButtonPerturb, SIGNAL(clicked()), this, SLOT(perturb()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
-	/*
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
-	connect(ui.pushButtonRemoveDeadend, SIGNAL(clicked()), this, SLOT(removeDeadends()));
-	*/
+	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
 
 	hide();
 }
@@ -136,21 +136,20 @@ void ControlWidget::clear() {
 	mainWin->glWidget->updateGL();
 }
 
+void ControlWidget::mergeRoads() {
+	mainWin->urbanGeometry->mergeRoads();
+
+	mainWin->glWidget->updateGL();
+}
+
 /**
  * エリア間の境界上で、エッジができる限りつながるように、微調整する。
  */
-/*
 void ControlWidget::connectRoads() {
-	mainWin->glWidget->areas.mergeRoads();
-	KDERoadGenerator::connectRoads(mainWin->glWidget->areas.roads, mainWin->glWidget->areas, 200.0f, 0.15f);
+	mainWin->urbanGeometry->connectRoads();
 
 	mainWin->glWidget->updateGL();
 }
 
-void ControlWidget::removeDeadends() {
-	GraphUtil::removeDeadEnd(mainWin->glWidget->areas.roads);
 
-	mainWin->glWidget->updateGL();
-}
-*/
 

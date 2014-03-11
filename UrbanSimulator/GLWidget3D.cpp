@@ -15,9 +15,9 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include "GLWidget3D.h"
-#include "../Core/Terrain.h"
-#include "../Core/SimpleSkyBox.h"
-#include "../Core/Util.h"
+#include <common/Util.h>
+#include <render/MyTerrain.h>
+#include <render/SimpleSkyBox.h>
 #include "MainWindow.h"
 #include <gl/GLU.h>
 

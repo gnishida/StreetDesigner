@@ -6,7 +6,6 @@
 #include "../GraphUtil.h"
 #include "KDERoadGenerator.h"
 #include "RoadGeneratorHelper.h"
-#include "../../../Core/global.h"
 
 RoadGraph* roadsPtr;
 Polygon2D face;
@@ -605,7 +604,7 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 				if (ucore::G::g["coordiniates"] == "cartesian") { // カーテシアン座標系の場合
 					location_diff += (pt - kf.items(roadType)[i].pt).length();
 				} else { // 極座標系の場合
-					location_diff += Util::diffAngle(roads.graph[v_desc]->pt - area.envelope().midPt(), kf.items(roadType)[i].pt) * 100.0f;
+					location_diff += ucore::Util::diffAngle(roads.graph[v_desc]->pt - area.envelope().midPt(), kf.items(roadType)[i].pt) * 100.0f;
 				}
 			}
 		}
@@ -628,7 +627,7 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 		for (int i = 0; i < item.edges.size(); ++i) {
 			for (int j = 0; j < item.edges[i].edge.size(); ++j) {
 				float r, theta;
-				Util::cartesian2polar(item.edges[i].edge[j], r, theta);
+				ucore::Util::cartesian2polar(item.edges[i].edge[j], r, theta);
 
 				item.edges[i].edge[j].setX(r * scale * cosf(theta));
 				item.edges[i].edge[j].setY(r * scale * sinf(theta));
@@ -697,7 +696,7 @@ void KDERoadGenerator::connectAvenues(RoadGraph &roads, const Polygon2D &area, c
 /**
  * 境界上の頂点を延長し、近くのエッジにぶつける
  */
-void KDERoadGenerator::connectRoads(RoadGraph &roads, RoadAreaSet &areas, float dist_threshold, float angle_threshold) {
+void KDERoadGenerator::connectRoads(RoadGraph &roads, float dist_threshold, float angle_threshold) {
 	// 境界上の頂点、エッジの組をリストアップする
 	QList<RoadVertexDesc> boundaryNodes;
 	QMap<RoadVertexDesc, RoadEdgeDesc> boundaryEdges;
@@ -867,7 +866,7 @@ void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, int area_id, RoadVertex
 	//if (min_dist > dist_threshold2) return;
 
 	// スナップにより、角度が大幅に変わる場合は、スナップさせない
-	float angle = Util::diffAngle(areas.areas[area_id]->roads.graph[v_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt, areas.areas[min_area_id]->roads.graph[min_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt);
+	float angle = ucore::Util::diffAngle(areas.areas[area_id]->roads.graph[v_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt, areas.areas[min_area_id]->roads.graph[min_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt);
 	if (angle > angle_threshold) return;
 
 	GraphUtil::moveVertex(areas.areas[area_id]->roads, v_desc, areas.areas[min_area_id]->roads.graph[min_desc]->pt);

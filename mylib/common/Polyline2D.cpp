@@ -28,7 +28,7 @@ void Polyline2D::translate(const QVector2D &offset) {
  */
 void Polyline2D::rotate(float angle, const QVector2D &orig) {
 	for (int i = 0; i < size(); ++i) {
-		(*this)[i] = Util::rotate(at(i), -Util::deg2rad(angle), orig);
+		(*this)[i] = ucore::Util::rotate(at(i), -ucore::Util::deg2rad(angle), orig);
 	}
 }
 

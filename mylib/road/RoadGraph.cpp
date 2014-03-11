@@ -1,11 +1,10 @@
 ﻿#include <QGLWidget>
-#include "../common/Util.h"
 #include "GraphUtil.h"
 #include "RoadGraph.h"
-#include "../../Core/RenderableQuadList.h"
-#include "../../Core/TextureManager.h"
-#include "../../Core/Util.h"
-#include "../../UrbanSimulator/MyTerrain.h"
+#include "../common/Util.h"
+#include "../render/MyTerrain.h"
+#include "../render/RenderableQuadList.h"
+#include "../render/TextureManager.h"
 
 RoadGraph::RoadGraph() {
 	showHighways = true;

@@ -15,9 +15,8 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include "MyTerrainRenderer.h"
-#include <common/MyTerrain.h>
-#include <common/Renderable.h>
-#include <common/GeometryObject.h>
+#include "Renderable.h"
+#include "GeometryObject.h"
 #include "MyTerrain.h"
 
 MyTerrainRenderer::MyTerrainRenderer() {

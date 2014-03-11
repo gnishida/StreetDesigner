@@ -15,7 +15,7 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include <QtGui/QApplication>
-#include "../Core/global.h"
+#include <common/global.h>
 #include "MainWindow.h"
 
 int main(int argc, char *argv[]) {

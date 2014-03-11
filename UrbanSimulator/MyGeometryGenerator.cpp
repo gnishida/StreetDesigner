@@ -15,13 +15,10 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include "MyGeometryGenerator.h"
-#include "MyBlockGenerator.h"
-#include "MyParcelGenerator.h"
-#include "MyBuildingGenerator.h"
 #include "MyUrbanGeometry.h"
 #include "MainWindow.h"
 #include <QtTest/qtest.h>
-#include "../Core/global.h"
+#include <common/global.h>
 
 
 

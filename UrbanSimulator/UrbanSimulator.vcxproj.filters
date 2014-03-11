@@ -44,18 +44,15 @@
     <Filter Include="mylib\road\generator">
       <UniqueIdentifier>{30784128-acc4-4d1d-a257-ed6f2a329b0b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mylib\render">
+      <UniqueIdentifier>{495e6131-d679-4400-a137-719b41a50ae6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\util">
+      <UniqueIdentifier>{66b4d64e-4a68-4174-9103-285c0a461fac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTerrain.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTerrainRenderer.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTerrainCell.cpp">
       <Filter>Files</Filter>
     </ClCompile>
     <ClCompile Include="MyGeometryGenerator.cpp">
@@ -65,15 +62,6 @@
       <Filter>Files</Filter>
     </ClCompile>
     <ClCompile Include="MyRoadGraphRenderer.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyBlockGenerator.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyParcelGenerator.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyBuildingGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
@@ -133,12 +121,6 @@
     <ClCompile Include="..\mylib\common\Polyline3D.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\common\Renderer.cpp">
-      <Filter>mylib\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\common\PolygonBuilder.cpp">
-      <Filter>mylib\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp">
       <Filter>mylib\road\feature</Filter>
     </ClCompile>
@@ -178,6 +160,66 @@
     <ClCompile Include="GeneratedFiles\Release\moc_PropertyWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\common\ColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ElevationColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\HeatMapColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\global.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\GeometryObject.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\MyRenderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\MyTerrainRenderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Noncopyable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuad.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuadList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\SimpleSkyBox.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Texture.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TextureManager.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\WaterRenderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\camera_3d.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\MyTerrain.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\MyTerrainCell.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\util\PolygonBuilder.cpp">
+      <Filter>mylib\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -203,15 +245,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyTerrain.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTerrainRenderer.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTerrainCell.h">
-      <Filter>Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyGeometryGenerator.h">
       <Filter>Files</Filter>
     </ClInclude>
@@ -219,15 +252,6 @@
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="MyRoadGraphRenderer.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyBlockGenerator.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyParcelGenerator.h">
-      <Filter>Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyBuildingGenerator.h">
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
@@ -272,12 +296,6 @@
     <ClInclude Include="..\mylib\common\Polyline3D.h">
       <Filter>mylib\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\mylib\common\Renderer.h">
-      <Filter>mylib\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\common\PolygonBuilder.h">
-      <Filter>mylib\common</Filter>
-    </ClInclude>
     <ClInclude Include="..\mylib\road\feature\AbstractFeature.h">
       <Filter>mylib\road\feature</Filter>
     </ClInclude>
@@ -310,6 +328,69 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_PropertyWidget.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ElevationColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\HeatMapColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\global.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\GeometryObject.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\MyRenderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\MyTerrainRenderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Noncopyable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuad.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuadList.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\SimpleSkyBox.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Texture.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TextureManager.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\WaterRenderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\camera_3d.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\MyTerrain.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\MyTerrainCell.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\util\PolygonBuilder.h">
+      <Filter>mylib\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

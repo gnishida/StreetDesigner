@@ -4,6 +4,8 @@
 #include <QVector3D>
 #include <QVector2D>
 
+namespace ucore {
+
 class Util {
 	static const float MTC_FLOAT_TOL;
 
@@ -11,6 +13,10 @@ protected:
 	Util();
 
 public:
+	// 3D
+	static QVector3D calculateNormal(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2);
+
+
 	static float pointSegmentDistanceXY(const QVector3D &a, const QVector3D &b, const QVector3D &c, bool segmentOnly = true);
 	static QVector2D projLatLonToMeter(const QVector2D &latLon, const QVector2D &centerLatLon);
 	static QVector2D projLatLonToMeter(double longitude, double latitude, const QVector2D &centerLatLon);
@@ -35,8 +41,9 @@ public:
 	static void cartesian2polar(const QVector2D &pt, float &radius, float &theta);
 
 	// 乱数関係
-	static float uniform_rand();
-	static float uniform_rand(float a, float b);
+	static float genRand();
+	static float genRand(float a, float b);
+	static float genRandNormal(float mean, float variance);
 
 	// Barycentric interpolation
 	static float barycentricInterpolation(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2, const QVector2D& p);
@@ -45,3 +52,4 @@ public:
 	static QVector2D projectTo2D(const QVector3D &pt);
 };
 
+} // namespace ucore

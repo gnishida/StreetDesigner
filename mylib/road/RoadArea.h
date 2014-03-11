@@ -3,8 +3,8 @@
 #include <boost/shared_ptr.hpp>
 #include "../common/Polygon2D.h"
 #include "../common/Polyline3D.h"
+#include "../render/MyTerrain.h"
 #include "RoadGraph.h"
-#include "../../UrbanSimulator/MyTerrain.h"
 
 class RoadArea {
 public:

@@ -16,9 +16,9 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include "../Core/Renderer.h"
-#include "../Core/TextureManager.h"
-#include "../Core/GeometryObject.h"
+#include <render/Renderer.h>
+#include <render/TextureManager.h>
+#include <render/GeometryObject.h>
 
 class MyRoadGraphRenderer : public ucore::Renderer {
 public:

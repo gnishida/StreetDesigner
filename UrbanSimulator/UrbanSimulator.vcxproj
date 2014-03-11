@@ -86,11 +86,11 @@
       <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;$(QTDIR)\lib;..\opencv\lib;..\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>qtmaind.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;opengl32.lib;glu32.lib;Core_d.lib;ParametricBuilding_d.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;opencv_legacy249d.lib;opencv_photo249d.lib;QtXmld4.lib;QtTestd4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmaind.lib;QtCored4.lib;QtGuid4.lib;QtOpenGLd4.lib;opengl32.lib;glu32.lib;opencv_core249d.lib;opencv_highgui249d.lib;opencv_imgproc249d.lib;opencv_legacy249d.lib;opencv_photo249d.lib;QtXmld4.lib;QtTestd4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,17 +124,34 @@
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;$(QTDIR)\lib;..\opencv\lib;..\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain.lib;QtCore4.lib;QtGui4.lib;QtOpenGL4.lib;opengl32.lib;glu32.lib;Core.lib;ParametricBuilding.lib;opencv_core249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;opencv_legacy249.lib;opencv_photo249.lib;QtTest4.lib;QtXml4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>qtmain.lib;QtCore4.lib;QtGui4.lib;QtOpenGL4.lib;opengl32.lib;glu32.lib;opencv_core249.lib;opencv_highgui249.lib;opencv_imgproc249.lib;opencv_legacy249.lib;opencv_photo249.lib;QtTest4.lib;QtXml4.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\mylib\common\BBox.cpp" />
+    <ClCompile Include="..\mylib\common\ColorTable.cpp" />
+    <ClCompile Include="..\mylib\common\ElevationColorTable.cpp" />
+    <ClCompile Include="..\mylib\common\global.cpp" />
+    <ClCompile Include="..\mylib\common\HeatMapColorTable.cpp" />
     <ClCompile Include="..\mylib\common\Polygon2D.cpp" />
-    <ClCompile Include="..\mylib\common\PolygonBuilder.cpp" />
     <ClCompile Include="..\mylib\common\Polyline2D.cpp" />
     <ClCompile Include="..\mylib\common\Polyline3D.cpp" />
-    <ClCompile Include="..\mylib\common\Renderer.cpp" />
     <ClCompile Include="..\mylib\common\Util.cpp" />
+    <ClCompile Include="..\mylib\render\camera_3d.cpp" />
+    <ClCompile Include="..\mylib\render\GeometryObject.cpp" />
+    <ClCompile Include="..\mylib\render\MyRenderer.cpp" />
+    <ClCompile Include="..\mylib\render\MyTerrain.cpp" />
+    <ClCompile Include="..\mylib\render\MyTerrainCell.cpp" />
+    <ClCompile Include="..\mylib\render\MyTerrainRenderer.cpp" />
+    <ClCompile Include="..\mylib\render\Noncopyable.cpp" />
+    <ClCompile Include="..\mylib\render\Renderable.cpp" />
+    <ClCompile Include="..\mylib\render\RenderableQuad.cpp" />
+    <ClCompile Include="..\mylib\render\RenderableQuadList.cpp" />
+    <ClCompile Include="..\mylib\render\Renderer.cpp" />
+    <ClCompile Include="..\mylib\render\SimpleSkyBox.cpp" />
+    <ClCompile Include="..\mylib\render\Texture.cpp" />
+    <ClCompile Include="..\mylib\render\TextureManager.cpp" />
+    <ClCompile Include="..\mylib\render\WaterRenderer.cpp" />
     <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp" />
     <ClCompile Include="..\mylib\road\feature\GridFeature.cpp" />
     <ClCompile Include="..\mylib\road\feature\KDEFeature.cpp" />
@@ -151,6 +168,7 @@
     <ClCompile Include="..\mylib\road\RoadEdge.cpp" />
     <ClCompile Include="..\mylib\road\RoadGraph.cpp" />
     <ClCompile Include="..\mylib\road\RoadVertex.cpp" />
+    <ClCompile Include="..\mylib\util\PolygonBuilder.cpp" />
     <ClCompile Include="ControlWidget.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -189,25 +207,37 @@
     <ClCompile Include="GLWidget3D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="MyBlockGenerator.cpp" />
-    <ClCompile Include="MyBuildingGenerator.cpp" />
     <ClCompile Include="MyGeometryGenerator.cpp" />
-    <ClCompile Include="MyParcelGenerator.cpp" />
     <ClCompile Include="MyRoadGraphRenderer.cpp" />
-    <ClCompile Include="MyTerrain.cpp" />
-    <ClCompile Include="MyTerrainCell.cpp" />
-    <ClCompile Include="MyTerrainRenderer.cpp" />
     <ClCompile Include="MyUrbanGeometry.cpp" />
     <ClCompile Include="PropertyWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\mylib\common\BBox.h" />
+    <ClInclude Include="..\mylib\common\ColorTable.h" />
+    <ClInclude Include="..\mylib\common\common.h" />
+    <ClInclude Include="..\mylib\common\ElevationColorTable.h" />
+    <ClInclude Include="..\mylib\common\global.h" />
+    <ClInclude Include="..\mylib\common\HeatMapColorTable.h" />
     <ClInclude Include="..\mylib\common\Polygon2D.h" />
-    <ClInclude Include="..\mylib\common\PolygonBuilder.h" />
     <ClInclude Include="..\mylib\common\Polyline2D.h" />
     <ClInclude Include="..\mylib\common\Polyline3D.h" />
-    <ClInclude Include="..\mylib\common\Renderer.h" />
     <ClInclude Include="..\mylib\common\Util.h" />
+    <ClInclude Include="..\mylib\render\camera_3d.h" />
+    <ClInclude Include="..\mylib\render\GeometryObject.h" />
+    <ClInclude Include="..\mylib\render\MyRenderer.h" />
+    <ClInclude Include="..\mylib\render\MyTerrain.h" />
+    <ClInclude Include="..\mylib\render\MyTerrainCell.h" />
+    <ClInclude Include="..\mylib\render\MyTerrainRenderer.h" />
+    <ClInclude Include="..\mylib\render\Noncopyable.h" />
+    <ClInclude Include="..\mylib\render\Renderable.h" />
+    <ClInclude Include="..\mylib\render\RenderableQuad.h" />
+    <ClInclude Include="..\mylib\render\RenderableQuadList.h" />
+    <ClInclude Include="..\mylib\render\Renderer.h" />
+    <ClInclude Include="..\mylib\render\SimpleSkyBox.h" />
+    <ClInclude Include="..\mylib\render\Texture.h" />
+    <ClInclude Include="..\mylib\render\TextureManager.h" />
+    <ClInclude Include="..\mylib\render\WaterRenderer.h" />
     <ClInclude Include="..\mylib\road\feature\AbstractFeature.h" />
     <ClInclude Include="..\mylib\road\feature\GridFeature.h" />
     <ClInclude Include="..\mylib\road\feature\KDEFeature.h" />
@@ -228,19 +258,19 @@
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing PropertyWidget.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing PropertyWidget.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing PropertyWidget.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing PropertyWidget.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
     </CustomBuild>
     <CustomBuild Include="ControlWidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
@@ -260,6 +290,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
     </CustomBuild>
+    <ClInclude Include="..\mylib\util\PolygonBuilder.h" />
     <ClInclude Include="GeneratedFiles\ui_ControlWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h" />
     <CustomBuild Include="MainWindow.h">
@@ -282,14 +313,8 @@
     </CustomBuild>
     <ClInclude Include="GeneratedFiles\ui_PropertyWidget.h" />
     <ClInclude Include="GLWidget3D.h" />
-    <ClInclude Include="MyBlockGenerator.h" />
-    <ClInclude Include="MyBuildingGenerator.h" />
     <ClInclude Include="MyGeometryGenerator.h" />
-    <ClInclude Include="MyParcelGenerator.h" />
     <ClInclude Include="MyRoadGraphRenderer.h" />
-    <ClInclude Include="MyTerrain.h" />
-    <ClInclude Include="MyTerrainCell.h" />
-    <ClInclude Include="MyTerrainRenderer.h" />
     <ClInclude Include="MyUrbanGeometry.h" />
   </ItemGroup>
   <ItemGroup>

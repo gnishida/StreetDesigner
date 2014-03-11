@@ -15,9 +15,9 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include "MyRoadGraphRenderer.h"
-#include "../Core/Renderable.h"
-#include "../Core/GeometryObject.h"
-#include "../Core/Texture.h"
+#include <render/Renderable.h>
+#include <render/GeometryObject.h>
+#include <render/Texture.h>
 
 
 

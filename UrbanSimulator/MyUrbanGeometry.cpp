@@ -14,28 +14,22 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#include "MyUrbanGeometry.h"
-#include "MyTerrain.h"
-#include "MyRoadGraphRenderer.h"
-#include "../Core/BlockRenderer.h"
-#include "../Core/ParcelRenderer.h"
-#include "../Core/BuildingRenderer.h"
-#include "../Core/WaterRenderer.h"
-#include "../Core/TextureManager.h"
-#include "../Core/Texture.h"
-#include "../Core/GeometryObject.h"
-#include "MyTerrain.h"
 #include <limits>
 #include <iostream>
 #include <QFile>
-#include "MainWindow.h"
-#include "../Core/global.h"
+#include <common/common.h>
+#include <common/global.h>
+#include <render/WaterRenderer.h>
+#include <render/TextureManager.h>
+#include <render/Texture.h>
+#include <render/GeometryObject.h>
+#include <render/MyTerrain.h>
 #include <road/GraphUtil.h>
 #include <road/generator/KDERoadGenerator.h>
 #include <road/feature/KDEFeature.h>
-
-#define SQR(x)	((x) * (x))
-
+#include "MainWindow.h"
+#include "MyUrbanGeometry.h"
+#include "MyRoadGraphRenderer.h"
 
 MyUrbanGeometry::MyUrbanGeometry(MainWindow* mainWin, int width, int depth) {
 	this->mainWin = mainWin;
@@ -54,10 +48,6 @@ MyUrbanGeometry::MyUrbanGeometry(MainWindow* mainWin, int width, int depth) {
 MyUrbanGeometry::~MyUrbanGeometry() {
 }
 
-void MyUrbanGeometry::setBuildingFactory(ucore::BuildingFactory* buildingFactory) {
-	this->buildingFactory = buildingFactory;
-}
-
 void MyUrbanGeometry::clear() {
 	clearGeometry();
 }
@@ -66,11 +56,6 @@ void MyUrbanGeometry::clearGeometry() {
 	if (terrain != NULL) delete terrain;
 
 	roads.clear();
-
-	for (int i = 0; i < blocks.size(); ++i) {
-		delete blocks[i];
-	}
-	blocks.clear();
 }
 
 void MyUrbanGeometry::generate() {
@@ -130,13 +115,6 @@ void MyUrbanGeometry::render(ucore::TextureManager* textureManager) {
 		//renderer.render(areas[i].roads.renderables);
 	}
 
-
-	/*
-	for (int i = 0; i < blocks.size(); ++i) {
-		renderBlock(blocks[i], textureManager);
-	}
-	*/
-
 	glDisable(GL_LIGHTING);
 }
 
@@ -145,11 +123,19 @@ void MyUrbanGeometry::render(ucore::TextureManager* textureManager) {
  */
 void MyUrbanGeometry::adaptToTerrain() {
 	roads.adaptToTerrain(terrain);
-	/*
-	for (int i = 0; i < blocks.size(); ++i) {
-		blocks[i]->adaptToTerrain(terrain);
-	}
-	*/
+}
+
+void MyUrbanGeometry::mergeRoads() {
+	areas.mergeRoads();
+	GraphUtil::copyRoads(areas.roads, roads);
+
+	areas.roads.clear();
+	areas.selectedIndex = -1;
+	areas.clear();
+}
+
+void MyUrbanGeometry::connectRoads() {
+	KDERoadGenerator::connectRoads(roads, 200.0f, 0.15f);
 }
 
 void MyUrbanGeometry::newTerrain(int width, int depth, int cellLength) {
@@ -258,25 +244,3 @@ void MyUrbanGeometry::loadAreas(const QString &filename) {
 void MyUrbanGeometry::saveAreas(const QString &filename) {
 	areas.save(filename);
 }
-
-void MyUrbanGeometry::renderBlock(ucore::Block* block, ucore::TextureManager* textureManager) {
-	if (ucore::G::getBool("showBlocks") && blockRenderer != NULL) {
-		blockRenderer->render(block, textureManager);
-	}
-
-	ucore::ParcelGraphVertexIter vi, viEnd;
-	for(boost::tie(vi, viEnd) = boost::vertices(block->getParcels()); vi != viEnd; ++vi) {
-		renderParcel(block->getParcels()[*vi], textureManager);
-	}
-}
-
-void MyUrbanGeometry::renderParcel(ucore::Parcel* parcel, ucore::TextureManager* textureManager) {
-	if (ucore::G::getBool("showParcels") && parcelRenderer != NULL) {
-		parcelRenderer->render(parcel, textureManager);
-	}
-
-	if (ucore::G::getBool("showBuildings") && buildingRenderer != NULL && parcel->getBuilding() != NULL) {		
-		buildingRenderer->render((ucore::GeometryObject*)parcel->getBuilding(), textureManager);
-	}
-}
-

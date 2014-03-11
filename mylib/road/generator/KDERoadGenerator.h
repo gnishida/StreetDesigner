@@ -26,7 +26,7 @@ private:
 	static void connectAvenues(RoadGraph &roads, const Polygon2D &area, const KDEFeature& f, RoadVertexDesc v_desc, float thresholdRatio);
 
 public:
-	static void connectRoads(RoadGraph &roads, RoadAreaSet &areas, float dist_threshold, float angle_threshold);
+	static void connectRoads(RoadGraph &roads, float dist_threshold, float angle_threshold);
 	static bool growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc, const QVector2D& step);
 	static void connectRoads2(RoadAreaSet &areas, float dist_threshold, float angle_threshold);
 	static void connectRoads2(RoadAreaSet &areas, int area_id, RoadVertexDesc v_desc, float dist_threshold, float angle_threshold);

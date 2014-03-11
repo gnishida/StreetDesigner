@@ -16,29 +16,19 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include "../Core/InfoLayerManager.h"
-#include "../Core/InfoLayer.h"
-#include "../Core/TextureManager.h"
-#include "../Core/InfoLayerRenderer.h"
-#include "../Core/Block.h"
-#include "../Core/Parcel.h"
-#include "../Core/BuildingFactory.h"
-#include "../Core/BuildingRenderer.h"
-#include "../Core/WaterRenderer.h"
-#include <road/RoadGraph.h>
-#include "../Core/TerrainRenderer.h"
-#include "../Core/ParcelRenderer.h"
-#include "../Core/BlockRenderer.h"
-#include "MyGeometryGenerator.h"
-#include "MyTerrain.h"
-#include "MyRoadGraphRenderer.h"
-#include "MyTerrainRenderer.h"
-#include <road/RoadAreaSet.h>
 #include <QProgressBar>
 #include <QMatrix4x4>
-#include <common/PolygonBuilder.h>
-#include <common/Renderer.h>
+#include <util/PolygonBuilder.h>
+#include <render/TextureManager.h>
+#include <render/WaterRenderer.h>
+#include <render/MyTerrain.h>
+#include <render/MyTerrainRenderer.h>
+#include <render/MyRenderer.h>
+#include <road/RoadGraph.h>
+#include <road/RoadAreaSet.h>
 #include <road/feature/RoadFeature.h>
+#include "MyGeometryGenerator.h"
+#include "MyRoadGraphRenderer.h"
 
 class MainWindow;
 
@@ -48,21 +38,14 @@ public:
 	int depth;
 	QVector3D pt;
 	MainWindow* mainWin;
-	::RoadGraph roads;
-	std::vector<ucore::Block*> blocks;
+	RoadGraph roads;
 	MyTerrain* terrain;
-	std::vector<ucore::InfoLayer*> infoLayers;
-
-	ucore::BuildingFactory* buildingFactory;
 
 	MyTerrainRenderer terrainRenderer;
 
 	/** Road Graph Renderer */
 	MyRoadGraphRenderer roadGraphRenderer;
 
-	ucore::BlockRenderer* blockRenderer;
-	ucore::ParcelRenderer* parcelRenderer;
-	ucore::BuildingRenderer* buildingRenderer;
 	ucore::WaterRenderer* waterRenderer;
 
 	MyGeometryGenerator* geometryGenerator;
@@ -70,7 +53,7 @@ public:
 	PolygonBuilder areaBuilder;
 	RoadAreaSet areas;
 	int selectedAreaIndex;
-	Renderer renderer;
+	MyRenderer renderer;
 
 
 public:
@@ -86,22 +69,6 @@ public:
 	/** getter for pt */
 	QVector3D getPt() { return pt; }
 
-	/** getter for blocks */
-	std::vector<ucore::Block*>& getBlocks() { return blocks; }
-
-	/** getter/setter for buildingFactory */
-	ucore::BuildingFactory* getBuildingFactory() { return buildingFactory; }
-	void setBuildingFactory(ucore::BuildingFactory* buildingFactory);
-
-	/** setter for blockRenderer */
-	void setBlockRenderer(ucore::BlockRenderer* blockRenderer) { this->blockRenderer = blockRenderer; }
-
-	/** setter for parcelRenderer */
-	void setParcelRenderer(ucore::ParcelRenderer* parcelRenderer) { this->parcelRenderer = parcelRenderer; }
-
-	/** setter for buildingRenderer */
-	void setBuildingRenderer(ucore::BuildingRenderer* buildingRenderer) { this->buildingRenderer = buildingRenderer; }
-
 	void clear();
 	void clearGeometry();
 	void generate();
@@ -111,6 +78,9 @@ public:
 
 	void render(ucore::TextureManager* textureManager);
 	void adaptToTerrain();
+
+	void mergeRoads();
+	void connectRoads();
 
 	void newTerrain(int width, int depth, int cellLength);
 	void loadTerrain(const QString &filename);
@@ -124,6 +94,4 @@ public:
 	void saveAreas(const QString &filename);
 
 private:
-	void renderBlock(ucore::Block* block, ucore::TextureManager* textureManager);
-	void renderParcel(ucore::Parcel* parcel, ucore::TextureManager* textureManager);
 };
