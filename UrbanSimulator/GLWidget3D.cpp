@@ -300,9 +300,6 @@ void GLWidget3D::keyPressEvent( QKeyEvent *e ){
 	keyMPressed=false;
 
 	switch( e->key() ){
-	case Qt::Key_Escape:
-		this->parentWidget()->close();
-		break;
 	case Qt::Key_Shift:
 		shiftPressed=true;
 		//clientMain->statusBar()->showMessage("Shift pressed");
