@@ -118,6 +118,7 @@ public:
 
 	void loadRoads(const QString &filename);
 	void saveRoads(const QString &filename);
+	void perturbRoads(float perturbationFactor);
 
 	void loadAreas(const QString &filename);
 	void saveAreas(const QString &filename);

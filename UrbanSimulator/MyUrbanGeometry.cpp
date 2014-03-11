@@ -85,9 +85,6 @@ void MyUrbanGeometry::generateRoads(RoadFeature &rf) {
 	KDERoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
-
-	// temporary
-	//GraphUtil::mergeRoads(roads, areas.selectedArea()->roads);
 }
 
 /**
@@ -246,6 +243,12 @@ void MyUrbanGeometry::saveRoads(const QString &filename) {
 	}
 
 	GraphUtil::saveRoads(roads, filename);
+}
+
+void MyUrbanGeometry::perturbRoads(float perturbationFactor) {
+	GraphUtil::perturb(areas.selectedArea()->roads, areas.selectedArea()->area, perturbationFactor);
+
+	mainWin->urbanGeometry->areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
 void MyUrbanGeometry::loadAreas(const QString &filename) {

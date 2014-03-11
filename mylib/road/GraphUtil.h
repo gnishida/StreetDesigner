@@ -75,6 +75,7 @@ public:
 	static void extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadType = 0);
 	static void subtractRoads(RoadGraph& roads, Polygon2D& area, bool strict);
 	static void subtractRoads2(RoadGraph& roads, Polygon2D& area);
+	static void perturb(RoadGraph &roads, const Polygon2D &area, float factor);
 
 	// Connectivity related functions
 	static std::vector<RoadVertexDesc> getNeighbors(RoadGraph& roads, RoadVertexDesc v, bool onlyValidVertex = true);

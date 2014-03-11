@@ -2,7 +2,7 @@
 #include "MainWindow.h"
 #include "GLWidget3D.h"
 #include "../Core/global.h"
-//#include <road/GraphUtil.h>
+#include <road/GraphUtil.h>
 //#include <road/feature/GridFeature.h>
 //#include <road/feature/RadialFeature.h>
 //#include <road/feature/GenericFeature.h>
@@ -27,6 +27,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.lineEditWeightEdge->setText("1");
 	ui.lineEditWeightLocation->setText("1");
 	ui.lineEditWeightRepetition->setText("2000000");
+	ui.lineEditPerturbationFactor->setText("0.1");
 
 	// register the event handlers
 	/*
@@ -36,6 +37,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.checkBoxRoadTypeLocalStreet, SIGNAL(stateChanged(int)), this, SLOT(showRoad(int)));
 	*/
 	connect(ui.pushButtonGenerateKDE, SIGNAL(clicked()), this, SLOT(generateKDE()));
+	connect(ui.pushButtonPerturb, SIGNAL(clicked()), this, SLOT(perturb()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	/*
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
@@ -114,6 +116,14 @@ void ControlWidget::generateKDE() {
 	mainWin->urbanGeometry->generateRoads(rf);
 	//RoadGenerator rg;
 	//rg.generateRoadNetwork(mainWin->urbanGeometry->areas.selectedArea().roads, mainWin->urbanGeometry->areas.selectedArea().area, rf);
+
+	mainWin->glWidget->updateGL();
+}
+
+void ControlWidget::perturb() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	mainWin->urbanGeometry->perturbRoads(ui.lineEditPerturbationFactor->text().toFloat());
 
 	mainWin->glWidget->updateGL();
 }

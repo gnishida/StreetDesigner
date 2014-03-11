@@ -8,6 +8,7 @@
 #include "../common/common.h"
 #include "../common/Util.h"
 #include "GraphUtil.h"
+#include "../../Core/Util.h"
 
 /**
  * Return the number of vertices.
@@ -1492,6 +1493,35 @@ void GraphUtil::subtractRoads2(RoadGraph& roads, Polygon2D& area) {
 
 	removeIsolatedVertices(roads);
 	reduce(roads);
+
+	roads.setModified();
+}
+
+/**
+ * 頂点を少しずらす。
+ */
+void GraphUtil::perturb(RoadGraph &roads, const Polygon2D &area, float factor) {
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		// outing edgeの最短距離を求める
+		float min_length = 1000.0f;
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			float length = roads.graph[*ei]->getLength();
+			if (length < min_length) {
+				min_length = length;
+			}
+		}
+
+		float dx = ucore::Util::genRand(-min_length * factor, min_length * factor);
+		float dy = ucore::Util::genRand(-min_length * factor, min_length * factor);
+
+		moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(dx, dy));
+	}
 
 	roads.setModified();
 }

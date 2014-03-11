@@ -272,6 +272,9 @@ void RoadGraph::setZ(float z) {
 	}
 }
 
+/**
+ * 道路網のGeometryを更新した場合は、必ずこの関数を実行して、3D Geometryを更新すること。
+ */
 void RoadGraph::adaptToTerrain(MyTerrain* terrain) {
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
