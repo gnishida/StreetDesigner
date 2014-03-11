@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="..\mylib\common\BBox.cpp" />
     <ClCompile Include="..\mylib\common\ColorTable.cpp" />
+    <ClCompile Include="..\mylib\common\ConvexHull.cpp" />
     <ClCompile Include="..\mylib\common\ElevationColorTable.cpp" />
     <ClCompile Include="..\mylib\common\global.cpp" />
     <ClCompile Include="..\mylib\common\HeatMapColorTable.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="..\mylib\common\BBox.h" />
     <ClInclude Include="..\mylib\common\ColorTable.h" />
     <ClInclude Include="..\mylib\common\common.h" />
+    <ClInclude Include="..\mylib\common\ConvexHull.h" />
     <ClInclude Include="..\mylib\common\ElevationColorTable.h" />
     <ClInclude Include="..\mylib\common\global.h" />
     <ClInclude Include="..\mylib\common\HeatMapColorTable.h" />

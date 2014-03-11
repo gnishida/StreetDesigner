@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PropertyWidget.ui'
 **
-** Created: Mon Mar 10 11:30:00 2014
+** Created: Tue Mar 11 17:25:50 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -52,6 +52,8 @@ public:
     QLabel *label_13;
     QLineEdit *lineEditVertexParent;
     QTextEdit *textEditVertexUncles;
+    QLabel *label_14;
+    QLineEdit *lineEditVertexOnBoundary;
 
     void setupUi(QDockWidget *PropertyWidget)
     {
@@ -64,7 +66,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 290, 171, 131));
+        groupBox->setGeometry(QRect(10, 320, 171, 131));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 31, 16));
@@ -97,7 +99,7 @@ public:
         lineEditEdgeRoundabout->setGeometry(QRect(80, 100, 81, 20));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 10, 171, 271));
+        groupBox_5->setGeometry(QRect(10, 10, 171, 291));
         label_6 = new QLabel(groupBox_5);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 20, 31, 16));
@@ -112,28 +114,34 @@ public:
         lineEditVertexPos->setGeometry(QRect(80, 40, 81, 20));
         label_8 = new QLabel(groupBox_5);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(10, 160, 51, 16));
+        label_8->setGeometry(QRect(10, 190, 51, 16));
         textEditVertexNeighbors = new QTextEdit(groupBox_5);
         textEditVertexNeighbors->setObjectName(QString::fromUtf8("textEditVertexNeighbors"));
-        textEditVertexNeighbors->setGeometry(QRect(80, 160, 81, 61));
+        textEditVertexNeighbors->setGeometry(QRect(80, 190, 81, 61));
         label_11 = new QLabel(groupBox_5);
         label_11->setObjectName(QString::fromUtf8("label_11"));
-        label_11->setGeometry(QRect(10, 230, 51, 16));
+        label_11->setGeometry(QRect(10, 260, 51, 16));
         lineEditKernel = new QLineEdit(groupBox_5);
         lineEditKernel->setObjectName(QString::fromUtf8("lineEditKernel"));
-        lineEditKernel->setGeometry(QRect(80, 230, 81, 20));
+        lineEditKernel->setGeometry(QRect(80, 260, 81, 20));
         label_12 = new QLabel(groupBox_5);
         label_12->setObjectName(QString::fromUtf8("label_12"));
         label_12->setGeometry(QRect(10, 60, 51, 16));
         label_13 = new QLabel(groupBox_5);
         label_13->setObjectName(QString::fromUtf8("label_13"));
-        label_13->setGeometry(QRect(10, 90, 51, 16));
+        label_13->setGeometry(QRect(10, 120, 51, 16));
         lineEditVertexParent = new QLineEdit(groupBox_5);
         lineEditVertexParent->setObjectName(QString::fromUtf8("lineEditVertexParent"));
         lineEditVertexParent->setGeometry(QRect(80, 60, 81, 20));
         textEditVertexUncles = new QTextEdit(groupBox_5);
         textEditVertexUncles->setObjectName(QString::fromUtf8("textEditVertexUncles"));
-        textEditVertexUncles->setGeometry(QRect(80, 90, 81, 61));
+        textEditVertexUncles->setGeometry(QRect(80, 120, 81, 61));
+        label_14 = new QLabel(groupBox_5);
+        label_14->setObjectName(QString::fromUtf8("label_14"));
+        label_14->setGeometry(QRect(10, 80, 71, 16));
+        lineEditVertexOnBoundary = new QLineEdit(groupBox_5);
+        lineEditVertexOnBoundary->setObjectName(QString::fromUtf8("lineEditVertexOnBoundary"));
+        lineEditVertexOnBoundary->setGeometry(QRect(80, 80, 81, 20));
         PropertyWidget->setWidget(dockWidgetContents);
 
         retranslateUi(PropertyWidget);
@@ -156,6 +164,7 @@ public:
         label_11->setText(QApplication::translate("PropertyWidget", "Example", 0, QApplication::UnicodeUTF8));
         label_12->setText(QApplication::translate("PropertyWidget", "Parent", 0, QApplication::UnicodeUTF8));
         label_13->setText(QApplication::translate("PropertyWidget", "Uncles", 0, QApplication::UnicodeUTF8));
+        label_14->setText(QApplication::translate("PropertyWidget", "On boundary?", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(PropertyWidget);
     } // retranslateUi
 

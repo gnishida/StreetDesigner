@@ -136,6 +136,8 @@ void MyUrbanGeometry::mergeRoads() {
 
 void MyUrbanGeometry::connectRoads() {
 	KDERoadGenerator::connectRoads(roads, 200.0f, 0.15f);
+
+	roads.adaptToTerrain(terrain);
 }
 
 void MyUrbanGeometry::newTerrain(int width, int depth, int cellLength) {

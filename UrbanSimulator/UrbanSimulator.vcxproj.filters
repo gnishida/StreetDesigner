@@ -220,6 +220,9 @@
     <ClCompile Include="..\mylib\util\PolygonBuilder.cpp">
       <Filter>mylib\util</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\common\ConvexHull.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -390,6 +393,9 @@
       <Filter>mylib\util</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ConvexHull.h">
       <Filter>mylib\common</Filter>
     </ClInclude>
   </ItemGroup>

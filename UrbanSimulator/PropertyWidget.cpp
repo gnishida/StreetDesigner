@@ -28,6 +28,8 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 		parent.setNum(roads.graph[vertexDesc]->properties["parent"].toInt());
 	}
 
+	QString onBoundary = roads.graph[vertexDesc]->onBoundary ? "Yes" : "No";
+
 	if (roads.graph[vertexDesc]->properties.contains("uncles")) {
 		uncles = roads.graph[vertexDesc]->properties["uncles"].toString();
 	}
@@ -46,6 +48,7 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	ui.lineEditVertexDesc->setText(desc);
 	ui.lineEditVertexPos->setText(location);
 	ui.lineEditVertexParent->setText(parent);
+	ui.lineEditVertexOnBoundary->setText(onBoundary);
 	ui.textEditVertexUncles->setText(uncles);
 	ui.textEditVertexNeighbors->setText(neighbors);
 	ui.lineEditKernel->setText(kernel);
@@ -98,6 +101,7 @@ void PropertyWidget::resetRoadVertex() {
 	ui.lineEditVertexDesc->setText("");
 	ui.lineEditVertexPos->setText("");
 	ui.lineEditVertexParent->setText("");
+	ui.lineEditVertexOnBoundary->setText("");
 	ui.textEditVertexUncles->setText("");
 	ui.textEditVertexNeighbors->setText("");
 	ui.lineEditKernel->setText("");
