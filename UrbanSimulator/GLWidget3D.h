@@ -43,6 +43,11 @@ protected:
 	float rotationSensitivity;
 	float zoomSensitivity;
 
+	RoadVertexDesc selectedVertexDesc;
+	RoadVertexPtr selectedVertex;
+	RoadEdgeDesc selectedEdgeDesc;
+	RoadEdgePtr selectedEdge;
+
 public:
 	GLWidget3D(MainWindow *parent);
 	~GLWidget3D();

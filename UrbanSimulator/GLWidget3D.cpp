@@ -18,6 +18,7 @@ This file is part of QtUrban.
 #include <common/Util.h>
 #include <render/MyTerrain.h>
 #include <render/SimpleSkyBox.h>
+#include <road/GraphUtil.h>
 #include "MainWindow.h"
 #include <gl/GLU.h>
 
@@ -113,6 +114,19 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 
 		mainWin->urbanGeometry->areas.selectedIndex = -1;
 
+		break;
+	case MainWindow::MODE_DEBUG:
+		if (GraphUtil::getVertex(mainWin->urbanGeometry->roads, pos, 10, selectedVertexDesc)) {
+			selectedVertex = mainWin->urbanGeometry->roads.graph[selectedVertexDesc];
+			mainWin->propertyWidget->setRoadVertex(mainWin->urbanGeometry->roads, selectedVertexDesc, selectedVertex);
+			mainWin->propertyWidget->resetRoadEdge();
+		} else {
+			if (GraphUtil::getEdge(mainWin->urbanGeometry->roads, pos, 10, selectedEdgeDesc)) {
+				selectedEdge = mainWin->urbanGeometry->roads.graph[selectedEdgeDesc];
+				mainWin->propertyWidget->resetRoadVertex();
+				mainWin->propertyWidget->setRoadEdge(selectedEdge);
+			}
+		}
 		break;
 	}
 }

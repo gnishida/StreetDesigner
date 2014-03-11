@@ -47,10 +47,8 @@ public slots:
 	void onHighwaySketch();
 	/*
 	void onBoulevardSketch();
-	void on3DView();
-	void onTerrain();
-	void onDebug();
 	*/
+	void onDebug();
 	void onShowControlWidget();
 	void onShowPropertyWidget();
 };

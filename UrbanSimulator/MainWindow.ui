@@ -62,9 +62,6 @@
     <addaction name="actionHighwaySketch"/>
     <addaction name="actionBoulevardSketch"/>
     <addaction name="separator"/>
-    <addaction name="action3DView"/>
-    <addaction name="actionTerrain"/>
-    <addaction name="separator"/>
     <addaction name="actionDebug"/>
    </widget>
    <addaction name="menuFile"/>

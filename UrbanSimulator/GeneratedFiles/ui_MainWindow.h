@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Mon Mar 10 11:29:59 2014
+** Created: Tue Mar 11 16:49:14 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -240,9 +240,6 @@ public:
         menuArea->addSeparator();
         menuArea->addAction(actionHighwaySketch);
         menuArea->addAction(actionBoulevardSketch);
-        menuArea->addSeparator();
-        menuArea->addAction(action3DView);
-        menuArea->addAction(actionTerrain);
         menuArea->addSeparator();
         menuArea->addAction(actionDebug);
 
