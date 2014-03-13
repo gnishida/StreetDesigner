@@ -51,7 +51,7 @@ public:
 
 
 public:
-	UrbanGeometry(MainWindow* mainWin, int width, int depth);
+	UrbanGeometry(MainWindow* mainWin);
 	~UrbanGeometry();
 
 	/** getter for width */
@@ -64,8 +64,6 @@ public:
 	void clearGeometry();
 	void generateRoads(RoadFeature &rf);
 	void generateBlocks();
-
-	bool containsPoint(const QVector3D& testPt);
 
 	void render(mylib::TextureManager* textureManager);
 	void adaptToTerrain();

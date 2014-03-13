@@ -7,6 +7,14 @@
 #include "Polyline3D.h"
 #include "Util.h"
 
+const QVector3D & Polygon3D::last() const {
+	return at(size() - 1);
+}
+
+QVector3D & Polygon3D::last() {
+	return at(size() - 1);
+}
+
 void Polygon3D::correct() {
 	boost::geometry::correct(*this);
 }
@@ -105,7 +113,8 @@ void Polygon3D::rotate(float angle, const QVector2D &orig) {
 
 /**
  * このポリゴンを三角形または凸四角形の集合に分割する。
- * tessellateされた各図形の頂点はclosedで、CCWオーダである。
+ * 2Dでのtessellationを行い、得られる図形のZ座標は全て0となる。
+ * また、tessellateされた各図形の頂点はclosedで、CCWオーダである。
  */
 std::vector<Polygon3D> Polygon3D::tessellate() const {
 	std::vector<Polygon3D> trapezoids;

@@ -37,7 +37,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	srand(12345);
 
 	// 境界上に、Avenueを生成
-	if (mylib::G::getBool("addAvenuesOnBoundary")) {
+	if (!mylib::G::getBool("multiSeeds") && mylib::G::getBool("addAvenuesOnBoundary")) {
 		generateRoadsOnBoundary(roads, area, RoadEdge::TYPE_AVENUE, 1);
 	}
 

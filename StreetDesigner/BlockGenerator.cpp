@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 This file is part of QtUrban.
 
     QtUrban is free software: you can redistribute it and/or modify
@@ -29,6 +29,8 @@ This file is part of QtUrban.
 RoadGraph* roadGraphPtr;
 std::vector<pm::Block*>* blocksPtr;
 Polygon3D blockContourTmp;
+Polygon3D blockContourPoints;
+std::vector<Polyline3D> blockContourLines;
 std::vector<float> blockContourWidths;
 
 //Vertex visitor
@@ -36,12 +38,34 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 	void begin_face() {
 		blockContourTmp.clear();
 		blockContourWidths.clear();
+
+		blockContourPoints.clear();
+		blockContourLines.clear();
 	}
 
 	void end_face() {
-		if(blockContourTmp.size() > 2){
+		if (blockContourPoints.size() > 2) {
+			/*
+			blockContourTmp.clear();
+			
+			for (int i = 0; i < blockContourPoints.size(); ++i) {
+				blockContourTmp.push_back(blockContourPoints[i]);
+
+				if ((blockContourLines[i][0] - blockContourPoints[i]).lengthSquared() < (blockContourLines[i].last() - blockContourPoints[i]).lengthSquared()) {
+					for (int j = 1; j < blockContourLines[i].size() - 1; ++j) {
+						blockContourTmp.push_back(blockContourLines[i][j]);
+					}
+				} else {
+					for (int j = blockContourLines[i].size() - 2; j > 0; --j) {
+						blockContourTmp.push_back(blockContourLines[i][j]);
+					}
+				}
+			}
+			*/
+
 			pm::Block* newBlock = new pm::Block();
-			newBlock->setContour(blockContourTmp);		
+			//newBlock->setContour(blockContourTmp);		
+			newBlock->setContour(blockContourPoints);
 			newBlock->setRoadWidths(blockContourWidths);
 			
 			blocksPtr->push_back(newBlock);
@@ -50,11 +74,19 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 
 	template <typename Vertex> 
 	void next_vertex(Vertex v) {
-		blockContourTmp.push_back(roadGraphPtr->graph[v]->pt);
+		//blockContourTmp.push_back(roadGraphPtr->graph[v]->pt);
+		blockContourPoints.push_back(roadGraphPtr->graph[v]->pt);
 	}
 
 	template <typename Edge> 
 	void next_edge(Edge e) {
+		blockContourLines.push_back(roadGraphPtr->graph[e]->polyline3D);
+
+		/*
+		for (int i = 0; i < roadGraphPtr->graph[e]->polyline3D.size() - 1; ++i) {
+			blockContourWidths.push_back(0.5f * roadGraphPtr->graph[e]->getWidth());
+		}
+		*/
 		blockContourWidths.push_back(0.5f * roadGraphPtr->graph[e]->getWidth());
 	}
 };
@@ -81,7 +113,6 @@ void BlockGenerator::run() {
 
 	roadGraphPtr = roads;
 	blocksPtr = blocks;
-	blocksPtr->clear();
 
 	bool isPlanar = false;
 	bool converges = true;
@@ -90,6 +121,7 @@ void BlockGenerator::run() {
 	typedef std::vector<RoadEdgeDesc > tEdgeDescriptorVector;
 	std::vector<tEdgeDescriptorVector> embedding(boost::num_vertices(roads->graph));
 
+	// Planarグラフにする
 	int cont=0;
 	while (!isPlanar && converges) {	
 		if (cont>2) {
@@ -111,8 +143,8 @@ void BlockGenerator::run() {
 		std::cout << "ERROR: Graph could not be planarized (generateBlocks)\n";
 	}
 
-	mainWin->glWidget->updateGL();
-	QTest::qWait(1);
+	//mainWin->glWidget->updateGL();
+	//QTest::qWait(1);
 
 	//Create edge index property map?	
 	typedef std::map<RoadEdgeDesc, size_t> EdgeIndexMap;
@@ -128,8 +160,8 @@ void BlockGenerator::run() {
 	vertex_output_visitor v_vis;
 	boost::planar_face_traversal(roads->graph, &embedding[0], v_vis, pmEdgeIndex);
 
-	mainWin->glWidget->updateGL();
-	QTest::qWait(1);
+	//mainWin->glWidget->updateGL();
+	//QTest::qWait(1);
 
 	std::vector<float> blockAreas;
 
@@ -137,38 +169,45 @@ void BlockGenerator::run() {
 	for (int i = 0; i < blocks->size(); ++i) {
 		//Reorient faces
 		//blocks->at(i)->getContour().reorientFace();
+		//blocks->at(i)->getContour().correct();
+		//std::reverse(blocks->at(i)->getContour().begin(), blocks->at(i)->getContour().end());
 
 		if(blocks->at(i)->getContour().size() < 3){
 			blockAreas.push_back(0.0f);
 			continue;
 		}
 
-		float insetArea = blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);		
-		blocks->at(i)->setContour(blockContourInset);
+		//float insetArea = blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);		
+		//blocks->at(i)->setContour(blockContourInset);
 
-		blockAreas.push_back(insetArea);
+		//blockAreas.push_back(insetArea);
 	}
 
 	//Remove the largest block
-	float maxArea = (std::numeric_limits<float>::min)();
+	/*
+	float maxArea = 0.0f;
 	int maxAreaIdx = -1;
 	for (int i = 0; i < blocks->size(); ++i) {
 		if (blocks->at(i)->getContour().size() < 3) {
 			continue;
 		}
-		if (blockAreas[i] > maxArea) {
-			maxArea = blockAreas[i];
+		float area = blocks->at(i)->getContour().area();
+		if (area > maxArea) {
+			maxArea = area;
 			maxAreaIdx = i;
 		}
 	}
 
 	if (maxAreaIdx != -1) {
 		blocks->erase(blocks->begin() + maxAreaIdx);
-		blockAreas.erase(blockAreas.begin() + maxAreaIdx);
-	}
+		//blockAreas.erase(blockAreas.begin() + maxAreaIdx);
+	}*/
+	blocks->erase(blocks->begin());
 
-	mainWin->glWidget->updateGL();
-	QTest::qWait(1);
+	//mainWin->glWidget->updateGL();
+	//QTest::qWait(1);
+
+	printf("generation done.\n");
 }
 
 /**

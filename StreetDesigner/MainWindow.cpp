@@ -50,7 +50,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	//propertyWidget->show();
 	//addDockWidget(Qt::RightDockWidgetArea, propertyWidget);
 
-	urbanGeometry = new MyUrbanGeometry(this, 3000, 3000);
+	urbanGeometry = new UrbanGeometry(this);
 
 	mode = MODE_AREA_SELECT;
 }

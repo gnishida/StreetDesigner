@@ -41,7 +41,7 @@ void RendererHelper::renderOne(mylib::Renderable* renderable) {
  * 与えられたポリゴンに基づいて、閉じた領域を描画する。
  * ただし、ポリゴンデータ自体は、閉じていなくて良い。
  */
-void RendererHelper::renderArea(const Polygon2D& area, GLenum lineType, const QColor& color, float height) {
+void RendererHelper::renderArea(const Polygon3D& area, const QColor& color, GLenum lineType) {
 	std::vector<mylib::Renderable*> renderables;
 	renderables.push_back(new mylib::Renderable(lineType, 3.0f));
 	renderables.push_back(new mylib::Renderable(GL_POINTS, 10.0f));
@@ -59,14 +59,14 @@ void RendererHelper::renderArea(const Polygon2D& area, GLenum lineType, const QC
 	for (int i = 0; i < area.size(); i++) {
 		v.location[0] = area[i].x();
 		v.location[1] = area[i].y();
-		v.location[2] = height;
+		v.location[2] = area[i].z();
 		renderables[0]->vertices.push_back(v);
 		renderables[1]->vertices.push_back(v);
 	}
 
 	v.location[0] = area[0].x();
 	v.location[1] = area[0].y();
-	v.location[2] = height;
+	v.location[2] = area[0].z();
 	renderables[0]->vertices.push_back(v);
 
 	render(renderables);

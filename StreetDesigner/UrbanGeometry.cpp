@@ -29,15 +29,14 @@ This file is part of QtUrban.
 #include <road/feature/KDEFeature.h>
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
+#include "BlockGenerator.h"
 
-UrbanGeometry::UrbanGeometry(MainWindow* mainWin, int width, int depth) {
+UrbanGeometry::UrbanGeometry(MainWindow* mainWin) {
 	this->mainWin = mainWin;
-	this->width = width;
-	this->depth = depth;
 
 	terrain = NULL;
 
-	waterRenderer = new mylib::WaterRenderer(width, depth, -10.0f);
+	waterRenderer = new mylib::WaterRenderer(300, 3000, -10.0f);
 
 	loadTerrain("data/default.trn");
 
@@ -66,30 +65,22 @@ void UrbanGeometry::generateRoads(RoadFeature &rf) {
 }
 
 void UrbanGeometry::generateBlocks() {
-}
-
-/**
- * returns true if bounding rectangle contains testPt
- */
-bool UrbanGeometry::containsPoint(const QVector3D& testPt) {
-	if (testPt.x() < -width/2.0f) return false;
-	if (testPt.x() > width/2.0f) return false;
-	if (testPt.y() < -depth/2.0f) return false;
-	if (testPt.y() > depth/2.0f) return false;
-	return true;
+	BlockGenerator generator(mainWin);
+	generator.run();
 }
 
 void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	glEnable(GL_LIGHTING);
 
 	if (waterRenderer != NULL) {
-		waterRenderer->renderMe(textureManager);
+		//waterRenderer->renderMe(textureManager);
 	}
 	
-	renderer.render(terrain, textureManager);
+	//renderer.render(terrain, textureManager);
 	renderer.render(&roads, textureManager);
 	for (int i = 0; i < blocks.size(); ++i) {
 		renderer.render(blocks[i], textureManager);
+		//rendererHelper.renderArea(blocks[i]->getContour(), QColor(255, 0, 0), GL_LINES);
 	}
 
 
@@ -234,7 +225,7 @@ void UrbanGeometry::saveRoads(const QString &filename) {
 void UrbanGeometry::perturbRoads(float perturbationFactor) {
 	GraphUtil::perturb(areas.selectedArea()->roads, areas.selectedArea()->area, perturbationFactor);
 
-	mainWin->urbanGeometry->areas.selectedArea()->roads.adaptToTerrain(terrain);
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
 void UrbanGeometry::loadAreas(const QString &filename) {

@@ -14,6 +14,8 @@ public:
 	Polygon3D() {}
 	~Polygon3D() {}
 
+	const QVector3D & last() const;
+	QVector3D & last();
 	void correct();
 	float area() const;
 	QVector2D centroid() const;

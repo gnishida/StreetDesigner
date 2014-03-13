@@ -1,5 +1,6 @@
 ﻿#include "ControlWidget.h"
 #include "MainWindow.h"
+#include "UrbanGeometry.h"
 #include "GLWidget3D.h"
 #include <common/global.h>
 #include <road/GraphUtil.h>

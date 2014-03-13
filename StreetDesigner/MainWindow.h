@@ -9,7 +9,6 @@
 #include <QToolBar>
 
 
-
 class MainWindow : public QMainWindow {
 Q_OBJECT
 
