@@ -30,6 +30,7 @@ public:
 	void rotate(float angle, const QVector2D &orig);
 
 	std::vector<Polygon3D> tessellate() const;
+	void findEdge(float x, float y, int& v1, int& v2, float& s) const;
 
 	void computeInset(float offsetDistance, Polygon3D &pgonInset);
 	void computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset);

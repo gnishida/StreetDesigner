@@ -147,7 +147,23 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 			float z = 0.0f;
 			bool done = false;
 
-			trapezoid.push_back(QVector3D((*it).x(), (*it).y(), 0.0f));
+			// 直近の頂点のZ座標を使ってZ座標を決定する
+			for (int j = 0; j < size(); j++) {
+				if (at(j).x() == (*it).x() && at(j).y() == (*it).y()) {
+					z = at(j).z();
+					done = true;
+					break;
+				}
+			}
+
+			if (!done) {
+				int v1, v2;
+				float s;
+				findEdge((*it).x(), (*it).y(), v1, v2, s);
+				z = at(v1).z() + (at(v2).z() - at(v1).z()) * s;
+			}
+
+			trapezoid.push_back(QVector3D((*it).x(), (*it).y(), z));
 			it++;
 		}
 
@@ -157,6 +173,30 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 	}
 
 	return trapezoids;
+}
+
+void Polygon3D::findEdge(float x, float y, int& v1, int& v2, float& s) const {
+	float minDist = (std::numeric_limits<float>::max)();
+
+	for (int i = 0; i < size(); i++) {
+		int next = (i + 1) % size();
+
+		float dist = mylib::Util::pointSegmentDistanceXY(at(i), at(next), QVector3D(x, y, 0));
+		if (dist < minDist) {
+			minDist = dist;
+			v1 = i;
+			v2 = next;
+			if (fabs(at(next).x() - at(i).x()) > fabs(at(next).y() - at(i).y())) {
+				s = (x - at(i).x()) / (at(next).x() - at(i).x());
+			} else {
+				if (at(next).y() - at(i).y() != 0.0f) {
+					s = (y - at(i).y()) / (at(next).y() - at(i).y());                                
+				} else {
+					s = 0.0f;
+				}
+			}
+		}
+	}
 }
 
 /**

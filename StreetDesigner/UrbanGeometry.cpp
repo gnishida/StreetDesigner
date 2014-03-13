@@ -77,10 +77,10 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	glEnable(GL_LIGHTING);
 
 	if (waterRenderer != NULL) {
-		//waterRenderer->renderMe(textureManager);
+		waterRenderer->renderMe(textureManager);
 	}
 	
-	//renderer.render(terrain, textureManager);
+	renderer.render(terrain, textureManager);
 	renderer.render(&roads, textureManager);
 	for (int i = 0; i < blocks.size(); ++i) {
 		renderer.render(blocks[i], textureManager);

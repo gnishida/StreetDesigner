@@ -74,8 +74,8 @@
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuArea"/>
-   <addaction name="menuWindow"/>
    <addaction name="menuPM"/>
+   <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="fileToolBar">
    <attribute name="toolBarArea">

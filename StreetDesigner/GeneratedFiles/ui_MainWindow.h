@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Thu Mar 13 11:47:17 2014
+** Created: Thu Mar 13 15:56:51 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -233,8 +233,8 @@ public:
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuArea->menuAction());
-        menuBar->addAction(menuWindow->menuAction());
         menuBar->addAction(menuPM->menuAction());
+        menuBar->addAction(menuWindow->menuAction());
         menuFile->addAction(actionNewTerrain);
         menuFile->addAction(actionOpenTerrain);
         menuFile->addAction(actionSaveTerrain);
