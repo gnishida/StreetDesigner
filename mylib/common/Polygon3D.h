@@ -40,3 +40,22 @@ public:
  */
 BOOST_GEOMETRY_REGISTER_RING(Polygon3D)
 
+namespace boost {
+namespace geometry {
+namespace traits {
+
+template<>
+struct point_order<Polygon3D>
+{
+    static const order_selector value = counterclockwise; 
+};
+
+template<>
+struct closure<Polygon3D>
+{
+    static const closure_selector value = open;
+};
+
+}
+}
+} //namespace boost { namespace geometry

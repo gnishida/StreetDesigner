@@ -61,11 +61,14 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 				}
 			}
 
-			pm::Block* newBlock = new pm::Block();
-			newBlock->setContour(blockContourTmp);
-			newBlock->setRoadWidths(blockContourWidths);
-			
-			blocksPtr->push_back(newBlock);
+			blockContourTmp.correct();
+			if (blockContourTmp.area() > 100.0f) {
+				pm::Block* newBlock = new pm::Block();
+				newBlock->setContour(blockContourTmp);
+				newBlock->setRoadWidths(blockContourWidths);
+	
+				blocksPtr->push_back(newBlock);
+			}
 		}
 	}
 
@@ -156,18 +159,17 @@ void BlockGenerator::run() {
 	//mainWin->glWidget->updateGL();
 	//QTest::qWait(1);
 
-	Polygon3D blockContourInset;
-	for (int i = 0; i < blocks->size(); ++i) {
-		//Reorient faces
-		//blocks->at(i)->getContour().reorientFace();
-		//blocks->at(i)->getContour().correct();
-		//std::reverse(blocks->at(i)->getContour().begin(), blocks->at(i)->getContour().end());
+	blocks->erase(blocks->begin());
 
-		//blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);		
-		//blocks->at(i)->setContour(blockContourInset);
+	for (int i = 0; i < blocks->size(); ++i) {
+		Polygon3D blockContourInset;
+		blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);
+		if (boost::geometry::intersects(blockContourInset)) {
+			continue;
+		}
+		blocks->at(i)->setContour(blockContourInset);
 	}
 
-	blocks->erase(blocks->begin());
 
 	//mainWin->glWidget->updateGL();
 	//QTest::qWait(1);

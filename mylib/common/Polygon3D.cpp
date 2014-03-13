@@ -185,12 +185,6 @@ void Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgon
 
 	if (cSz < 3) return;
 
-	/*
-	if (Polygon3D::reorientFace(cleanPgon)) {
-		std::reverse(offsetDistances.begin(), offsetDistances.end());
-	}
-	*/
-
 	//if offsets are zero, add a small epsilon just to avoid division by zero
 	for (size_t i=0; i<offsetDistances.size(); ++i){
 		if(fabs(offsetDistances[i]) < tol){

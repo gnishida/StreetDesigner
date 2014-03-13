@@ -22,7 +22,7 @@ This file is part of QtUrban.
 namespace pm {
 
 Block::Block() : GeometryObject() {
-	color = QColor(255, 0, 0);
+	color = QColor(255, 255, 128);
 }
 
 Block::~Block() {
