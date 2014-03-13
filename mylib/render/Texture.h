@@ -19,7 +19,7 @@ This file is part of QtUrban.
 #include <qstring.h>
 #include <qvector2d.h>
 
-namespace ucore {
+namespace mylib {
 
 class Texture {
 private:
@@ -44,4 +44,4 @@ public:
 	//void bind(float xSize, float ySize, bool repeat = false);
 };
 
-} // namespace ucore
+} // namespace mylib

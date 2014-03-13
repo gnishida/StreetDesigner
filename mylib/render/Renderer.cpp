@@ -16,8 +16,10 @@ This file is part of QtUrban.
 
 #include "Renderer.h"
 #include "GeometryObject.h"
+#include "Renderable.h"
+#include "Texture.h"
 
-namespace ucore {
+namespace mylib {
 
 Renderer::Renderer() {
 }
@@ -39,4 +41,47 @@ void Renderer::render(GeometryObject* object, TextureManager* textureManager) {
 	}
 }
 
-} // namespace ucore
+void Renderer::_render(GeometryObject* object, TextureManager* textureManager) {
+	for (int i = 0; i < object->getNumRenderables(); ++i) {
+		mylib::Renderable* renderable = object->getRenderable(i);
+		mylib::Texture* texture = renderable->getTexture();
+
+		if (texture != NULL) {
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, renderable->getTexture()->getId());
+
+			glBegin(renderable->getGlBeginMode());
+			for (int j = 0; j < renderable->getNumMeshVertices(); ++j) {
+				glNormal3f(renderable->getMeshVertex(j).normal[0], renderable->getMeshVertex(j).normal[1], renderable->getMeshVertex(j).normal[2]);
+				glTexCoord2f(renderable->getMeshVertex(j).tex[0], renderable->getMeshVertex(j).tex[1]);
+				glVertex3f(renderable->getMeshVertex(j).location[0], renderable->getMeshVertex(j).location[1], renderable->getMeshVertex(j).location[2]);
+			}
+			glEnd();
+
+			glDisable(GL_TEXTURE_2D);
+		} else {
+			glBegin(renderable->getGlBeginMode());
+			for (int j = 0; j < renderable->getNumMeshVertices(); ++j) {
+				glColor3f(renderable->getMeshVertex(j).color[0], renderable->getMeshVertex(j).color[1], renderable->getMeshVertex(j).color[2]);
+				glNormal3f(renderable->getMeshVertex(j).normal[0], renderable->getMeshVertex(j).normal[1], renderable->getMeshVertex(j).normal[2]);
+				glVertex3f(renderable->getMeshVertex(j).location[0], renderable->getMeshVertex(j).location[1], renderable->getMeshVertex(j).location[2]);
+			}
+			glEnd();
+		}
+	}
+
+
+	/*
+	for (int i = 0; i < object->getNumRenderables(); ++i) {
+		glBegin(object->getRenderable(i)->getGlBeginMode());
+		for (int j = 0; j < object->getRenderable(i)->getNumMeshVertices(); ++j) {
+			glColor3f(object->getRenderable(i)->getMeshVertex(j).color[0], object->getRenderable(i)->getMeshVertex(j).color[1], object->getRenderable(i)->getMeshVertex(j).color[2]);
+			glNormal3f(object->getRenderable(i)->getMeshVertex(j).normal[0], object->getRenderable(i)->getMeshVertex(j).normal[1], object->getRenderable(i)->getMeshVertex(j).normal[2]);
+			glVertex3f(object->getRenderable(i)->getMeshVertex(j).location[0], object->getRenderable(i)->getMeshVertex(j).location[1], object->getRenderable(i)->getMeshVertex(j).location[2]);
+		}
+		glEnd();
+	}
+	*/
+}
+
+} // namespace mylib

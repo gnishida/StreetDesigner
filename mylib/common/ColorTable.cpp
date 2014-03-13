@@ -16,14 +16,11 @@ This file is part of QtUrban.
 
 #include "ColorTable.h"
 
-namespace ucore {
+namespace mylib {
 
 ColorTableEntry::ColorTableEntry(double value, int r, int g, int b) {
 	this->value = value;
 	color = QColor(r, g, b);
-}
-
-ColorTableEntry::~ColorTableEntry() {
 }
 
 float ColorTableEntry::getValue() {
@@ -36,9 +33,6 @@ QColor ColorTableEntry::getColor() {
 
 ColorTable::ColorTable() {
 	scale = ColorTable::SCALE_LINEAR;
-}
-
-ColorTable::~ColorTable() {
 }
 
 void ColorTable::setScale(int scale) {
@@ -86,4 +80,4 @@ QColor ColorTable::getRGB(double value) {
 	return prev.getColor();
 }
 
-} // namespace ucore
+} // namespace mylib

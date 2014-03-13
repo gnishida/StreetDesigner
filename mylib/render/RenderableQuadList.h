@@ -19,7 +19,7 @@ This file is part of QtUrban.
 #include "Renderable.h"
 #include "qvector3d.h"
 
-namespace ucore {
+namespace mylib {
 
 class RenderableQuadList : public Renderable {
 public:
@@ -33,4 +33,4 @@ public:
 	void addQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal1, const QVector3D& normal2, const QVector3D& normal3, const QVector3D& normal4, const QColor& color1, const QColor& color2, const QColor& color3, const QColor& color4);
 };
 
-} // namespace ucore
+} // namespace mylib

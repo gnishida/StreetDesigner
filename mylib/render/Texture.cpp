@@ -17,7 +17,7 @@ This file is part of QtUrban.
 #include "Texture.h"
 #include <QtOpenGL>
 
-namespace ucore {
+namespace mylib {
 
 Texture::Texture(unsigned int id, QString filename, const QVector2D& size) {
 	this->id = id;
@@ -59,4 +59,4 @@ void Texture::bind(float xSize, float ySize, bool repeat) {
 	glBindTexture(GL_TEXTURE_2D, id);
 }*/
 
-} // namespace ucore
+} // namespace mylib

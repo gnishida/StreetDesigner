@@ -19,7 +19,7 @@ This file is part of QtUrban.
 #include "ColorTable.h"
 #include <qcolor.h>
 
-namespace ucore {
+namespace mylib {
 
 class HeatMapColorTable : public ColorTable {
 protected:
@@ -32,4 +32,4 @@ public:
 	QColor getColor(double value);
 };
 
-} // namespace ucore
+} // namespace mylib

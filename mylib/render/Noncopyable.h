@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #pragma once
 
-namespace ucore {
+namespace mylib {
 
 class Noncopyable {
 protected:
@@ -28,4 +28,4 @@ private:
 	Noncopyable& operator=(const Noncopyable& ref);
 };
 
-} // namespace ucore
+} // namespace mylib

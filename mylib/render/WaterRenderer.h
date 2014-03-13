@@ -41,7 +41,7 @@ static float	normal[6 * (RESOLUTION + 1) * (RESOLUTION + 1)];
 
 static bool water_initialized = false;
 
-namespace ucore {
+namespace mylib {
 
 class TextureManager;
 class Texture;
@@ -76,4 +76,4 @@ private:
 	//int	load_texture (const char * filename, unsigned char * dest, const int format, const unsigned int size);		
 };
 
-} // namespace ucore
+} // namespace mylib

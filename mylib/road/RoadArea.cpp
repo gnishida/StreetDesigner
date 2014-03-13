@@ -40,7 +40,7 @@ void RoadArea::save(QDomDocument& doc, QDomNode& parent) {
 	}
 }
 
-void RoadArea::adaptToTerrain(MyTerrain* terrain) {
+void RoadArea::adaptToTerrain(mylib::Terrain* terrain) {
 	area3D.clear();
 
 	for (int i = 0; i < area.size(); ++i) {

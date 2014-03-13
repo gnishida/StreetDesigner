@@ -23,7 +23,7 @@ This file is part of QtUrban.
 #include <QtOpenGL>
 
 
-namespace ucore {
+namespace mylib {
 
 class Camera3D {
 public:
@@ -136,5 +136,5 @@ protected:
 	}
 };
 
-} // namespace ucore
+} // namespace mylib
 

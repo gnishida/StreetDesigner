@@ -18,7 +18,7 @@ This file is part of QtUrban.
 #include "TextureManager.h"
 #include "Texture.h"
 
-namespace ucore {
+namespace mylib {
 
 #define		MOD	0xff
 
@@ -410,4 +410,4 @@ void WaterRenderer::renderMe(TextureManager* textureManager) {
 	glDisable(GL_TEXTURE_GEN_T);
 }
 
-} // namespace ucore
+} // namespace mylib

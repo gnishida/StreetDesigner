@@ -17,7 +17,7 @@ This file is part of QtUrban.
 #include "HeatMapColorTable.h"
 #include <algorithm>
 
-namespace ucore {
+namespace mylib {
 
 HeatMapColorTable::HeatMapColorTable(float minValue, float maxValue) : ColorTable() {
 	this->maxValue = maxValue;
@@ -47,4 +47,4 @@ QColor HeatMapColorTable::getColor(double value) {
 	return QColor(r * 255, g * 255, b * 255);
 }
 
-} // namespace ucore
+} // namespace mylib

@@ -22,7 +22,7 @@ This file is part of QtUrban.
 
 class QGLWidget;
 
-namespace ucore {
+namespace mylib {
 
 class Texture;
 
@@ -45,4 +45,4 @@ public:
 	Texture* get(QString name);
 };
 
-} // namespace ucore
+} // namespace mylib

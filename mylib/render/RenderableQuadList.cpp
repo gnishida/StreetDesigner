@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #include "RenderableQuadList.h"
 
-namespace ucore {
+namespace mylib {
 
 RenderableQuadList::RenderableQuadList() : Renderable(GL_QUADS) {
 }
@@ -56,4 +56,4 @@ void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, con
 	generateMeshVertex(pt4.x(), pt4.y(), pt4.z(), normal4.x(), normal4.y(), normal4.z(), color4);
 }
 
-} // namespace ucore
+} // namespace mylib

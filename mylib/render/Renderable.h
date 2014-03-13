@@ -22,7 +22,7 @@ This file is part of QtUrban.
 #include <boost/shared_ptr.hpp>
 #include "Noncopyable.h"
 
-namespace ucore {
+namespace mylib {
 
 class TextureManager;
 class Texture;
@@ -81,4 +81,4 @@ protected:
 
 typedef boost::shared_ptr<Renderable> RenderablePtr;
 
-} // namespace ucore
+} // namespace mylib

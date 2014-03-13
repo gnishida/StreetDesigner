@@ -21,7 +21,7 @@ bool RoadGeneratorHelper::intersects(RoadGraph &roads, const QVector2D& p0, cons
 			//if new segment intersects other segment
 			QVector2D intPt;
 			float tab, tcd;
-			if (ucore::Util::segmentSegmentIntersectXY(p0, p1, roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], &tab, &tcd, true, intPt)) {
+			if (mylib::Util::segmentSegmentIntersectXY(p0, p1, roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], &tab, &tcd, true, intPt)) {
 				float dist = (p0 - intPt).lengthSquared();
 
 				//make sure we get only closest segment
@@ -61,7 +61,7 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos,
 		if (GraphUtil::getDegree(roads, *vi) == 0) continue;
 
 		// スナップによる変位角
-		float phi = ucore::Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+		float phi = mylib::Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
 
 		bool okay = true;
 		RoadOutEdgeIter ei, eend;
@@ -78,7 +78,7 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos,
 		
 
 			// ２つのエッジのなす角
-			float theta = ucore::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+			float theta = mylib::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
 			if (phi > theta * 0.5f) {
 				okay = false;
 				break;
@@ -139,10 +139,10 @@ bool RoadGeneratorHelper::canSnapToVertex2(RoadGraph& roads, const QVector2D pos
 		if (v2 == srcDesc) continue;
 
 		// スナップによる変位角
-		float phi = ucore::Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+		float phi = mylib::Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
 
 		// ２つのエッジのなす角
-		float theta = ucore::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+		float theta = mylib::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
 
 		// スナップによる変位角が、２つのエッジのなす角の半分より大きい場合は、スキップ
 		if (phi > theta * 0.5f) continue;
@@ -188,13 +188,13 @@ bool RoadGeneratorHelper::canSnapToEdge(RoadGraph& roads, const QVector2D& pos, 
 		float dist = GraphUtil::distance(roads, pos, *ei, closePt);
 
 		// 変位角が90度以上なら、スキップ
-		float phi = ucore::Util::diffAngle(closePt - roads.graph[srcDesc]->pt, pos - roads.graph[srcDesc]->pt);
+		float phi = mylib::Util::diffAngle(closePt - roads.graph[srcDesc]->pt, pos - roads.graph[srcDesc]->pt);
 		if (phi >= M_PI * 0.5f) continue;
 
 		// ２つのエッジのなす角が45度以下なら、スキップ
-		float theta1 = ucore::Util::diffAngle(closePt - roads.graph[src]->pt, closePt - roads.graph[srcDesc]->pt);
+		float theta1 = mylib::Util::diffAngle(closePt - roads.graph[src]->pt, closePt - roads.graph[srcDesc]->pt);
 		if (theta1 <= M_PI * 0.25f) continue;
-		float theta2 = ucore::Util::diffAngle(closePt - roads.graph[tgt]->pt, closePt - roads.graph[srcDesc]->pt);
+		float theta2 = mylib::Util::diffAngle(closePt - roads.graph[tgt]->pt, closePt - roads.graph[srcDesc]->pt);
 		if (theta2 <= M_PI * 0.25f) continue;
 
 
@@ -264,7 +264,7 @@ float RoadGeneratorHelper::getNearestEdge(RoadGraph& roads, const QVector2D& pt,
 
 		QVector2D pt2;
 		for (int i = 0; i < roads.graph[*ei]->polyline.size() - 1; i++) {
-			float dist = ucore::Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
+			float dist = mylib::Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
 			if (dist < min_dist) {
 				min_dist = dist;
 				snapEdge = *ei;
@@ -321,14 +321,14 @@ bool RoadGeneratorHelper::invadingTerritory(RoadGraph &roads, const QVector2D &p
 		// 誤差により、テリトリーに入っていると判断されてしまうのを防ぐため、0.9fをかける。
 		if ((roads.graph[*vi]->pt - pt).lengthSquared() < roads.graph[*vi]->kernel.territory * roads.graph[*vi]->kernel.territory * 0.81f) {
 			// 対象となる頂点方向へ、エッジが伸びていない場合（角度が15度より大きい）は、「侵入」と判断する
-			if (ucore::Util::diffAngle(roads.graph[*vi]->pt - pt, targetPt - pt) > M_PI * 15.0f / 180.0f) return true;
+			if (mylib::Util::diffAngle(roads.graph[*vi]->pt - pt, targetPt - pt) > M_PI * 15.0f / 180.0f) return true;
 
 			if (roads.graph[*vi]->kernel.id == -1) return true;
 
 			// 対象となる頂点から、頂点srcVertex方向へ向かうエッジがなければ、「侵入」と判断する
 			bool close = false;
 			for (int i = 0; i < roads.graph[*vi]->kernel.edges.size(); ++i) {
-				if (ucore::Util::diffAngle(roads.graph[*vi]->kernel.edges[i].edge.last(), roads.graph[srcVertex]->pt - roads.graph[*vi]->pt) < M_PI * 15.0f / 180.0f) {
+				if (mylib::Util::diffAngle(roads.graph[*vi]->kernel.edges[i].edge.last(), roads.graph[srcVertex]->pt - roads.graph[*vi]->pt) < M_PI * 15.0f / 180.0f) {
 					close = true;
 					break;
 				}
@@ -390,7 +390,7 @@ bool RoadGeneratorHelper::isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_des
 		}
 		*/
 
-		if (ucore::Util::diffAngle(roads.graph[tgt]->pt - roads.graph[v_desc]->pt, polyline.last()) < M_PI * 30.0f / 180.0f) {
+		if (mylib::Util::diffAngle(roads.graph[tgt]->pt - roads.graph[v_desc]->pt, polyline.last()) < M_PI * 30.0f / 180.0f) {
 			return true;
 		}
 	}

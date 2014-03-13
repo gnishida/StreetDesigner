@@ -16,16 +16,15 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include <qvector3d.h>
-#include <qcolor.h>
+#include <QVector3D>
+#include <QColor>
 #include <vector>
 #include <QtOpenGL>
 #include "Renderable.h"
 
-namespace ucore {
+namespace mylib {
 
 class TextureManager;
-
 
 class GeometryObject {
 private:
@@ -82,4 +81,4 @@ protected:
 	virtual void _generateMeshVertices(TextureManager* textureManager) = 0;
 };
 
-} // namespace ucore
+} // namespace mylib

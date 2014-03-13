@@ -86,7 +86,7 @@ bool RoadEdge::containsPoint(const QVector2D &pos, float widthPerLane, int& inde
 		QVector2D p0(polyline[i].x(), polyline[i].y());
 		QVector2D p1(polyline[i + 1].x(), polyline[i + 1].y());
 
-		if (ucore::Util::pointSegmentDistanceXY(p0, p1, pos) <= getWidth(widthPerLane)) {
+		if (mylib::Util::pointSegmentDistanceXY(p0, p1, pos) <= getWidth(widthPerLane)) {
 			// find the closest point
 			float min_dist = std::numeric_limits<float>::max();
 			for (int j = 0; j < polyline.size(); j++) {

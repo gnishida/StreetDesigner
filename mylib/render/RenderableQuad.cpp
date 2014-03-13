@@ -16,9 +16,9 @@ This file is part of QtUrban.
 
 #include "RenderableQuad.h"
 
-namespace ucore {
+namespace mylib {
 
-RenderableQuad::RenderableQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, ucore::Texture* texture, float s0, float t0, float s1, float t1) : Renderable(GL_QUADS) {
+RenderableQuad::RenderableQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, mylib::Texture* texture, float s0, float t0, float s1, float t1) : Renderable(GL_QUADS) {
 	this->texture = texture;
 
 	generateMeshVertex(pt1.x(), pt1.y(), pt1.z(), normal.x(), normal.y(), normal.z(), s0, t0);
@@ -30,4 +30,4 @@ RenderableQuad::RenderableQuad(const QVector3D& pt1, const QVector3D& pt2, const
 RenderableQuad::~RenderableQuad() {
 }
 
-} // namespace ucore
+} // namespace mylib

@@ -20,7 +20,7 @@ This file is part of QtUrban.
 #include "camera_3d.h"
 #include "TextureManager.h"
 
-namespace ucore {
+namespace mylib {
 
 class Texture;
 
@@ -36,4 +36,4 @@ public:
 	void render(Camera3D* camera, TextureManager* textureManager);
 };
 
-} // namespace ucore
+} // namespace mylib

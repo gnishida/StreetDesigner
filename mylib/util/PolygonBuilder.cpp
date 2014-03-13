@@ -58,7 +58,7 @@ const Polyline3D& PolygonBuilder::polyline3D() const {
 	return _polyline3D;
 }
 
-void PolygonBuilder::adaptToTerrain(MyTerrain* terrain) {
+void PolygonBuilder::adaptToTerrain(mylib::Terrain* terrain) {
 	_polyline3D.clear();
 
 	for (int i = 0; i < _polyline.size(); ++i) {

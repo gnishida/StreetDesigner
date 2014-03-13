@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #include "GeometryObject.h"
 
-namespace ucore {
+namespace mylib {
 
 GeometryObject::GeometryObject() {
 	scale = 1.0f;
@@ -68,4 +68,4 @@ void GeometryObject::generateMeshVertices(TextureManager* textureManager) {
 	modified = false;
 }
 
-} // namespace ucore
+} // namespace mylib

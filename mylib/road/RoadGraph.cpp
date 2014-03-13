@@ -2,7 +2,7 @@
 #include "GraphUtil.h"
 #include "RoadGraph.h"
 #include "../common/Util.h"
-#include "../render/MyTerrain.h"
+#include "../render/Terrain.h"
 #include "../render/RenderableQuadList.h"
 #include "../render/TextureManager.h"
 
@@ -16,9 +16,9 @@ RoadGraph::RoadGraph() {
 RoadGraph::~RoadGraph() {
 }
 
-void RoadGraph::_generateMeshVertices(ucore::TextureManager* textureManager) {
-	ucore::RenderableQuadList* renderable1 = new ucore::RenderableQuadList();
-	ucore::RenderableQuadList* renderable2 = new ucore::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
+void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
+	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList();
+	mylib::RenderableQuadList* renderable2 = new mylib::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
 
 	// generate vertices for seeds
 	/*
@@ -28,7 +28,7 @@ void RoadGraph::_generateMeshVertices(ucore::TextureManager* textureManager) {
 		QVector3D p1 = v->getPt() + QVector3D(5, -5, 0);
 		QVector3D p2 = v->getPt() + QVector3D(5, 5, 0);
 		QVector3D p3 = v->getPt() + QVector3D(-5, 5, 0);
-		QVector3D normal = ucore::Util::calculateNormal(p0, p1, p2);
+		QVector3D normal = mylib::Util::calculateNormal(p0, p1, p2);
 
 		renderable1->addQuad(p0, p1, p2, p3, normal, QColor(255, 255, 255));
 	}
@@ -50,7 +50,7 @@ void RoadGraph::_generateMeshVertices(ucore::TextureManager* textureManager) {
 			QVector3D p1 = pt1 - vec * graph[*ei]->getWidth() / 2.0f;
 			QVector3D p2 = pt2 - vec * graph[*ei]->getWidth() / 2.0f;
 			QVector3D p3 = pt2 + vec * graph[*ei]->getWidth() / 2.0f;
-			QVector3D normal = ucore::Util::calculateNormal(p0, p1, p2);
+			QVector3D normal = mylib::Util::calculateNormal(p0, p1, p2);
 
 			if (i < num - 2) {
 				QVector3D vec2 = graph[*ei]->polyline3D[i + 2] - pt2;
@@ -274,7 +274,7 @@ void RoadGraph::setZ(float z) {
 /**
  * 道路網のGeometryを更新した場合は、必ずこの関数を実行して、3D Geometryを更新すること。
  */
-void RoadGraph::adaptToTerrain(MyTerrain* terrain) {
+void RoadGraph::adaptToTerrain(mylib::Terrain* terrain) {
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
 		float z = terrain->getValue(graph[*vi]->pt.x(), graph[*vi]->pt.y());

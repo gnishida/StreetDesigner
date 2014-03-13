@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #include "Renderable.h"
 
-namespace ucore {
+namespace mylib {
 
 Renderable::Renderable() {
 	glBeginMode = GL_TRIANGLES;	// This should be always GL_TRIANGLES in the future, but we allow others for now.
@@ -42,7 +42,7 @@ void Renderable::addVertex(const Vertex& vertex) {
 }
 
 void Renderable::generateMeshVertex(float x, float y, float z, float nx, float ny, float nz, float s, float t) {
-	ucore::Vertex vertex;
+	mylib::Vertex vertex;
 	vertex.location[0] = x;
 	vertex.location[1] = y;
 	vertex.location[2] = z;
@@ -59,7 +59,7 @@ void Renderable::generateMeshVertex(float x, float y, float z, float nx, float n
 }
 
 void Renderable::generateMeshVertex(float x, float y, float z, float nx, float ny, float nz, const QColor& color) {
-	ucore::Vertex vertex;
+	mylib::Vertex vertex;
 	vertex.location[0] = x;
 	vertex.location[1] = y;
 	vertex.location[2] = z;
@@ -193,4 +193,4 @@ void Renderable::generateFace(int face, float x, float y, float z, float w, floa
 	}
 }*/
 
-} // namespace ucore
+} // namespace mylib

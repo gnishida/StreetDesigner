@@ -37,7 +37,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	srand(12345);
 
 	// 境界上に、Avenueを生成
-	if (ucore::G::getBool("addAvenuesOnBoundary")) {
+	if (mylib::G::getBool("addAvenuesOnBoundary")) {
 		generateRoadsOnBoundary(roads, area, RoadEdge::TYPE_AVENUE, 1);
 	}
 
@@ -49,7 +49,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 
 	// Avenueを生成
 	int i;
-	for (i = 0; !seeds.empty() && i < ucore::G::getInt("numIterations"); ++i) {
+	for (i = 0; !seeds.empty() && i < mylib::G::getInt("numIterations"); ++i) {
 		RoadVertexDesc desc = seeds.front();
 		seeds.pop_front();
 
@@ -57,9 +57,9 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 		attemptExpansion(roads, area, desc, RoadEdge::TYPE_AVENUE, kf, seeds, additionalSeeds);
 	}
 	
-	if (ucore::G::getBool("multiSeeds")) {
-		if (ucore::G::getBool("connectAvenues")) {
-			for (; !additionalSeeds.empty() && i < ucore::G::getInt("numIterations"); ++i) {
+	if (mylib::G::getBool("multiSeeds")) {
+		if (mylib::G::getBool("connectAvenues")) {
+			for (; !additionalSeeds.empty() && i < mylib::G::getInt("numIterations"); ++i) {
 				RoadVertexDesc desc = additionalSeeds.front();
 				additionalSeeds.pop_front();
 
@@ -71,7 +71,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 		}
 
 		// 指定されたエリアでCropping
-		if (ucore::G::getBool("cropping")) {
+		if (mylib::G::getBool("cropping")) {
 			GraphUtil::extractRoads2(roads, area);
 		}
 	}
@@ -81,7 +81,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	//GraphUtil::reduce(roads);
 	//GraphUtil::clean(roads);
 
-	if (!ucore::G::getBool("generateLocalStreets")) {
+	if (!mylib::G::getBool("generateLocalStreets")) {
 		GraphUtil::clean(roads);
 		return;
 	}
@@ -89,7 +89,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	// Local streetを生成
 	generateStreetSeeds(roads, area, kf, seeds);
 
-	for (int i = 0; !seeds.empty() && i < ucore::G::getInt("numIterations"); ++i) {
+	for (int i = 0; !seeds.empty() && i < mylib::G::getInt("numIterations"); ++i) {
 		RoadVertexDesc desc = seeds.front();
 		seeds.pop_front();
 
@@ -137,7 +137,7 @@ void KDERoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &ar
 	int numSeeds = numExpectedVertices / 30 + 1;
 	float threshold = area.area() / numExpectedVertices;
 	
-	if (ucore::G::getBool("multiSeeds")) {
+	if (mylib::G::getBool("multiSeeds")) {
 		// シードの数を決定
 		BBox bboxTarget = area.envelope();
 		std::cout << "Target BBox: (" << bboxTarget.minPt.x() << "," << bboxTarget.minPt.y() << ") - (" << bboxTarget.maxPt.x() << "," << bboxTarget.maxPt.y() << ")" << std::endl;
@@ -453,7 +453,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			snapped = true;
 			intersected = false;
 		} else {
-			if (!ucore::G::getBool("multiSeeds")) {
+			if (!mylib::G::getBool("multiSeeds")) {
 				if (!outside && !area.contains(pt)) {
 					// エリア外周との交点を求める
 					area.intersects(roads.graph[srcDesc]->pt, pt, outsidePt);
@@ -475,7 +475,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 	}
 
 	if (!intersected) {
-		if (ucore::G::getBool("invadingCheck")) {
+		if (mylib::G::getBool("invadingCheck")) {
 			// 他の頂点のテリトリーに侵入したら、頂点生成、エッジ生成を却下する
 			if (RoadGeneratorHelper::invadingTerritory(roads, pt, srcDesc, roads.graph[srcDesc]->pt + edge.edge[edge.edge.size() - 1])) return true;
 		}
@@ -487,7 +487,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			tgtDesc = snapDesc;
 
 			// デバッグ用に、スナップ画像を保存
-			if (ucore::G::getBool("saveSnappingImages")) {
+			if (mylib::G::getBool("saveSnappingImages")) {
 				RoadGeneratorHelper::saveSnappingImage(roads, area, srcDesc, old_polyline, polyline, snapDesc, "snap");
 			}
 		} else {
@@ -510,7 +510,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 
 	// シードに追加
 	if (toBeSeed) {
-		if (!ucore::G::getBool("multiSeeds") || currentBBox.contains(pt)) {
+		if (!mylib::G::getBool("multiSeeds") || currentBBox.contains(pt)) {
 			seeds.push_back(tgtDesc);
 
 			// 追加した頂点に、カーネルを割り当てる
@@ -602,16 +602,16 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 				BBox bbox;
 				QVector2D pt = RoadGeneratorHelper::modulo(area, kf.area(), roads.graph[neighbors[j]]->kernel.pt - polylines[j].last() + polylines[j][0] + area.envelope().midPt(), bbox);
 
-				if (ucore::G::g["coordiniates"] == "cartesian") { // カーテシアン座標系の場合
+				if (mylib::G::g["coordiniates"] == "cartesian") { // カーテシアン座標系の場合
 					location_diff += (pt - kf.items(roadType)[i].pt).length();
 				} else { // 極座標系の場合
-					location_diff += ucore::Util::diffAngle(roads.graph[v_desc]->pt - area.envelope().midPt(), kf.items(roadType)[i].pt) * 100.0f;
+					location_diff += mylib::Util::diffAngle(roads.graph[v_desc]->pt - area.envelope().midPt(), kf.items(roadType)[i].pt) * 100.0f;
 				}
 			}
 		}
 
 		// フィッティングスコアを計算
-		float diff = edge_diff * ucore::G::getFloat("weightEdge") + location_diff * ucore::G::getFloat("weightLocation") + repetition * ucore::G::getFloat("weightRepetition");
+		float diff = edge_diff * mylib::G::getFloat("weightEdge") + location_diff * mylib::G::getFloat("weightLocation") + repetition * mylib::G::getFloat("weightRepetition");
 		if (diff < min_diff) {
 			min_diff = diff;
 			min_index = i;
@@ -621,14 +621,14 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 	KDEFeatureItem item = kf.items(roadType)[min_index];
 
 	// 極座標系の場合は、ポリラインを変形しておく
-	if (ucore::G::g["coordiniates"] == "polar") {
+	if (mylib::G::g["coordiniates"] == "polar") {
 		QVector2D offset = roads.graph[v_desc]->pt - area.envelope().midPt();
 		float scale = offset.length() / item.pt.length();
 
 		for (int i = 0; i < item.edges.size(); ++i) {
 			for (int j = 0; j < item.edges[i].edge.size(); ++j) {
 				float r, theta;
-				ucore::Util::cartesian2polar(item.edges[i].edge[j], r, theta);
+				mylib::Util::cartesian2polar(item.edges[i].edge[j], r, theta);
 
 				item.edges[i].edge[j].setX(r * scale * cosf(theta));
 				item.edges[i].edge[j].setY(r * scale * sinf(theta));
@@ -670,7 +670,7 @@ void KDERoadGenerator::connectAvenues(RoadGraph &roads, const Polygon2D &area, c
 	if (RoadGeneratorHelper::canSnapToVertex2(roads, roads.graph[v_desc]->pt, threshold, srcDesc, snapDesc)) {
 		GraphUtil::snapVertex(roads, v_desc, snapDesc);
 
-		if (ucore::G::getBool("saveConnectingImages")) {
+		if (mylib::G::getBool("saveConnectingImages")) {
 			Polyline2D old_polyline = roads.graph[srcEdge]->polyline;
 			RoadEdgeDesc new_edge = GraphUtil::getEdge(roads, srcDesc, snapDesc);
 
@@ -879,7 +879,7 @@ void KDERoadGenerator::connectRoads2(RoadAreaSet &areas, int area_id, RoadVertex
 	//if (min_dist > dist_threshold2) return;
 
 	// スナップにより、角度が大幅に変わる場合は、スナップさせない
-	float angle = ucore::Util::diffAngle(areas.areas[area_id]->roads.graph[v_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt, areas.areas[min_area_id]->roads.graph[min_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt);
+	float angle = mylib::Util::diffAngle(areas.areas[area_id]->roads.graph[v_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt, areas.areas[min_area_id]->roads.graph[min_desc]->pt - areas.areas[area_id]->roads.graph[v2_desc]->pt);
 	if (angle > angle_threshold) return;
 
 	GraphUtil::moveVertex(areas.areas[area_id]->roads, v_desc, areas.areas[min_area_id]->roads.graph[min_desc]->pt);

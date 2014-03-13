@@ -5,7 +5,7 @@
 #include "../common/Polygon2D.h"
 #include "../common/Polyline2D.h"
 #include "../common/Polyline3D.h"
-#include "../render/MyTerrain.h"
+#include "../render/Terrain.h"
 
 class PolygonBuilder {
 private:
@@ -30,6 +30,6 @@ public:
 
 	const Polyline3D& polyline3D() const;
 
-	void adaptToTerrain(MyTerrain* terrain);
+	void adaptToTerrain(mylib::Terrain* terrain);
 };
 

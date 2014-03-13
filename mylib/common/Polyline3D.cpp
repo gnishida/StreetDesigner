@@ -29,7 +29,7 @@ void Polyline3D::translate(const QVector2D &offset) {
 void Polyline3D::rotate(float angle, const QVector2D &orig) {
 	for (int i = 0; i < size(); ++i) {
 		float z = (*this)[i].z();
-		(*this)[i] = ucore::Util::rotate(QVector2D(at(i).x(), at(i).y()), -ucore::Util::deg2rad(angle), orig);
+		(*this)[i] = mylib::Util::rotate(QVector2D(at(i).x(), at(i).y()), -mylib::Util::deg2rad(angle), orig);
 		(*this)[i].setZ(z);
 	}
 }
@@ -42,3 +42,4 @@ void Polyline3D::scale(float factor) {
 		(*this)[i] = QVector3D(at(i).x() * factor, at(i).y() * factor, at(i).z());
 	}
 }
+

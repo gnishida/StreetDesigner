@@ -21,7 +21,7 @@ This file is part of QtUrban.
 #include <qtextstream.h>
 #include <iostream>
 
-namespace ucore {
+namespace mylib {
 
 TextureManager::TextureManager(QGLWidget* glWidget) {
 	this->glWidget = glWidget;
@@ -80,4 +80,4 @@ Texture* TextureManager::get(QString name) {
 	return textures[name];
 }
 
-} // namespace ucore
+} // namespace mylib

@@ -44,7 +44,7 @@ float KDEFeatureItem::getMinAngle(const Polyline2D &polyline) const {
 	for (int i = 0; i < edges.size(); ++i) {
 		if (edges[i].edge.size() == 0) continue;
 
-		float angle = ucore::Util::diffAngle(polyline.last() - polyline[0], edges[i].edge.last());
+		float angle = mylib::Util::diffAngle(polyline.last() - polyline[0], edges[i].edge.last());
 		if (angle < min_angle) {
 			min_angle = angle;
 		}
@@ -57,7 +57,7 @@ float KDEFeatureItem::getMinAngle(const Polyline2D &polyline) const {
  * 指定された角度[degree]だけ、交差点カーネルを時計回りに回転する。
  */
 void KDEFeatureItem::rotate(float deg, const QVector2D &orig) {
-	pt = ucore::Util::rotate(pt, -ucore::Util::deg2rad(deg), orig);
+	pt = mylib::Util::rotate(pt, -mylib::Util::deg2rad(deg), orig);
 
 	for (int i = 0; i < edges.size(); ++i) {
 		edges[i].edge.rotate(deg, orig);

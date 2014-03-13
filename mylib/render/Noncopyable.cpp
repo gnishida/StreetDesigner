@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #include "Noncopyable.h"
 
-namespace ucore {
+namespace mylib {
 
 Noncopyable::Noncopyable() {
 }
@@ -24,4 +24,4 @@ Noncopyable::Noncopyable() {
 Noncopyable::~Noncopyable() {
 }
 
-} // namespace ucore
+} // namespace mylib

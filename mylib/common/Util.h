@@ -4,7 +4,7 @@
 #include <QVector3D>
 #include <QVector2D>
 
-namespace ucore {
+namespace mylib {
 
 class Util {
 	static const float MTC_FLOAT_TOL;
@@ -50,6 +50,8 @@ public:
 
 	// 3Dポイントを2Dポイント(XY平面)に射影する
 	static QVector2D projectTo2D(const QVector3D &pt);
+
+	static bool getIrregularBisector(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2, float d01, float d12, QVector3D& intPt);
 };
 
-} // namespace ucore
+} // namespace mylib

@@ -3,7 +3,7 @@
 #include <boost/shared_ptr.hpp>
 #include "../common/Polygon2D.h"
 #include "../common/Polyline3D.h"
-#include "../render/MyTerrain.h"
+#include "../render/Terrain.h"
 #include "RoadGraph.h"
 
 class RoadArea {
@@ -20,7 +20,7 @@ public:
 	void load(QDomNode& node);
 	void save(QDomDocument& doc, QDomNode& node);
 
-	void adaptToTerrain(MyTerrain* terrain);
+	void adaptToTerrain(mylib::Terrain* terrain);
 };
 
 typedef boost::shared_ptr<RoadArea> RoadAreaPtr;

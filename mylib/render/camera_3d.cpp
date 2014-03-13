@@ -16,10 +16,10 @@ This file is part of QtUrban.
 
 #include "camera_3d.h"
 #include "qmatrix4x4.h"
-#include "qvector4d.h"
-#include "qfile.h"
+#include <QVector4D>
+#include <QFile>
 
-namespace ucore {
+namespace mylib {
 
 void Camera3D::applyCamTransform() {
 	glLoadIdentity();		
@@ -97,4 +97,4 @@ bool  Camera3D::loadCameraPose(QTextStream& camStream) {
 	return true;
 }
 
-} // namespace ucore
+} // namespace mylib

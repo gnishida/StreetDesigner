@@ -16,9 +16,12 @@ This file is part of QtUrban.
 
 #pragma once
 
-namespace ucore {
+#include <QVector2D>
+#include "../common/Polyline3D.h"
+#include "GeometryObject.h"
 
-class GeometryObject;
+namespace mylib {
+
 class TextureManager;
 
 class Renderer {
@@ -29,7 +32,7 @@ public:
 	void render(GeometryObject* object, TextureManager* textureManager);
 
 protected:
-	virtual void _render(GeometryObject* object, TextureManager* textureManager) = 0;
+	void _render(GeometryObject* object, TextureManager* textureManager);
 };
 
-} // namespace ucore
+} // namespace mylib

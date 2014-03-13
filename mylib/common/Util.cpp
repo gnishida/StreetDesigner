@@ -1,7 +1,7 @@
 ﻿#include "Util.h"
 #include "common.h"
 
-namespace ucore {
+namespace mylib {
 
 const float Util::MTC_FLOAT_TOL = 1e-6f;
 
@@ -335,4 +335,52 @@ QVector2D Util::projectTo2D(const QVector3D &pt) {
 	return QVector2D(pt.x(), pt.y());
 }
 
-} // namespace ucore
+/**
+* Given three non colinear points p0, p1, p2, this function computes
+* the intersection between the lines A and B. Line A is the line parallel to the segment p0-p1
+* and at a distance d01 from that segment. Line B is the line parallel to the segment
+* p1-p2 at a distance d12 from that segment.
+* Returns true if point is successfully computed
+**/
+bool Util::getIrregularBisector(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2, float d01, float d12, QVector3D& intPt) {
+	double alpha;
+	double theta;
+	double L;
+
+	QVector3D p1_p0;
+	QVector3D p1_p2;
+	QVector3D p1_p2_perp;
+	QVector3D crossP;
+
+	p1_p0 = p0 - p1;
+	p1_p0.setZ(0.0f);
+
+	p1_p2 = p2 - p1;
+	p1_p2.setZ(0.0f);
+
+	p1_p2_perp.setX( -p1_p2.y() );
+	p1_p2_perp.setY(  p1_p2.x() );
+	p1_p2_perp.setZ( 0.0f );
+
+	alpha = diffAngle(p1_p0, p1_p2);				
+
+	if (!(alpha == alpha)) {
+		return false;
+	}				
+
+	theta = atan2( sin(alpha), (d01 / d12) + cos(alpha) );				
+	L = d12 / sin(theta);
+
+	//This is done to handle convex vs. concave angles in polygon
+	crossP = QVector3D::crossProduct(p1_p2, p1_p0);
+
+	if (crossP.z() > 0) {
+		intPt = p1 + (p1_p2.normalized())*L*cos(theta) + (p1_p2_perp.normalized())*d12;
+	} else {
+		intPt = p1 - (p1_p2.normalized()) * L * cos(theta) + (p1_p2_perp.normalized()) * d12;
+	}
+	return true;
+}
+
+
+} // namespace mylib

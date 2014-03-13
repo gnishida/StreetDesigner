@@ -18,7 +18,7 @@ This file is part of QtUrban.
 #include "TextureManager.h"
 #include "Texture.h"
 
-namespace ucore {
+namespace mylib {
 
 std::vector<Texture*> SimpleSkyBox::textures;
 
@@ -106,4 +106,4 @@ void SimpleSkyBox::render(Camera3D* camera, TextureManager* textureManager) {
 	glDisable(GL_TEXTURE_2D);
 }
 
-} // namespace ucore
+} // namespace mylib

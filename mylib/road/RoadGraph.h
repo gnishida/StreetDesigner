@@ -13,6 +13,7 @@
 #include "RoadEdge.h"
 #include "../render/Renderable.h"
 #include "../render/GeometryObject.h"
+#include "../render/Terrain.h"
 
 using namespace boost;
 
@@ -24,9 +25,9 @@ typedef graph_traits<BGLGraph>::edge_iterator RoadEdgeIter;
 typedef graph_traits<BGLGraph>::out_edge_iterator RoadOutEdgeIter;
 typedef graph_traits<BGLGraph>::in_edge_iterator RoadInEdgeIter;
 
-class MyTerrain;
+class Terrain;
 
-class RoadGraph : public ucore::GeometryObject {
+class RoadGraph : public mylib::GeometryObject {
 public:
 	BGLGraph graph;
 
@@ -55,10 +56,10 @@ public:
 
 	void clear();
 	void setZ(float z);
-	void adaptToTerrain(MyTerrain* terrain);
+	void adaptToTerrain(mylib::Terrain* terrain);
 
 private:
-	void _generateMeshVertices(ucore::TextureManager* textureManager);
+	void _generateMeshVertices(mylib::TextureManager* textureManager);
 };
 
 typedef boost::shared_ptr<RoadGraph> RoadGraphPtr;
