@@ -31,8 +31,8 @@ public:
 
 	std::vector<Polygon3D> tessellate() const;
 
-	float computeInset(float offsetDistance, Polygon3D &pgonInset, bool computeArea = true);
-	float computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset, bool computeArea = true);
+	void computeInset(float offsetDistance, Polygon3D &pgonInset);
+	void computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset);
 };
 
 /**

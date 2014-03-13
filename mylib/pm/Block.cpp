@@ -65,7 +65,8 @@ void Block::clearParcels() {
 
 void Block::adaptToTerrain(mylib::Terrain* terrain) {
 	for (int i = 0; i < contour.size(); ++i) {
-		contour[i].setZ(terrain->getValue(contour[i].x(), contour[i].y()));
+		float z = terrain->getValue(contour[i].x(), contour[i].y());
+		contour[i].setZ(z + 10.0f);
 	}
 
 	/*

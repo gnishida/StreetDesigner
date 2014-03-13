@@ -215,6 +215,8 @@ void MainWindow::onDebug() {
 
 void MainWindow::onGenerateBlocks() {
 	urbanGeometry->generateBlocks();
+
+	glWidget->updateGL();
 }
 
 void MainWindow::onGenerateParcels() {

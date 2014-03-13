@@ -156,8 +156,6 @@ void BlockGenerator::run() {
 	//mainWin->glWidget->updateGL();
 	//QTest::qWait(1);
 
-	std::vector<float> blockAreas;
-
 	Polygon3D blockContourInset;
 	for (int i = 0; i < blocks->size(); ++i) {
 		//Reorient faces
@@ -165,36 +163,10 @@ void BlockGenerator::run() {
 		//blocks->at(i)->getContour().correct();
 		//std::reverse(blocks->at(i)->getContour().begin(), blocks->at(i)->getContour().end());
 
-		if(blocks->at(i)->getContour().size() < 3){
-			blockAreas.push_back(0.0f);
-			continue;
-		}
-
-		//float insetArea = blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);		
+		//blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);		
 		//blocks->at(i)->setContour(blockContourInset);
-
-		//blockAreas.push_back(insetArea);
 	}
 
-	//Remove the largest block
-	/*
-	float maxArea = 0.0f;
-	int maxAreaIdx = -1;
-	for (int i = 0; i < blocks->size(); ++i) {
-		if (blocks->at(i)->getContour().size() < 3) {
-			continue;
-		}
-		float area = blocks->at(i)->getContour().area();
-		if (area > maxArea) {
-			maxArea = area;
-			maxAreaIdx = i;
-		}
-	}
-
-	if (maxAreaIdx != -1) {
-		blocks->erase(blocks->begin() + maxAreaIdx);
-		//blockAreas.erase(blockAreas.begin() + maxAreaIdx);
-	}*/
 	blocks->erase(blocks->begin());
 
 	//mainWin->glWidget->updateGL();

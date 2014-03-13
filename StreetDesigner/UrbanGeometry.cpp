@@ -67,6 +67,10 @@ void UrbanGeometry::generateRoads(RoadFeature &rf) {
 void UrbanGeometry::generateBlocks() {
 	BlockGenerator generator(mainWin);
 	generator.run();
+
+	for (int i = 0; i < blocks.size(); ++i) {
+		blocks[i]->adaptToTerrain(terrain);
+	}
 }
 
 void UrbanGeometry::render(mylib::TextureManager* textureManager) {
@@ -80,7 +84,6 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	renderer.render(&roads, textureManager);
 	for (int i = 0; i < blocks.size(); ++i) {
 		renderer.render(blocks[i], textureManager);
-		//rendererHelper.renderArea(blocks[i]->getContour(), QColor(255, 0, 0), GL_LINES);
 	}
 
 

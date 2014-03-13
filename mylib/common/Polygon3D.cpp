@@ -169,21 +169,21 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 * @param[out] pgonInset: The vertices of the polygon inset
 * @return insetArea: Returns the area of the polygon inset		
 **/
-float Polygon3D::computeInset(float offsetDistance, Polygon3D &pgonInset, bool computeArea) {
-	if (size() < 3) return 0.0f;				
+void Polygon3D::computeInset(float offsetDistance, Polygon3D &pgonInset) {
+	if (size() < 3) return;
 	std::vector<float> offsetDistances(size(), offsetDistance);
 
-	return computeInset(offsetDistances, pgonInset, computeArea);
+	computeInset(offsetDistances, pgonInset);
 }
 
-float Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset, bool computeArea) {
+void Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset) {
 	Polygon3D cleanPgon = *this;
 	double tol = 0.01f;
 
 	int prev, next;
 	int cSz = cleanPgon.size();
 
-	if (cSz < 3) return 0.0f;
+	if (cSz < 3) return;
 
 	/*
 	if (Polygon3D::reorientFace(cleanPgon)) {
@@ -210,49 +210,4 @@ float Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgo
 
 		pgonInset[cur] = intPt;
 	}
-
-	//Compute inset area
-	if(computeArea){
-
-		boost::geometry::ring_type<Polygon3D>::type bg_contour;
-		boost::geometry::ring_type<Polygon3D>::type bg_contour_inset;
-		float contArea;
-		float contInsetArea;
-
-		if (pgonInset.size() > 0) {
-			boost::geometry::assign(bg_contour_inset, pgonInset);
-			boost::geometry::correct(bg_contour_inset);
-
-			if (boost::geometry::intersects(bg_contour_inset)) {
-				pgonInset.clear();
-				return 0.0f;
-			} else {
-
-				boost::geometry::assign(bg_contour, cleanPgon);
-				boost::geometry::correct(bg_contour);
-				//if inset is not within polygon
-				if (!bg_contour.contains(bg_contour_inset)) {
-				//if (!mylib::Util::is2DRingWithin2DRing(bg_contour_inset, bg_contour)) {
-					pgonInset.clear();
-					return 0.0f;
-				} else {
-					contArea = fabs(boost::geometry::area(bg_contour));
-					contInsetArea = fabs(boost::geometry::area(bg_contour_inset));
-
-					if (contInsetArea < contArea) {
-						//return boost::geometry::area(bg_contour_inset);
-						return contInsetArea;
-					} else {
-						pgonInset.clear();
-						return 0.0f;
-					}
-				}
-			}
-		} else {
-			pgonInset.clear();
-			return 0.0f;
-		}
-	}
-	return 0.0f;
-
 }
