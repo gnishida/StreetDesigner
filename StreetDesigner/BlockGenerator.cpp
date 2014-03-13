@@ -45,7 +45,6 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 
 	void end_face() {
 		if (blockContourPoints.size() > 2) {
-			/*
 			blockContourTmp.clear();
 			
 			for (int i = 0; i < blockContourPoints.size(); ++i) {
@@ -61,11 +60,9 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 					}
 				}
 			}
-			*/
 
 			pm::Block* newBlock = new pm::Block();
-			//newBlock->setContour(blockContourTmp);		
-			newBlock->setContour(blockContourPoints);
+			newBlock->setContour(blockContourTmp);
 			newBlock->setRoadWidths(blockContourWidths);
 			
 			blocksPtr->push_back(newBlock);
@@ -74,7 +71,6 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 
 	template <typename Vertex> 
 	void next_vertex(Vertex v) {
-		//blockContourTmp.push_back(roadGraphPtr->graph[v]->pt);
 		blockContourPoints.push_back(roadGraphPtr->graph[v]->pt);
 	}
 
@@ -82,12 +78,9 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 	void next_edge(Edge e) {
 		blockContourLines.push_back(roadGraphPtr->graph[e]->polyline3D);
 
-		/*
 		for (int i = 0; i < roadGraphPtr->graph[e]->polyline3D.size() - 1; ++i) {
 			blockContourWidths.push_back(0.5f * roadGraphPtr->graph[e]->getWidth());
 		}
-		*/
-		blockContourWidths.push_back(0.5f * roadGraphPtr->graph[e]->getWidth());
 	}
 };
 
