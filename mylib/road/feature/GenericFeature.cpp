@@ -102,11 +102,11 @@ void GenericFeature::computeFeature() {
 std::vector<float> GenericFeature::getAngles(int num) const {
 	std::vector<float> angles;
 
-	float angle = Util::uniform_rand(0, M_PI * 2.0f);
+	float angle = Util::genRand(0, M_PI * 2.0f);
 	float angle_step = M_PI * 2.0f / num;
 
 	for (int i = 0; i < num; ++i) {
-		angles.push_back(angle + Util::uniform_rand(-0.2f, 0.2f));
+		angles.push_back(angle + Util::genRand(-0.2f, 0.2f));
 
 		angle += angle_step;		
 	}
@@ -126,7 +126,7 @@ std::vector<float> GenericFeature::getAngles(int num, const QVector2D &dir) cons
 	for (int i = 0; i < num; ++i) {
 		angle += angle_step;		
 
-		angles.push_back(angle + Util::uniform_rand(-0.2f, 0.2f));
+		angles.push_back(angle + Util::genRand(-0.2f, 0.2f));
 	}
 
 	return angles;
@@ -142,7 +142,7 @@ std::vector<float> GenericFeature::getPerpendicularAngles(const QVector2D &dir) 
 	float angle_step = M_PI;
 
 	for (int i = 0; i < 2; ++i) {
-		angles.push_back(angle + Util::uniform_rand(-0.2f, 0.2f));
+		angles.push_back(angle + Util::genRand(-0.2f, 0.2f));
 
 		angle += angle_step;		
 	}
@@ -157,7 +157,7 @@ std::vector<float> GenericFeature::getLengths(int roadType, int num) const {
 	std::vector<float> ret;
 
 	for (int i = 0; i < num; ++i) {
-		ret.push_back(generateLength(roadType, Util::uniform_rand()));
+		ret.push_back(generateLength(roadType, Util::genRand()));
 	}
 
 	return ret;
@@ -181,7 +181,7 @@ float GenericFeature::generateLength(int roadType, float uniform_random_number) 
 }
 
 int GenericFeature::getDirections(int roadType) const {
-	float uniform_random_number = Util::uniform_rand();
+	float uniform_random_number = Util::genRand();
 
 	for (QMap<int, float>::iterator it = avenueNumDirections.begin(); it != avenueNumDirections.end(); ++it) {
 		if (uniform_random_number <= avenueNumDirections[it.key()]) return it.key();

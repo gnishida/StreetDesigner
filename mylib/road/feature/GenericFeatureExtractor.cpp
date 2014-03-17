@@ -14,7 +14,7 @@ void GenericFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, 
 		if (!roads.graph[*ei]->valid) continue;
 
 		// GridまたはRadialのエッジは、スキップ
-		if (roads.graph[*ei]->shapeType > 0) continue;
+		if (roads.graph[*ei]->properties["shapeType"].toInt() > 0) continue;
 
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
@@ -65,7 +65,7 @@ int GenericFeatureExtractor::getNumEdges(RoadGraph &roads, RoadVertexDesc v, int
 		
 		if (!GraphUtil::isRoadTypeMatched(roads.graph[*ei]->type, roadType)) continue;
 
-		if (roads.graph[*ei]->shapeType != shapeType) continue;
+		if (roads.graph[*ei]->properties["shapeType"] != shapeType) continue;
 
 		count++;
 	}

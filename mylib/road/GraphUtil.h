@@ -52,9 +52,10 @@ public:
 	static void removeIsolatedEdges(RoadGraph& roads, bool onlyValidEdge = true);
 	static RoadVertexDesc splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt);
 	static bool hasCloseEdge(RoadGraph* roads, RoadVertexDesc v1, RoadVertexDesc v2, float angle_threshold = 0.3f);
-	static bool isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyLine);
-	static bool isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyLine1, std::vector<QVector2D>& polyLine2);
-	static std::vector<QVector2D> simplifyPolyLine(std::vector<QVector2D>& polyLine, float threshold);
+	static bool isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline);
+	static bool isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline, RoadEdgeDesc ignoreEdge);
+	static bool isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline1, std::vector<QVector2D>& polyline2);
+	static std::vector<QVector2D> simplifyPolyLine(std::vector<QVector2D>& polyline, float threshold);
 	static void removeShortEdges(RoadGraph& roads, float threshold);
 	static void removeLinkEdges(RoadGraph& roads);
 	static Polyline2D finerEdge(RoadGraph& roads, RoadEdgeDesc e, float step = 1.0f);

@@ -41,10 +41,10 @@ void GridFeature::addEdge(const QVector2D& edge_vec, float threshold) {
 	float a1 = atan2f(dir.y(), dir.x());
 	float a2 = atan2f(-dir.y(), -dir.x());
 
-	float diff1 = mylib::Util::diffAngle(angle1, a1);
-	float diff2 = mylib::Util::diffAngle(angle1, a2);
-	float diff3 = mylib::Util::diffAngle(angle2, a1);
-	float diff4 = mylib::Util::diffAngle(angle2, a2);
+	float diff1 = Util::diffAngle(angle1, a1);
+	float diff2 = Util::diffAngle(angle1, a2);
+	float diff3 = Util::diffAngle(angle2, a1);
+	float diff4 = Util::diffAngle(angle2, a2);
 	float min_diff = std::min(std::min(diff1, diff2), std::min(diff3, diff4));
 
 	// エッジの方向が、仮の方向から閾値よりも大きく外れている場合は、そのエッジの方向は無視する。
@@ -140,7 +140,7 @@ bool GridFeature::isClose(const QVector2D& dir, float threshold) {
 	float a1 = atan2f(dir.y(), dir.x());
 	float a2 = atan2f(-dir.y(), -dir.x());
 
-	if (mylib::Util::diffAngle(angle1, a1) <= threshold || mylib::Util::diffAngle(angle1, a2) <= threshold || mylib::Util::diffAngle(angle2, a1) <= threshold || mylib::Util::diffAngle(angle2, a2) <= threshold) return true;
+	if (Util::diffAngle(angle1, a1) <= threshold || Util::diffAngle(angle1, a2) <= threshold || Util::diffAngle(angle2, a1) <= threshold || Util::diffAngle(angle2, a2) <= threshold) return true;
 	else return false;
 }
 
@@ -156,10 +156,10 @@ std::vector<float> GridFeature::getAngles() const {
 
 std::vector<float> GridFeature::getLengths() const {
 	std::vector<float> ret;
-	ret.push_back(generateLength(0, mylib::Util::genRand()));
-	ret.push_back(generateLength(1, mylib::Util::genRand()));
-	ret.push_back(generateLength(2, mylib::Util::genRand()));
-	ret.push_back(generateLength(3, mylib::Util::genRand()));
+	ret.push_back(generateLength(0, Util::genRand()));
+	ret.push_back(generateLength(1, Util::genRand()));
+	ret.push_back(generateLength(2, Util::genRand()));
+	ret.push_back(generateLength(3, Util::genRand()));
 
 	return ret;
 }

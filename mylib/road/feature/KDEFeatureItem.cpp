@@ -6,8 +6,8 @@
 #include "../../common/Util.h"
 #include "KDEFeatureItem.h"
 
-void KDEFeatureItem::addEdge(const Polyline2D &polyline, bool deadend, bool onBoundary) {
-	edges.push_back(KDEFeatureItemEdge(polyline, deadend, onBoundary));
+void KDEFeatureItem::addEdge(const Polyline2D &polyline, int lanes, bool deadend, bool onBoundary) {
+	edges.push_back(KDEFeatureItemEdge(polyline, lanes, deadend, onBoundary));
 }
 
 /**
@@ -44,7 +44,7 @@ float KDEFeatureItem::getMinAngle(const Polyline2D &polyline) const {
 	for (int i = 0; i < edges.size(); ++i) {
 		if (edges[i].edge.size() == 0) continue;
 
-		float angle = mylib::Util::diffAngle(polyline.last() - polyline[0], edges[i].edge.last());
+		float angle = Util::diffAngle(polyline.last() - polyline[0], edges[i].edge.last());
 		if (angle < min_angle) {
 			min_angle = angle;
 		}
@@ -57,7 +57,7 @@ float KDEFeatureItem::getMinAngle(const Polyline2D &polyline) const {
  * 指定された角度[degree]だけ、交差点カーネルを時計回りに回転する。
  */
 void KDEFeatureItem::rotate(float deg, const QVector2D &orig) {
-	pt = mylib::Util::rotate(pt, -mylib::Util::deg2rad(deg), orig);
+	pt = Util::rotate(pt, -Util::deg2rad(deg), orig);
 
 	for (int i = 0; i < edges.size(); ++i) {
 		edges[i].edge.rotate(deg, orig);
@@ -93,7 +93,7 @@ void KDEFeatureItem::load(QDomNode& node) {
 				child2 = child2.nextSibling();
 			}
 
-			edges.push_back(KDEFeatureItemEdge(polyline, child.toElement().attribute("deadend") == "true", child.toElement().attribute("onBoundary") == "true"));
+			edges.push_back(KDEFeatureItemEdge(polyline, child.toElement().attribute("lanes").toFloat(), child.toElement().attribute("deadend") == "true", child.toElement().attribute("onBoundary") == "true"));
 		}
 
 		child = child.nextSibling();
@@ -103,6 +103,8 @@ void KDEFeatureItem::load(QDomNode& node) {
 void KDEFeatureItem::save(QDomDocument& doc, QDomNode& node) {
 	for (int i = 0; i < edges.size(); ++i) {
 		QDomElement node_edge = doc.createElement("edge");
+
+		node_edge.setAttribute("lanes", edges[i].lanes);
 
 		QString str;
 		if (edges[i].deadend) {

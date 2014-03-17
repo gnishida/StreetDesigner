@@ -156,6 +156,7 @@
     <ClCompile Include="..\mylib\render\TextureManager.cpp" />
     <ClCompile Include="..\mylib\render\WaterRenderer.cpp" />
     <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp" />
+    <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp" />
     <ClCompile Include="..\mylib\road\feature\GridFeature.cpp" />
     <ClCompile Include="..\mylib\road\feature\KDEFeature.cpp" />
     <ClCompile Include="..\mylib\road\feature\KDEFeatureItem.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="..\mylib\render\TextureManager.h" />
     <ClInclude Include="..\mylib\render\WaterRenderer.h" />
     <ClInclude Include="..\mylib\road\feature\AbstractFeature.h" />
+    <ClInclude Include="..\mylib\road\feature\GenericFeature.h" />
     <ClInclude Include="..\mylib\road\feature\GridFeature.h" />
     <ClInclude Include="..\mylib\road\feature\KDEFeature.h" />
     <ClInclude Include="..\mylib\road\feature\KDEFeatureItem.h" />

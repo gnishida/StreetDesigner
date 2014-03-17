@@ -20,7 +20,7 @@ This file is part of QtUrban.
 #include "UrbanGeometry.h"
 #include "MainWindow.h"
 
-class pm::Block;
+class Block;
 class RoadGraph;
 
 class RoadGraph;

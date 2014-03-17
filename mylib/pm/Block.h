@@ -25,8 +25,6 @@ This file is part of QtUrban.
 #include "../common/BBox.h"
 //#include "Parcel.h"
 
-namespace pm {
-
 /*typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, Parcel*> ParcelGraph;				
 typedef boost::graph_traits<ParcelGraph>::vertex_descriptor ParcelGraphVertexDesc;
 typedef boost::graph_traits<ParcelGraph>::vertex_iterator ParcelGraphVertexIter;
@@ -80,5 +78,3 @@ public:
 private:
 	void _generateMeshVertices(mylib::TextureManager* textureManager);
 };
-
-} // namespace pm

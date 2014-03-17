@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{66e7bec6-c215-42d7-b05c-b476c23f581c}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{5f667ac5-102b-474f-ad60-37260764bace}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="mylib">
+      <UniqueIdentifier>{9ec9c332-c5b4-4194-9a9d-180969a5b2b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\common">
+      <UniqueIdentifier>{68b6a1e1-918a-4fed-b9b2-0876c5dd0428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\road">
+      <UniqueIdentifier>{8c1cb6e3-0727-4067-a992-ed737a01b367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\road\feature">
+      <UniqueIdentifier>{3d993ea4-2c52-4573-bba5-7524c0243c13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\road\generator">
+      <UniqueIdentifier>{7c178cde-8f3c-4b16-90b8-dd7582e7876f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_MainWindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadSegmentationUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HoughTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\BBox.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\Polygon2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\Renderable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\Util.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\VoronoiUtil.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\AbstractFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\GenericFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\GridFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\RadialFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\RoadFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\KDEFeatureItem.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\KDEFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\Polyline2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\GraphUtil.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\RoadArea.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\RoadEdge.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\RoadGraph.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\RoadGraphRenderer.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\RoadVertex.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\KDEFeatureExtractor.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\GenericFeatureExtractor.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\ConvexHull.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\PolygonBuilder.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\common\global.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\mylib\road\feature\KDEFeatureItemEdge.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ControlWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadSegmentationUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HoughTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\BBox.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\Polygon2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\Renderable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\Util.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\VoronoiUtil.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\AbstractFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\GenericFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\GridFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\RadialFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\RoadFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\KDEFeatureItem.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\KDEFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\Polyline2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\GraphUtil.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\RoadArea.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\RoadEdge.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\RoadGraph.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\RoadGraphRenderer.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\RoadVertex.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\KDEFeatureExtractor.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\GenericFeatureExtractor.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\ConvexHull.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\PolygonBuilder.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\common\global.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\mylib\road\feature\KDEFeatureItemEdge.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

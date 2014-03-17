@@ -181,7 +181,7 @@ void Polygon3D::findEdge(float x, float y, int& v1, int& v2, float& s) const {
 	for (int i = 0; i < size(); i++) {
 		int next = (i + 1) % size();
 
-		float dist = mylib::Util::pointSegmentDistanceXY(at(i), at(next), QVector3D(x, y, 0));
+		float dist = Util::pointSegmentDistanceXY(at(i), at(next), QVector3D(x, y, 0));
 		if (dist < minDist) {
 			minDist = dist;
 			v1 = i;
@@ -240,7 +240,7 @@ void Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgon
 		prev = (cur-1+cSz)%cSz; //point p0
 		next = (cur+1)%cSz;	  //point p2
 
-		mylib::Util::getIrregularBisector(cleanPgon[prev], cleanPgon[cur], cleanPgon[next], offsetDistances[prev], offsetDistances[cur], intPt);
+		Util::getIrregularBisector(cleanPgon[prev], cleanPgon[cur], cleanPgon[next], offsetDistances[prev], offsetDistances[cur], intPt);
 
 		pgonInset[cur] = intPt;
 	}

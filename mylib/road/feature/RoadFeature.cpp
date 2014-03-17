@@ -36,6 +36,10 @@ void RoadFeature::load(QString filename) {
 				KDEFeaturePtr kf = KDEFeaturePtr(new KDEFeature(features.size()));
 				kf->load(node);
 				features.push_back(kf);
+			} else if (node.toElement().attribute("type") == "generic") {
+				GenericFeaturePtr gf = GenericFeaturePtr(new GenericFeature(features.size()));
+				gf->load(node);
+				features.push_back(gf);
 			}
 		}
 

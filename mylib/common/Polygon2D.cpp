@@ -227,7 +227,7 @@ QVector2D Polygon2D::getOBB(const QVector2D& dir, Polygon2D& obb) const {
 	// 指定された方向がX軸になるよう、ポリゴンを回転する
 	float alpha = atan2f(dir.y(), dir.x());
 	Polygon2D rotPolygon;
-	rotate(mylib::Util::rad2deg(alpha), rotPolygon);
+	rotate(Util::rad2deg(alpha), rotPolygon);
 
 	// 回転したポリゴンの中心が原点になるよう、移動する
 	Polygon2D rotPolygon2;
@@ -244,7 +244,7 @@ QVector2D Polygon2D::getOBB(const QVector2D& dir, Polygon2D& obb) const {
 	boost::geometry::convert(bbox, obb);
 
 	// Bounding Boxを、再度回転して戻す
-	obb.rotate(mylib::Util::rad2deg(-alpha));
+	obb.rotate(Util::rad2deg(-alpha));
 
 	// 再度、もともとのポリゴンの中心に戻す
 	obb.translate(center.x(), center.y());

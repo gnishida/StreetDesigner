@@ -73,9 +73,9 @@ float TerrainCell::getElevation(float x, float y) {
 	QVector2D p(x, y);
 
 	if (SQR(this->x + length - x) + SQR(this->y - y) < SQR(this->x - x) + SQR(this->y + length - y)) {
-		return mylib::Util::barycentricInterpolation(pSW, pSE, pNE, p);
+		return Util::barycentricInterpolation(pSW, pSE, pNE, p);
 	} else {
-		return mylib::Util::barycentricInterpolation(pSW, pNE, pNW, p);
+		return Util::barycentricInterpolation(pSW, pNE, pNW, p);
 	}
 }
 

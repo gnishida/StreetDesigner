@@ -19,30 +19,30 @@ This file is part of QtUrban.
 #include "MainWindow.h"
 
 int main(int argc, char *argv[]) {
-	mylib::G::global()["showTerrain"] = true;
-	mylib::G::global()["showRoads"] = true;
-	mylib::G::global()["showBlocks"] = true;
-	mylib::G::global()["showParcels"] = true;
-	mylib::G::global()["showBuildings"] = true;
-	mylib::G::global()["showParcels"] = true;
-	mylib::G::global()["showTrees"] = true;
+	G::global()["showTerrain"] = true;
+	G::global()["showRoads"] = true;
+	G::global()["showBlocks"] = true;
+	G::global()["showParcels"] = true;
+	G::global()["showBuildings"] = true;
+	G::global()["showParcels"] = true;
+	G::global()["showTrees"] = true;
 
-	mylib::G::global()["parcelAreaMean"] = 3600;
-	mylib::G::global()["parcelAreaDeviation"] = 49;
-	mylib::G::global()["parcelSplitDeviation"] = 0.19;
-	mylib::G::global()["parkPercentage"] = 0.2f;
-	mylib::G::global()["parksRatio"] = 0.05f;
+	G::global()["parcelAreaMean"] = 3600;
+	G::global()["parcelAreaDeviation"] = 49;
+	G::global()["parcelSplitDeviation"] = 0.19;
+	G::global()["parkPercentage"] = 0.2f;
+	G::global()["parksRatio"] = 0.05f;
 
-	mylib::G::global()["buildingHeightMean"] = 12;
-	mylib::G::global()["buildingHeightDeviation"] = 90;
-	mylib::G::global()["buildingBaseAboveGround"] = 3.0f;
-	mylib::G::global()["meanBuildingFloorHeight"] = 3.0f;
-	mylib::G::global()["buildingHeightFactor"] = 0.067f;
-	mylib::G::global()["maxHeightBaseAspectRatio"] = 1.0f;
-	mylib::G::global()["minBuildingArea"] = 10.0f;
+	G::global()["buildingHeightMean"] = 12;
+	G::global()["buildingHeightDeviation"] = 90;
+	G::global()["buildingBaseAboveGround"] = 3.0f;
+	G::global()["meanBuildingFloorHeight"] = 3.0f;
+	G::global()["buildingHeightFactor"] = 0.067f;
+	G::global()["maxHeightBaseAspectRatio"] = 1.0f;
+	G::global()["minBuildingArea"] = 10.0f;
 
-	mylib::G::global()["snapToClosestVertexFactor"] = 0.7f;
-	mylib::G::global()["roadAngleTolerance"] = 1.2566f;
+	G::global()["snapToClosestVertexFactor"] = 0.7f;
+	G::global()["roadAngleTolerance"] = 1.2566f;
 
 	QApplication a(argc, argv);
 	MainWindow w;

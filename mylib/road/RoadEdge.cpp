@@ -12,11 +12,11 @@ RoadEdge::RoadEdge(unsigned int type, unsigned int lanes, bool oneWay, bool link
 
 	// initialize other members
 	this->valid = true;
-	this->shapeType = SHAPE_DEFAULT;
-	this->group = -1;
-	this->gridness = 0.0f;
-	this->seed = false;
-	this->fullyPaired = false;
+	this->properties["seed"] = false;
+	this->properties["shapeType"] = SHAPE_DEFAULT;
+	this->properties["group"] = -1;
+	this->properties["gridness"] = 0.0f;
+	this->properties["fullyPaired"] = false;
 
 	// default color
 	switch (type) {
@@ -86,7 +86,7 @@ bool RoadEdge::containsPoint(const QVector2D &pos, float widthPerLane, int& inde
 		QVector2D p0(polyline[i].x(), polyline[i].y());
 		QVector2D p1(polyline[i + 1].x(), polyline[i + 1].y());
 
-		if (mylib::Util::pointSegmentDistanceXY(p0, p1, pos) <= getWidth(widthPerLane)) {
+		if (Util::pointSegmentDistanceXY(p0, p1, pos) <= getWidth(widthPerLane)) {
 			// find the closest point
 			float min_dist = std::numeric_limits<float>::max();
 			for (int j = 0; j < polyline.size(); j++) {

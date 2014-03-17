@@ -234,6 +234,10 @@ void UrbanGeometry::perturbRoads(float perturbationFactor) {
 
 void UrbanGeometry::loadAreas(const QString &filename) {
 	areas.load(filename);
+
+	for (int i = 0; i < areas.size(); ++i) {
+		areas[i]->adaptToTerrain(terrain);
+	}
 }
 
 void UrbanGeometry::saveAreas(const QString &filename) {

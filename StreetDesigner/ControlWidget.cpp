@@ -82,22 +82,22 @@ void ControlWidget::generateKDE() {
 		return;
 	}
 
-	mylib::G::global()["invadingCheck"] = ui.checkBoxInvadingCheck->isChecked();
-	mylib::G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
-	mylib::G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
-	mylib::G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-	mylib::G::global()["saveSnappingImages"] = ui.checkBoxSaveSnappingImages->isChecked();
-	mylib::G::global()["weightEdge"] = ui.lineEditWeightEdge->text().toFloat();
-	mylib::G::global()["weightLocation"] = ui.lineEditWeightLocation->text().toFloat();
-	mylib::G::global()["weightRepetition"] = ui.lineEditWeightRepetition->text().toFloat();
+	G::global()["invadingCheck"] = ui.checkBoxInvadingCheck->isChecked();
+	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
+	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["saveSnappingImages"] = ui.checkBoxSaveSnappingImages->isChecked();
+	G::global()["weightEdge"] = ui.lineEditWeightEdge->text().toFloat();
+	G::global()["weightLocation"] = ui.lineEditWeightLocation->text().toFloat();
+	G::global()["weightRepetition"] = ui.lineEditWeightRepetition->text().toFloat();
 
-	mylib::G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
-	mylib::G::global()["connectAvenues"] = ui.checkBoxConnectAvenues->isChecked();
-	mylib::G::global()["saveConnectingImages"] = ui.checkBoxSaveConnectingImages->isChecked();
-	mylib::G::global()["cropping"] = ui.checkBoxCropping->isChecked();
-	mylib::G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
+	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
+	G::global()["connectAvenues"] = ui.checkBoxConnectAvenues->isChecked();
+	G::global()["saveConnectingImages"] = ui.checkBoxSaveConnectingImages->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 
-	mylib::G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
+	G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
 
 	int orientation = ui.dialOrientation->value() - 180;
 	bool areaScaling = ui.checkBoxAreaScaling->isChecked();

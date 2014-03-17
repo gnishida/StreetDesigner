@@ -4,8 +4,6 @@
 #include <QVector3D>
 #include <QVector2D>
 
-namespace mylib {
-
 class Util {
 	static const float MTC_FLOAT_TOL;
 
@@ -53,5 +51,3 @@ public:
 
 	static bool getIrregularBisector(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2, float d01, float d12, QVector3D& intPt);
 };
-
-} // namespace mylib

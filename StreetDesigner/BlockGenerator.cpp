@@ -26,8 +26,8 @@ This file is part of QtUrban.
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
 
-RoadGraph* roadGraphPtr;
-std::vector<pm::Block*>* blocksPtr;
+RoadGraph* roadGraphPtrForBlockGeneration;
+std::vector<Block*>* blocksPtr;
 Polygon3D blockContourTmp;
 Polygon3D blockContourPoints;
 std::vector<Polyline3D> blockContourLines;
@@ -63,7 +63,7 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 
 			blockContourTmp.correct();
 			if (blockContourTmp.area() > 100.0f) {
-				pm::Block* newBlock = new pm::Block();
+				Block* newBlock = new Block();
 				newBlock->setContour(blockContourTmp);
 				newBlock->setRoadWidths(blockContourWidths);
 	
@@ -74,15 +74,15 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 
 	template <typename Vertex> 
 	void next_vertex(Vertex v) {
-		blockContourPoints.push_back(roadGraphPtr->graph[v]->pt);
+		blockContourPoints.push_back(roadGraphPtrForBlockGeneration->graph[v]->pt);
 	}
 
 	template <typename Edge> 
 	void next_edge(Edge e) {
-		blockContourLines.push_back(roadGraphPtr->graph[e]->polyline3D);
+		blockContourLines.push_back(roadGraphPtrForBlockGeneration->graph[e]->polyline3D);
 
-		for (int i = 0; i < roadGraphPtr->graph[e]->polyline3D.size() - 1; ++i) {
-			blockContourWidths.push_back(0.5f * roadGraphPtr->graph[e]->getWidth());
+		for (int i = 0; i < roadGraphPtrForBlockGeneration->graph[e]->polyline3D.size() - 1; ++i) {
+			blockContourWidths.push_back(0.5f * roadGraphPtrForBlockGeneration->graph[e]->getWidth());
 		}
 	}
 };
@@ -99,7 +99,7 @@ BlockGenerator::~BlockGenerator() {
 **/
 void BlockGenerator::run() {
 	RoadGraph* roads = &mainWin->urbanGeometry->roads;
-	std::vector<pm::Block*>* blocks = &mainWin->urbanGeometry->blocks;
+	std::vector<Block*>* blocks = &mainWin->urbanGeometry->blocks;
 
 	// clean up memory allocated for blocks
 	for (int i = 0; i < blocks->size(); ++i) {
@@ -107,7 +107,7 @@ void BlockGenerator::run() {
 	}
 	blocks->clear();
 
-	roadGraphPtr = roads;
+	roadGraphPtrForBlockGeneration = roads;
 	blocksPtr = blocks;
 
 	bool isPlanar = false;

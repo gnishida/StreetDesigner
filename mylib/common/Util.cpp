@@ -1,8 +1,6 @@
 ﻿#include "Util.h"
 #include "common.h"
 
-namespace mylib {
-
 const float Util::MTC_FLOAT_TOL = 1e-6f;
 
 QVector3D Util::calculateNormal(const QVector3D& p0, const QVector3D& p1, const QVector3D& p2) {
@@ -381,6 +379,3 @@ bool Util::getIrregularBisector(const QVector3D& p0, const QVector3D& p1, const 
 	}
 	return true;
 }
-
-
-} // namespace mylib

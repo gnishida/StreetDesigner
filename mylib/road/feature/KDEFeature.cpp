@@ -141,6 +141,7 @@ void KDEFeature::loadAvenue(QDomNode& node) {
 			KDEFeatureItem item;
 			item.id = child.toElement().attribute("id").toInt();
 			item.pt = QVector2D(child.toElement().attribute("x").toFloat(), child.toElement().attribute("y").toFloat());
+			item.streetSeed = child.toElement().attribute("streetSeed") == "true" ? true : false;
 			item.territory = child.toElement().attribute("territory").toFloat();
 			item.load(child);
 			_avenueItems.push_back(item);
@@ -202,6 +203,7 @@ void KDEFeature::saveAvenue(QDomDocument& doc, QDomNode& node) {
 		node_item.setAttribute("id", _avenueItems[i].id);
 		node_item.setAttribute("x", _avenueItems[i].pt.x());
 		node_item.setAttribute("y", _avenueItems[i].pt.y());
+		node_item.setAttribute("streetSeed", _avenueItems[i].streetSeed ? "true" : "false");
 		node_item.setAttribute("territory", _avenueItems[i].territory);
 		node.appendChild(node_item);
 		_avenueItems[i].save(doc, node_item);
@@ -214,6 +216,7 @@ void KDEFeature::saveStreet(QDomDocument& doc, QDomNode& node) {
 		node_item.setAttribute("id", _streetItems[i].id);
 		node_item.setAttribute("x", _streetItems[i].pt.x());
 		node_item.setAttribute("y", _streetItems[i].pt.y());
+		node_item.setAttribute("streetSeed", "false");
 		node_item.setAttribute("territory", _streetItems[i].territory);
 		node.appendChild(node_item);
 		_streetItems[i].save(doc, node_item);

@@ -28,7 +28,7 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		QVector3D p1 = v->getPt() + QVector3D(5, -5, 0);
 		QVector3D p2 = v->getPt() + QVector3D(5, 5, 0);
 		QVector3D p3 = v->getPt() + QVector3D(-5, 5, 0);
-		QVector3D normal = mylib::Util::calculateNormal(p0, p1, p2);
+		QVector3D normal = Util::calculateNormal(p0, p1, p2);
 
 		renderable1->addQuad(p0, p1, p2, p3, normal, QColor(255, 255, 255));
 	}
@@ -36,6 +36,8 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
+		if (!graph[*ei]->valid) continue;
+
 		int num = graph[*ei]->polyline3D.size();
 		if (num <= 1) continue;
 
@@ -50,7 +52,7 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			QVector3D p1 = pt1 - vec * graph[*ei]->getWidth() / 2.0f;
 			QVector3D p2 = pt2 - vec * graph[*ei]->getWidth() / 2.0f;
 			QVector3D p3 = pt2 + vec * graph[*ei]->getWidth() / 2.0f;
-			QVector3D normal = mylib::Util::calculateNormal(p0, p1, p2);
+			QVector3D normal = Util::calculateNormal(p0, p1, p2);
 
 			if (i < num - 2) {
 				QVector3D vec2 = graph[*ei]->polyline3D[i + 2] - pt2;

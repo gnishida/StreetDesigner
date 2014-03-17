@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <Qvector2D>
+#include <QHash>
+#include <QVariant>
 #include <QColor>
 #include <boost/shared_ptr.hpp>
 #include "../common/Polyline3D.h"
@@ -24,12 +26,8 @@ public:
 	QColor bgColor;
 
 	bool valid;			// if this edge is valid
-	bool seed;			// if this edge is used as a seed of a forest
 
-	int shapeType;		// 0 - default / 1 - grid / 2 - radial / 3 - plaza
-	int group;			// to which tree in the forest this edge belongs to
-	float gridness;		// how much it looks like grid
-	bool fullyPaired;	// if this edge has a corresponding edge
+	QHash<QString, QVariant> properties;
 
 public:
 	RoadEdge(unsigned int type, unsigned int lanes, bool oneWay = false, bool link = false, bool roundabout = false);

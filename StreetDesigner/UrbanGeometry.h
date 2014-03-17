@@ -37,7 +37,7 @@ public:
 	int depth;
 	MainWindow* mainWin;
 	RoadGraph roads;
-	std::vector<pm::Block*> blocks;
+	std::vector<Block*> blocks;
 	mylib::Terrain* terrain;
 
 	mylib::Renderer renderer;

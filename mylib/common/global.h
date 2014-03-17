@@ -15,8 +15,6 @@
 #include <Qvariant>
 #include <QVector3D>
 
-namespace mylib {
-
 class G{
 public:
 
@@ -45,4 +43,3 @@ private:
 	G& operator=(G const&){};  // assignment operator is private
 };
 
-} // namespace mylib

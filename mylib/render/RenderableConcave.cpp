@@ -71,7 +71,7 @@ void RenderableConcave::tessellate(const Polygon3D& polygon, const QColor& color
 	for (int i = 0; i < trapezoids.size(); ++i) {
 		if (trapezoids[i].size() < 3) continue;
 
-		QVector3D n = mylib::Util::calculateNormal(trapezoids[i][0], trapezoids[i][1], trapezoids[i][2]);
+		QVector3D n = Util::calculateNormal(trapezoids[i][0], trapezoids[i][1], trapezoids[i][2]);
 
 		for (int j = 1; j < trapezoids[i].size() - 1; ++j) {
 			generateMeshVertex(trapezoids[i][0].x(), trapezoids[i][0].y(), trapezoids[i][0].z(), 0, 0, 1, color);

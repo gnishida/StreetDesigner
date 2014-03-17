@@ -19,9 +19,7 @@ This file is part of QtUrban.
 #include "../render/RenderableConcave.h"
 #include "Block.h"
 
-namespace pm {
-
-Block::Block() : GeometryObject() {
+Block::Block() : mylib::GeometryObject() {
 	color = QColor(255, 255, 128);
 }
 
@@ -84,5 +82,3 @@ void Block::_generateMeshVertices(mylib::TextureManager* textureManager) {
 
 	renderables.push_back(new mylib::RenderableConcave(contour, color));
 }
-
-} // namespace pm

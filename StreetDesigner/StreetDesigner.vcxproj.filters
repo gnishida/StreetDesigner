@@ -238,6 +238,9 @@
     <ClCompile Include="TerrainSizeInputDialog.cpp">
       <Filter>Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -424,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_TerrainSizeInputDialog.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\feature\GenericFeature.h">
+      <Filter>mylib\road\feature</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

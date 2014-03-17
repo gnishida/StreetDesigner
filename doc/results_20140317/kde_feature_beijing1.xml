@@ -1,0 +1,1066 @@
+<features version="2014-02-26">
+    <feature weight="1" type="kde">
+        <center x="0" y="0"/>
+        <area>
+            <point x="-846.32763671875" y="935.230712890625"/>
+            <point x="879.33349609375" y="951.150146484375"/>
+            <point x="863.4140625" y="-930.5205078125"/>
+            <point x="-897.26904296875" y="-943.25634765625"/>
+            <point x="-897.26904296875" y="-943.25634765625"/>
+            <point x="-846.32763671875" y="935.230712890625"/>
+        </area>
+        <avenue density="2.03202e-05">
+            <item x="-230.412109375" y="52.441162109375" territory="45.1882" id="0" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="2.697265625" y="98.562255859375"/>
+                    <point x="1.27734375" y="136.622314453125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="7.96484375" y="-51.318359375"/>
+                    <point x="8.08447265625" y="-134.72998046875"/>
+                    <point x="9.04541015625" y="-152.88623046875"/>
+                    <point x="14.25732421875" y="-165.120361328125"/>
+                    <point x="20.66162109375" y="-172.82373046875"/>
+                    <point x="26.31201171875" y="-177.743896484375"/>
+                    <point x="44.52197265625" y="-183.766357421875"/>
+                    <point x="82.1982421875" y="-184.924072265625"/>
+                    <point x="113.1298828125" y="-192.749755859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-6.04345703125" y="-42.5576171875"/>
+                    <point x="-4.7109375" y="-173.547119140625"/>
+                    <point x="-3.95166015625" y="-363.04638671875"/>
+                </edge>
+            </item>
+            <item x="-229.134765625" y="189.0634765625" territory="52.3388" id="1" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.419921875" y="-38.06005859375"/>
+                    <point x="-1.27734375" y="-136.622314453125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="4.7265625" y="139.427734375"/>
+                    <point x="5.7119140625" y="218.6982421875"/>
+                </edge>
+            </item>
+            <item x="-223.4228515625" y="407.76171875" territory="62.0293" id="2" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.9853515625" y="-79.2705078125"/>
+                    <point x="-5.7119140625" y="-218.6982421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.73046875" y="65.66748046875"/>
+                    <point x="1.13916015625" y="102.770263671875"/>
+                </edge>
+            </item>
+            <item x="-222.28369140625" y="510.531982421875" territory="64.6092" id="3" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.80029296875" y="181.762451171875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.40869140625" y="-37.102783203125"/>
+                    <point x="-1.13916015625" y="-102.770263671875"/>
+                </edge>
+            </item>
+            <item x="-220.4833984375" y="692.29443359375" territory="47.6332" id="4" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.80029296875" y="-181.762451171875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.70068359375" y="70.966064453125"/>
+                </edge>
+            </item>
+            <item x="-219.78271484375" y="763.260498046875" territory="14.1454" id="5" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.70068359375" y="-70.966064453125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="162.8134765625" y="-0.333984375"/>
+                    <point x="199.9208984375" y="-0.400634765625"/>
+                    <point x="538.173828125" y="-1.0908203125"/>
+                </edge>
+            </item>
+            <item x="314.00244140625" y="-139.94140625" territory="8.48336" id="6" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.12646484375" y="-8.482421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-431.28466796875" y="-0.3671875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="811.27734375" y="-0.93505859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.05126953125" y="250.2685546875"/>
+                    <point x="-3.046875" y="451.91259765625"/>
+                    <point x="-2.20166015625" y="538.98681640625"/>
+                    <point x="-0.53125" y="630.769775390625"/>
+                </edge>
+            </item>
+            <item x="314.12890625" y="-148.423828125" territory="8.48336" id="7" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.12646484375" y="8.482421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.5263671875" y="-134.2958984375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-175.16943359375" y="0.022216796875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="261.8486328125" y="-0.467529296875"/>
+                </edge>
+            </item>
+            <item x="313.6025390625" y="-282.7197265625" territory="134.297" id="8" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.5263671875" y="134.2958984375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.5673828125" y="-199.807373046875"/>
+                </edge>
+            </item>
+            <item x="314.169921875" y="-482.527099609375" territory="195.967" id="9" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.5673828125" y="199.807373046875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.28125" y="-195.966796875"/>
+                </edge>
+            </item>
+            <item x="313.888671875" y="-678.493896484375" territory="11.9114" id="10" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.28125" y="195.966796875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.08642578125" y="-11.9111328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-313.48876953125" y="0.757080078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="120.2890625" y="-1.191162109375"/>
+                </edge>
+            </item>
+            <item x="-697.12939453125" y="-679.807373046875" territory="9.32979" id="11" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.98095703125" y="-492.52197265625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-436.41748046875" y="2.493408203125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.14794921875" y="9.32861328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="160.47021484375" y="-1.224609375"/>
+                    <point x="411.31005859375" y="-6.0224609375"/>
+                </edge>
+            </item>
+            <item x="-271.7158203125" y="446.690185546875" territory="62.0293" id="12" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-409.43798828125" y="5.8330078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.62353515625" y="107.30078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.6630859375" y="-113.134033203125"/>
+                    <point x="-1.3408203125" y="-229.162353515625"/>
+                </edge>
+            </item>
+            <item x="-681.15380859375" y="452.523193359375" territory="263.89" id="13" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="409.43798828125" y="-5.8330078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-263.86328125" y="3.75146484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-7.19384765625" y="-596.928466796875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="3.85546875" y="319.921142578125"/>
+                </edge>
+            </item>
+            <item x="-276.6435546875" y="-300.3193359375" territory="43.513" id="14" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-5.14453125" y="-130.60009765625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-14.203125" y="29.68896484375"/>
+                    <point x="-15.34326171875" y="107.42333984375"/>
+                    <point x="-18.93310546875" y="122.1064453125"/>
+                    <point x="-23.76708984375" y="132.069580078125"/>
+                    <point x="-37.92041015625" y="139.739501953125"/>
+                    <point x="-54.89697265625" y="141.832275390625"/>
+                    <point x="-93.03466796875" y="142.767333984375"/>
+                    <point x="-122.3525390625" y="151.71728515625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.50830078125" y="137.10107421875"/>
+                    <point x="1.7880859375" y="344.589599609375"/>
+                </edge>
+            </item>
+            <item x="-281.7880859375" y="-430.91943359375" territory="66.2795" id="15" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="5.14453125" y="130.60009765625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.03857421875" y="-66.279541015625"/>
+                </edge>
+            </item>
+            <item x="-281.74951171875" y="-497.198974609375" territory="46.6522" id="16" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.03857421875" y="66.279541015625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-2.77783203125" y="-130.4775390625"/>
+                </edge>
+            </item>
+            <item x="-284.52734375" y="-627.676513671875" territory="46.1414" id="17" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="2.77783203125" y="130.4775390625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.984375" y="-46.130859375"/>
+                </edge>
+            </item>
+            <item x="-285.51171875" y="-673.807373046875" territory="12.0264" id="18" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.984375" y="46.130859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.3076171875" y="-12.0224609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-251.02587890625" y="2.026123046875"/>
+                    <point x="-411.4697265625" y="3.32861328125"/>
+                </edge>
+            </item>
+            <item x="-285.8193359375" y="-685.829833984375" territory="12.0264" id="19" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.3076171875" y="12.0224609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-2.24658203125" y="-217.2509765625"/>
+                    <point x="-13.51416015625" y="-292.25830078125"/>
+                    <point x="-22.05712890625" y="-318.11767578125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-250.83984375" y="4.7978515625"/>
+                    <point x="-411.31005859375" y="6.0224609375"/>
+                </edge>
+            </item>
+            <item x="-696.9814453125" y="-670.478759765625" territory="9.32979" id="20" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-436.5263671875" y="-0.333984375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.14794921875" y="-9.32861328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="160.44384765625" y="-1.302490234375"/>
+                    <point x="411.4697265625" y="-3.32861328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.65185546875" y="35.3662109375"/>
+                    <point x="0.76611328125" y="43.458984375"/>
+                    <point x="1.16552734375" y="72.31298828125"/>
+                    <point x="1.41064453125" y="89.734619140625"/>
+                    <point x="1.63916015625" y="105.931640625"/>
+                    <point x="2.5" y="148.210693359375"/>
+                    <point x="2.57470703125" y="151.66162109375"/>
+                    <point x="2.9716796875" y="171.487548828125"/>
+                    <point x="3.5673828125" y="200.75341796875"/>
+                    <point x="3.998046875" y="221.926513671875"/>
+                </edge>
+            </item>
+            <item x="-116.908203125" y="-149.091796875" territory="8.79116" id="21" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="255.86767578125" y="0.690185546875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-106.36279296875" y="0.2783203125"/>
+                    <point x="-181.16748046875" y="0.857177734375"/>
+                    <point x="-282.087890625" y="0.48974609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-29.98681640625" y="-11.25439453125"/>
+                    <point x="-70.78125" y="-10.508544921875"/>
+                    <point x="-83.935546875" y="-13.814697265625"/>
+                    <point x="-93.64453125" y="-20.204345703125"/>
+                    <point x="-101.5068359375" y="-28.486572265625"/>
+                    <point x="-105.67626953125" y="-39.8857421875"/>
+                    <point x="-107.16259765625" y="-51.952880859375"/>
+                    <point x="-109.6650390625" y="-136.132568359375"/>
+                    <point x="-117.45556640625" y="-161.513427734375"/>
+                </edge>
+            </item>
+            <item x="138.95947265625" y="-148.401611328125" territory="175.169" id="22" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-255.86767578125" y="-0.690185546875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="175.16943359375" y="-0.022216796875"/>
+                </edge>
+            </item>
+            <item x="575.9775390625" y="-148.891357421875" territory="261.849" id="23" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-261.8486328125" y="0.467529296875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="549.36376953125" y="-3.283935546875"/>
+                </edge>
+            </item>
+            <item x="-238.85107421875" y="-689.525634765625" territory="12.3677" id="24" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="232.05810546875" y="-0.60107421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.02490234375" y="12.36767578125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-2.966796875" y="-212.1416015625"/>
+                    <point x="-10.24658203125" y="-284.00927734375"/>
+                    <point x="-20.041015625" y="-328.0361328125"/>
+                </edge>
+            </item>
+            <item x="313.97509765625" y="-690.405029296875" territory="11.9114" id="25" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.1533203125" y="-367.87744140625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.08642578125" y="11.9111328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-320.76806640625" y="0.2783203125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="385.06103515625" y="-1.469482421875"/>
+                </edge>
+            </item>
+            <item x="318.841796875" y="775.449951171875" territory="13.2879" id="26" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="807.001953125" y="0.634521484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-175.50732421875" y="0.634521484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.45068359375" y="-13.2802734375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.94287109375" y="166.74560546875"/>
+                </edge>
+            </item>
+            <item x="143.33447265625" y="776.08447265625" territory="14.1997" id="27" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="175.50732421875" y="-0.634521484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-153.4345703125" y="0.556640625"/>
+                    <point x="-180.02587890625" y="0.65673828125"/>
+                    <point x="-208.54833984375" y="0.757080078125"/>
+                    <point x="-362.64892578125" y="1.313720703125"/>
+                </edge>
+            </item>
+            <item x="-219.314453125" y="777.398193359375" territory="12.0245" id="28" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.2216796875" y="12.0224609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="154.1005859375" y="-0.556640625"/>
+                    <point x="182.623046875" y="-0.656982421875"/>
+                    <point x="209.21435546875" y="-0.757080078125"/>
+                    <point x="362.64892578125" y="-1.313720703125"/>
+                </edge>
+            </item>
+            <item x="-267.1083984375" y="778.388916015625" territory="14.4827" id="29" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-178.609375" y="2.337646484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.6494140625" y="71.567138671875"/>
+                </edge>
+            </item>
+            <item x="-445.7177734375" y="780.7265625" territory="178.625" id="30" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="178.609375" y="-2.337646484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-231.28076171875" y="3.02783203125"/>
+                </edge>
+            </item>
+            <item x="-676.99853515625" y="783.75439453125" territory="11.314" id="31" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="231.28076171875" y="-3.02783203125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-440.46240234375" y="6.9130859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.2998046875" y="-11.31005859375"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="7.35107421875" y="355.677001953125"/>
+                </edge>
+            </item>
+            <item x="-677.29833984375" y="772.4443359375" territory="11.314" id="32" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-334.88232421875" y="6.90185546875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-3.85546875" y="-319.921142578125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.2998046875" y="11.31005859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="237.07373046875" y="-4.931396484375"/>
+                    <point x="410.2001953125" y="-8.5380859375"/>
+                </edge>
+            </item>
+            <item x="-267.09814453125" y="763.90625" territory="14.4827" id="33" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.01708984375" y="-71.255615234375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-173.12646484375" y="3.606689453125"/>
+                    <point x="-410.2001953125" y="8.5380859375"/>
+                </edge>
+            </item>
+            <item x="318.39111328125" y="762.169677734375" territory="13.2879" id="34" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="164.0517578125" y="0.3896484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-4.919921875" y="-271.34130859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.45068359375" y="13.2802734375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-338.2529296875" y="0.690185546875"/>
+                    <point x="-375.3603515625" y="0.7568359375"/>
+                    <point x="-538.173828125" y="1.0908203125"/>
+                </edge>
+            </item>
+            <item x="482.44287109375" y="762.559326171875" territory="164.052" id="35" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-164.0517578125" y="-0.3896484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="643.283203125" y="1.52490234375"/>
+                </edge>
+            </item>
+            <item x="-810.44873046875" y="-141.555419921875" territory="70.5529" id="36" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-70.548828125" y="-0.757080078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="122.10107421875" y="-2.849853515625"/>
+                </edge>
+            </item>
+            <item x="-688.34765625" y="-144.4052734375" territory="122.134" id="37" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-122.10107421875" y="2.849853515625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="7.19384765625" y="596.928466796875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="17.84375" y="4.375"/>
+                    <point x="188.365234375" y="4.5419921875"/>
+                    <point x="259.27392578125" y="4.497314453125"/>
+                    <point x="289.388671875" y="4.385986328125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="17.18359375" y="-5.209716796875"/>
+                    <point x="188.33740234375" y="-4.497314453125"/>
+                    <point x="197.0771484375" y="-4.4638671875"/>
+                    <point x="223.6806640625" y="-4.374755859375"/>
+                    <point x="289.3515625" y="-4.19677734375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.43798828125" y="-61.648681640625"/>
+                    <point x="-2.36962890625" y="-203.614501953125"/>
+                </edge>
+            </item>
+            <item x="-692.9833984375" y="-448.55224609375" territory="24.4503" id="38" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.470703125" y="24.44580078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.4306640625" y="-21.173095703125"/>
+                    <point x="-1.0263671875" y="-50.43896484375"/>
+                    <point x="-1.42333984375" y="-70.264892578125"/>
+                    <point x="-1.498046875" y="-73.7158203125"/>
+                    <point x="-2.35888671875" y="-115.994873046875"/>
+                    <point x="-2.58740234375" y="-132.19189453125"/>
+                    <point x="-2.83251953125" y="-149.613525390625"/>
+                    <point x="-3.23193359375" y="-178.467529296875"/>
+                    <point x="-3.34619140625" y="-186.560302734375"/>
+                    <point x="-3.998046875" y="-221.926513671875"/>
+                </edge>
+            </item>
+            <item x="-690.71728515625" y="-348.019775390625" territory="76.1078" id="39" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.79541015625" y="-76.086669921875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.931640625" y="141.9658203125"/>
+                    <point x="2.36962890625" y="203.614501953125"/>
+                </edge>
+            </item>
+            <item x="698.93115234375" y="-678.5830078125" territory="13.2919" id="40" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.10498046875" y="-13.29150390625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="275.390625" y="0.8349609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-264.75341796875" y="-1.10205078125"/>
+                </edge>
+            </item>
+            <item x="699.0361328125" y="-691.87451171875" territory="13.2919" id="41" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.10498046875" y="13.29150390625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-385.06103515625" y="1.469482421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="436.4599609375" y="-0.2783203125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.953125" y="-270.595458984375"/>
+                    <point x="1.8505859375" y="-372.898193359375"/>
+                </edge>
+            </item>
+            <item x="-6.79296875" y="-690.126708984375" territory="14.3264" id="42" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-6.3837890625" y="-365.25048828125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-232.05810546875" y="0.60107421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="320.76806640625" y="-0.2783203125"/>
+                </edge>
+            </item>
+            <item x="-692.5126953125" y="-424.1064453125" territory="24.4503" id="43" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.470703125" y="-24.44580078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.79541015625" y="76.086669921875"/>
+                </edge>
+            </item>
+            <item x="-235.923828125" y="-482.738525390625" territory="23.8895" id="44" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.13623046875" y="-23.88916015625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.56005859375" y="172.13330078125"/>
+                </edge>
+            </item>
+            <item x="-117.2822265625" y="-140.30859375" territory="8.79116" id="45" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="431.28466796875" y="0.3671875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-30.931640625" y="7.82568359375"/>
+                    <point x="-68.60791015625" y="8.9833984375"/>
+                    <point x="-86.81787109375" y="15.005859375"/>
+                    <point x="-92.46826171875" y="19.926025390625"/>
+                    <point x="-98.87255859375" y="27.62939453125"/>
+                    <point x="-104.08447265625" y="39.863525390625"/>
+                    <point x="-105.04541015625" y="58.019775390625"/>
+                    <point x="-105.1650390625" y="141.431396484375"/>
+                    <point x="-113.1298828125" y="192.749755859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-105.97802734375" y="0.089111328125"/>
+                    <point x="-180.5771484375" y="0.467529296875"/>
+                    <point x="-281.6767578125" y="0.289306640625"/>
+                </edge>
+            </item>
+            <item x="-234.36376953125" y="-310.605224609375" territory="43.513" id="46" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.56005859375" y="-172.13330078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="7.79052734375" y="25.380859375"/>
+                    <point x="10.29296875" y="109.560546875"/>
+                    <point x="11.779296875" y="121.627685546875"/>
+                    <point x="15.94873046875" y="133.02685546875"/>
+                    <point x="23.81103515625" y="141.30908203125"/>
+                    <point x="33.52001953125" y="147.69873046875"/>
+                    <point x="46.67431640625" y="151.0048828125"/>
+                    <point x="87.46875" y="150.259033203125"/>
+                    <point x="117.45556640625" y="161.513427734375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.75927734375" y="189.499267578125"/>
+                    <point x="-2.091796875" y="320.48876953125"/>
+                    <point x="3.95166015625" y="363.04638671875"/>
+                </edge>
+            </item>
+            <item x="-236.06005859375" y="-506.627685546875" territory="23.8895" id="47" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.9638671875" y="-121.28271484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.13623046875" y="23.88916015625"/>
+                </edge>
+            </item>
+            <item x="-273.056640625" y="217.52783203125" territory="52.3388" id="48" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.677734375" y="116.0283203125"/>
+                    <point x="1.3408203125" y="229.162353515625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.373046875" y="-27.62939453125"/>
+                    <point x="-1.6552734375" y="-122.6962890625"/>
+                    <point x="-1.798828125" y="-173.257568359375"/>
+                </edge>
+            </item>
+            <item x="-270.09228515625" y="553.990966796875" territory="64.6092" id="49" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.97705078125" y="138.65966796875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.62353515625" y="-107.30078125"/>
+                </edge>
+            </item>
+            <item x="-398.99609375" y="-148.60205078125" territory="8.58284" id="50" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="100.92041015625" y="0.367431640625"/>
+                    <point x="175.72509765625" y="-0.21142578125"/>
+                    <point x="282.087890625" y="-0.48974609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="29.31787109375" y="-8.949951171875"/>
+                    <point x="67.45556640625" y="-9.885009765625"/>
+                    <point x="84.43212890625" y="-11.977783203125"/>
+                    <point x="98.58544921875" y="-19.647705078125"/>
+                    <point x="103.41943359375" y="-29.61083984375"/>
+                    <point x="107.00927734375" y="-44.2939453125"/>
+                    <point x="108.1494140625" y="-122.0283203125"/>
+                    <point x="122.3525390625" y="-151.71728515625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-65.6708984375" y="-0.177978515625"/>
+                    <point x="-92.2744140625" y="-0.26708984375"/>
+                    <point x="-101.01416015625" y="-0.300537109375"/>
+                    <point x="-272.16796875" y="-1.012939453125"/>
+                    <point x="-289.3515625" y="4.19677734375"/>
+                </edge>
+            </item>
+            <item x="-274.85546875" y="44.270263671875" territory="45.1882" id="51" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-11.81982421875" y="-53.266357421875"/>
+                    <point x="-10.77783203125" y="-137.368408203125"/>
+                    <point x="-15.80615234375" y="-154.133056640625"/>
+                    <point x="-23.8984375" y="-163.684326171875"/>
+                    <point x="-35.375" y="-171.354248046875"/>
+                    <point x="-50.33203125" y="-174.426513671875"/>
+                    <point x="-94.5419921875" y="-175.361572265625"/>
+                    <point x="-124.103515625" y="-184.28955078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.27978515625" y="-207.488525390625"/>
+                    <point x="-1.7880859375" y="-344.589599609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.1435546875" y="50.561279296875"/>
+                    <point x="1.42578125" y="145.628173828125"/>
+                    <point x="1.798828125" y="173.257568359375"/>
+                </edge>
+            </item>
+            <item x="-398.958984375" y="-140.019287109375" territory="8.58284" id="52" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="29.5615234375" y="8.927978515625"/>
+                    <point x="73.771484375" y="9.863037109375"/>
+                    <point x="88.728515625" y="12.935302734375"/>
+                    <point x="100.205078125" y="20.605224609375"/>
+                    <point x="108.29736328125" y="30.156494140625"/>
+                    <point x="113.32568359375" y="46.921142578125"/>
+                    <point x="112.28369140625" y="131.023193359375"/>
+                    <point x="124.103515625" y="184.28955078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="101.099609375" y="0.17822265625"/>
+                    <point x="175.69873046875" y="-0.2001953125"/>
+                    <point x="281.6767578125" y="-0.289306640625"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-30.11474609375" y="0.111328125"/>
+                    <point x="-101.0234375" y="0.156005859375"/>
+                    <point x="-271.544921875" y="-0.010986328125"/>
+                    <point x="-289.388671875" y="-4.385986328125"/>
+                </edge>
+            </item>
+            <item x="0.39990234375" y="-677.73681640625" territory="14.3264" id="53" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="313.48876953125" y="-0.757080078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-239.22607421875" y="0.578857421875"/>
+                </edge>
+            </item>
+            <item x="-238.826171875" y="-677.157958984375" territory="12.3677" id="54" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="239.22607421875" y="-0.578857421875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.02490234375" y="-12.36767578125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0.80224609375" y="49.24755859375"/>
+                </edge>
+            </item>
+            <item x="434.177734375" y="-679.68505859375" territory="120.295" id="55" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="264.75341796875" y="1.10205078125"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-120.2890625" y="1.191162109375"/>
+                </edge>
+            </item>
+            <item x="-219.0927734375" y="789.420654296875" territory="12.0245" id="56" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.2216796875" y="-12.0224609375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.1103515625" y="59.84521484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="152.65625" y="0.356201171875"/>
+                </edge>
+            </item>
+            <item x="-217.982421875" y="849.265869140625" territory="48.4815" id="57" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.1103515625" y="-59.84521484375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.48681640625" y="94.321044921875"/>
+                </edge>
+            </item>
+            <item x="-238.02392578125" y="-627.910400390625" territory="46.504" id="58" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.80224609375" y="-49.24755859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.9638671875" y="121.28271484375"/>
+                </edge>
+            </item>
+            <item x="-266.458984375" y="849.9560546875" territory="48.4815" id="59" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="2.4560546875" y="268.8701171875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-0.6494140625" y="-71.567138671875"/>
+                </edge>
+            </item>
+            <item x="-268.115234375" y="692.650634765625" territory="47.6332" id="60" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="1.01708984375" y="71.255615234375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.97705078125" y="-138.65966796875"/>
+                </edge>
+            </item>
+            <item x="313.47119140625" y="490.828369140625" territory="271.386" id="61" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="4.919921875" y="271.34130859375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-1.67041015625" y="-91.782958984375"/>
+                    <point x="-2.515625" y="-178.857177734375"/>
+                    <point x="-0.52001953125" y="-380.501220703125"/>
+                    <point x="0.53125" y="-630.769775390625"/>
+                </edge>
+            </item>
+            <item x="143.75927734375" y="790.27783203125" territory="14.1997" id="62" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-157.06396484375" y="-0.367431640625"/>
+                    <point x="-210.19580078125" y="-0.5009765625"/>
+                </edge>
+            </item>
+            <item x="-66.4365234375" y="789.77685546875" territory="152.657" id="63" streetSeed="true">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="-152.65625" y="-0.356201171875"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="53.1318359375" y="0.133544921875"/>
+                    <point x="210.19580078125" y="0.5009765625"/>
+                </edge>
+            </item>
+        </avenue>
+        <street density="8.57257e-06">
+            <item x="-222.28369140625" y="510.531982421875" territory="319.791" id="0" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="304.42236328125" y="-5.04296875"/>
+                    <point x="330.54736328125" y="-18.790771484375"/>
+                    <point x="535.7548828125" y="-19.70361328125"/>
+                </edge>
+            </item>
+            <item x="313.6025390625" y="-282.7197265625" territory="199.808" id="1" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="75.2744140625" y="0.79052734375"/>
+                    <point x="193.0166015625" y="-122.640625"/>
+                </edge>
+            </item>
+            <item x="314.169921875" y="-482.527099609375" territory="118.64" id="2" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="118.63671875" y="-0.946044921875"/>
+                </edge>
+            </item>
+            <item x="-281.7880859375" y="-430.91943359375" territory="69.2008" id="3" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-410.724609375" y="6.81298828125"/>
+                </edge>
+            </item>
+            <item x="138.95947265625" y="-148.401611328125" territory="220.321" id="4" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-4.99755859375" y="-78.3466796875"/>
+                    <point x="-8.13671875" y="-117.9541015625"/>
+                    <point x="-8.54931640625" y="-171.120361328125"/>
+                    <point x="-8.04150390625" y="-242.620849609375"/>
+                    <point x="-8.0029296875" y="-293.493896484375"/>
+                    <point x="-23.56201171875" y="-325.108642578125"/>
+                    <point x="-52.41064453125" y="-351.66943359375"/>
+                    <point x="-138.6943359375" y="-360.073974609375"/>
+                </edge>
+            </item>
+            <item x="575.9775390625" y="-148.891357421875" territory="196.767" id="5" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-2.8369140625" y="-196.74609375"/>
+                </edge>
+            </item>
+            <item x="143.33447265625" y="776.08447265625" territory="14.1997" id="6" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="0.4248046875" y="14.193359375"/>
+                </edge>
+            </item>
+            <item x="-445.7177734375" y="780.7265625" territory="281.187" id="7" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="0.44189453125" y="15.206298828125"/>
+                    <point x="-1.66748046875" y="51.830322265625"/>
+                    <point x="-15.94775390625" y="160.65625"/>
+                    <point x="-22.86083984375" y="226.869140625"/>
+                    <point x="-30.4794921875" y="300.640625"/>
+                    <point x="-30.56640625" y="365.45068359375"/>
+                </edge>
+            </item>
+            <item x="482.44287109375" y="762.559326171875" territory="243.606" id="8" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="3.859375" y="-239.648681640625"/>
+                    <point x="-9.8671875" y="-262.702880859375"/>
+                    <point x="-30.47998046875" y="-273.244873046875"/>
+                    <point x="-168.9716796875" y="-271.73095703125"/>
+                </edge>
+            </item>
+            <item x="-810.44873046875" y="-141.555419921875" territory="70.5529" id="9" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="4.5224609375" y="-204.271240234375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-2.2880859375" y="131.568603515625"/>
+                    <point x="-12.5654296875" y="144.77099609375"/>
+                    <point x="-115.28759765625" y="255.4892578125"/>
+                    <point x="-122.62939453125" y="274.54736328125"/>
+                    <point x="-133.67236328125" y="338.344482421875"/>
+                    <point x="-134.568359375" y="597.830078125"/>
+                </edge>
+            </item>
+            <item x="-805.92626953125" y="-345.82666015625" territory="85.1828" id="10" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-4.5224609375" y="204.271240234375"/>
+                </edge>
+            </item>
+            <item x="-692.9833984375" y="-448.55224609375" territory="24.4503" id="11" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-165.87841796875" y="-3.9296875"/>
+                    <point x="-165.5791015625" y="-18.27880859375"/>
+                    <point x="-291.7841796875" y="-18.267578125"/>
+                </edge>
+            </item>
+            <item x="-753.81298828125" y="-422.826416015625" territory="61.3137" id="12" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="0.21923828125" y="70.331787109375"/>
+                    <point x="7.55419921875" y="76.1982421875"/>
+                    <point x="63.095703125" y="74.806640625"/>
+                </edge>
+            </item>
+            <item x="-690.71728515625" y="-348.019775390625" territory="76.1078" id="13" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-55.54150390625" y="1.3916015625"/>
+                    <point x="-62.87646484375" y="-4.474853515625"/>
+                    <point x="-63.095703125" y="-74.806640625"/>
+                </edge>
+            </item>
+            <item x="-692.5126953125" y="-424.1064453125" territory="24.4503" id="14" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="410.724609375" y="-6.81298828125"/>
+                </edge>
+            </item>
+            <item x="-235.923828125" y="-482.738525390625" territory="69.2008" id="15" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="24.56201171875" y="1.291259765625"/>
+                    <point x="76.8076171875" y="-0.857177734375"/>
+                    <point x="142.353515625" y="-12.75732421875"/>
+                    <point x="188.1884765625" y="-22.375244140625"/>
+                    <point x="236.18896484375" y="-25.737060546875"/>
+                </edge>
+            </item>
+            <item x="0.26513671875" y="-508.4755859375" territory="169.261" id="16" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="0.134765625" y="-169.26123046875"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-48.00048828125" y="3.36181640625"/>
+                    <point x="-93.83544921875" y="12.979736328125"/>
+                    <point x="-159.38134765625" y="24.8798828125"/>
+                    <point x="-211.626953125" y="27.0283203125"/>
+                    <point x="-236.18896484375" y="25.737060546875"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="86.28369140625" y="8.404541015625"/>
+                    <point x="115.13232421875" y="34.96533203125"/>
+                    <point x="130.69140625" y="66.580078125"/>
+                    <point x="130.65283203125" y="117.453125"/>
+                    <point x="130.14501953125" y="188.95361328125"/>
+                    <point x="130.5576171875" y="242.119873046875"/>
+                    <point x="133.69677734375" y="281.727294921875"/>
+                    <point x="138.6943359375" y="360.073974609375"/>
+                </edge>
+            </item>
+            <item x="0.39990234375" y="-677.73681640625" territory="169.261" id="17" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-0.134765625" y="169.26123046875"/>
+                </edge>
+            </item>
+            <item x="434.177734375" y="-679.68505859375" territory="196.217" id="18" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-1.37109375" y="196.2119140625"/>
+                </edge>
+            </item>
+            <item x="432.806640625" y="-483.47314453125" territory="107.47" id="19" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-118.63671875" y="0.946044921875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="73.8125" y="78.11279296875"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="1.37109375" y="-196.2119140625"/>
+                </edge>
+            </item>
+            <item x="506.619140625" y="-405.3603515625" territory="89.3976" id="20" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-73.8125" y="-78.11279296875"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="66.521484375" y="59.722900390625"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-117.7421875" y="123.43115234375"/>
+                    <point x="-193.0166015625" y="122.640625"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="122.58056640625" y="-112.143310546875"/>
+                    <point x="143.666015625" y="-122.228759765625"/>
+                </edge>
+            </item>
+            <item x="573.140625" y="-345.637451171875" territory="89.3976" id="21" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-66.521484375" y="-59.722900390625"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="2.8369140625" y="196.74609375"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="255.2939453125" y="-19.70361328125"/>
+                </edge>
+            </item>
+            <item x="650.28515625" y="-527.589111328125" territory="188.626" id="22" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-21.08544921875" y="10.08544921875"/>
+                    <point x="-143.666015625" y="122.228759765625"/>
+                </edge>
+            </item>
+            <item x="828.4345703125" y="-365.341064453125" territory="26.6605" id="23" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-255.2939453125" y="19.70361328125"/>
+                </edge>
+            </item>
+            <item x="313.47119140625" y="490.828369140625" territory="319.983" id="24" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-205.20751953125" y="0.912841796875"/>
+                    <point x="-231.33251953125" y="14.66064453125"/>
+                    <point x="-535.7548828125" y="19.70361328125"/>
+                </edge>
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="138.49169921875" y="-1.513916015625"/>
+                    <point x="159.1044921875" y="9.028076171875"/>
+                    <point x="172.8310546875" y="32.082275390625"/>
+                    <point x="168.9716796875" y="271.73095703125"/>
+                </edge>
+            </item>
+            <item x="143.75927734375" y="790.27783203125" territory="14.1997" id="25" streetSeed="false">
+                <edge deadend="true" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-0.4248046875" y="-14.193359375"/>
+                </edge>
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="4.48876953125" y="150.370361328125"/>
+                </edge>
+            </item>
+            <item x="-66.4365234375" y="789.77685546875" territory="148.955" id="26" streetSeed="false">
+                <edge deadend="false" onBoundary="false" lanes="1">
+                    <point x="0" y="0"/>
+                    <point x="-5.705078125" y="148.84521484375"/>
+                </edge>
+            </item>
+        </street>
+    </feature>
+</features>

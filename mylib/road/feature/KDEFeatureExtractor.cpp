@@ -33,7 +33,7 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	end = clock();
 	std::cout << "Elapsed time for cleaning the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	start = clock();
-	GraphUtil::reduce(temp_roads);
+	//GraphUtil::reduce(temp_roads);
 	end = clock();
 	std::cout << "Elapsed time for reducing the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 
@@ -46,7 +46,7 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	end = clock();
 	std::cout << "Elapsed time for removing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	start = clock();
-	GraphUtil::reduce(temp_roads);
+	//GraphUtil::reduce(temp_roads);
 	end = clock();
 	std::cout << "Elapsed time for reducing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	GraphUtil::removeIsolatedVertices(temp_roads);
@@ -121,6 +121,7 @@ int KDEFeatureExtractor::extractAvenueFeature(RoadGraph &orig_roads, const Polyg
 	QVector2D center = area.centroid();
 
 	if (perturbation) {
+		// 各頂点を少し動かす
 		RoadVertexIter vi, vend;
 		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 			if (!roads.graph[*vi]->valid) continue;
@@ -153,6 +154,9 @@ int KDEFeatureExtractor::extractAvenueFeature(RoadGraph &orig_roads, const Polyg
 		KDEFeatureItem item(kf->numItems(RoadEdge::TYPE_AVENUE));
 		item.pt = roads.graph[*vi]->pt - center;
 
+		// Streetとの交差点かどうか、登録
+		item.streetSeed = GraphUtil::getDegree(roads, *vi) == 2 ? true : false;
+
 		// 近接頂点までの距離を登録
 		RoadVertexDesc nearestVertexDesc = GraphUtil::getVertex(roads, roads.graph[*vi]->pt, *vi);
 		item.territory = (roads.graph[nearestVertexDesc]->pt - roads.graph[*vi]->pt).length();
@@ -163,15 +167,21 @@ int KDEFeatureExtractor::extractAvenueFeature(RoadGraph &orig_roads, const Polyg
 			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 			int degree = GraphUtil::getNumEdges(roads, tgt);
 
-			Polyline2D polyline = GraphUtil::finerEdge(roads, *ei, 20.0f);
+			Polyline2D polyline = roads.graph[*ei]->polyline;
+
+			// エッジジオミトリの順番を、当該頂点から出発するように並べ替える
 			if ((polyline[0] - roads.graph[*vi]->pt).lengthSquared() > (polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
 				std::reverse(polyline.begin(), polyline.end());
 			}
-			for (int i = 1; i < polyline.size(); ++i) {
-				polyline[i] -= polyline[0];
-			}
+
+			// 当該頂点からの相対座標に変換する
+			polyline.translate(-roads.graph[*vi]->pt);
+
+			// 最初の点(0, 0)を削除する
 			polyline.erase(polyline.begin());
-			item.addEdge(polyline, degree == 1, roads.graph[tgt]->onBoundary);
+
+			// 道路ユニットにエッジジオミトリを登録する
+			item.addEdge(polyline, roads.graph[*ei]->lanes, degree == 1, roads.graph[tgt]->onBoundary);
 		}
 
 		kf->addItem(RoadEdge::TYPE_AVENUE, item);
@@ -191,6 +201,7 @@ int KDEFeatureExtractor::extractStreetFeature(RoadGraph &orig_roads, const Polyg
 	QVector2D center = area.centroid();
 
 	if (perturbation) {
+		// 各頂点を少し動かす
 		RoadVertexIter vi, vend;
 		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 			if (!roads.graph[*vi]->valid) continue;
@@ -233,14 +244,18 @@ int KDEFeatureExtractor::extractStreetFeature(RoadGraph &orig_roads, const Polyg
 			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 			int degree = GraphUtil::getNumEdges(roads, tgt);
 
-			Polyline2D polyline;
-			if ((roads.graph[*ei]->polyLine[0] - roads.graph[*vi]->pt).lengthSquared() > (roads.graph[*ei]->polyLine[0] - roads.graph[tgt]->pt).lengthSquared()) {
-				std::reverse(roads.graph[*ei]->polyLine.begin(), roads.graph[*ei]->polyLine.end());
+			Polyline2D polyline = roads.graph[*ei]->polyline;
+
+			// エッジジオミトリの順番を、当該頂点から出発するように並べ替える
+			if ((polyline[0] - roads.graph[*vi]->pt).lengthSquared() > (polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
+				std::reverse(polyline.begin(), polyline.end());
 			}
-			for (int i = 1; i < roads.graph[*ei]->polyLine.size(); ++i) {
-				polyline.push_back(roads.graph[*ei]->polyLine[i] - roads.graph[*vi]->pt);
-			}
-			item.addEdge(polyline, degree == 1, false);
+
+			// 当該頂点からの相対座標に変換する
+			polyline.translate(-roads.graph[*vi]->pt);
+
+			// 道路ユニットにエッジジオミトリを登録する
+			item.addEdge(polyline, roads.graph[*ei]->lanes, degree == 1, false);
 		}
 
 		kf->addItem(RoadEdge::TYPE_STREET, item);

@@ -154,7 +154,7 @@ RoadVertexDesc GraphUtil::getVertex(RoadGraph& roads, const QVector2D& pt, float
 
 		QVector2D vec = roads.graph[*vi]->getPt() - pt;
 		float angle2 = atan2f(vec.y(), vec.x());
-		if (mylib::Util::diffAngle(angle, angle2) > angle_threshold) continue;
+		if (Util::diffAngle(angle, angle2) > angle_threshold) continue;
 
 		float dist = vec.lengthSquared();
 		if (dist < min_dist) {
@@ -647,7 +647,7 @@ void GraphUtil::moveEdge(RoadGraph& roads, RoadEdgeDesc e, QVector2D& src_pos, Q
 
 	if ((roads.graph[e]->polyline[0] - roads.graph[src]->pt).lengthSquared() < (roads.graph[e]->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
 		QVector2D src_diff = src_pos - roads.graph[e]->polyline[0];
-		QVector2D tgt_diff = tgt_pos - roads.graph[e]->polyline[n - 1];
+		QVector2D tgt_diff = tgt_pos - roads.graph[e]->polyline.last();
 
 		for (int i = 1; i < n - 1; i++) {
 			roads.graph[e]->polyline[i] += src_diff + (tgt_diff - src_diff) * (float)i / (float)(n - 1);
@@ -655,7 +655,7 @@ void GraphUtil::moveEdge(RoadGraph& roads, RoadEdgeDesc e, QVector2D& src_pos, Q
 		roads.graph[e]->polyline[0] = src_pos;
 		roads.graph[e]->polyline[n - 1] = tgt_pos;
 	} else {
-		QVector2D src_diff = src_pos - roads.graph[e]->polyline[n - 1];
+		QVector2D src_diff = src_pos - roads.graph[e]->polyline.last();
 		QVector2D tgt_diff = tgt_pos - roads.graph[e]->polyline[0];
 
 		for (int i = 1; i < n - 1; i++) {
@@ -673,7 +673,7 @@ void GraphUtil::moveEdge(RoadGraph& roads, RoadEdgeDesc e, QVector2D& src_pos, Q
  */
 void GraphUtil::movePolyline(RoadGraph& roads, Polyline2D &polyline, const QVector2D& src_pos, const QVector2D& tgt_pos) {
 	float scale = (tgt_pos - src_pos).length() / (polyline.last() - polyline[0]).length();
-	float rotation_degree = mylib::Util::rad2deg(mylib::Util::diffAngle(polyline.last() - polyline[0], tgt_pos- src_pos, false));
+	float rotation_degree = Util::rad2deg(Util::diffAngle(polyline.last() - polyline[0], tgt_pos- src_pos, false));
 
 	polyline.scale(scale);
 	polyline.rotate(rotation_degree, QVector2D(0, 0));
@@ -818,7 +818,7 @@ bool GraphUtil::hasCloseEdge(RoadGraph* roads, RoadVertexDesc v1, RoadVertexDesc
 
 		RoadVertexDesc tgt = boost::target(*ei, roads->graph);
 
-		float angle = mylib::Util::diffAngle(roads->graph[tgt]->pt - roads->graph[v1]->pt, roads->graph[v2]->pt - roads->graph[v1]->pt);
+		float angle = Util::diffAngle(roads->graph[tgt]->pt - roads->graph[v1]->pt, roads->graph[v2]->pt - roads->graph[v1]->pt);
 		if (angle < angle_threshold) return true;
 	}
 
@@ -839,15 +839,27 @@ bool GraphUtil::isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline) 
 	return false;
 }
 
+bool GraphUtil::isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline, RoadEdgeDesc ignoreEdge) {
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+		if (*ei == ignoreEdge) continue;
+
+		if (isIntersect(roads, roads.graph[*ei]->polyline, polyline)) return true;
+	}
+
+	return false;
+}
+
 /**
  * Check if the two poly lines intersect with each other.
  */
-bool GraphUtil::isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyLine1, std::vector<QVector2D>& polyLine2) {
-	for (int i = 0; i < polyLine1.size() - 1; i++) {
-		for (int j = 0; j < polyLine2.size() - 1; j++) {
+bool GraphUtil::isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyline1, std::vector<QVector2D>& polyline2) {
+	for (int i = 0; i < polyline1.size() - 1; i++) {
+		for (int j = 0; j < polyline2.size() - 1; j++) {
 			float tab, tcd;
 			QVector2D intPoint;
-			if (mylib::Util::segmentSegmentIntersectXY(polyLine1[i], polyLine1[i + 1], polyLine2[j], polyLine2[j + 1], &tab, &tcd, true, intPoint)) {
+			if (Util::segmentSegmentIntersectXY(polyline1[i], polyline1[i + 1], polyline2[j], polyline2[j + 1], &tab, &tcd, true, intPoint)) {
 				return true;
 			}
 		}
@@ -859,13 +871,13 @@ bool GraphUtil::isIntersect(RoadGraph &roads, std::vector<QVector2D>& polyLine1,
 /**
  * Simplify a polyline.
  */
-std::vector<QVector2D> GraphUtil::simplifyPolyLine(std::vector<QVector2D>& polyLine, float threshold) {
+std::vector<QVector2D> GraphUtil::simplifyPolyLine(std::vector<QVector2D>& polyline, float threshold) {
 	std::vector<QVector2D> ret;
 	
 	typedef boost::geometry::model::d2::point_xy<double> xy;
 	boost::geometry::model::linestring<xy> line;
-	for (int i = 0; i < polyLine.size(); i++) {
-		line.push_back(xy(polyLine[i].x(), polyLine[i].y()));
+	for (int i = 0; i < polyline.size(); i++) {
+		line.push_back(xy(polyline[i].x(), polyline[i].y()));
 	}
 
 	boost::geometry::model::linestring<xy> simplified;
@@ -916,18 +928,18 @@ void GraphUtil::realize(RoadGraph& roads) {
  * Make the edge finer by inserting more points along the polyline.
  */
 Polyline2D GraphUtil::finerEdge(RoadGraph& roads, RoadEdgeDesc e, float step) {
-	Polyline2D polyLine;
+	Polyline2D polyline;
 
 	for (int i = 0; i < roads.graph[e]->polyline.size() - 1; i++) {
 		QVector2D vec = roads.graph[e]->polyline[i + 1] - roads.graph[e]->polyline[i];
 		float length = vec.length();
 		for (int j = 0; j < length; j += step) {
-			polyLine.push_back(roads.graph[e]->polyline[i] + vec * (float)j / length);
+			polyline.push_back(roads.graph[e]->polyline[i] + vec * (float)j / length);
 		}
 	}
-	polyLine.push_back(roads.graph[e]->polyline.last());
+	polyline.push_back(roads.graph[e]->polyline.last());
 
-	return polyLine;
+	return polyline;
 }
 
 /**
@@ -938,7 +950,7 @@ float GraphUtil::distance(RoadGraph& roads, const QVector2D& pt, RoadEdgeDesc e,
 
 	for (int i = 0; i < roads.graph[e]->polyline.size() - 1; ++i) {
 		QVector2D closePt;
-		float dist = mylib::Util::pointSegmentDistanceXY(roads.graph[e]->polyline[i], roads.graph[e]->polyline[i + 1], pt, closePt);
+		float dist = Util::pointSegmentDistanceXY(roads.graph[e]->polyline[i], roads.graph[e]->polyline[i + 1], pt, closePt);
 		if (dist < min_dist) {
 			min_dist = dist;
 			closestPt = closePt;
@@ -1370,19 +1382,19 @@ void GraphUtil::extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadT
 		RoadVertexDesc tgt = boost::target(edges[e_id], roads.graph);
 
 		// if either vertice is out of the range, add a vertex on the border
-		std::vector<QVector2D> polyLine = finerEdge(roads, edges[e_id]);
+		std::vector<QVector2D> polyline = finerEdge(roads, edges[e_id]);
 		QVector2D intPt;
-		if (area.contains(polyLine[0])) {
-			for (int i = 1; i < polyLine.size(); i++) {
-				if (!area.contains(polyLine[i])) {
-					intPt = polyLine[i];
+		if (area.contains(polyline[0])) {
+			for (int i = 1; i < polyline.size(); i++) {
+				if (!area.contains(polyline[i])) {
+					intPt = polyline[i];
 					break;
 				}
 			}
 		} else {
-			for (int i = polyLine.size() - 1; i >= 0; i--) {
-				if (!area.contains(polyLine[i])) {
-					intPt = polyLine[i];
+			for (int i = polyline.size() - 1; i >= 0; i--) {
+				if (!area.contains(polyline[i])) {
+					intPt = polyline[i];
 					break;
 				}
 			}
@@ -1400,7 +1412,6 @@ void GraphUtil::extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadT
 	}
 
 	removeIsolatedVertices(roads);
-	reduce(roads);
 
 	roads.setModified();
 }
@@ -1462,19 +1473,19 @@ void GraphUtil::subtractRoads2(RoadGraph& roads, Polygon2D& area) {
 		RoadVertexDesc tgt = boost::target(edges[e_id], roads.graph);
 
 		// if either vertice is out of the range, add a vertex on the border
-		std::vector<QVector2D> polyLine = finerEdge(roads, edges[e_id], 3.0f);
+		std::vector<QVector2D> polyline = finerEdge(roads, edges[e_id], 3.0f);
 		QVector2D intPt;
-		if (area.contains(polyLine[0])) {
-			for (int i = 1; i < polyLine.size(); i++) {
-				if (!area.contains(polyLine[i])) {
-					intPt = polyLine[i];
+		if (area.contains(polyline[0])) {
+			for (int i = 1; i < polyline.size(); i++) {
+				if (!area.contains(polyline[i])) {
+					intPt = polyline[i];
 					break;
 				}
 			}
 		} else {
-			for (int i = polyLine.size() - 1; i >= 0; i--) {
-				if (!area.contains(polyLine[i])) {
-					intPt = polyLine[i];
+			for (int i = polyline.size() - 1; i >= 0; i--) {
+				if (!area.contains(polyline[i])) {
+					intPt = polyline[i];
 					break;
 				}
 			}
@@ -1516,8 +1527,8 @@ void GraphUtil::perturb(RoadGraph &roads, const Polygon2D &area, float factor) {
 			}
 		}
 
-		float dx = mylib::Util::genRand(-min_length * factor, min_length * factor);
-		float dy = mylib::Util::genRand(-min_length * factor, min_length * factor);
+		float dx = Util::genRand(-min_length * factor, min_length * factor);
+		float dy = Util::genRand(-min_length * factor, min_length * factor);
 
 		moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(dx, dy));
 	}
@@ -1695,7 +1706,7 @@ bool GraphUtil::getEdge(RoadGraph &roads, const QVector2D &pt, float threshold, 
 
 		QVector2D pt2;
 		for (int i = 0; i < roads.graph[*ei]->polyline.size() - 1; i++) {
-			float dist = mylib::Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
+			float dist = Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
 			if (dist < min_dist) {
 				min_dist = dist;
 				e = *ei;
@@ -1729,7 +1740,7 @@ bool GraphUtil::getEdge(RoadGraph& roads, const QVector2D &pt, RoadVertexDesc ig
 
 		QVector2D pt2;
 		for (int i = 0; i < roads.graph[*ei]->polyline.size() - 1; i++) {
-			float dist = mylib::Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
+			float dist = Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
 			if (dist < min_dist) {
 				min_dist = dist;
 				e = *ei;
@@ -1763,7 +1774,7 @@ bool GraphUtil::getEdge(RoadGraph* roads, RoadVertexDesc v, float threshold, Roa
 
 		QVector2D pt2;
 		for (int i = 0; i < roads->graph[*ei]->polyline.size() - 1; i++) {
-			float dist = mylib::Util::pointSegmentDistanceXY(roads->graph[*ei]->polyline[i], roads->graph[*ei]->polyline[i + 1], roads->graph[v]->pt, pt2);
+			float dist = Util::pointSegmentDistanceXY(roads->graph[*ei]->polyline[i], roads->graph[*ei]->polyline[i + 1], roads->graph[v]->pt, pt2);
 			if (dist < min_dist) {
 				min_dist = dist;
 				e = *ei;
@@ -1795,7 +1806,7 @@ RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph* roads, RoadVertexDesc v, floa
 		if (onlyValidEdge && !roads->graph[tgt]->valid) continue;
 
 		QVector2D pt2;
-		float d = mylib::Util::pointSegmentDistanceXY(roads->graph[src]->getPt(), roads->graph[tgt]->getPt(), roads->graph[v]->getPt(), pt2);
+		float d = Util::pointSegmentDistanceXY(roads->graph[src]->getPt(), roads->graph[tgt]->getPt(), roads->graph[v]->getPt(), pt2);
 		if (d < dist) {
 			dist = d;
 			min_e = *ei;
@@ -2279,7 +2290,7 @@ bool GraphUtil::planarifyOne(RoadGraph& roads) {
 				for (int j = 0; j < e2->polyline.size() - 1; j++) {
 					float tab, tcd;
 					QVector2D intPt;
-					if (mylib::Util::segmentSegmentIntersectXY(e->polyline[i], e->polyline[i+1], e2->polyline[j], e2->polyline[j+1], &tab, &tcd, true, intPt)) {
+					if (Util::segmentSegmentIntersectXY(e->polyline[i], e->polyline[i+1], e2->polyline[j], e2->polyline[j+1], &tab, &tcd, true, intPt)) {
 						// エッジの端、ぎりぎりで、交差する場合は、交差させない
 						if ((roads.graph[src]->pt - intPt).length() < 10 || (roads.graph[tgt]->pt - intPt).length() < 10 || (roads.graph[src2]->pt - intPt).length() < 10 || (roads.graph[tgt2]->pt - intPt).length() < 10) continue;
 
@@ -2486,7 +2497,7 @@ void GraphUtil::snapDeadendEdges(RoadGraph& roads, float threshold) {
 				if (!roads.graph[*ei]->valid) continue;
 
 				RoadVertexDesc tgt2 = boost::target(*ei, roads.graph);
-				float angle = mylib::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[*vi2]->pt - roads.graph[tgt2]->pt);
+				float angle = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[*vi2]->pt - roads.graph[tgt2]->pt);
 				if (angle < min_angle) {
 					min_angle = angle;
 				}
@@ -2532,7 +2543,7 @@ void GraphUtil::snapDeadendEdges(RoadGraph& roads, float threshold) {
 					if (!roads.graph[*ei]->valid) continue;
 
 					RoadVertexDesc tgt2 = boost::target(*ei, roads.graph);
-					float angle = mylib::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[*vi2]->pt - roads.graph[tgt2]->pt);
+					float angle = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[*vi2]->pt - roads.graph[tgt2]->pt);
 					if (angle < min_angle) {
 						min_angle = angle;
 					}
@@ -2617,7 +2628,7 @@ void GraphUtil::snapDeadendEdges2(RoadGraph& roads, int degree, float threshold)
 		if ((roads.graph[nearest_desc]->pt - roads.graph[tgt]->pt).length() < (roads.graph[*vi]->pt - roads.graph[tgt]->pt).length()) continue;
 
 		// スナップによるエッジの角度変化が大きすぎる場合は、対象からはずす
-		float diff_angle = mylib::Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[nearest_desc]->pt - roads.graph[tgt]->pt);
+		float diff_angle = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[tgt]->pt, roads.graph[nearest_desc]->pt - roads.graph[tgt]->pt);
 		if (diff_angle > angle_threshold) continue;
 
 		// tgtとスナップ先との間に既にエッジがある場合は、スナップしない
@@ -2651,7 +2662,7 @@ void GraphUtil::removeShortDeadend(RoadGraph& roads, float threshold) {
 				if (!roads.graph[*ei]->valid) continue;
 
 				// If the edge has a pair, don't remove it.
-				if (roads.graph[*ei]->fullyPaired) continue;
+				if (roads.graph[*ei]->properties["fullyPaired"] == true) continue;
 
 				RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
