@@ -63,8 +63,6 @@ float TerrainCell::getElevationNE() {
 float TerrainCell::getElevation(float x, float y) {
 	if (cornersElevationModified) recalcCornersElevation();
 
-	double elev;
-
 	QVector3D pSW(this->x, this->y, this->elevationSW);
 	QVector3D pSE(this->x + length, this->y, this->elevationSE);
 	QVector3D pNE(this->x + length, this->y + length, this->elevationNE);

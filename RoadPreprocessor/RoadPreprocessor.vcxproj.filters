@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="mylib">
+      <UniqueIdentifier>{1f3b48f0-d1b8-46e8-a4b4-c172b6614655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\common">
+      <UniqueIdentifier>{0ae5794d-4072-4651-b02b-c9ce8014c160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\road">
+      <UniqueIdentifier>{81203946-f181-4c7f-bd6f-d89904437901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\render">
+      <UniqueIdentifier>{15a92c71-b2b4-4c47-9629-7b89f9454c7a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadPreprocessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OSMRoadsParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\BBox.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\global.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polygon2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polyline2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Util.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\GraphUtil.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadEdge.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadGraph.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadVertex.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\GeometryObject.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuad.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuadList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Terrain.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TerrainCell.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Texture.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TextureManager.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Noncopyable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ElevationColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RoadPreprocessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OSMRoadsParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\BBox.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\global.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polygon2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polyline2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Util.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\GraphUtil.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadEdge.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadGraph.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadVertex.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\GeometryObject.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuad.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuadList.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Terrain.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TerrainCell.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Texture.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TextureManager.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Noncopyable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ElevationColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
