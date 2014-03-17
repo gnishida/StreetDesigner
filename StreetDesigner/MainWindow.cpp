@@ -1,6 +1,6 @@
 #include <road/GraphUtil.h>
 #include "MainWindow.h"
-
+#include "TerrainSizeInputDialog.h"
 
 MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags) {
 	ui.setupUi(this);
@@ -70,9 +70,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent* e) {
 }
 
 void MainWindow::onNewTerrain() {
-	urbanGeometry->newTerrain(6000, 6000, 100);
-
-	glWidget->updateGL();
+	TerrainSizeInputDialog dlg(this);
+	if (dlg.exec() == QDialog::Accepted) {
+		urbanGeometry->newTerrain(dlg.width, dlg.depth, dlg.cellLength);
+		glWidget->updateGL();
+	}
 }
 
 void MainWindow::onLoadTerrain() {

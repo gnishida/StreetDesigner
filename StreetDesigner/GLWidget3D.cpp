@@ -31,7 +31,7 @@ GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuf
 	farPlaneToSpaceRadiusFactor=5.0f;//N 5.0f
 
 	rotationSensitivity = 0.4f;
-	zoomSensitivity = 5.0f;
+	zoomSensitivity = 10.0f;
 
 	controlPressed=false;
 	shiftPressed=false;

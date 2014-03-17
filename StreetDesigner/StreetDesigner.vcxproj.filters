@@ -229,6 +229,15 @@
     <ClCompile Include="UrbanGeometry.cpp">
       <Filter>Files</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TerrainSizeInputDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TerrainSizeInputDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSizeInputDialog.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -250,6 +259,12 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="PropertyWidget.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TerrainSizeInputDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TerrainSizeInputDialog.h">
       <Filter>Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -406,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="UrbanGeometry.h">
       <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_TerrainSizeInputDialog.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
