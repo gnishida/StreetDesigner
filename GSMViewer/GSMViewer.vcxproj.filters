@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;cxx;c;def</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{e74a8402-77d7-4360-8035-4cc0290b1ba5}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{246830fd-ef65-4885-b26a-cc82d42cf097}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="mylib">
+      <UniqueIdentifier>{d5a253b9-c73b-4a60-baba-f8e583147502}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\common">
+      <UniqueIdentifier>{9ac05e80-5ede-4f05-8e86-c0ce414fdcd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\road">
+      <UniqueIdentifier>{2c40c8a0-ed61-42bc-acd3-3c972fbf030d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\render">
+      <UniqueIdentifier>{c4d48ad8-db4f-42d3-8619-e9fd172baabb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\util">
+      <UniqueIdentifier>{29f321a6-5dd8-4f96-b171-19de2068c2c2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_MainWindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadGraphEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipBoard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\BBox.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ElevationColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\global.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polygon2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polyline2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Util.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\GeometryObject.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Noncopyable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuad.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuadList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RendererHelper.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Terrain.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TerrainCell.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Texture.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TextureManager.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\GraphUtil.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadEdge.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadGraph.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\RoadVertex.cpp">
+      <Filter>mylib\road</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\util\PolygonBuilder.cpp">
+      <Filter>mylib\util</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ControlWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadGraphEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipBoard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\BBox.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ElevationColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\global.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polygon2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polyline2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Util.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\GeometryObject.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Noncopyable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuad.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuadList.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RendererHelper.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Terrain.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TerrainCell.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Texture.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TextureManager.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\GraphUtil.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadEdge.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadGraph.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\RoadVertex.h">
+      <Filter>mylib\road</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\util\PolygonBuilder.h">
+      <Filter>mylib\util</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
