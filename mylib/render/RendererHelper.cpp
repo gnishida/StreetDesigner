@@ -1,13 +1,13 @@
 ﻿#include "RendererHelper.h"
 #include <QtOpenGL>
 
-void RendererHelper::render(std::vector<mylib::Renderable*> renderables) {
+void RendererHelper::render(std::vector<mylib::RenderablePtr> renderables) {
 	for (int i = 0; i < renderables.size(); i++) {
 		renderOne(renderables[i]);
 	}
 }
 
-void RendererHelper::renderOne(mylib::Renderable* renderable) {
+void RendererHelper::renderOne(mylib::RenderablePtr renderable) {
 	if (renderable->glBeginMode == GL_LINE_STIPPLE) {
 		glEnable(GL_LINE_STIPPLE);
 		glLineStipple(1 , 0xF0F0);
@@ -42,9 +42,9 @@ void RendererHelper::renderOne(mylib::Renderable* renderable) {
  * ただし、ポリゴンデータ自体は、閉じていなくて良い。
  */
 void RendererHelper::renderArea(const Polygon3D& area, const QColor& color, GLenum lineType) {
-	std::vector<mylib::Renderable*> renderables;
-	renderables.push_back(new mylib::Renderable(lineType, 3.0f));
-	renderables.push_back(new mylib::Renderable(GL_POINTS, 10.0f));
+	std::vector<mylib::RenderablePtr> renderables;
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(lineType, 3.0f)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));
 
 	mylib::Vertex v;
 
@@ -72,8 +72,43 @@ void RendererHelper::renderArea(const Polygon3D& area, const QColor& color, GLen
 	render(renderables);
 }
 
+/**
+ * 与えられたポリゴンに基づいて、閉じた領域を描画する。
+ * ただし、ポリゴンデータ自体は、閉じていなくて良い。
+ */
+void RendererHelper::renderArea(const Polygon2D& area, const QColor& color, GLenum lineType, float height) {
+	std::vector<mylib::RenderablePtr> renderables;
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(lineType, 3.0f)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));
+
+	mylib::Vertex v;
+
+	v.color[0] = color.redF();
+	v.color[1] = color.greenF();
+	v.color[2] = color.blueF();
+	v.color[3] = color.alphaF();
+	v.normal[0] = 0.0f;
+	v.normal[1] = 0.0f;
+	v.normal[2] = 1.0f;
+
+	for (int i = 0; i < area.size(); i++) {
+		v.location[0] = area[i].x();
+		v.location[1] = area[i].y();
+		v.location[2] = height;
+		renderables[0]->vertices.push_back(v);
+		renderables[1]->vertices.push_back(v);
+	}
+
+	v.location[0] = area[0].x();
+	v.location[1] = area[0].y();
+	v.location[2] = height;
+	renderables[0]->vertices.push_back(v);
+
+	render(renderables);
+}
+
 void RendererHelper::renderPoint(const QVector2D& pt, const QColor& color, float height) {
-	mylib::Renderable* renderable = new mylib::Renderable(GL_POINTS, 10.0f);
+	mylib::RenderablePtr renderable = mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f));
 
 	mylib::Vertex v;
 
@@ -94,9 +129,9 @@ void RendererHelper::renderPoint(const QVector2D& pt, const QColor& color, float
 }
 
 void RendererHelper::renderPolyline(const Polyline3D& polyline, const QColor& color, GLenum lineType) {
-	std::vector<mylib::Renderable*> renderables;
-	renderables.push_back(new mylib::Renderable(lineType, 3.0f));
-	renderables.push_back(new mylib::Renderable(GL_POINTS, 10.0f));
+	std::vector<mylib::RenderablePtr> renderables;
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(lineType, 3.0f)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));
 	
 	mylib::Vertex v;
 	v.color[0] = color.redF();
@@ -118,15 +153,38 @@ void RendererHelper::renderPolyline(const Polyline3D& polyline, const QColor& co
 	}
 
 	render(renderables);
-
-	for (int i = 0;i < renderables.size(); ++i) {
-		delete renderables[i];
-	}
 }
 
-/*void RendererHelper::renderConcave(Polygon2D& polygon, const QColor& color, float height) {
-	std::vector<RenderablePtr> renderables;
-	renderables.push_back(RenderablePtr(new Renderable(GL_TRIANGLES)));
+void RendererHelper::renderPolyline(const Polyline2D& polyline, const QColor& color, GLenum lineType, float height) {
+	std::vector<mylib::RenderablePtr> renderables;
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(lineType, 3.0f)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));
+	
+	mylib::Vertex v;
+	v.color[0] = color.redF();
+	v.color[1] = color.greenF();
+	v.color[2] = color.blueF();
+	v.color[3] = color.alphaF();
+	v.normal[0] = 0.0f;
+	v.normal[1] = 0.0f;
+	v.normal[2] = 1.0f;
+
+	// add lines
+	for (int i = 0; i < polyline.size(); i++) {
+		v.location[0] = polyline[i].x();
+		v.location[1] = polyline[i].y();
+		v.location[2] = height;
+
+		renderables[0]->vertices.push_back(v);
+		renderables[1]->vertices.push_back(v);
+	}
+
+	render(renderables);
+}
+
+void RendererHelper::renderConcave(Polygon2D& polygon, const QColor& color, float height) {
+	std::vector<mylib::RenderablePtr> renderables;
+	renderables.push_back(mylib::RenderablePtr(mylib::RenderablePtr(new mylib::Renderable(GL_TRIANGLES))));
 
 	if (polygon.size() < 3) return;
 
@@ -163,4 +221,4 @@ void RendererHelper::renderPolyline(const Polyline3D& polyline, const QColor& co
 	}
 
 	render(renderables);
-}*/
+}

@@ -57,6 +57,9 @@ public:
 	void clear();
 	void setZ(float z);
 	void adaptToTerrain(mylib::Terrain* terrain);
+	void generate2DMesh();
+	void add2DMeshOfEdge(mylib::RenderablePtr renderable, RoadEdgePtr edge, float widthBase, QColor color, float height);
+	void add2DMeshOfVertex(mylib::RenderablePtr renderable, RoadVertexPtr vertex, QColor color, float height);
 
 private:
 	void _generateMeshVertices(mylib::TextureManager* textureManager);

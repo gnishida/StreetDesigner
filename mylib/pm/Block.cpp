@@ -80,5 +80,5 @@ void Block::adaptToTerrain(mylib::Terrain* terrain) {
 void Block::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	if (contour.size() < 3) return;
 
-	renderables.push_back(new mylib::RenderableConcave(contour, color));
+	renderables.push_back(mylib::RenderablePtr(new mylib::RenderableConcave(contour, color)));
 }

@@ -40,12 +40,12 @@ GeometryObject::~GeometryObject() {
 
 void GeometryObject::clearRenderables() {
 	for (int i = 0; i < renderables.size(); i++) {
-		delete renderables[i];
+		//delete renderables[i];
 	}
 	renderables.clear();
 }
 
-Renderable* GeometryObject::getRenderable(int index) {
+RenderablePtr GeometryObject::getRenderable(int index) {
 	if (index < 0 || index >= renderables.size()) {
 		int a = 0;
 		return NULL;

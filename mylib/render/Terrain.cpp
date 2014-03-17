@@ -154,7 +154,7 @@ void Terrain::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		}
 	}
 
-	renderables.push_back(renderable);
+	renderables.push_back(mylib::RenderablePtr(renderable));
 }
 
 } // namespace mylib

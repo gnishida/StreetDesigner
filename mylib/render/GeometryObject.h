@@ -27,16 +27,16 @@ namespace mylib {
 class TextureManager;
 
 class GeometryObject {
-private:
+protected:
 	// true if the mesh has been modified
 	bool modified;
 
-protected:
+public:
 	QVector3D pt;
 	float scale;
 	float rotateZ;
 	QColor color;
-	std::vector<Renderable*> renderables;
+	std::vector<RenderablePtr> renderables;
 	GLuint dispList;
 
 public:
@@ -69,7 +69,7 @@ public:
 	/** getter for renderables */
 	//std::vector<Renderable*>& getRenderables() { return renderables; }
 	int getNumRenderables() { return (int)renderables.size(); }
-	Renderable* getRenderable(int index);
+	RenderablePtr getRenderable(int index);
 
 	GLuint getDispList() { return dispList; }
 	void newDispList();

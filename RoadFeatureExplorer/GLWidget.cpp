@@ -14,7 +14,7 @@ float GLWidget::MAX_Z = 11520.0f;
 GLWidget::GLWidget(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuffers), (QWidget*)mainWin) {
 	this->mainWin = mainWin;
 
-	renderer = new RoadGraphRenderer();
+	renderer = new RendererHelper();
 
 	// set up the camera
 	camera = new Camera();
@@ -40,7 +40,7 @@ GLWidget::~GLWidget() {
 
 void GLWidget::drawScene() {
 	// draw the road graph
-	roads.generateMesh();
+	roads.generate2DMesh();
 	renderer->render(roads.renderables);
 	
 	// define the height for other items
@@ -48,7 +48,7 @@ void GLWidget::drawScene() {
 
 	// draw the selected area
 	if (selectedAreaBuilder.selected()) {
-		renderer->renderArea(selectedArea, GL_LINE_STIPPLE, QColor(0, 0, 255), height);
+		renderer->renderArea(selectedArea, QColor(0, 0, 255), GL_LINE_STIPPLE, height);
 
 		// 領域を表示
 		for (int i = 0; i < mainWin->glWidget->roadFeature.features.size(); ++i) {

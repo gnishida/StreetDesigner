@@ -71,17 +71,17 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		}
 	}
 
-	renderables.push_back(renderable1);
-	renderables.push_back(renderable2);
+	renderables.push_back(mylib::RenderablePtr(renderable1));
+	renderables.push_back(mylib::RenderablePtr(renderable2));
 }
 
-/*void RoadGraph::generateMesh() {
+void RoadGraph::generate2DMesh() {
 	if (!modified) return;
 
 	renderables.clear();
 
-	renderables.push_back(RenderablePtr(new Renderable(GL_TRIANGLES)));
-	renderables.push_back(RenderablePtr(new Renderable(GL_POINTS, 10.0f)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_TRIANGLES)));
+	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));
 
 	// road edge
 	RoadEdgeIter ei, eend;
@@ -111,8 +111,8 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 
 		// draw the border of the road segment
 		if ((showHighways && edge->type == RoadEdge::TYPE_HIGHWAY) || (showBoulevard && edge->type ==  RoadEdge::TYPE_BOULEVARD) || (showAvenues && edge->type ==  RoadEdge::TYPE_AVENUE) || (showLocalStreets && edge->type ==  RoadEdge::TYPE_STREET)) {
-			addMeshFromEdge(renderables[0], edge, widthBase * (1.0f + curbRatio), bgColor, height * 0.5f);
-			addMeshFromEdge(renderables[0], edge, widthBase, color, height);
+			add2DMeshOfEdge(renderables[0], edge, widthBase * (1.0f + curbRatio), bgColor, height * 0.5f);
+			add2DMeshOfEdge(renderables[0], edge, widthBase, color, height);
 		}
 	}
 
@@ -122,20 +122,18 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		if (!graph[*vi]->valid) continue;
 
 		if (graph[*vi]->seed) {
-			addMeshFromVertex(renderables[1], graph[*vi], QColor(0, 0, 255), 2.0f);
+			add2DMeshOfVertex(renderables[1], graph[*vi], QColor(0, 0, 255), 2.0f);
 		}
 	}
 
 	modified = false;
 }
-*/
 
 /**
  * Add a mesh for the specified edge.
  */
- /*
-void RoadGraph::addMeshFromEdge(RenderablePtr renderable, RoadEdgePtr edge, float widthBase, QColor color, float height) {
-	Vertex v;
+void RoadGraph::add2DMeshOfEdge(mylib::RenderablePtr renderable, RoadEdgePtr edge, float widthBase, QColor color, float height) {
+	mylib::Vertex v;
 
 	// define the width of the road segment
 	float width;
@@ -152,12 +150,12 @@ void RoadGraph::addMeshFromEdge(RenderablePtr renderable, RoadEdgePtr edge, floa
 		break;
 	}
 
-	int num = edge->polyLine.size();
+	int num = edge->polyline.size();
 
 	// draw the edge
 	for (int i = 0; i < num - 1; ++i) {
-		QVector2D pt1 = edge->polyLine[i];
-		QVector2D pt2 = edge->polyLine[i + 1];
+		QVector2D pt1 = edge->polyline[i];
+		QVector2D pt2 = edge->polyline[i + 1];
 		QVector2D vec = pt2 - pt1;
 		vec = QVector2D(-vec.y(), vec.x());
 		vec.normalize();
@@ -202,13 +200,12 @@ void RoadGraph::addMeshFromEdge(RenderablePtr renderable, RoadEdgePtr edge, floa
 		renderable->vertices.push_back(v);
 	}
 }
-*/
+
 /**
  * Add a mesh for the specified edge.
  */
-/*
-void RoadGraph::addMeshFromVertex(RenderablePtr renderable, RoadVertexPtr vertex, QColor color, float height) {
-	Vertex v;
+void RoadGraph::add2DMeshOfVertex(mylib::RenderablePtr renderable, RoadVertexPtr vertex, QColor color, float height) {
+	mylib::Vertex v;
 
 	// draw the vertex
 	v.color[0] = color.redF();
@@ -225,7 +222,6 @@ void RoadGraph::addMeshFromVertex(RenderablePtr renderable, RoadVertexPtr vertex
 
 	renderable->vertices.push_back(v);
 }
-*/
 
 void RoadGraph::clear() {
 	graph.clear();

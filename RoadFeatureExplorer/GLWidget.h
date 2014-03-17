@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Camera.h"
-#include <common/PolygonBuilder.h>
+#include <util/PolygonBuilder.h>
 #include <road/RoadGraph.h>
-#include <road/RoadGraphRenderer.h>
 #include <road/feature/RoadFeature.h>
 #include <road/feature/GridFeature.h>
 #include <road/feature/RadialFeature.h>
 #include <road/feature/GenericFeature.h>
+#include <render/RendererHelper.h>
 #include <QGLWidget>
 #include <QString>
 
@@ -23,7 +23,7 @@ public:
 	Camera* camera;
 	RoadGraph roads;
 	RoadGraph origRoads;
-	RoadGraphRenderer* renderer;
+	RendererHelper* renderer;
 	QPoint lastPos;
 	Polygon2D selectedArea;
 	PolygonBuilder selectedAreaBuilder;

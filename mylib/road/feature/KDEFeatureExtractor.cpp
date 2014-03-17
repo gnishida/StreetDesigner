@@ -130,7 +130,7 @@ int KDEFeatureExtractor::extractAvenueFeature(RoadGraph &orig_roads, const Polyg
 			float min_dist = (roads.graph[*vi]->pt - roads.graph[closestVertexDesc]->pt).length() * 0.5f;
 
 			// 交差点を少し動かす
-			GraphUtil::moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(Util::uniform_rand(-min_dist, min_dist), Util::uniform_rand(-min_dist, min_dist)));
+			GraphUtil::moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(Util::genRand(-min_dist, min_dist), Util::genRand(-min_dist, min_dist)));
 		}
 
 		GraphUtil::saveRoads(roads, "perturbed_avenues.gsm");
@@ -210,7 +210,7 @@ int KDEFeatureExtractor::extractStreetFeature(RoadGraph &orig_roads, const Polyg
 			float min_dist = (roads.graph[*vi]->pt - roads.graph[closestVertexDesc]->pt).length() * 0.5f;
 
 			// 交差点を少し動かす
-			GraphUtil::moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(Util::uniform_rand(-min_dist, min_dist), Util::uniform_rand(-min_dist, min_dist)));
+			GraphUtil::moveVertex(roads, *vi, roads.graph[*vi]->pt + QVector2D(Util::genRand(-min_dist, min_dist), Util::genRand(-min_dist, min_dist)));
 		}
 
 		GraphUtil::saveRoads(roads, "perturbed_streets.gsm");

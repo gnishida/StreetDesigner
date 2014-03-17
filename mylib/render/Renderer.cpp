@@ -43,7 +43,7 @@ void Renderer::render(GeometryObject* object, TextureManager* textureManager) {
 
 void Renderer::_render(GeometryObject* object, TextureManager* textureManager) {
 	for (int i = 0; i < object->getNumRenderables(); ++i) {
-		mylib::Renderable* renderable = object->getRenderable(i);
+		mylib::RenderablePtr renderable = object->getRenderable(i);
 		mylib::Texture* texture = renderable->getTexture();
 
 		if (texture != NULL) {
