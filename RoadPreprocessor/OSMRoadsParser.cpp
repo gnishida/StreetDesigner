@@ -56,15 +56,7 @@ void OSMRoadsParser::handleNode(const QXmlAttributes &atts) {
 	// マップの範囲外なら、無視する
 	if (!range.contains(pos)) return;
 
-	// 同じ座標の頂点が既に登録済みでないかチェック
-	bool duplicated = false;
-	for (int i = 0; i < idToActualId.size(); ++i) {
-		if ((vertices[idToActualId[i]].pt - pos).lengthSquared() < 1.0f) {
-			duplicated = true;
-			idToActualId.insert(id, i);
-		}
-	}
-	if (!duplicated) idToActualId.insert(id, id);
+	idToActualId.insert(id, id);
 
 	// 頂点リストに追加
 	vertices.insert(id, RoadVertex(pos));
@@ -152,26 +144,24 @@ void OSMRoadsParser::createRoadEdge() {
 		if (!idToActualId.contains(next)) continue;
 
 		RoadVertexDesc sourceDesc;
-		if (idToDesc.contains(idToActualId[id])) {		// 既にBGLに登録済みなら、BGLから該当頂点のdescを取得
-			sourceDesc = idToDesc[idToActualId[id]];
+		if (idToDesc.contains(id)) {		// 既にBGLに登録済みなら、BGLから該当頂点のdescを取得
+			sourceDesc = idToDesc[id];
 		} else {										// 未登録なら、BGLに該当頂点を追加
-			RoadVertexPtr v = RoadVertexPtr(new RoadVertex(vertices[idToActualId[id]].getPt()));
+			RoadVertexPtr v = RoadVertexPtr(new RoadVertex(vertices[id].getPt()));
 			sourceDesc = GraphUtil::addVertex(*roads, v);
-			idToDesc.insert(idToActualId[id], sourceDesc);
+			idToDesc.insert(id, sourceDesc);
 		}
 
 		RoadVertexDesc destDesc;
-		if (idToDesc.contains(idToActualId[next])) {	// 既にBGLに登録済みなら、BGLから該当頂点のdescを取得
-			destDesc = idToDesc[idToActualId[next]];
+		if (idToDesc.contains(next)) {	// 既にBGLに登録済みなら、BGLから該当頂点のdescを取得
+			destDesc = idToDesc[next];
 		} else {										// 未登録なら、BGLに該当頂点を追加
-			RoadVertexPtr v = RoadVertexPtr(new RoadVertex(vertices[idToActualId[next]].getPt()));
+			RoadVertexPtr v = RoadVertexPtr(new RoadVertex(vertices[next].getPt()));
 			destDesc = GraphUtil::addVertex(*roads, v);
-			idToDesc.insert(idToActualId[next], destDesc);
+			idToDesc.insert(next, destDesc);
 		}
 
 		// 道路セグメントをBGLに追加
-		if (!GraphUtil::hasEdge(*roads, sourceDesc, destDesc)) {
-			GraphUtil::addEdge(*roads, sourceDesc, destDesc, way.type, way.lanes, way.oneWay, way.link, way.roundabout);
-		}
+		GraphUtil::addEdge(*roads, sourceDesc, destDesc, way.type, way.lanes, way.oneWay, way.link, way.roundabout);
 	}
 }
