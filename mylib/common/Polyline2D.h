@@ -15,6 +15,9 @@ public:
 	void translate(const QVector2D &offset);
 	void rotate(float angle, const QVector2D &orig);
 	void scale(float factor);
+
+	float length() const;
+	float length(int index) const;
 };
 
 /**

@@ -309,7 +309,11 @@ void GLWidget3D::keyPressEvent( QKeyEvent *e ){
 		break;
 	case Qt::Key_Alt:
 		altPressed=true;
-		break;				
+		break;
+	case Qt::Key_Escape:
+		mainWin->urbanGeometry->areaBuilder.cancel();
+		updateGL();
+		break;
 	case Qt::Key_R:
 		std::cout << "Reseting camera pose\n";
 		myCam.resetCamera();

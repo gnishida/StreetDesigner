@@ -40,3 +40,23 @@ void Polyline2D::scale(float factor) {
 		(*this)[i] = QVector2D(at(i).x() * factor, at(i).y() * factor);
 	}
 }
+
+/**
+ * 全長の長さを計算して返却する。
+ */
+float Polyline2D::length() const {
+	return length(size() - 1);
+}
+
+/**
+ * 指定したindexの点までの長さを計算して返却する。
+ */
+float Polyline2D::length(int index) const {
+	float length = 0.0f;
+
+	for (int i = 0; i < index; ++i) {
+		length += (at(i + 1) - at(i)).length();
+	}
+
+	return length;
+}

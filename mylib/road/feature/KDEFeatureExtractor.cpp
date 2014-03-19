@@ -51,7 +51,7 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	std::cout << "Elapsed time for reducing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	GraphUtil::removeIsolatedVertices(temp_roads);
 	start = clock();
-	GraphUtil::clean(temp_roads);
+	//GraphUtil::clean(temp_roads);
 	end = clock();
 	std::cout << "Elapsed time for cleaning the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 
@@ -90,7 +90,7 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	std::cout << "Elapsed time for removing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	GraphUtil::removeIsolatedVertices(temp_roads);
 	start = clock();
-	GraphUtil::clean(temp_roads);
+	//GraphUtil::clean(temp_roads);
 	end = clock();
 	std::cout << "Elapsed time for cleaning the streets: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 
@@ -253,6 +253,9 @@ int KDEFeatureExtractor::extractStreetFeature(RoadGraph &orig_roads, const Polyg
 
 			// 当該頂点からの相対座標に変換する
 			polyline.translate(-roads.graph[*vi]->pt);
+
+			// 最初の点(0, 0)を削除する
+			polyline.erase(polyline.begin());
 
 			// 道路ユニットにエッジジオミトリを登録する
 			item.addEdge(polyline, roads.graph[*ei]->lanes, degree == 1, false);

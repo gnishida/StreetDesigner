@@ -69,11 +69,6 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 				connectAvenues(roads, area, kf, desc, 1.0f);
 			}
 		}
-
-		// 指定されたエリアでCropping
-		if (G::getBool("cropping")) {
-			GraphUtil::extractRoads2(roads, area);
-		}
 	}
 
 	// clean up
@@ -81,18 +76,23 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	//GraphUtil::reduce(roads);
 	//GraphUtil::clean(roads);
 
-	if (!G::getBool("generateLocalStreets")) return;
-
 	// Local streetを生成
-	generateStreetSeeds2(roads, area, kf, seeds);
+	if (G::getBool("generateLocalStreets")) {
+		generateStreetSeeds2(roads, area, kf, seeds);
 
-	for (int i = 0; !seeds.empty() && i < G::getInt("numIterations"); ++i) {
-		RoadVertexDesc desc = seeds.front();
-		seeds.pop_front();
+		for (int i = 0; !seeds.empty() && i < G::getInt("numIterations"); ++i) {
+			RoadVertexDesc desc = seeds.front();
+			seeds.pop_front();
 
-		std::cout << "attemptExpansion (street): " << i << std::endl;
-		//if (i == 3) break;
-		attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, kf, seeds, additionalSeeds);
+			std::cout << "attemptExpansion (street): " << i << std::endl;
+			//if (i == 3) break;
+			attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, kf, seeds, additionalSeeds);
+		}
+	}
+
+	// 指定されたエリアでCropping
+	if (G::getBool("cropping")) {
+		GraphUtil::extractRoads2(roads, area);
 	}
 
 	// isolated edgeを削除
@@ -340,15 +340,24 @@ void KDERoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &ar
  * Avenueが既に生成済みであることを前提とする。streetSeedフラグがtrueのAvenue頂点をシードとする。
  */
 void KDERoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D &area, const KDEFeature& f, std::list<RoadVertexDesc>& seeds) {
+	std::vector<RoadVertexDesc> tempSeeds;
+
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = vertices(roads.graph); vi != vend; ++vi) {
 		if (!roads.graph[*vi]->valid) continue;
 
 		if (roads.graph[*vi]->kernel.streetSeed) {
-			seeds.push_back(*vi);
+			tempSeeds.push_back(*vi);
 		} else if (GraphUtil::getDegree(roads, *vi) == 2) {
-			seeds.push_back(*vi);
+			tempSeeds.push_back(*vi);
 		}
+	}
+
+	// 各シードに、カーネルを割り当てる
+	for (int i = 0; i < tempSeeds.size(); ++i) {
+		KDEFeatureItem item = getItem(roads, area, f, RoadEdge::TYPE_STREET, tempSeeds[i]);
+		roads.graph[tempSeeds[i]]->kernel = item;
+		seeds.push_back(tempSeeds[i]);
 	}
 }
 
