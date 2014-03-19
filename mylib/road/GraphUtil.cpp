@@ -670,27 +670,30 @@ void GraphUtil::moveEdge(RoadGraph& roads, RoadEdgeDesc e, QVector2D& src_pos, Q
 
 /**
  * Polylineを指定した始点、終点になるよう変形する。
+ * スケールが大きく変化する場合は、スケーリング＆回転で対応。
+ * スケールがあまり変化しない場合は、Linear Interpolationにより変形させる。
  */
 void GraphUtil::movePolyline(RoadGraph& roads, Polyline2D &polyline, const QVector2D& src_pos, const QVector2D& tgt_pos) {
-	/*
-	// スケーリング＆回転で、ポリラインを指定された座標にフィットさせる
 	float scale = (tgt_pos - src_pos).length() / (polyline.last() - polyline[0]).length();
-	float rotation_degree = Util::rad2deg(Util::diffAngle(polyline.last() - polyline[0], tgt_pos- src_pos, false));
 
-	polyline.scale(scale);
-	polyline.rotate(rotation_degree, QVector2D(0, 0));
-	polyline.translate(src_pos - polyline[0]);
-	*/
+	if (scale > 2.0f || scale < 0.5f) {
+		// スケーリング＆回転で、ポリラインを指定された座標にフィットさせる
+		float rotation_degree = Util::rad2deg(Util::diffAngle(polyline.last() - polyline[0], tgt_pos- src_pos, false));
 
-	// 指定された座標に、Linear Interpolationにより移動する
-	Polyline2D temp_polyline = polyline;
-	QVector2D offset = src_pos - temp_polyline[0];
-	QVector2D diff_ratio = (tgt_pos - temp_polyline.last() - offset) / temp_polyline.length();
-	for (int i = 1; i < temp_polyline.size() - 1; ++i) {
-		polyline[i] += offset + diff_ratio * temp_polyline.length(i);
+		polyline.scale(scale);
+		polyline.rotate(rotation_degree, QVector2D(0, 0));
+		polyline.translate(src_pos - polyline[0]);
+	} else {
+		// 指定された座標に、Linear Interpolationにより移動する
+		Polyline2D temp_polyline = polyline;
+		QVector2D offset = src_pos - temp_polyline[0];
+		QVector2D diff_ratio = (tgt_pos - temp_polyline.last() - offset) / temp_polyline.length();
+		for (int i = 1; i < temp_polyline.size() - 1; ++i) {
+			polyline[i] += offset + diff_ratio * temp_polyline.length(i);
+		}
+		polyline[0] = src_pos;
+		polyline[polyline.size() - 1] = tgt_pos;
 	}
-	polyline[0] = src_pos;
-	polyline[polyline.size() - 1] = tgt_pos;
 }
 
 /**
