@@ -69,6 +69,11 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 				connectAvenues(roads, area, kf, desc, 1.0f);
 			}
 		}
+
+		// 指定されたエリアでCropping
+		if (G::getBool("cropping")) {
+			GraphUtil::extractRoads2(roads, area);
+		}
 	}
 
 	// clean up
@@ -90,9 +95,11 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 		}
 	}
 
-	// 指定されたエリアでCropping
-	if (G::getBool("cropping")) {
-		GraphUtil::extractRoads2(roads, area);
+	if (G::getBool("multiSeeds")) {
+		// 指定されたエリアでCropping
+		if (G::getBool("cropping")) {
+			GraphUtil::extractRoads2(roads, area);
+		}
 	}
 
 	// isolated edgeを削除
