@@ -562,6 +562,20 @@ bool GraphUtil::hasEdge(RoadGraph& roads, RoadVertexDesc desc1, RoadVertexDesc d
 	return false;
 }
 
+bool GraphUtil::hasSimilarEdge(RoadGraph& roads, RoadVertexDesc desc1, RoadVertexDesc desc2, const Polyline2D &polyline) {
+	RoadOutEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::out_edges(desc1, roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+		if (tgt != desc2) continue;
+
+		if (isSimilarPolyline(roads.graph[*ei]->polyline, polyline)) return true;
+	}
+
+	return false;
+}
+
 /**
  * Return the edge between src and tgt.
  */
@@ -694,6 +708,34 @@ void GraphUtil::movePolyline(RoadGraph& roads, Polyline2D &polyline, const QVect
 		polyline[0] = src_pos;
 		polyline[polyline.size() - 1] = tgt_pos;
 	}
+}
+
+/**
+ * ２つのpolylineがだいたい同じ形かどうかチェックする
+ * 長さ、端点の方向ベクトル、最初の方向ベクトル、最後の方向ベクトルを使用して判断する。
+ */
+bool GraphUtil::isSimilarPolyline(const Polyline2D &polyline1, const Polyline2D &polyline2) {
+	if (polyline1.size() == 1 && polyline2.size() == 1) return true;
+	if (polyline1.size() == 1 || polyline2.size() == 1) return false;
+
+	// 長さをチェック
+	if (polyline1.length() - polyline2.length() > 100.0f) return false;
+
+	Polyline2D polyline2b = polyline2;
+	if (Util::rad2deg(Util::diffAngle(polyline1.last() - polyline1[0], polyline2.last() - polyline2[0])) > 90.0f) {
+		std::reverse(polyline2b.begin(), polyline2b.end());
+	}
+
+	// 端点の方向ベクトルをチェック
+	if (Util::rad2deg(Util::diffAngle(polyline1.last() - polyline1[0], polyline2b.last() - polyline2b[0])) > 10.0f) return false;
+
+	// 最初の方向ベクトルをチェック
+	if (Util::rad2deg(Util::diffAngle(polyline1[1] - polyline1[0], polyline2b[1] - polyline2b[0])) > 10.0f) return false;
+
+	// 最後の方向ベクトルをチェック
+	if (Util::rad2deg(Util::diffAngle(polyline1.last() - polyline1[polyline1.size() - 2], polyline2b.last() - polyline2b[polyline2b.size() - 2])) > 10.0f) return false;
+
+	return true;
 }
 
 /**

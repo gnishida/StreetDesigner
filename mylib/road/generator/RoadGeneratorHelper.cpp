@@ -71,11 +71,10 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos,
 			RoadVertexDesc v2 = boost::target(*ei, roads.graph);
 
 			// 自分自身には、スナップしない
-			if (v2 == srcDesc) {
+			/*if (v2 == srcDesc) {
 				okay = false;
 				break;
-			}
-		
+			}*/
 
 			// ２つのエッジのなす角
 			float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
@@ -382,6 +381,8 @@ int RoadGeneratorHelper::getClosestItem(const KDEFeature &f, int roadType, const
 
 /**
  * 指定された頂点について、指定されたエッジに似たエッジが既に登録済みかどうかチェックする。
+ * polylineには、各点の、頂点からのオフセット座標が入る。ただし、頂点自体の座標(0, 0)は含まない。
+ * 登録済みのエッジに対しては、エッジの端点への方向ベクトルとpolylineの端点の方向ベクトルのなす角度が30度未満なら、trueを返却する。
  */
 bool RoadGeneratorHelper::isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_desc, const Polyline2D &polyline) {
 	if (polyline.size() == 0) true;

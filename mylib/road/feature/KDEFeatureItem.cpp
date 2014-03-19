@@ -7,6 +7,21 @@
 #include "KDEFeatureItem.h"
 
 void KDEFeatureItem::addEdge(const Polyline2D &polyline, int lanes, bool deadend, bool onBoundary) {
+	// 既に同じpolylineのエッジが存在する場合は、登録しない
+	for (int i = 0; i < edges.size(); ++i) {
+		if (edges[i].edge.size() != polyline.size()) continue;
+
+		bool duplicated = true;
+		for (int j = 0; j < edges[i].edge.size(); ++j) {
+			if ((edges[i].edge[j] - polyline[j]).lengthSquared() > 0.0f) {
+				duplicated = false;
+				break;
+			}
+		}
+
+		if (duplicated) return;
+	}
+
 	edges.push_back(KDEFeatureItemEdge(polyline, lanes, deadend, onBoundary));
 }
 

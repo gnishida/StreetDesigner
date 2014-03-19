@@ -374,10 +374,19 @@ void KDERoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area,
 		roads.graph[srcDesc]->kernel = item;
 	}
 	
+	std::vector<bool> isRedundant;
 	for (int i = 0; i < item.edges.size(); ++i) {
-		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, item.edges[i].edge)) continue;
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, item.edges[i].edge)) {
+			isRedundant.push_back(true);
+		} else {
+			isRedundant.push_back(false);
+		}
+	}
 
-		growRoadSegment(roads, area, srcDesc, roadType, f, item.edges[i], seeds, additionalSeeds);
+	for (int i = 0; i < item.edges.size(); ++i) {
+		if (!isRedundant[i]) {
+			growRoadSegment(roads, area, srcDesc, roadType, f, item.edges[i], seeds, additionalSeeds);
+		}
 	}
 }
 
@@ -525,7 +534,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 		}
 	}
 
-	if (GraphUtil::hasEdge(roads, srcDesc, tgtDesc)) return false;
+	if (GraphUtil::hasSimilarEdge(roads, srcDesc, tgtDesc, polyline)) return false;
 
 	// エッジを追加
 	RoadEdgeDesc e = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
