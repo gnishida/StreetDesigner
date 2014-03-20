@@ -41,6 +41,9 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		int num = graph[*ei]->polyline3D.size();
 		if (num <= 1) continue;
 
+		float halfWidth = graph[*ei]->getWidth() / 2.0f;
+
+		QVector3D p0, p1, p2, p3;
 		for (int i = 0; i < num - 1; ++i) {
 			QVector3D pt1 = graph[*ei]->polyline3D[i];
 			QVector3D pt2 = graph[*ei]->polyline3D[i + 1];
@@ -48,26 +51,26 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			vec = QVector3D(-vec.y(), vec.x(), 0.0f);
 			vec.normalize();
 
-			QVector3D p0 = pt1 + vec * graph[*ei]->getWidth() / 2.0f;
-			QVector3D p1 = pt1 - vec * graph[*ei]->getWidth() / 2.0f;
-			QVector3D p2 = pt2 - vec * graph[*ei]->getWidth() / 2.0f;
-			QVector3D p3 = pt2 + vec * graph[*ei]->getWidth() / 2.0f;
+			if (i == 0) {
+				p0 = pt1 + vec * halfWidth;
+				p1 = pt1 - vec * halfWidth;
+			}
+			p2 = pt2 - vec * halfWidth;
+			p3 = pt2 + vec * halfWidth;
 			QVector3D normal = Util::calculateNormal(p0, p1, p2);
 
 			if (i < num - 2) {
-				QVector3D vec2 = graph[*ei]->polyline3D[i + 2] - pt2;
-				vec2 = QVector3D(-vec2.y(), vec2.x(), 0.0f);
-				vec2.normalize();
+				QVector3D pt3 = graph[*ei]->polyline3D[i + 2];
 
-				QVector3D p4 = pt2 - vec2 * graph[*ei]->getWidth() / 2.0f;
-				QVector3D p5 = pt2 + vec2 * graph[*ei]->getWidth() / 2.0f;
-
-				p2 = (p2 + p4) / 2;
-				p3 = (p3 + p5) / 2;
+				Util::getIrregularBisector(pt1, pt2, pt3, halfWidth, halfWidth, p3);
+				Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
 			}
 
 			//renderable2->addQuad(p0, p1, p2, p3, normal, color);
 			renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, 1);
+
+			p0 = p3;
+			p1 = p2;
 		}
 	}
 
