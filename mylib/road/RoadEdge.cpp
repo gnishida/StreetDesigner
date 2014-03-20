@@ -74,7 +74,7 @@ float RoadEdge::getWidth(float widthPerLane) {
 		return 0.0f;
 	}*/
 
-	return widthPerLane;
+	return widthPerLane * 2.0f;
 }
 
 /**
