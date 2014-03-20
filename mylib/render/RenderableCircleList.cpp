@@ -36,4 +36,15 @@ void RenderableCircleList::addCircle(const QVector3D& o, float r, int slices, co
 	}
 }
 
+void RenderableCircleList::addCircle(const QVector3D& o, float r, int slices, const QColor& color, float hightOffset) {
+	for (int i = 0; i < slices; i++) {
+		float angle1 = 2.0 * M_PI * i / slices;
+		float angle2 = 2.0 * M_PI * (i + 1) / slices;
+
+		generateMeshVertex(o.x(), o.y(), o.z() + hightOffset, 0, 0, 1, color);
+		generateMeshVertex(o.x() + r * cos(angle1), o.y() + r * sin(angle1), o.z() + hightOffset, 0, 0, 1, color);
+		generateMeshVertex(o.x() + r * cos(angle2), o.y() + r * sin(angle2), o.z() + hightOffset, 0, 0, 1, color);
+	}
+}
+
 } // namespace mylib

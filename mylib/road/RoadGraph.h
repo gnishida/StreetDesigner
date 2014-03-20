@@ -13,6 +13,7 @@
 #include "RoadEdge.h"
 #include "../render/Renderable.h"
 #include "../render/GeometryObject.h"
+#include "../render/RenderableQuadList.h"
 #include "../render/Terrain.h"
 
 using namespace boost;
@@ -57,12 +58,15 @@ public:
 	void clear();
 	void setZ(float z);
 	void adaptToTerrain(mylib::Terrain* terrain);
+	void add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset = 0.0f);
+
 	void generate2DMesh();
 	void add2DMeshOfEdge(mylib::RenderablePtr renderable, RoadEdgePtr edge, float widthBase, QColor color, float height);
 	void add2DMeshOfVertex(mylib::RenderablePtr renderable, RoadVertexPtr vertex, QColor color, float height);
 
 private:
 	void _generateMeshVertices(mylib::TextureManager* textureManager);
+	void _generateMeshVertices2(mylib::TextureManager* textureManager);
 };
 
 typedef boost::shared_ptr<RoadGraph> RoadGraphPtr;

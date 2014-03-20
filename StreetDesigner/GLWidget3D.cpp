@@ -229,18 +229,6 @@ void GLWidget3D::initializeGL() {
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialEmission);
 
-	//tex
-	glEnable(GL_TEXTURE_2D);								
-	glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-	//glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameterf (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);	
-
-	glTexGenf (GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
-	glTexGenf (GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR );
-	glDisable(GL_TEXTURE_2D);
-
 	textureManager = mylib::TextureManager::getInstance(this);
 	textureManager->initializeTextures(this, "data/textures.txt");
 	skyBox = new mylib::SimpleSkyBox(2.0f * this->spaceRadius);

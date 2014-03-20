@@ -3,7 +3,6 @@
 #include "RoadGraph.h"
 #include "../common/Util.h"
 #include "../render/Terrain.h"
-#include "../render/RenderableQuadList.h"
 #include "../render/RenderableCircleList.h"
 #include "../render/TextureManager.h"
 
@@ -17,24 +16,66 @@ RoadGraph::RoadGraph() {
 RoadGraph::~RoadGraph() {
 }
 
-void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
+void RoadGraph::_generateMeshVertices2(mylib::TextureManager* textureManager) {
 	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList();
-	mylib::RenderableQuadList* renderable2 = new mylib::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
-	//mylib::RenderableCircleList* renderable3 = new mylib::RenderableCircleList();
+	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList();
 
-	// generate vertices for seeds
-	/*
-	for (int i = 0; i < seeds.size(); ++i) {
-		RoadVertexPtr v = graph[seeds[i]];
-		QVector3D p0 = v->getPt() + QVector3D(-5, -5, 0);
-		QVector3D p1 = v->getPt() + QVector3D(5, -5, 0);
-		QVector3D p2 = v->getPt() + QVector3D(5, 5, 0);
-		QVector3D p3 = v->getPt() + QVector3D(-5, 5, 0);
-		QVector3D normal = Util::calculateNormal(p0, p1, p2);
+	// draw road segments
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
+		if (!graph[*ei]->valid) continue;
 
-		renderable1->addQuad(p0, p1, p2, p3, normal, QColor(255, 255, 255));
+		RoadEdgePtr edge = graph[*ei];
+
+		QColor color = graph[*ei]->color;
+		QColor bgColor = graph[*ei]->bgColor;
+
+		// draw the border of the road segment
+		if ((showHighways && edge->type == RoadEdge::TYPE_HIGHWAY) || (showBoulevard && edge->type ==  RoadEdge::TYPE_BOULEVARD) || (showAvenues && edge->type ==  RoadEdge::TYPE_AVENUE) || (showLocalStreets && edge->type ==  RoadEdge::TYPE_STREET)) {
+
+			add3DMeshOfEdge(renderable1, edge, edge->getWidth() + 1.0f, bgColor);
+			add3DMeshOfEdge(renderable1, edge, edge->getWidth(), color, 0.5f);
+		}
 	}
-	*/
+
+	// draw intersections
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
+		if (!graph[*vi]->valid) continue;
+
+		// get the largest width of the outing edges
+		float max_width = 0;
+		QColor color;
+		QColor bgColor;
+		int max_type = 0;
+		RoadOutEdgeIter oei, oeend;
+		for (boost::tie(oei, oeend) = boost::out_edges(*vi, graph); oei != oeend; ++oei) {
+			if (!graph[*oei]->valid) continue;
+
+			float width = graph[*oei]->getWidth();
+			if (width > max_width) {
+				max_width = width;
+			}
+
+			if (graph[*oei]->type > max_type) {
+				max_type = graph[*oei]->type;
+				color = graph[*oei]->color;
+				bgColor = graph[*oei]->bgColor;
+			}
+
+		}
+
+		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f + 0.5f, 10, bgColor);
+		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 10, color, 0.5f);
+	}
+
+	renderables.push_back(mylib::RenderablePtr(renderable1));
+	renderables.push_back(mylib::RenderablePtr(renderable2));
+}
+
+void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
+	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
+	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList();
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
@@ -64,19 +105,19 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			if (i < num - 2) {
 				QVector3D pt3 = graph[*ei]->polyline3D[i + 2];
 
+
 				Util::getIrregularBisector(pt1, pt2, pt3, halfWidth, halfWidth, p3);
 				Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
 			}
 
-			//renderable2->addQuad(p0, p1, p2, p3, normal, color);
-			renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, 1);
+			renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
 
 			p0 = p3;
 			p1 = p2;
 		}
 	}
 
-	/*
+	// draw intersections
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
 		if (!graph[*vi]->valid) continue;
@@ -93,13 +134,47 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			}
 		}
 
-		renderable3->addCircle(graph[*vi]->pt, max_width * 0.5f, 10, QColor(10, 10, 10));
+		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, QColor(10, 10, 10));
 	}
-	*/
 
 	renderables.push_back(mylib::RenderablePtr(renderable1));
 	renderables.push_back(mylib::RenderablePtr(renderable2));
-	//renderables.push_back(mylib::RenderablePtr(renderable3));
+}
+
+/**
+ * Add a mesh for the specified edge.
+ */
+void RoadGraph::add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset) {
+	int num = edge->polyline.size();
+
+	QVector3D p0, p1, p2, p3;
+	for (int i = 0; i < num - 1; ++i) {
+		QVector3D pt1 = edge->polyline3D[i];
+		QVector3D pt2 = edge->polyline3D[i + 1];
+		QVector3D vec = pt2 - pt1;
+		vec = QVector3D(-vec.y(), vec.x(), 0.0f);
+		vec.normalize();
+
+		if (i == 0) {
+			p0 = pt1 + vec * width * 0.5f;
+			p1 = pt1 - vec * width * 0.5f;
+		}
+		p2 = pt2 - vec * width * 0.5f;
+		p3 = pt2 + vec * width * 0.5f;
+		QVector3D normal(0, 0, 1);// = Util::calculateNormal(p0, p1, p2);
+
+		if (i < num - 2) {
+			QVector3D pt3 = edge->polyline3D[i + 2];
+
+			Util::getIrregularBisector(pt1, pt2, pt3, width * 0.5f, width * 0.5f, p3);
+			Util::getIrregularBisector(pt1, pt2, pt3, -width * 0.5f, -width * 0.5f, p2);
+		}
+
+		renderable->addQuad(p0, p1, p2, p3, normal, color, heightOffset);
+
+		p0 = p3;
+		p1 = p2;
+	}
 }
 
 void RoadGraph::generate2DMesh() {

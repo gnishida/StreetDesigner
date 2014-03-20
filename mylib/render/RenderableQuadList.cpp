@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 This file is part of QtUrban.
 
     QtUrban is free software: you can redistribute it and/or modify
@@ -40,6 +40,16 @@ void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, con
 	generateMeshVertex(pt2.x(), pt2.y(), pt2.z(), normal.x(), normal.y(), normal.z(), color);
 	generateMeshVertex(pt3.x(), pt3.y(), pt3.z(), normal.x(), normal.y(), normal.z(), color);
 	generateMeshVertex(pt4.x(), pt4.y(), pt4.z(), normal.x(), normal.y(), normal.z(), color);
+}
+
+/**
+ * Z座標を、全てhightOffset足して表示する
+ */
+void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, const QColor& color, float heightOffset) {
+	generateMeshVertex(pt1.x(), pt1.y(), pt1.z() + heightOffset, normal.x(), normal.y(), normal.z(), color);
+	generateMeshVertex(pt2.x(), pt2.y(), pt2.z() + heightOffset, normal.x(), normal.y(), normal.z(), color);
+	generateMeshVertex(pt3.x(), pt3.y(), pt3.z() + heightOffset, normal.x(), normal.y(), normal.z(), color);
+	generateMeshVertex(pt4.x(), pt4.y(), pt4.z() + heightOffset, normal.x(), normal.y(), normal.z(), color);
 }
 
 void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, const QColor& color1, const QColor& color2, const QColor& color3, const QColor& color4) {

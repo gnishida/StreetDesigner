@@ -84,7 +84,6 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	renderer.render(&roads, textureManager);
 	for (int i = 0; i < blocks.size(); ++i) {
 		renderer.render(blocks[i], textureManager);
-		//rendererHelper.renderArea(blocks[i]->getContour(), QColor(255, 0, 0), GL_LINES);
 	}
 
 
@@ -97,7 +96,6 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 
 	// draw the areas
 	for (int i = 0; i < areas.size(); ++i) {
-		//areas[i].adaptToTerrain(terrain);
 		if (i == areas.selectedIndex) {
 			rendererHelper.renderPolyline(areas[i]->area3D, QColor(0, 0, 255), GL_LINE_STIPPLE);
 		} else {

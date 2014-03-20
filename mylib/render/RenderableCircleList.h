@@ -28,6 +28,7 @@ public:
 	~RenderableCircleList() {}
 
 	void addCircle(const QVector3D& o, float r, int slices, const QColor& color);
+	void addCircle(const QVector3D& o, float r, int slices, const QColor& color, float hightOffset);
 };
 
 } // namespace mylib
