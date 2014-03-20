@@ -96,6 +96,12 @@
     <ClCompile Include="..\mylib\render\RenderableCircleList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polyline3D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RoadPreprocessor.h">
@@ -166,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableCircleList.h">
       <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableCylinderList.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polyline3D.h">
+      <Filter>mylib\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

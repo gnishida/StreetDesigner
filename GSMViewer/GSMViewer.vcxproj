@@ -133,11 +133,13 @@
     <ClCompile Include="..\mylib\common\global.cpp" />
     <ClCompile Include="..\mylib\common\Polygon2D.cpp" />
     <ClCompile Include="..\mylib\common\Polyline2D.cpp" />
+    <ClCompile Include="..\mylib\common\Polyline3D.cpp" />
     <ClCompile Include="..\mylib\common\Util.cpp" />
     <ClCompile Include="..\mylib\render\GeometryObject.cpp" />
     <ClCompile Include="..\mylib\render\Noncopyable.cpp" />
     <ClCompile Include="..\mylib\render\Renderable.cpp" />
     <ClCompile Include="..\mylib\render\RenderableCircleList.cpp" />
+    <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp" />
     <ClCompile Include="..\mylib\render\RenderableQuadList.cpp" />
     <ClCompile Include="..\mylib\render\RendererHelper.cpp" />
     <ClCompile Include="..\mylib\render\Terrain.cpp" />
@@ -233,11 +235,13 @@
     <ClInclude Include="..\mylib\common\global.h" />
     <ClInclude Include="..\mylib\common\Polygon2D.h" />
     <ClInclude Include="..\mylib\common\Polyline2D.h" />
+    <ClInclude Include="..\mylib\common\Polyline3D.h" />
     <ClInclude Include="..\mylib\common\Util.h" />
     <ClInclude Include="..\mylib\render\GeometryObject.h" />
     <ClInclude Include="..\mylib\render\Noncopyable.h" />
     <ClInclude Include="..\mylib\render\Renderable.h" />
     <ClInclude Include="..\mylib\render\RenderableCircleList.h" />
+    <ClInclude Include="..\mylib\render\RenderableCylinderList.h" />
     <ClInclude Include="..\mylib\render\RenderableQuadList.h" />
     <ClInclude Include="..\mylib\render\RendererHelper.h" />
     <ClInclude Include="..\mylib\render\Terrain.h" />
