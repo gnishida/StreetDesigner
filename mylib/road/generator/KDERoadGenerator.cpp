@@ -544,7 +544,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 	if (GraphUtil::hasSimilarEdge(roads, srcDesc, tgtDesc, polyline)) return false;
 
 	// エッジを追加
-	RoadEdgeDesc e = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
+	RoadEdgeDesc e = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, edge.lanes);
 	roads.graph[e]->polyline = polyline;
 
 	// シードに追加
