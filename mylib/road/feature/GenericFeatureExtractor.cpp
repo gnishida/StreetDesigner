@@ -7,28 +7,17 @@
 void GenericFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, RoadFeature& roadFeature) {
 	GenericFeaturePtr gf = GenericFeaturePtr(new GenericFeature(0));
 
-	BBox bbox;
+	BBox bbox = area.envelope();
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
 		if (!roads.graph[*ei]->valid) continue;
-
-		// GridまたはRadialのエッジは、スキップ
-		if (roads.graph[*ei]->properties["shapeType"].toInt() > 0) continue;
 
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
 		// エリア外ならスキップ
 		if (!area.contains(roads.graph[src]->pt) && !area.contains(roads.graph[tgt]->pt)) continue;
-
-		// Bounding Boxを更新
-		if (area.contains(roads.graph[src]->pt)) {
-			bbox.addPoint(roads.graph[src]->pt);
-		}
-		if (area.contains(roads.graph[tgt]->pt)) {
-			bbox.addPoint(roads.graph[tgt]->pt);
-		}
 
 		int roadType = roads.graph[*ei]->type;
 		float length = roads.graph[*ei]->getLength();

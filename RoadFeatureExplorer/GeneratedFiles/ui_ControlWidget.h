@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Wed Mar 19 19:06:43 2014
+** Created: Thu Mar 20 17:53:09 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -36,6 +36,8 @@ public:
     QCheckBox *checkBoxExactCut;
     QCheckBox *checkBoxRoadTypeHighway;
     QCheckBox *checkBoxRoadTypeBoulevard;
+    QGroupBox *groupBox;
+    QPushButton *pushButtonExtractGenericFeature;
 
     void setupUi(QDockWidget *ControlWidget)
     {
@@ -73,6 +75,12 @@ public:
         checkBoxRoadTypeBoulevard = new QCheckBox(dockWidgetContents);
         checkBoxRoadTypeBoulevard->setObjectName(QString::fromUtf8("checkBoxRoadTypeBoulevard"));
         checkBoxRoadTypeBoulevard->setGeometry(QRect(100, 10, 70, 17));
+        groupBox = new QGroupBox(dockWidgetContents);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        groupBox->setGeometry(QRect(10, 250, 201, 71));
+        pushButtonExtractGenericFeature = new QPushButton(groupBox);
+        pushButtonExtractGenericFeature->setObjectName(QString::fromUtf8("pushButtonExtractGenericFeature"));
+        pushButtonExtractGenericFeature->setGeometry(QRect(30, 30, 141, 31));
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -91,6 +99,8 @@ public:
         checkBoxExactCut->setText(QApplication::translate("ControlWidget", "Exact Cut", 0, QApplication::UnicodeUTF8));
         checkBoxRoadTypeHighway->setText(QApplication::translate("ControlWidget", "Highways", 0, QApplication::UnicodeUTF8));
         checkBoxRoadTypeBoulevard->setText(QApplication::translate("ControlWidget", "Boulevard", 0, QApplication::UnicodeUTF8));
+        groupBox->setTitle(QApplication::translate("ControlWidget", "Generic Feature", 0, QApplication::UnicodeUTF8));
+        pushButtonExtractGenericFeature->setText(QApplication::translate("ControlWidget", "Extract Generic Feature", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi
 
