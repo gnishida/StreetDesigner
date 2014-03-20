@@ -6,18 +6,18 @@
 
 class GenericRoadGenerator {
 public:
-	GenericRoadGenerator();
-	~GenericRoadGenerator();
+	GenericRoadGenerator() {}
+	~GenericRoadGenerator() {}
 
-	void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const GenericFeature& gf);
+	static void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const GenericFeature& gf);
 
 private:
-	void generateInitialSeeds(RoadGraph &roads, const Polygon2D &area, const GenericFeature& gf, std::list<RoadVertexDesc>& seeds);
-	bool generateInitialStreetSeeds(RoadGraph &roads, const GenericFeature& gf, std::list<RoadVertexDesc>& seeds);
+	static void generateInitialSeeds(RoadGraph &roads, const Polygon2D &area, const GenericFeature& gf, std::list<RoadVertexDesc>& seeds);
+	static bool generateInitialStreetSeeds(RoadGraph &roads, const GenericFeature& gf, std::list<RoadVertexDesc>& seeds);
 
-	void attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const GenericFeature& gf, std::list<RoadVertexDesc> &newSeeds);
-	bool intersects(RoadGraph &roads, const QVector2D& p0, const QVector2D& p1, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt);
+	static void attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const GenericFeature& gf, std::list<RoadVertexDesc> &newSeeds);
+	static bool intersects(RoadGraph &roads, const QVector2D& p0, const QVector2D& p1, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt);
 
-	void removeDeadEnds(RoadGraph &roads);
+	static void removeDeadEnds(RoadGraph &roads);
 };
 

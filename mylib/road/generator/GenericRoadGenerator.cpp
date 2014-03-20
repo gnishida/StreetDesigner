@@ -2,12 +2,6 @@
 #include "../GraphUtil.h"
 #include "GenericRoadGenerator.h"
 
-GenericRoadGenerator::GenericRoadGenerator() {
-}
-
-GenericRoadGenerator::~GenericRoadGenerator() {
-}
-
 void GenericRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const GenericFeature& gf) {
 	std::list<RoadVertexDesc> seeds;
 	std::list<RoadVertexDesc> newSeeds;
@@ -169,7 +163,7 @@ void GenericRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &a
 		bool outside = false;
 
 		float dist = roads.graph[srcDesc]->lengths[i];
-		dist = dist + Util::uniform_rand(dist * -0.3f, dist * 0.3f);
+		dist = dist + Util::genRand(dist * -0.3f, dist * 0.3f);
 
 		RoadVertexDesc tgtDesc;
 		QVector2D pt = roads.graph[srcDesc]->pt + dir * dist;

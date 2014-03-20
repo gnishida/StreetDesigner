@@ -509,7 +509,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>780</y>
+      <y>820</y>
       <width>171</width>
       <height>101</height>
      </rect>
@@ -555,6 +555,19 @@
     </property>
     <property name="text">
      <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButtonGenerateParametric">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>780</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Parametric</string>
     </property>
    </widget>
   </widget>

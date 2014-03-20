@@ -244,6 +244,9 @@
     <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\road\generator\GenericRoadGenerator.cpp">
+      <Filter>mylib\road\generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableCylinderList.h">
       <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\generator\GenericRoadGenerator.h">
+      <Filter>mylib\road\generator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,6 +44,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
+	connect(ui.pushButtonGenerateParametric, SIGNAL(clicked()), this, SLOT(generateParametric()));
 
 	hide();
 }
@@ -77,10 +78,7 @@ void ControlWidget::generateKDE() {
 
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
 
-	if (filename.isEmpty()) {
-		printf("Unable to open file\n");
-		return;
-	}
+	if (filename.isEmpty()) return;
 
 	G::global()["invadingCheck"] = ui.checkBoxInvadingCheck->isChecked();
 	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
@@ -152,5 +150,18 @@ void ControlWidget::connectRoads() {
 	mainWin->glWidget->updateGL();
 }
 
+void ControlWidget::generateParametric() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+
+	if (filename.isEmpty()) return;
+
+	RoadFeature rf;
+	rf.load(filename);
+
+	mainWin->urbanGeometry->generateParametricRoads(rf);
+
+	mainWin->glWidget->updateGL();
+}
 

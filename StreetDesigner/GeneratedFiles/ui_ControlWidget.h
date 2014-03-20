@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Wed Mar 19 19:07:10 2014
+** Created: Thu Mar 20 17:42:09 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -70,6 +70,7 @@ public:
     QPushButton *pushButtonConnect;
     QPushButton *pushButtonMerge;
     QPushButton *pushButtonClear;
+    QPushButton *pushButtonGenerateParametric;
     QButtonGroup *buttonGroup;
     QButtonGroup *buttonGroup_2;
 
@@ -209,7 +210,7 @@ public:
         radioButtonPolarCoordinate->setGeometry(QRect(10, 40, 131, 17));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 780, 171, 101));
+        groupBox_5->setGeometry(QRect(10, 820, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
         pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
@@ -219,6 +220,9 @@ public:
         pushButtonClear = new QPushButton(dockWidgetContents);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
         pushButtonClear->setGeometry(QRect(30, 730, 131, 31));
+        pushButtonGenerateParametric = new QPushButton(dockWidgetContents);
+        pushButtonGenerateParametric->setObjectName(QString::fromUtf8("pushButtonGenerateParametric"));
+        pushButtonGenerateParametric->setGeometry(QRect(30, 780, 131, 31));
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -261,6 +265,7 @@ public:
         pushButtonConnect->setText(QApplication::translate("ControlWidget", "Connect", 0, QApplication::UnicodeUTF8));
         pushButtonMerge->setText(QApplication::translate("ControlWidget", "Merge", 0, QApplication::UnicodeUTF8));
         pushButtonClear->setText(QApplication::translate("ControlWidget", "Clear", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerateParametric->setText(QApplication::translate("ControlWidget", "Parametric", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi
 
