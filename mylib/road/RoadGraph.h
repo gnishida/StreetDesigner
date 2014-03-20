@@ -66,7 +66,6 @@ public:
 
 private:
 	void _generateMeshVertices(mylib::TextureManager* textureManager);
-	void _generateMeshVertices2(mylib::TextureManager* textureManager);
 };
 
 typedef boost::shared_ptr<RoadGraph> RoadGraphPtr;

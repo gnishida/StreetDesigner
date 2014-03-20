@@ -188,7 +188,6 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 		mainWin->urbanGeometry->areas.add(RoadAreaPtr(new RoadArea(mainWin->urbanGeometry->areaBuilder.polygon())));
 		mainWin->urbanGeometry->areas.selectLastArea();
 		mainWin->urbanGeometry->areas.selectedArea()->adaptToTerrain(mainWin->urbanGeometry->terrain);
-		//mainWin->urbanGeometry->areas.selectedArea()->roads.setZ(myCam.dz);
 
 		mainWin->mode = MainWindow::MODE_AREA_SELECT;
 		mainWin->ui.actionAreaSelect->setChecked(true);
