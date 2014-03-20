@@ -74,8 +74,8 @@ void RoadGraph::_generateMeshVertices2(mylib::TextureManager* textureManager) {
 }
 
 void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
-	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
-	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList();
+	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList(textureManager->get("data/textures/street_segment.jpg"));
+	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList(textureManager->get("data/textures/street_intersection.jpg"));
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
@@ -134,7 +134,7 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			}
 		}
 
-		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, QColor(10, 10, 10));
+		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, -0.1f);
 	}
 
 	renderables.push_back(mylib::RenderablePtr(renderable1));
