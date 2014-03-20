@@ -21,10 +21,13 @@ This file is part of QtUrban.
 
 namespace mylib {
 
-class RenderableQuad : public Renderable {
+class RenderableCircleList : public Renderable {
 public:
-	RenderableQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, mylib::Texture* texture, float s0, float t0, float s1, float t1);
-	~RenderableQuad();
+	RenderableCircleList();
+	RenderableCircleList(Texture* texture);
+	~RenderableCircleList() {}
+
+	void addCircle(const QVector3D& o, float r, int slices, const QColor& color);
 };
 
 } // namespace mylib

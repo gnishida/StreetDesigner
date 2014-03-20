@@ -14,20 +14,26 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#include "RenderableQuad.h"
+#include "RenderableCircleList.h"
 
 namespace mylib {
 
-RenderableQuad::RenderableQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, mylib::Texture* texture, float s0, float t0, float s1, float t1) : Renderable(GL_QUADS) {
-	this->texture = texture;
-
-	generateMeshVertex(pt1.x(), pt1.y(), pt1.z(), normal.x(), normal.y(), normal.z(), s0, t0);
-	generateMeshVertex(pt2.x(), pt2.y(), pt2.z(), normal.x(), normal.y(), normal.z(), s1, t0);
-	generateMeshVertex(pt3.x(), pt3.y(), pt3.z(), normal.x(), normal.y(), normal.z(), s1, t1);
-	generateMeshVertex(pt4.x(), pt4.y(), pt4.z(), normal.x(), normal.y(), normal.z(), s0, t1);
+RenderableCircleList::RenderableCircleList() : Renderable(GL_TRIANGLES) {
 }
 
-RenderableQuad::~RenderableQuad() {
+RenderableCircleList::RenderableCircleList(Texture* texture) : Renderable(GL_TRIANGLES) {
+	this->texture = texture;
+}
+
+void RenderableCircleList::addCircle(const QVector3D& o, float r, int slices, const QColor& color) {
+	for (int i = 0; i < slices; i++) {
+		float angle1 = 2.0 * M_PI * i / slices;
+		float angle2 = 2.0 * M_PI * (i + 1) / slices;
+
+		generateMeshVertex(o.x(), o.y(), o.z(), 0, 0, 1, color);
+		generateMeshVertex(o.x() + r * cos(angle1), o.y() + r * sin(angle1), o.z(), 0, 0, 1, color);
+		generateMeshVertex(o.x() + r * cos(angle2), o.y() + r * sin(angle2), o.z(), 0, 0, 1, color);
+	}
 }
 
 } // namespace mylib

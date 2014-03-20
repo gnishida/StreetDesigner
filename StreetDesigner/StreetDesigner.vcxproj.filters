@@ -175,9 +175,6 @@
     <ClCompile Include="..\mylib\render\Renderable.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\render\RenderableQuad.cpp">
-      <Filter>mylib\render</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\render\RenderableQuadList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
@@ -240,6 +237,9 @@
     </ClCompile>
     <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp">
       <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableCircleList.cpp">
+      <Filter>mylib\render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,9 +368,6 @@
     <ClInclude Include="..\mylib\render\Renderable.h">
       <Filter>mylib\render</Filter>
     </ClInclude>
-    <ClInclude Include="..\mylib\render\RenderableQuad.h">
-      <Filter>mylib\render</Filter>
-    </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableQuadList.h">
       <Filter>mylib\render</Filter>
     </ClInclude>
@@ -430,6 +427,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\road\feature\GenericFeature.h">
       <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableCircleList.h">
+      <Filter>mylib\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

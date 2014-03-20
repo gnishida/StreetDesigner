@@ -16,8 +16,8 @@ This file is part of QtUrban.
 
 #pragma once
 
+#include <QVector3D>
 #include "Renderable.h"
-#include "qvector3d.h"
 
 namespace mylib {
 

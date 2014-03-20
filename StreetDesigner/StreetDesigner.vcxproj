@@ -142,12 +142,12 @@
     <ClCompile Include="..\mylib\pm\Block.cpp" />
     <ClCompile Include="..\mylib\render\camera_3d.cpp" />
     <ClCompile Include="..\mylib\render\GeometryObject.cpp" />
+    <ClCompile Include="..\mylib\render\RenderableCircleList.cpp" />
     <ClCompile Include="..\mylib\render\RenderableConcave.cpp" />
     <ClCompile Include="..\mylib\render\Terrain.cpp" />
     <ClCompile Include="..\mylib\render\TerrainCell.cpp" />
     <ClCompile Include="..\mylib\render\Noncopyable.cpp" />
     <ClCompile Include="..\mylib\render\Renderable.cpp" />
-    <ClCompile Include="..\mylib\render\RenderableQuad.cpp" />
     <ClCompile Include="..\mylib\render\RenderableQuadList.cpp" />
     <ClCompile Include="..\mylib\render\Renderer.cpp" />
     <ClCompile Include="..\mylib\render\RendererHelper.cpp" />
@@ -240,12 +240,12 @@
     <ClInclude Include="..\mylib\pm\Block.h" />
     <ClInclude Include="..\mylib\render\camera_3d.h" />
     <ClInclude Include="..\mylib\render\GeometryObject.h" />
+    <ClInclude Include="..\mylib\render\RenderableCircleList.h" />
     <ClInclude Include="..\mylib\render\RenderableConcave.h" />
     <ClInclude Include="..\mylib\render\Terrain.h" />
     <ClInclude Include="..\mylib\render\TerrainCell.h" />
     <ClInclude Include="..\mylib\render\Noncopyable.h" />
     <ClInclude Include="..\mylib\render\Renderable.h" />
-    <ClInclude Include="..\mylib\render\RenderableQuad.h" />
     <ClInclude Include="..\mylib\render\RenderableQuadList.h" />
     <ClInclude Include="..\mylib\render\Renderer.h" />
     <ClInclude Include="..\mylib\render\RendererHelper.h" />

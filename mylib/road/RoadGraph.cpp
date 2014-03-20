@@ -4,6 +4,7 @@
 #include "../common/Util.h"
 #include "../render/Terrain.h"
 #include "../render/RenderableQuadList.h"
+#include "../render/RenderableCircleList.h"
 #include "../render/TextureManager.h"
 
 RoadGraph::RoadGraph() {
@@ -19,6 +20,7 @@ RoadGraph::~RoadGraph() {
 void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList();
 	mylib::RenderableQuadList* renderable2 = new mylib::RenderableQuadList(textureManager->get("data/textures/street.jpg"));
+	//mylib::RenderableCircleList* renderable3 = new mylib::RenderableCircleList();
 
 	// generate vertices for seeds
 	/*
@@ -74,8 +76,30 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		}
 	}
 
+	/*
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
+		if (!graph[*vi]->valid) continue;
+
+		// get the largest width of the outing edges
+		float max_width = 0;
+		RoadOutEdgeIter oei, oeend;
+		for (boost::tie(oei, oeend) = boost::out_edges(*vi, graph); oei != oeend; ++oei) {
+			if (!graph[*oei]->valid) continue;
+
+			float width = graph[*oei]->getWidth();
+			if (width > max_width) {
+				max_width = width;
+			}
+		}
+
+		renderable3->addCircle(graph[*vi]->pt, max_width * 0.5f, 10, QColor(10, 10, 10));
+	}
+	*/
+
 	renderables.push_back(mylib::RenderablePtr(renderable1));
 	renderables.push_back(mylib::RenderablePtr(renderable2));
+	//renderables.push_back(mylib::RenderablePtr(renderable3));
 }
 
 void RoadGraph::generate2DMesh() {
