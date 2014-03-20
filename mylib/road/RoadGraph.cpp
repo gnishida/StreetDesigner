@@ -65,13 +65,19 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
 
 			// draw a bridge
-			if (bridgeHeight > 2.0f) {
+			if (bridgeHeight > 5.0f) {
 				renderable3->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
 			}
 
 			p0 = p3;
 			p1 = p2;
 		}
+
+		// draw a bridge
+		if (bridgeHeight > 5.0f) {
+			renderable3->addCylinder(graph[*ei]->polyline3D.last().x(), graph[*ei]->polyline3D.last().y(), -20, 1.5f, 1.5f, graph[*ei]->polyline3D.last().z() + 20, 10, 10);
+		}
+
 	}
 
 	// draw intersections

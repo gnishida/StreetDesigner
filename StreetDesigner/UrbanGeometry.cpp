@@ -36,7 +36,7 @@ UrbanGeometry::UrbanGeometry(MainWindow* mainWin) {
 
 	terrain = NULL;
 
-	waterRenderer = new mylib::WaterRenderer(300, 3000, -10.0f);
+	waterRenderer = new mylib::WaterRenderer(300, 3000, -2.0f);
 
 	loadTerrain("data/default.trn");
 
