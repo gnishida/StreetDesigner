@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.menuArea, SIGNAL(aboutToShow()), this, SLOT(onAreaMenu()));
 	connect(ui.actionAreaSelect, SIGNAL(triggered()), this, SLOT(onAreaSelect()));
 	connect(ui.actionAreaCreate, SIGNAL(triggered()), this, SLOT(onAreaCreate()));
+	connect(ui.actionAreaDelete, SIGNAL(triggered()), this, SLOT(onAreaDelete()));
 	connect(ui.actionHighwaySketch, SIGNAL(triggered()), this, SLOT(onHighwaySketch()));
 	//connect(ui.actionBoulevardSketch, SIGNAL(triggered()), this, SLOT(onBoulevardSketch()));
 	connect(ui.actionDebug, SIGNAL(triggered()), this, SLOT(onDebug()));
@@ -181,6 +182,12 @@ void MainWindow::onAreaCreate() {
 	ui.action3DView->setChecked(false);
 	ui.actionTerrain->setChecked(false);
 	ui.actionDebug->setChecked(false);
+}
+
+void MainWindow::onAreaDelete() {
+	urbanGeometry->areas.deleteArea();
+
+	glWidget->updateGL();
 }
 
 void MainWindow::onHighwaySketch() {

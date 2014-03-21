@@ -61,20 +61,17 @@ void RoadEdge::addPoint(const QVector2D &pt) {
 }
 
 float RoadEdge::getWidth(float widthPerLane) {
-	/*
 	switch (type) {
 	case TYPE_HIGHWAY:
-		return widthPerLane * 2.0f * lanes;
+		return widthPerLane * 2.0f;// * lanes;
 	case TYPE_BOULEVARD:
 	case TYPE_AVENUE:
-		return widthPerLane * 1.5f * lanes;
+		return widthPerLane * 1.5f;// * lanes;
 	case TYPE_STREET:
-		return widthPerLane * lanes;
+		return widthPerLane;// * lanes;
 	default:
 		return 0.0f;
-	}*/
-
-	return widthPerLane * 2.0f;
+	}
 }
 
 /**

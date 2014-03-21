@@ -58,6 +58,7 @@
     </property>
     <addaction name="actionAreaSelect"/>
     <addaction name="actionAreaCreate"/>
+    <addaction name="actionAreaDelete"/>
     <addaction name="separator"/>
     <addaction name="actionHighwaySketch"/>
     <addaction name="actionBoulevardSketch"/>
@@ -392,6 +393,11 @@
   <action name="actionGenerateBuildings">
    <property name="text">
     <string>Generate Buildings</string>
+   </property>
+  </action>
+  <action name="actionAreaDelete">
+   <property name="text">
+    <string>Delete</string>
    </property>
   </action>
  </widget>

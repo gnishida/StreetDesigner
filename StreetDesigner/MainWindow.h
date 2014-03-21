@@ -43,6 +43,7 @@ public slots:
 	void onAreaMenu();
 	void onAreaSelect();
 	void onAreaCreate();
+	void onAreaDelete();
 	void onHighwaySketch();
 	/*
 	void onBoulevardSketch();

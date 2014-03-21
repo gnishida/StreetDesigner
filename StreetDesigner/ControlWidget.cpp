@@ -129,7 +129,7 @@ void ControlWidget::perturb() {
 
 void ControlWidget::clear() {
 	if (mainWin->urbanGeometry->areas.selectedIndex >= 0) {
-		mainWin->urbanGeometry->areas.selectedArea()->roads.clear();
+		mainWin->urbanGeometry->areas.selectedArea()->clear();
 	}
 
 	mainWin->glWidget->updateGL();

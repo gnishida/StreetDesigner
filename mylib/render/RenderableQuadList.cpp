@@ -32,6 +32,13 @@ void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, con
 	generateMeshVertex(pt4.x(), pt4.y(), pt4.z(), normal.x(), normal.y(), normal.z(), s0, t1);
 }
 
+void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, float s0, float s1, float t0, float t1, float heightOffset) {
+	generateMeshVertex(pt1.x(), pt1.y(), pt1.z() + heightOffset, normal.x(), normal.y(), normal.z(), s0, t0);
+	generateMeshVertex(pt2.x(), pt2.y(), pt2.z() + heightOffset, normal.x(), normal.y(), normal.z(), s1, t0);
+	generateMeshVertex(pt3.x(), pt3.y(), pt3.z() + heightOffset, normal.x(), normal.y(), normal.z(), s1, t1);
+	generateMeshVertex(pt4.x(), pt4.y(), pt4.z() + heightOffset, normal.x(), normal.y(), normal.z(), s0, t1);
+}
+
 void RenderableQuadList::addQuad(const QVector3D& pt1, const QVector3D& pt2, const QVector3D& pt3, const QVector3D& pt4, const QVector3D& normal, const QColor& color) {
 	generateMeshVertex(pt1.x(), pt1.y(), pt1.z(), normal.x(), normal.y(), normal.z(), color);
 	generateMeshVertex(pt2.x(), pt2.y(), pt2.z(), normal.x(), normal.y(), normal.z(), color);

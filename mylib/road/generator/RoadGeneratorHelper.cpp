@@ -51,7 +51,7 @@ bool RoadGeneratorHelper::intersects(RoadGraph &roads, const QVector2D& p0, cons
  * @param snapDesc			最も近い頂点
  * @return					もしsnapすべき頂点があれば、trueを返却する
  */
-bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos, float threshold, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc) {
+bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos, const Polyline2D &polyline, float threshold, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc) {
 	float min_dist = std::numeric_limits<float>::max();
 
 	RoadVertexIter vi, vend;
@@ -88,8 +88,13 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos,
 
 		float dist2 = (roads.graph[*vi]->pt - pos).lengthSquared();
 		if (dist2 < min_dist) {
-			min_dist = dist2;
-			snapDesc = *vi;
+			// 交差するかチェック
+			Polyline2D tempPolyline = polyline;
+			GraphUtil::movePolyline(roads, tempPolyline, roads.graph[srcDesc]->pt, roads.graph[*vi]->pt);
+			if (!GraphUtil::isIntersect(roads, tempPolyline)) {
+				min_dist = dist2;
+				snapDesc = *vi;
+			}
 		}
 	}
 
@@ -112,7 +117,7 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D pos,
  * @param snapDesc			最も近い頂点
  * @return					もしsnapすべき頂点があれば、trueを返却する
  */
-bool RoadGeneratorHelper::canSnapToVertex2(RoadGraph& roads, const QVector2D pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc edge, RoadVertexDesc& snapDesc) {
+bool RoadGeneratorHelper::canSnapToVertex2(RoadGraph& roads, const QVector2D &pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc edge, RoadVertexDesc& snapDesc) {
 	float min_dist = std::numeric_limits<float>::max();
 
 	Polyline2D polyline = roads.graph[edge]->polyline;

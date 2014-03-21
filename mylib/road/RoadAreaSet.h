@@ -23,6 +23,7 @@ public:
 	void selectArea(const QVector2D &pt);
 	void selectLastArea();
 	RoadAreaPtr selectedArea();
+	void deleteArea();
 
 	void setZ(float z);
 

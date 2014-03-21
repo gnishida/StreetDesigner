@@ -19,8 +19,9 @@ RoadGraph::~RoadGraph() {
 
 void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList(textureManager->get("data/textures/street_segment.jpg"));
-	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList(textureManager->get("data/textures/street_intersection.jpg"));
-	mylib::RenderableCylinderList* renderable3 = new mylib::RenderableCylinderList(textureManager->get("data/textures/bridge.jpg"));
+	mylib::RenderableQuadList* renderable2 = new mylib::RenderableQuadList(textureManager->get("data/textures/avenue_segment.jpg"));
+	mylib::RenderableCircleList* renderable3 = new mylib::RenderableCircleList(textureManager->get("data/textures/street_intersection.jpg"));
+	mylib::RenderableCylinderList* renderable4 = new mylib::RenderableCylinderList(textureManager->get("data/textures/bridge.jpg"));
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
@@ -62,11 +63,15 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 				Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
 			}
 
-			renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
+			if (graph[*ei]->type == RoadEdge::TYPE_STREET) {
+				renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
+			} else {
+				renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f, 0.1f);
+			}
 
 			// draw a bridge
 			if (bridgeHeight > 5.0f) {
-				renderable3->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+				renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
 			}
 
 			p0 = p3;
@@ -75,7 +80,7 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 
 		// draw a bridge
 		if (bridgeHeight > 5.0f) {
-			renderable3->addCylinder(graph[*ei]->polyline3D.last().x(), graph[*ei]->polyline3D.last().y(), -20, 1.5f, 1.5f, graph[*ei]->polyline3D.last().z() + 20, 10, 10);
+			renderable4->addCylinder(graph[*ei]->polyline3D.last().x(), graph[*ei]->polyline3D.last().y(), -20, 1.5f, 1.5f, graph[*ei]->polyline3D.last().z() + 20, 10, 10);
 		}
 
 	}
@@ -97,12 +102,13 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 			}
 		}
 
-		renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, -0.1f);
+		renderable3->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, -0.1f);
 	}
 
 	renderables.push_back(mylib::RenderablePtr(renderable1));
 	renderables.push_back(mylib::RenderablePtr(renderable2));
 	renderables.push_back(mylib::RenderablePtr(renderable3));
+	renderables.push_back(mylib::RenderablePtr(renderable4));
 }
 
 /**

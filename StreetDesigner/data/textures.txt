@@ -7,5 +7,6 @@ data/textures/sky_frontav9.jpg:512.0:512.0
 data/textures/sky_backav9.jpg:512.0:512.0
 data/textures/street.jpg:1:1
 data/textures/street_segment.jpg:1:1
+data/textures/avenue_segment.jpg:1:1
 data/textures/street_intersection.jpg:1:1
 data/textures/bridge.jpg:1:1

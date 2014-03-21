@@ -79,6 +79,15 @@ RoadAreaPtr RoadAreaSet::selectedArea() {
 	return areas[selectedIndex];
 }
 
+void RoadAreaSet::deleteArea() {
+	if (selectedIndex < 0 || selectedIndex >= areas.size()) return;
+
+	areas[selectedIndex]->clear();
+	areas.erase(areas.begin() + selectedIndex);
+
+	selectedIndex = -1;
+}
+
 void RoadAreaSet::setZ(float z) {
 	roads.setZ(z);
 	for (int i = 0; i < areas.size(); ++i) {

@@ -441,6 +441,8 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			toBeSeed = false;
 		}
 
+		polyline.push_back(pt);
+
 		// Densityをチェック
 		if (roadType == RoadEdge::TYPE_STREET) {
 			float density = GraphUtil::getNumVertices(roads, pt, 400);
@@ -466,7 +468,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 		RoadVertexDesc desc;
 		RoadEdgeDesc e_desc;
 		QVector2D closestPt;		
-		if (RoadGeneratorHelper::canSnapToVertex(roads, pt, threshold, srcDesc, desc)) {
+		if (RoadGeneratorHelper::canSnapToVertex(roads, pt, polyline, threshold, srcDesc, desc)) {
 			snapDesc = desc;
 			snapped = true;
 			intersected = false;
@@ -496,7 +498,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 				if (!outside && !area.contains(pt)) {
 					// エリア外周との交点を求める
 					area.intersects(roads.graph[srcDesc]->pt, pt, outsidePt);
-					pt = outsidePt;
+					polyline[polyline.size() - 1] = outsidePt;
 					outside = true;
 					toBeSeed = false;
 				}
@@ -507,8 +509,6 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			// 交差相手のエッジを分割
 			tgtDesc = GraphUtil::splitEdge(roads, closestEdge, pt);
 		}
-			
-		polyline.push_back(pt);
 
 		if (snapped || intersected || outside) break;
 	}
