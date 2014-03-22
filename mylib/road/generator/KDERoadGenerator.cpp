@@ -464,6 +464,10 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			}
 		}
 
+		if (G::getBool("multiSeeds") && edge.noLocationError) {
+			threshold = 1.0f;
+		}
+
 		// 近くに頂点があるか？
 		RoadVertexDesc desc;
 		RoadEdgeDesc e_desc;
@@ -617,6 +621,7 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 	// 各カーネルについて、非類似度スコアを計算する
 	float min_diff = std::numeric_limits<float>::max();
 	int min_index = -1;
+	bool noLocationError = false;
 	for (int i = 0; i < kf.items(roadType).size(); ++i) {
 		// 繰り返し度を計算
 		float repetition = 0.0f;
@@ -654,10 +659,14 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 		if (diff < min_diff) {
 			min_diff = diff;
 			min_index = i;
+			noLocationError = (location_diff < 0.1f) ? true : false;
 		}
 	}
 
 	KDEFeatureItem item = kf.items(roadType)[min_index];
+	for (int i = 0; i < item.edges.size(); ++i) {
+		item.edges[i].noLocationError = noLocationError;
+	}
 
 	// 極座標系の場合は、ポリラインを変形しておく
 	if (G::g["coordiniates"] == "polar") {

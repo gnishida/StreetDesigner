@@ -8,6 +8,7 @@ public:
 	int lanes;
 	bool deadend;
 	bool onBoundary;
+	bool noLocationError;
 
 public:
 	KDEFeatureItemEdge(const Polyline2D &edge, int lanes, bool deadend, bool onBoundary) : edge(edge), lanes(lanes), deadend(deadend), onBoundary(onBoundary) {}
