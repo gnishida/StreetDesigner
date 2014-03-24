@@ -98,7 +98,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	if (G::getBool("multiSeeds")) {
 		// 指定されたエリアでCropping
 		if (G::getBool("cropping")) {
-			GraphUtil::extractRoads2(roads, area);
+			//GraphUtil::extractRoads2(roads, area);
 		}
 	}
 
@@ -408,7 +408,8 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
 	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
 	BBox currentBBox;
-	RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
+	QVector2D moduloPt;
+	moduloPt = RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
 
 	bool snapped = false;
 	bool intersected = false;
@@ -553,7 +554,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 
 	// シードに追加
 	if (toBeSeed) {
-		if (!G::getBool("multiSeeds") || currentBBox.contains(pt)) {
+		if (!G::getBool("multiSeeds") || f.area().contains(moduloPt)) {
 			seeds.push_back(tgtDesc);
 
 			// 追加した頂点に、カーネルを割り当てる
