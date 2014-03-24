@@ -38,6 +38,7 @@ public slots:
 	void onSaveTerrain();
 	void onLoadRoads();
 	void onSaveRoads();
+	void onClearRoads();
 	void onLoadAreas();
 	void onSaveAreas();
 	void onAreaMenu();

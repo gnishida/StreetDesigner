@@ -66,7 +66,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 				std::cout << "attemptExpansion (avenue): " << i << " (Additional Seed: " << desc << ")" << std::endl;
 
 				if (GraphUtil::getDegree(roads, desc) > 1) continue;
-				connectAvenues(roads, area, kf, desc, 1.0f);
+				connectAvenues(roads, area, kf, desc, 1000.0f);
 			}
 		}
 
@@ -98,7 +98,7 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	if (G::getBool("multiSeeds")) {
 		// 指定されたエリアでCropping
 		if (G::getBool("cropping")) {
-			//GraphUtil::extractRoads2(roads, area);
+			GraphUtil::extractRoads2(roads, area);
 		}
 	}
 
@@ -392,7 +392,11 @@ void KDERoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area,
 
 	for (int i = 0; i < item.edges.size(); ++i) {
 		if (!isRedundant[i]) {
-			growRoadSegment(roads, area, srcDesc, roadType, f, item.edges[i], seeds, additionalSeeds);
+			if (G::getBool("multiSeeds")) {
+				growRoadSegment2(roads, area, srcDesc, roadType, f, item.edges[i], seeds, additionalSeeds);
+			} else {
+				growRoadSegment(roads, area, srcDesc, roadType, f, item.edges[i], seeds, additionalSeeds);
+			}
 		}
 	}
 }
@@ -408,8 +412,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
 	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
 	BBox currentBBox;
-	QVector2D moduloPt;
-	moduloPt = RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
+	RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
 
 	bool snapped = false;
 	bool intersected = false;
@@ -554,7 +557,7 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 
 	// シードに追加
 	if (toBeSeed) {
-		if (!G::getBool("multiSeeds") || f.area().contains(moduloPt)) {
+		if (!G::getBool("multiSeeds") || currentBBox.contains(pt)) {
 			seeds.push_back(tgtDesc);
 
 			// 追加した頂点に、カーネルを割り当てる
@@ -563,6 +566,180 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			if (RoadGeneratorHelper::containsInitialSeed(area, f.area(), pt)) {
 				additionalSeeds.push_back(tgtDesc);
 			}
+		}
+	}
+
+	return true;
+}
+
+/**
+ * "multiSeeds"用の道路生成関数。
+ * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
+ * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
+ */
+bool KDERoadGenerator::growRoadSegment2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &edge, std::list<RoadVertexDesc> &seeds, std::list<RoadVertexDesc> &additionalSeeds) {
+	RoadVertexDesc tgtDesc;
+	RoadVertexDesc snapDesc;
+
+	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
+	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
+	BBox currentBBox;
+	QVector2D moduleSrcPt = RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
+
+	bool snapped = false;
+	bool intersected = false;
+	bool outside = false;
+	QVector2D outsidePt;
+
+	bool toBeSeed = true;
+	bool toBeAdditionalSeed = false;
+
+	Polyline2D polyline;
+	polyline.push_back(roads.graph[srcDesc]->pt);
+
+	QVector2D pt;
+	QVector2D prevPt = roads.graph[srcDesc]->pt;
+	for (int j = 0; j < edge.edge.size(); ++j) {
+		pt = roads.graph[srcDesc]->pt + edge.edge[j];
+
+		// INTERSECTS -- If edge intersects other edge
+		QVector2D intPoint;
+		RoadEdgeDesc closestEdge;
+		intersected = RoadGeneratorHelper::intersects(roads, prevPt, pt, closestEdge, intPoint);
+		prevPt = pt;
+		if (intersected) {
+			RoadVertexDesc src = boost::source(closestEdge, roads.graph);
+			RoadVertexDesc tgt = boost::target(closestEdge, roads.graph);
+
+			// 自分のエッジに交差した場合は、このエッジのgrowをキャンセル
+			if (src == srcDesc || tgt == srcDesc) return true;
+
+			pt = intPoint;
+			toBeSeed = false;
+		}
+
+		polyline.push_back(pt);
+
+		// Densityをチェック
+		if (roadType == RoadEdge::TYPE_STREET) {
+			float density = GraphUtil::getNumVertices(roads, pt, 400);
+			//if (density >= (f.density(roadType) + f.density(RoadEdge::TYPE_AVENUE)) * 400.0f * 400.0f * M_PI * 3) return false;
+		} else {
+			//float density = GraphUtil::getNumVertices(roads, pt, 400);
+			//if (density >= f.density(roadType) * 400.0f * 400.0f * M_PI) return false;
+		}
+
+		float threshold;
+		if (roadType == RoadEdge::TYPE_STREET) {
+			//threshold = std::max(0.25f * (float)edge[j].length(), 10.0f);
+			threshold = std::min(0.25f * (float)edge.edge[j].length(), 10.0f);
+		} else {
+			if (intersected || j == edge.edge.size() - 1) {
+				threshold = std::min(0.5f * (float)edge.edge[j].length(), 40.0f);
+			} else {
+				threshold = std::min(0.25f * (float)edge.edge[j].length(), 20.0f);
+			}
+		}
+
+		if (G::getBool("multiSeeds") && edge.noLocationError) {
+			//threshold = 1.0f;
+		}
+
+		// 近くに頂点があるか？
+		RoadVertexDesc desc;
+		RoadEdgeDesc e_desc;
+		QVector2D closestPt;		
+		if (RoadGeneratorHelper::canSnapToVertex(roads, pt, polyline, threshold, srcDesc, desc)) {
+			snapDesc = desc;
+			snapped = true;
+			intersected = false;
+			toBeSeed = false;
+
+			QString str;
+			str.setNum(srcDesc);
+			if (roads.graph[snapDesc]->properties.contains("uncles")) {
+				roads.graph[snapDesc]->properties["uncles"] = roads.graph[snapDesc]->properties["uncles"].toString() + "," + str;
+			} else {
+				roads.graph[snapDesc]->properties["uncles"] = str;
+			}
+		} else if (RoadGeneratorHelper::canSnapToEdge(roads, pt, threshold * 0.2f, srcDesc, e_desc, closestPt)) {
+			// 実験。既存のエッジを分割させないよう、キャンセルさせてみる
+			if (roadType == RoadEdge::TYPE_AVENUE && roads.graph[e_desc]->type == RoadEdge::TYPE_AVENUE) {
+				//return false;
+			} 
+			
+			toBeSeed = false;
+
+			snapDesc = GraphUtil::splitEdge(roads, e_desc, pt);
+			roads.graph[snapDesc]->properties["parent"] = srcDesc;
+			snapped = true;
+			intersected = false;
+		} else {
+			BBox nextBBox;
+			QVector2D moduloPt = RoadGeneratorHelper::modulo(area, f.area(), pt, nextBBox);
+
+			if (!outside && (!currentBBox.contains(pt) || !f.area().contains(moduloPt))) {
+				outside = true;
+				toBeAdditionalSeed = true;
+
+				if (currentBBox.intersects(roads.graph[srcDesc]->pt, pt, outsidePt)) {
+					pt = outsidePt;
+					polyline[polyline.size() - 1] = outsidePt;
+				}
+			}
+		}
+
+		if (intersected) {
+			// 交差相手のエッジを分割
+			tgtDesc = GraphUtil::splitEdge(roads, closestEdge, pt);
+		}
+
+		if (snapped || intersected || outside) break;
+	}
+
+	if (!intersected) {
+		if (G::getBool("invadingCheck")) {
+			// 他の頂点のテリトリーに侵入したら、頂点生成、エッジ生成を却下する
+			if (RoadGeneratorHelper::invadingTerritory(roads, pt, srcDesc, roads.graph[srcDesc]->pt + edge.edge[edge.edge.size() - 1])) return true;
+		}
+
+		if (snapped) {
+			Polyline2D old_polyline = polyline;
+
+			GraphUtil::movePolyline(roads, polyline, roads.graph[srcDesc]->pt, roads.graph[snapDesc]->pt);
+			tgtDesc = snapDesc;
+
+			// デバッグ用に、スナップ画像を保存
+			if (G::getBool("saveSnappingImages")) {
+				RoadGeneratorHelper::saveSnappingImage(roads, area, srcDesc, old_polyline, polyline, snapDesc, "snap");
+			}
+		} else {
+			// 頂点を追加
+			RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
+			tgtDesc = GraphUtil::addVertex(roads, v);
+			roads.graph[tgtDesc]->properties["parent"] = srcDesc;
+		}
+			
+		if (outside) {
+			roads.graph[tgtDesc]->onBoundary = true;
+		}
+	}
+
+	if (GraphUtil::hasSimilarEdge(roads, srcDesc, tgtDesc, polyline)) return false;
+
+	// エッジを追加
+	RoadEdgeDesc e = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, edge.lanes);
+	roads.graph[e]->polyline = polyline;
+
+	// シードに追加
+	if (toBeSeed) {
+		if (!toBeAdditionalSeed) {
+			seeds.push_back(tgtDesc);
+
+			// 追加した頂点に、カーネルを割り当てる
+			roads.graph[tgtDesc]->kernel = getItem(roads, area, f, roadType, tgtDesc);
+		} else {
+			additionalSeeds.push_back(tgtDesc);
 		}
 	}
 

@@ -1,5 +1,7 @@
 #include <boost/geometry/geometry.hpp> 
 #include "BBox.h"
+#include "Polyline2D.h"
+#include "Polygon2D.h"
 
 void BBox::addPoint(const QVector2D& pt) {
 	boost::geometry::expand(*this, pt);
@@ -26,4 +28,22 @@ float BBox::dy() const {
 
 float BBox::area() const {
 	return boost::geometry::area(*this);
+}
+
+bool BBox::intersects(const QVector2D& a, const QVector2D& b, QVector2D& intPt) const {
+	Polyline2D polyline;
+	polyline.push_back(a);
+	polyline.push_back(b);
+
+	Polygon2D polygon;
+	boost::geometry::convert(*this, polygon);
+
+	std::vector<QVector2D> points;
+	boost::geometry::intersection(polygon, polyline, points);
+	if (points.size() > 0) {
+		intPt = points[0];
+		return true;
+	} else {
+		return false;
+	}
 }

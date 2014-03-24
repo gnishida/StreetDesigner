@@ -39,6 +39,7 @@
     <addaction name="separator"/>
     <addaction name="actionLoadRoads"/>
     <addaction name="actionSaveRoads"/>
+    <addaction name="actionClearRoads"/>
     <addaction name="separator"/>
     <addaction name="actionLoadAreas"/>
     <addaction name="actionSaveAreas"/>
@@ -398,6 +399,11 @@
   <action name="actionAreaDelete">
    <property name="text">
     <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionClearRoads">
+   <property name="text">
+    <string>Clear Roads</string>
    </property>
   </action>
  </widget>

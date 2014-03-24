@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionSaveTerrain, SIGNAL(triggered()), this, SLOT(onSaveTerrain()));
 	connect(ui.actionLoadRoads, SIGNAL(triggered()), this, SLOT(onLoadRoads()));
 	connect(ui.actionSaveRoads, SIGNAL(triggered()), this, SLOT(onSaveRoads()));
+	connect(ui.actionClearRoads, SIGNAL(triggered()), this, SLOT(onClearRoads()));
 	connect(ui.actionLoadAreas, SIGNAL(triggered()), this, SLOT(onLoadAreas()));
 	connect(ui.actionSaveAreas, SIGNAL(triggered()), this, SLOT(onSaveAreas()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -125,6 +126,11 @@ void MainWindow::onSaveRoads() {
 	urbanGeometry->saveRoads(filename);
 
 	QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::onClearRoads() {
+	urbanGeometry->clearRoads();
+	glWidget->updateGL();
 }
 
 void MainWindow::onLoadAreas() {

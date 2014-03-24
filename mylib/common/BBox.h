@@ -22,6 +22,8 @@ public:
 	float dx() const;
 	float dy() const;
 	float area() const;
+
+	bool intersects(const QVector2D& a, const QVector2D& b, QVector2D& intPt) const;
 };
 
 /**

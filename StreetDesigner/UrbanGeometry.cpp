@@ -234,6 +234,10 @@ void UrbanGeometry::saveRoads(const QString &filename) {
 	GraphUtil::saveRoads(roads, filename);
 }
 
+void UrbanGeometry::clearRoads() {
+	roads.clear();
+}
+
 void UrbanGeometry::perturbRoads(float perturbationFactor) {
 	GraphUtil::perturb(areas.selectedArea()->roads, areas.selectedArea()->area, perturbationFactor);
 
