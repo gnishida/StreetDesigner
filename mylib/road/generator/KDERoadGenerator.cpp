@@ -8,6 +8,17 @@
 #include "KDERoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 
+double time_total = 0;
+double time_attemptExpansion = 0;
+double time_getItem = 0;
+double time_getItem_0 = 0;
+double time_getItem_1 = 0;
+double time_getItem_2 = 0;
+double time_getItem_3 = 0;
+double time_getItem_4 = 0;
+double time_getItem_5 = 0;
+double time_getItem_6 = 0;
+
 RoadGraph* roadGraphPtr;
 Polygon2D face;
 std::vector<Polygon2D*>* facesPtr;
@@ -35,6 +46,19 @@ struct faceVisitor : public boost::planar_face_traversal_visitor {
 
 void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const KDEFeature& kf) {
 	srand(12345);
+
+	time_total = 0;
+	time_attemptExpansion = 0;
+	time_getItem = 0;
+	time_getItem_0 = 0;
+	time_getItem_1 = 0;
+	time_getItem_2 = 0;
+	time_getItem_3 = 0;
+	time_getItem_4 = 0;
+	time_getItem_5 = 0;
+	time_getItem_6 = 0;
+
+	time_t start = clock();
 
 	// 境界上に、Avenueを生成
 	if (G::getBool("addAvenuesOnBoundary")) {
@@ -105,6 +129,20 @@ void KDERoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	// isolated edgeを削除
 	//GraphUtil::removeIsolatedEdges(roads);
 	//GraphUtil::clean(roads);
+
+	time_t end = clock();
+	time_total += (double)(end-start) / CLOCKS_PER_SEC;
+
+	std::cout << "total: " << time_total << std::endl;
+	std::cout << "attempExpansion: " << time_attemptExpansion << std::endl;
+	std::cout << "getItem: " << time_getItem << std::endl;
+	std::cout << "getItem_0: " << time_getItem_0 << std::endl;
+	std::cout << "getItem_1: " << time_getItem_1 << std::endl;
+	std::cout << "getItem_2: " << time_getItem_2 << std::endl;
+	std::cout << "getItem_3: " << time_getItem_3 << std::endl;
+	std::cout << "getItem_4: " << time_getItem_4 << std::endl;
+	std::cout << "getItem_5: " << time_getItem_5 << std::endl;
+	std::cout << "getItem_6: " << time_getItem_6 << std::endl;
 }
 
 /**
@@ -362,8 +400,10 @@ void KDERoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D &a
 
 	// 各シードに、カーネルを割り当てる
 	for (int i = 0; i < tempSeeds.size(); ++i) {
-		KDEFeatureItem item = getItem(roads, area, f, RoadEdge::TYPE_STREET, tempSeeds[i]);
-		roads.graph[tempSeeds[i]]->kernel = item;
+		time_t start = clock();
+		roads.graph[tempSeeds[i]]->kernel = getItem(roads, area, f, RoadEdge::TYPE_STREET, tempSeeds[i]);
+		time_t end = clock();
+		time_getItem += (double)(end-start) / CLOCKS_PER_SEC;
 		seeds.push_back(tempSeeds[i]);
 	}
 }
@@ -390,6 +430,9 @@ void KDERoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area,
 		}
 	}
 
+
+	time_t start = clock();
+
 	for (int i = 0; i < item.edges.size(); ++i) {
 		if (!isRedundant[i]) {
 			if (G::getBool("multiSeeds")) {
@@ -399,6 +442,9 @@ void KDERoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area,
 			}
 		}
 	}
+
+	time_t end = clock();
+	time_attemptExpansion += (double)(end-start) / CLOCKS_PER_SEC;
 }
 
 /**
@@ -561,7 +607,10 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			seeds.push_back(tgtDesc);
 
 			// 追加した頂点に、カーネルを割り当てる
+			time_t start = clock();
 			roads.graph[tgtDesc]->kernel = getItem(roads, area, f, roadType, tgtDesc);
+			time_t end = clock();
+			time_getItem += (double)(end-start) / CLOCKS_PER_SEC;
 		} else {
 			if (RoadGeneratorHelper::containsInitialSeed(area, f.area(), pt)) {
 				additionalSeeds.push_back(tgtDesc);
@@ -737,7 +786,10 @@ bool KDERoadGenerator::growRoadSegment2(RoadGraph &roads, const Polygon2D &area,
 			seeds.push_back(tgtDesc);
 
 			// 追加した頂点に、カーネルを割り当てる
+			time_t start = clock();
 			roads.graph[tgtDesc]->kernel = getItem(roads, area, f, roadType, tgtDesc);
+			time_t end = clock();
+			time_getItem += (double)(end-start) / CLOCKS_PER_SEC;
 		} else {
 			additionalSeeds.push_back(tgtDesc);
 		}
@@ -755,10 +807,16 @@ bool KDERoadGenerator::growRoadSegment2(RoadGraph &roads, const Polygon2D &area,
  * @param offsetPosOfVertex		与えられた頂点の、このエリアの中心からのオフセット位置
  */
 KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area, const KDEFeature& kf, int roadType, RoadVertexDesc v_desc) {
+	time_t start, end;
+
+	start = clock();
 	BBox currentBBox;
 	RoadGeneratorHelper::modulo(area, kf.area(), roads.graph[v_desc]->pt, currentBBox);
+	end = clock();
+	time_getItem_0 += (double)(end-start) / CLOCKS_PER_SEC;
 
 	// 当該頂点から出るエッジをリストアップする
+	start = clock();
 	QList<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;
 	RoadOutEdgeIter ei, eend;
@@ -795,25 +853,35 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 			neighborKernels[roads.graph[*vi]->kernel.id] = dist;
 		}
 	}
+	end = clock();
+	time_getItem_5 += (double)(end-start) / CLOCKS_PER_SEC;
 
 	// 各カーネルについて、非類似度スコアを計算する
+	start = clock();
 	float min_diff = std::numeric_limits<float>::max();
 	int min_index = -1;
 	bool noLocationError = false;
 	for (int i = 0; i < kf.items(roadType).size(); ++i) {
 		// 繰り返し度を計算
+		start = clock();
 		float repetition = 0.0f;
 		if (neighborKernels.contains(kf.items(roadType)[i].id)) {
 			repetition = 1.0f / neighborKernels[kf.items(roadType)[i].id];
 		}
+		end = clock();
+		time_getItem_1 += (double)(end-start) / CLOCKS_PER_SEC;
 
 		// エッジの非類似度を計算
+		start = clock();
 		float edge_diff = 0.0f;
 		for (int j = 0; j < polylines.size(); ++j) {
 			edge_diff += kf.items(roadType)[i].getMinDistance(polylines[j]);
-		}		
+		}
+		end = clock();
+		time_getItem_2 += (double)(end-start) / CLOCKS_PER_SEC;
 
 		// 位置の非類似度を計算
+		start = clock();
 		float location_diff = 0.0f;
 		if (neighbors.size() == 0) { // 最初のシードには隣接ノードがないので
 			BBox bbox;
@@ -831,20 +899,28 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 				}
 			}
 		}
+		end = clock();
+		time_getItem_3 += (double)(end-start) / CLOCKS_PER_SEC;
 
 		// フィッティングスコアを計算
+		start = clock();
 		float diff = edge_diff * G::getFloat("weightEdge") + location_diff * G::getFloat("weightLocation") + repetition * G::getFloat("weightRepetition");
 		if (diff < min_diff) {
 			min_diff = diff;
 			min_index = i;
 			noLocationError = (location_diff < 0.1f) ? true : false;
 		}
+		end = clock();
+		time_getItem_4 += (double)(end-start) / CLOCKS_PER_SEC;
 	}
 
+	start = clock();
 	KDEFeatureItem item = kf.items(roadType)[min_index];
 	for (int i = 0; i < item.edges.size(); ++i) {
 		item.edges[i].noLocationError = noLocationError;
 	}
+	end = clock();
+	time_getItem_6 += (double)(end-start) / CLOCKS_PER_SEC;
 
 	// 極座標系の場合は、ポリラインを変形しておく
 	if (G::g["coordiniates"] == "polar") {
