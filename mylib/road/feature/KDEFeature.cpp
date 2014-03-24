@@ -53,6 +53,17 @@ const std::vector<KDEFeatureItem>& KDEFeature::items(int roadType) const {
 	}
 }
 
+std::vector<KDEFeatureItem>& KDEFeature::items(int roadType) {
+	switch (roadType) {
+	case RoadEdge::TYPE_AVENUE:
+		return _avenueItems;
+	case RoadEdge::TYPE_STREET:
+		return _streetItems;
+	default:
+		return _streetItems;
+	}
+}
+
 const float KDEFeature::density(int roadType) const {
 	switch (roadType) {
 	case RoadEdge::TYPE_AVENUE:

@@ -26,6 +26,7 @@ public:
 	size_t numItems(int roadType) const;
 
 	const std::vector<KDEFeatureItem>& items(int roadType) const;
+	std::vector<KDEFeatureItem>& items(int roadType);
 	const float density(int roadType) const;
 
 	void rotate(float deg);
