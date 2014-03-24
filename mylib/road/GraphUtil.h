@@ -88,7 +88,7 @@ public:
 	static bool getEdge(RoadGraph& roads, const QVector2D &pt, float threshold, RoadEdgeDesc& e, bool onlyValidEdge = true);
 	static bool getEdge(RoadGraph& roads, const QVector2D &pt, RoadVertexDesc ignore, float threshold, RoadEdgeDesc& e, bool onlyValidEdge = true);
 	static bool getEdge(RoadGraph* roads, RoadVertexDesc v, float threshold, RoadEdgeDesc& e, bool onlyValidEdge = true);
-	static RoadEdgeDesc findNearestEdge(RoadGraph* roads, RoadVertexDesc v, float& dist, QVector2D& closestPt, bool onlyValidEdge = true);
+	static RoadEdgeDesc findNearestEdge(RoadGraph& roads, RoadVertexDesc v, float& dist, QVector2D& closestPt, bool onlyValidEdge = true);
 
 	// The road graph modification functions
 	static void clean(RoadGraph& roads);
@@ -96,6 +96,7 @@ public:
 	static bool reduce(RoadGraph& roads, RoadVertexDesc desc);
 	static void simplify(RoadGraph& roads, float dist_threshold);
 	static void simplify2(RoadGraph& srcRoad, float dist_threshold);
+	static void simplify3(RoadGraph& srcRoad, float dist_threshold);
 	static void normalize(RoadGraph& roads);
 	static void normalize(RoadGraph& roads, float step_size);
 	static void singlify(RoadGraph& roads);

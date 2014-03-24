@@ -363,7 +363,11 @@ void GraphUtil::snapVertex(RoadGraph& roads, RoadVertexDesc v1, RoadVertexDesc v
 		//if (hasCloseEdge(roads, v2, v1b)) continue;	// <-- In this case, snap the edge to the other instead of discard it.
 
 		// add a new edge
-		addEdge(roads, v2, v1b, roads.graph[*ei]);
+		if (v1 != v1b) {
+			addEdge(roads, v2, v1b, roads.graph[*ei]);
+		} else {	// this is for a loop edge.
+			addEdge(roads, v2, v2, roads.graph[*ei]);
+		}
 	}
 
 	// invalidate v1
@@ -1001,7 +1005,7 @@ Polyline2D GraphUtil::finerEdge(RoadGraph& roads, RoadEdgeDesc e, float step) {
 }
 
 /**
- * 指定された点から、指定されたエッジへの距離を返却する。
+ * 指定された点から、指定されたエッジへの最短距離を返却する。
  */
 float GraphUtil::distance(RoadGraph& roads, const QVector2D& pt, RoadEdgeDesc e, QVector2D &closestPt) {
 	float min_dist = std::numeric_limits<float>::max();
@@ -1855,23 +1859,36 @@ bool GraphUtil::getEdge(RoadGraph* roads, RoadVertexDesc v, float threshold, Roa
  * 指定された頂点に最も近いエッジを返却する。
  * ただし、指定された頂点に隣接するエッジは、対象外とする。
  */
-RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph* roads, RoadVertexDesc v, float& dist, QVector2D &closestPt, bool onlyValidEdge) {
+RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph& roads, RoadVertexDesc v, float& dist, QVector2D &closestPt, bool onlyValidEdge) {
 	dist = std::numeric_limits<float>::max();
 	RoadEdgeDesc min_e;
 
 	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::edges(roads->graph); ei != eend; ++ei) {
-		if (onlyValidEdge && !roads->graph[*ei]->valid) continue;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (onlyValidEdge && !roads.graph[*ei]->valid) continue;
 
-		RoadVertexDesc src = boost::source(*ei, roads->graph);
-		RoadVertexDesc tgt = boost::target(*ei, roads->graph);
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 		if (v == src || v == tgt) continue;
 
+		// 長さ0のエッジは、無視する。(何らかのバグの可能性で生成された可能性が高い。)
+		if (roads.graph[*ei]->getLength() <= 0.1f) continue;
+
+		// ループエッジにスナップさせない方が良いかなと思って。少し議論の余地があるかも
+		if (src == tgt) continue;
+
+		int k = src;
+
+		QVector2D pt2;
+		float d = distance(roads, roads.graph[v]->pt, *ei, pt2);
+
+		/*
 		if (onlyValidEdge && !roads->graph[src]->valid) continue;
 		if (onlyValidEdge && !roads->graph[tgt]->valid) continue;
 
 		QVector2D pt2;
 		float d = Util::pointSegmentDistanceXY(roads->graph[src]->getPt(), roads->graph[tgt]->getPt(), roads->graph[v]->getPt(), pt2);
+		*/
 		if (d < dist) {
 			dist = d;
 			min_e = *ei;
@@ -2038,7 +2055,7 @@ void GraphUtil::simplify(RoadGraph& roads, float dist_threshold) {
 		// find the closest vertex
 		QVector2D closestPt;
 		float dist;
-		RoadEdgeDesc e = GraphUtil::findNearestEdge(&roads, *vi, dist, closestPt);
+		RoadEdgeDesc e = GraphUtil::findNearestEdge(roads, *vi, dist, closestPt);
 		if (dist < dist_threshold) {
 			// move the vertex to the closest point on the edge
 			GraphUtil::moveVertex(roads, *vi, closestPt);
@@ -2138,6 +2155,174 @@ void GraphUtil::simplify2(RoadGraph& roads, float dist_threshold) {
 	}
 
 	copyRoads(temp2, roads);
+
+	roads.setModified();
+}
+
+/**
+ * Avenueのみをsimplifyする。
+ * Observation: Local streetをsimplifyすると、もとの形状を失うことが多い。
+ *              一方で、Avenueは、Parallelレーンやround aboutなど、道路生成する時にはむしろ邪魔。
+ * ノード間の距離が指定した距離よりも近い場合は、１つにしてしまう。
+ * ノードとエッジ間の距離が、閾値よりも小さい場合も、エッジ上にノードを移してしまう。
+ */
+void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
+	float threshold2 = dist_threshold * dist_threshold;
+
+	RoadGraph temp;
+	copyRoads(roads, temp);
+
+	roads.clear();
+
+	// outing edgeの中で、2つ以上avenue以上のレベルのタイプがあれば、avenueフラグをtrueにする
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(temp.graph); vi != vend; ++vi) {
+		if (!temp.graph[*vi]->valid) continue;
+
+		int numAvenues = 0;
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(*vi, temp.graph); ei != eend; ++ei) {
+			if (temp.graph[*ei]->type == RoadEdge::TYPE_AVENUE || temp.graph[*ei]->type == RoadEdge::TYPE_BOULEVARD || temp.graph[*ei]->type == RoadEdge::TYPE_HIGHWAY) {
+				 numAvenues++;
+			}
+		}
+		temp.graph[*vi]->properties["isAvenue"] = (numAvenues >= 2) ? true : false;
+	}
+
+	// 全ての頂点同士で、近いものをグループ化する
+	int group_id = 0;
+	std::vector<QVector2D> group_centers;
+	std::vector<int> group_nums;
+	QHash<RoadVertexDesc, int> groups;
+	for (boost::tie(vi, vend) = boost::vertices(temp.graph); vi != vend; ++vi) {
+		if (!temp.graph[*vi]->valid) continue;
+		if (temp.graph[*vi]->properties["isAvenue"] == false) continue;
+
+		float min_dist = std::numeric_limits<float>::max();
+		int min_group_id = -1;
+		for (int i = 0; i < group_centers.size(); i++) {
+			float dist = (group_centers[i] - temp.graph[*vi]->pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				min_group_id = i;
+			}
+		}
+
+		if (min_group_id >= 0 && min_dist < threshold2) {
+			group_centers[min_group_id] = group_centers[min_group_id] * group_nums[min_group_id] + temp.graph[*vi]->pt;
+			group_nums[min_group_id]++;
+			group_centers[min_group_id] /= group_nums[min_group_id];
+		} else {
+			min_group_id = group_centers.size();
+			group_centers.push_back(temp.graph[*vi]->pt);
+			group_nums.push_back(1);
+		}
+		
+		groups[*vi] = min_group_id;
+	}
+
+	// グラフroadsを一旦クリア
+	roads.clear();
+
+	// グラフroadsに、groupの中心座標を頂点として登録する
+	QHash<int, RoadVertexDesc> conv;	// group center ⇒ 実際の頂点desc
+	for (int i = 0; i < group_centers.size(); i++) {
+		RoadVertexDesc v = boost::add_vertex(roads.graph);
+		roads.graph[v] = RoadVertexPtr(new RoadVertex(group_centers[i]));
+		conv[i] = v;
+	}
+
+	// グラフroadsに、groupの参加していない頂点を追加する
+	QHash<RoadVertexDesc, RoadVertexDesc> conv2;	// tempの頂点desc => 実際の頂点desc
+	for (boost::tie(vi, vend) = boost::vertices(temp.graph); vi != vend; ++vi) {
+		if (!temp.graph[*vi]->valid) continue;
+
+		if (temp.graph[*vi]->properties["isAvenue"] == false) {
+			RoadVertexDesc v = boost::add_vertex(roads.graph);
+			roads.graph[v] = RoadVertexPtr(new RoadVertex(temp.graph[*vi]->pt));
+			conv2[*vi] = v;
+		}
+	}
+
+	// エッジを登録する
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(temp.graph); ei != eend; ++ei) {
+		if (!temp.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, temp.graph);
+		RoadVertexDesc tgt = boost::target(*ei, temp.graph);
+
+		if (temp.graph[src]->properties["isAvenue"] == true && temp.graph[tgt]->properties["isAvenue"] == true) {
+			RoadVertexDesc new_src = conv[groups[src]];
+			RoadVertexDesc new_tgt = conv[groups[tgt]];
+
+			// エッジが点に縮退する場合は、スキップ
+			if (new_src == new_tgt) continue;
+
+			// 既にエッジがあれば、スキップ
+			if (hasEdge(roads, new_src, new_tgt)) continue;
+
+			// ポリラインを移動
+			if ((temp.graph[*ei]->polyline[0] - temp.graph[src]->pt).lengthSquared() <= (temp.graph[*ei]->polyline[0] - temp.graph[tgt]->pt).lengthSquared()) {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_src]->pt, roads.graph[new_tgt]->pt);
+			} else {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_tgt]->pt, roads.graph[new_src]->pt);
+			}
+
+			// エッジを追加
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
+		} else if (temp.graph[src]->properties["isAvenue"] == true) {
+			RoadVertexDesc new_src = conv[groups[src]];
+			RoadVertexDesc new_tgt = conv2[tgt];
+
+			// ポリラインを移動
+			if ((temp.graph[*ei]->polyline[0] - temp.graph[src]->pt).lengthSquared() <= (temp.graph[*ei]->polyline[0] - temp.graph[tgt]->pt).lengthSquared()) {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_src]->pt, roads.graph[new_tgt]->pt);
+			} else {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_tgt]->pt, roads.graph[new_src]->pt);
+			}
+
+			// エッジを追加
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
+		} else if (temp.graph[tgt]->properties["isAvenue"] == true) {
+			RoadVertexDesc new_src = conv2[src];
+			RoadVertexDesc new_tgt = conv[groups[tgt]];
+
+			// ポリラインを移動
+			if ((temp.graph[*ei]->polyline[0] - temp.graph[src]->pt).lengthSquared() <= (temp.graph[*ei]->polyline[0] - temp.graph[tgt]->pt).lengthSquared()) {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_src]->pt, roads.graph[new_tgt]->pt);
+			} else {
+				movePolyline(temp, temp.graph[*ei]->polyline, roads.graph[new_tgt]->pt, roads.graph[new_src]->pt);
+			}
+
+			// エッジを追加
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
+		} else {
+			RoadVertexDesc new_src = conv2[src];
+			RoadVertexDesc new_tgt = conv2[tgt];
+
+			// エッジを追加
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
+		}
+	}
+
+	// find the closest vertex
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		QVector2D closestPt;
+		float dist;
+		RoadEdgeDesc e = GraphUtil::findNearestEdge(roads, *vi, dist, closestPt);
+		if (dist < dist_threshold) {
+			RoadVertexDesc splitVertexDesc = splitEdge(roads, e, closestPt);
+
+			snapVertex(roads, *vi, splitVertexDesc);
+		}
+	}
 
 	roads.setModified();
 }

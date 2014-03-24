@@ -72,7 +72,7 @@ bool RoadGraphEditor::deleteEdge() {
 
 void RoadGraphEditor::simplify(float threshold) {
 	history.push_back(roads);
-	GraphUtil::simplify(roads, threshold);
+	GraphUtil::simplify3(roads, threshold);
 }
 
 void RoadGraphEditor::reduce() {

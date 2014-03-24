@@ -14,6 +14,11 @@ QVector3D Util::calculateNormal(const QVector3D& p0, const QVector3D& p1, const 
 float Util::pointSegmentDistanceXY(const QVector3D &a, const QVector3D &b, const QVector3D &c, bool segmentOnly) {
 	float r_numerator = (c.x()-a.x())*(b.x()-a.x()) + (c.y()-a.y())*(b.y()-a.y());
 	float r_denomenator = (b.x()-a.x())*(b.x()-a.x()) + (b.y()-a.y())*(b.y()-a.y());
+
+	if (r_denomenator <= 0.0f) {
+		return (a - c).length();
+	}
+
 	float r = r_numerator / r_denomenator;
 
 	if (segmentOnly && (r < 0 || r > 1)) {
@@ -137,7 +142,15 @@ float Util::pointSegmentDistanceXY(const QVector2D& a, const QVector2D& b, const
 
 	float r_numerator = (c.x()-a.x())*(b.x()-a.x()) + (c.y()-a.y())*(b.y()-a.y());
 	float r_denomenator = (b.x()-a.x())*(b.x()-a.x()) + (b.y()-a.y())*(b.y()-a.y());
+
+	// For the case that the denominator is 0.
+	if (r_denomenator <= 0.0f) {
+		closestPtInAB = a;
+		return (a - c).length();
+	}
+
 	float r = r_numerator / r_denomenator;
+
 	//
 	float px = a.x() + r*(b.x()-a.x());
 	float py = a.y() + r*(b.y()-a.y());
