@@ -904,7 +904,8 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 
 		// フィッティングスコアを計算
 		start = clock();
-		float diff = edge_diff * G::getFloat("weightEdge") + location_diff * G::getFloat("weightLocation") + repetition * G::getFloat("weightRepetition");
+		//float diff = edge_diff * G::getFloat("weightEdge") + location_diff * G::getFloat("weightLocation") + repetition * G::getFloat("weightRepetition");
+		float diff = edge_diff + location_diff;
 		if (diff < min_diff) {
 			min_diff = diff;
 			min_index = i;
