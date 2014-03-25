@@ -250,6 +250,15 @@
     <ClCompile Include="..\mylib\road\generator\PMRoadGenerator.cpp">
       <Filter>mylib\road\generator</Filter>
     </ClCompile>
+    <ClCompile Include="PMControlWidget.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PMControlWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PMControlWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -277,6 +286,12 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="TerrainSizeInputDialog.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PMControlWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PMControlWidget.h">
       <Filter>Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -448,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\PMRoadGenerator.h">
       <Filter>mylib\road\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_PMControlWidget.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include <QtGui/QMainWindow>
 #include "ui_MainWindow.h"
 #include "ControlWidget.h"
+#include "PMControlWidget.h"
 #include "PropertyWidget.h"
 #include "GLWidget3D.h"
 #include "UrbanGeometry.h"
@@ -18,6 +19,7 @@ public:
 public:
 	Ui::MainWindow ui;
 	ControlWidget* controlWidget;
+	PMControlWidget* pmcontrolWidget;
 	PropertyWidget* propertyWidget;
 	GLWidget3D* glWidget;
 	UrbanGeometry* urbanGeometry;
@@ -52,7 +54,9 @@ public slots:
 	void onDebug();
 	void onGenerateBlocks();
 	void onGenerateParcels();
+	void onDisplayRoads();
 	void onShowControlWidget();
+	void onShowPMControlWidget();
 	void onShowPropertyWidget();
 };
 

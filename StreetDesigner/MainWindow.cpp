@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	// setup the docking widgets
 	controlWidget = new ControlWidget(this);
+	pmcontrolWidget = new PMControlWidget(this);
 	propertyWidget = new PropertyWidget(this);
 
 	// setup the toolbar
@@ -39,7 +40,12 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionDebug, SIGNAL(triggered()), this, SLOT(onDebug()));
 	connect(ui.actionGenerateBlocks, SIGNAL(triggered()), this, SLOT(onGenerateBlocks()));
 	connect(ui.actionGenerateParcels, SIGNAL(triggered()), this, SLOT(onGenerateParcels()));
+	connect(ui.actionDisplayHighway, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
+	connect(ui.actionDisplayBoulevard, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
+	connect(ui.actionDisplayAvenue, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
+	connect(ui.actionDisplayLocalStreet, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
+	connect(ui.actionPMControlWidget, SIGNAL(triggered()), this, SLOT(onShowPMControlWidget()));
 	connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
 
 	// setup the GL widget
@@ -48,9 +54,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	controlWidget->show();
 	addDockWidget(Qt::LeftDockWidgetArea, controlWidget);
-
-	//propertyWidget->show();
-	//addDockWidget(Qt::RightDockWidgetArea, propertyWidget);
 
 	urbanGeometry = new UrbanGeometry(this);
 
@@ -237,9 +240,26 @@ void MainWindow::onGenerateBlocks() {
 void MainWindow::onGenerateParcels() {
 }
 
+void MainWindow::onDisplayRoads() {
+	urbanGeometry->roads.showHighways = ui.actionDisplayHighway->isChecked();
+	urbanGeometry->roads.showBoulevards = ui.actionDisplayBoulevard->isChecked();
+	urbanGeometry->roads.showAvenues = ui.actionDisplayAvenue->isChecked();
+	urbanGeometry->roads.showLocalStreets = ui.actionDisplayLocalStreet->isChecked();
+	urbanGeometry->roads.setModified();
+
+	glWidget->updateGL();
+}
+
 void MainWindow::onShowControlWidget() {
+	pmcontrolWidget->hide();
 	controlWidget->show();
 	addDockWidget(Qt::LeftDockWidgetArea, controlWidget);
+}
+
+void MainWindow::onShowPMControlWidget() {
+	controlWidget->hide();
+	pmcontrolWidget->show();
+	addDockWidget(Qt::LeftDockWidgetArea, pmcontrolWidget);
 }
 
 void MainWindow::onShowPropertyWidget() {

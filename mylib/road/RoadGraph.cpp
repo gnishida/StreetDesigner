@@ -9,7 +9,7 @@
 
 RoadGraph::RoadGraph() {
 	showHighways = true;
-	showBoulevard = true;
+	showBoulevards = true;
 	showAvenues = true;
 	showLocalStreets = true;
 }
@@ -63,15 +63,47 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 				Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
 			}
 
-			if (graph[*ei]->type == RoadEdge::TYPE_STREET) {
-				renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
-			} else {
-				renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f, 0.1f);
-			}
+			switch (graph[*ei]->type) {
+			case RoadEdge::TYPE_HIGHWAY:
+				if (showHighways) {
+					renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f, 0.3f);
 
-			// draw a bridge
-			if (bridgeHeight > 5.0f) {
-				renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+					// draw a bridge
+					if (bridgeHeight > 5.0f) {
+						renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+					}
+				}
+				break;
+			case RoadEdge::TYPE_BOULEVARD:
+				if (showBoulevards) {
+					renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f, 0.2f);
+
+					// draw a bridge
+					if (bridgeHeight > 5.0f) {
+						renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+					}
+				}
+				break;
+			case RoadEdge::TYPE_AVENUE:
+				if (showAvenues) {
+					renderable2->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f, 0.1f);
+
+					// draw a bridge
+					if (bridgeHeight > 5.0f) {
+						renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+					}
+				}
+				break;
+			case RoadEdge::TYPE_STREET:
+				if (showLocalStreets) {
+					renderable1->addQuad(p0, p1, p2, p3, normal, 0, 1, 0, (pt1 - pt2).length() / 10.0f);
+
+					// draw a bridge
+					if (bridgeHeight > 5.0f) {
+						renderable4->addCylinder(pt1.x(), pt1.y(), -20, 1.5f, 1.5f, pt1.z() + 20, 10, 10);
+					}
+				}
+				break;
 			}
 
 			p0 = p3;
@@ -182,7 +214,7 @@ void RoadGraph::generate2DMesh() {
 		QColor bgColor = graph[*ei]->bgColor;
 
 		// draw the border of the road segment
-		if ((showHighways && edge->type == RoadEdge::TYPE_HIGHWAY) || (showBoulevard && edge->type ==  RoadEdge::TYPE_BOULEVARD) || (showAvenues && edge->type ==  RoadEdge::TYPE_AVENUE) || (showLocalStreets && edge->type ==  RoadEdge::TYPE_STREET)) {
+		if ((showHighways && edge->type == RoadEdge::TYPE_HIGHWAY) || (showBoulevards && edge->type ==  RoadEdge::TYPE_BOULEVARD) || (showAvenues && edge->type ==  RoadEdge::TYPE_AVENUE) || (showLocalStreets && edge->type ==  RoadEdge::TYPE_STREET)) {
 			add2DMeshOfEdge(renderables[0], edge, widthBase * (1.0f + curbRatio), bgColor, height * 0.5f);
 			add2DMeshOfEdge(renderables[0], edge, widthBase, color, height);
 		}

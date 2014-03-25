@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Mon Mar 24 14:42:35 2014
+** Created: Tue Mar 25 16:50:12 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -65,12 +65,23 @@ public:
     QAction *actionGenerateBuildings;
     QAction *actionAreaDelete;
     QAction *actionClearRoads;
+    QAction *actionPMControlWidget;
+    QAction *actionHighways;
+    QAction *actionBoulevard;
+    QAction *actionAvenue;
+    QAction *actionLocal_Street;
+    QAction *actionDisplayHighway;
+    QAction *actionDisplayBoulevard;
+    QAction *actionDisplayAvenue;
+    QAction *actionDisplayLocalStreet;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuWindow;
     QMenu *menuArea;
     QMenu *menuPM;
+    QMenu *menuDisplay;
+    QMenu *menuRoads;
     QToolBar *fileToolBar;
     QToolBar *areaToolBar;
     QStatusBar *statusBar;
@@ -212,6 +223,32 @@ public:
         actionAreaDelete->setObjectName(QString::fromUtf8("actionAreaDelete"));
         actionClearRoads = new QAction(MainWindow);
         actionClearRoads->setObjectName(QString::fromUtf8("actionClearRoads"));
+        actionPMControlWidget = new QAction(MainWindow);
+        actionPMControlWidget->setObjectName(QString::fromUtf8("actionPMControlWidget"));
+        actionHighways = new QAction(MainWindow);
+        actionHighways->setObjectName(QString::fromUtf8("actionHighways"));
+        actionBoulevard = new QAction(MainWindow);
+        actionBoulevard->setObjectName(QString::fromUtf8("actionBoulevard"));
+        actionAvenue = new QAction(MainWindow);
+        actionAvenue->setObjectName(QString::fromUtf8("actionAvenue"));
+        actionLocal_Street = new QAction(MainWindow);
+        actionLocal_Street->setObjectName(QString::fromUtf8("actionLocal_Street"));
+        actionDisplayHighway = new QAction(MainWindow);
+        actionDisplayHighway->setObjectName(QString::fromUtf8("actionDisplayHighway"));
+        actionDisplayHighway->setCheckable(true);
+        actionDisplayHighway->setChecked(true);
+        actionDisplayBoulevard = new QAction(MainWindow);
+        actionDisplayBoulevard->setObjectName(QString::fromUtf8("actionDisplayBoulevard"));
+        actionDisplayBoulevard->setCheckable(true);
+        actionDisplayBoulevard->setChecked(true);
+        actionDisplayAvenue = new QAction(MainWindow);
+        actionDisplayAvenue->setObjectName(QString::fromUtf8("actionDisplayAvenue"));
+        actionDisplayAvenue->setCheckable(true);
+        actionDisplayAvenue->setChecked(true);
+        actionDisplayLocalStreet = new QAction(MainWindow);
+        actionDisplayLocalStreet->setObjectName(QString::fromUtf8("actionDisplayLocalStreet"));
+        actionDisplayLocalStreet->setCheckable(true);
+        actionDisplayLocalStreet->setChecked(true);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -226,6 +263,10 @@ public:
         menuArea->setObjectName(QString::fromUtf8("menuArea"));
         menuPM = new QMenu(menuBar);
         menuPM->setObjectName(QString::fromUtf8("menuPM"));
+        menuDisplay = new QMenu(menuBar);
+        menuDisplay->setObjectName(QString::fromUtf8("menuDisplay"));
+        menuRoads = new QMenu(menuDisplay);
+        menuRoads->setObjectName(QString::fromUtf8("menuRoads"));
         MainWindow->setMenuBar(menuBar);
         fileToolBar = new QToolBar(MainWindow);
         fileToolBar->setObjectName(QString::fromUtf8("fileToolBar"));
@@ -240,6 +281,7 @@ public:
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuArea->menuAction());
         menuBar->addAction(menuPM->menuAction());
+        menuBar->addAction(menuDisplay->menuAction());
         menuBar->addAction(menuWindow->menuAction());
         menuFile->addAction(actionNewTerrain);
         menuFile->addAction(actionOpenTerrain);
@@ -254,6 +296,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuWindow->addAction(actionControlWidget);
+        menuWindow->addAction(actionPMControlWidget);
         menuWindow->addAction(actionPropertyWidget);
         menuArea->addAction(actionAreaSelect);
         menuArea->addAction(actionAreaCreate);
@@ -266,6 +309,11 @@ public:
         menuPM->addAction(actionGenerateBlocks);
         menuPM->addAction(actionGenerateParcels);
         menuPM->addAction(actionGenerateBuildings);
+        menuDisplay->addAction(menuRoads->menuAction());
+        menuRoads->addAction(actionDisplayHighway);
+        menuRoads->addAction(actionDisplayBoulevard);
+        menuRoads->addAction(actionDisplayAvenue);
+        menuRoads->addAction(actionDisplayLocalStreet);
 
         retranslateUi(MainWindow);
 
@@ -325,10 +373,21 @@ public:
         actionGenerateBuildings->setText(QApplication::translate("MainWindow", "Generate Buildings", 0, QApplication::UnicodeUTF8));
         actionAreaDelete->setText(QApplication::translate("MainWindow", "Delete", 0, QApplication::UnicodeUTF8));
         actionClearRoads->setText(QApplication::translate("MainWindow", "Clear Roads", 0, QApplication::UnicodeUTF8));
+        actionPMControlWidget->setText(QApplication::translate("MainWindow", "PM Control Widget", 0, QApplication::UnicodeUTF8));
+        actionHighways->setText(QApplication::translate("MainWindow", "Highway", 0, QApplication::UnicodeUTF8));
+        actionBoulevard->setText(QApplication::translate("MainWindow", "Boulevard", 0, QApplication::UnicodeUTF8));
+        actionAvenue->setText(QApplication::translate("MainWindow", "Avenue", 0, QApplication::UnicodeUTF8));
+        actionLocal_Street->setText(QApplication::translate("MainWindow", "Local Street", 0, QApplication::UnicodeUTF8));
+        actionDisplayHighway->setText(QApplication::translate("MainWindow", "Highway", 0, QApplication::UnicodeUTF8));
+        actionDisplayBoulevard->setText(QApplication::translate("MainWindow", "Boulevard", 0, QApplication::UnicodeUTF8));
+        actionDisplayAvenue->setText(QApplication::translate("MainWindow", "Avenue", 0, QApplication::UnicodeUTF8));
+        actionDisplayLocalStreet->setText(QApplication::translate("MainWindow", "Local Street", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuWindow->setTitle(QApplication::translate("MainWindow", "Window", 0, QApplication::UnicodeUTF8));
         menuArea->setTitle(QApplication::translate("MainWindow", "Area", 0, QApplication::UnicodeUTF8));
         menuPM->setTitle(QApplication::translate("MainWindow", "PM", 0, QApplication::UnicodeUTF8));
+        menuDisplay->setTitle(QApplication::translate("MainWindow", "Display", 0, QApplication::UnicodeUTF8));
+        menuRoads->setTitle(QApplication::translate("MainWindow", "Roads", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

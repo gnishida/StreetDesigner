@@ -1,19 +1,22 @@
-﻿#include "../../common/Util.h"
+﻿#include "../../common/global.h"
+#include "../../common/Util.h"
 #include "../GraphUtil.h"
 #include "PMRoadGenerator.h"
 
 void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area) {
 	roads.clear();
 
-	float snapToClosestVertexFactor = 0.7f;
-	float roadAngleTolerance = 1.2566f;
+	float snapToClosestVertexFactor = G::getFloat("snapFactor");
+	float roadAngleTolerance = G::getFloat("minAngle");
 
 	// generate arterials
 	int count = 0;
 	std::vector<RoadVertexDesc> seeds;
 	generateInitialArterialSeeds(roads, area, seeds);
 
-	while (!seeds.empty() && count < 100000) {
+	int numIterations = G::getInt("numIterations");
+
+	while (!seeds.empty() && count < numIterations) {
 		std::cout << count << std::endl;
 
 		RoadVertexDesc id = seeds.front();
@@ -43,28 +46,12 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 				seeds.push_back(id2);
 			}
 
-			/*
-			if (roads.findNearestVertex(edge->getPolyLine()[num - 1], id, id2) < edge->getLength() * snapToClosestVertexFactor) {
-				edge->snapTo(roads.graph[id2]->getPt(), urbanGeometry);
-				if (roads.isRedundant(id2, edge, roadAngleTolerance)) {
-					delete edge;
-					continue;
-				}
-			} else {
-				MyRoadGraphVertex* vertex2 = new MyRoadGraphVertex(edge->getPolyLine()[num - 1]);
-				vertex2->initDirection(direction, (direction > M_PI) ? direction - M_PI : direction + M_PI);
-				id2 = roadGraph->addVertex(vertex2);
-				seeds.push_back(id2);
-				roadGraph->getSeeds().push_back(id2);
-			}*/
-
 			GraphUtil::addEdge(roads, id, id2, edge);
 		}
 
 		count++;
 	}
 
-	//GraphUtil::removeDeadEnd(roads);
 	removeSelfIntersectingRoads(roads);
 
 	// generate streets
@@ -72,7 +59,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 
 	count = 0;
 
-	while (!seeds.empty()) {
+	while (!seeds.empty() && count < numIterations) {
 		std::cout << count << std::endl;
 
 		int id = seeds.front();
@@ -111,8 +98,9 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		count++;
 	}
 
-	//GraphUtil::removeDeadEnd(roads);
 	removeSelfIntersectingRoads(roads);
+
+	GraphUtil::clean(roads);
 }
 
 void PMRoadGenerator::generateInitialArterialSeeds(RoadGraph &roads, const Polygon2D &area, std::vector<RoadVertexDesc>& seeds) {
@@ -180,7 +168,7 @@ RoadEdgePtr PMRoadGenerator::attemptExpansion(RoadGraph &roads, RoadVertexDesc i
 	int maxPopulationPerCell = 600;
 	int maxEmploymentPerCell = 600;
 	float step = 10.0f;
-	float organicFactor = 0.1f;
+	float organicFactor = G::getFloat("organicFactor");
 	float roadSlopeThreshold = 100.0f;
 	float snapToClosestVertexFactor = 0.7f;
 	float roadWidth;

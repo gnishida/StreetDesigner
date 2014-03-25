@@ -43,7 +43,7 @@ public:
 	QColor colorAvenue;
 	QColor colorStreet;
 	bool showHighways;
-	bool showBoulevard;
+	bool showBoulevards;
 	bool showAvenues;
 	bool showLocalStreets;
 

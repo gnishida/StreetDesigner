@@ -51,6 +51,7 @@
      <string>Window</string>
     </property>
     <addaction name="actionControlWidget"/>
+    <addaction name="actionPMControlWidget"/>
     <addaction name="actionPropertyWidget"/>
    </widget>
    <widget class="QMenu" name="menuArea">
@@ -74,9 +75,25 @@
     <addaction name="actionGenerateParcels"/>
     <addaction name="actionGenerateBuildings"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <widget class="QMenu" name="menuRoads">
+     <property name="title">
+      <string>Roads</string>
+     </property>
+     <addaction name="actionDisplayHighway"/>
+     <addaction name="actionDisplayBoulevard"/>
+     <addaction name="actionDisplayAvenue"/>
+     <addaction name="actionDisplayLocalStreet"/>
+    </widget>
+    <addaction name="menuRoads"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuArea"/>
    <addaction name="menuPM"/>
+   <addaction name="menuDisplay"/>
    <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="fileToolBar">
@@ -404,6 +421,75 @@
   <action name="actionClearRoads">
    <property name="text">
     <string>Clear Roads</string>
+   </property>
+  </action>
+  <action name="actionPMControlWidget">
+   <property name="text">
+    <string>PM Control Widget</string>
+   </property>
+  </action>
+  <action name="actionHighways">
+   <property name="text">
+    <string>Highway</string>
+   </property>
+  </action>
+  <action name="actionBoulevard">
+   <property name="text">
+    <string>Boulevard</string>
+   </property>
+  </action>
+  <action name="actionAvenue">
+   <property name="text">
+    <string>Avenue</string>
+   </property>
+  </action>
+  <action name="actionLocal_Street">
+   <property name="text">
+    <string>Local Street</string>
+   </property>
+  </action>
+  <action name="actionDisplayHighway">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highway</string>
+   </property>
+  </action>
+  <action name="actionDisplayBoulevard">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Boulevard</string>
+   </property>
+  </action>
+  <action name="actionDisplayAvenue">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Avenue</string>
+   </property>
+  </action>
+  <action name="actionDisplayLocalStreet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Local Street</string>
    </property>
   </action>
  </widget>
