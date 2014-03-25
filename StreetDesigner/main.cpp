@@ -45,7 +45,7 @@ polygon.push_back(QVector3D(-61.2608,392.535,5.0f));
 polygon.push_back(QVector3D(-60.1465,382.573,5.0f));
 polygon.push_back(QVector3D(-59.4326,375.037,5.0f));
 polygon.push_back(QVector3D(-55.4499,376.831,5.0f));
-*/
+
 polygon.push_back(QVector3D(-49.2427,379.654,5.0f));
 polygon.push_back(QVector3D(-43.0303,382.539,5.0f));
 polygon.push_back(QVector3D(-36.8084,385.421,5.0f));
@@ -58,6 +58,7 @@ polygon.push_back(QVector3D(12.5696,394.027,5.0f));
 polygon.push_back(QVector3D(22.557,394.084,5.0f));
 polygon.push_back(QVector3D(32.5423,394.234,5.0f));
 polygon.push_back(QVector3D(39.9101,394.391,5.0f));
+*/
 polygon.push_back(QVector3D(39.7343,402.635,5.0f));
 polygon.push_back(QVector3D(39.4901,412.621,5.0f));
 polygon.push_back(QVector3D(39.1896,422.589,5.0f));
