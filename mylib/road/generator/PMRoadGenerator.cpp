@@ -64,7 +64,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		count++;
 	}
 
-	GraphUtil::removeDeadEnd(roads);
+	//GraphUtil::removeDeadEnd(roads);
 	removeSelfIntersectingRoads(roads);
 
 	// generate streets
@@ -111,7 +111,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		count++;
 	}
 
-	GraphUtil::removeDeadEnd(roads);
+	//GraphUtil::removeDeadEnd(roads);
 	removeSelfIntersectingRoads(roads);
 }
 
@@ -131,47 +131,35 @@ void PMRoadGenerator::generateInitialArterialSeeds(RoadGraph &roads, const Polyg
 void PMRoadGenerator::generateInitialStreetSeeds(RoadGraph &roads, std::vector<RoadVertexDesc>& seeds) {
 	seeds.clear();
 
-	std::vector<RoadEdgeDesc> toBeRemoved;
-
-
+	int i = 0;
+	int num = GraphUtil::getNumEdges(roads);
 	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend; ++ei) {
-		//RoadGraphEdgeDesc edge = *ei;
+	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend && i < num; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		i++;
 
 		int step = roads.graph[*ei]->polyline.size() / 5;
 		if (step <= 1) continue;
+
+		RoadEdgePtr edge = roads.graph[*ei];
+		RoadEdgeDesc e = *ei;
 		
-		while (step < roads.graph[*ei]->polyline.size() - step) {
-			RoadVertexDesc desc = GraphUtil::splitEdge(roads, *ei, roads.graph[*ei]->polyline[step]);
+		while (step < edge->polyline.size() - step) {
+			RoadEdgeDesc e1, e2;
+			RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
 			
-			QVector2D vec = roads.graph[*ei]->polyline[step] - roads.graph[*ei]->polyline[step - 1];
-			initDirection(roads, desc, atan2f(vec.y(), vec.x()));
+			QVector2D vec = edge->polyline[step] - edge->polyline[step - 1];
+			float direction = atan2f(vec.y(), vec.x());
+			initDirection(roads, desc, direction + M_PI * 0.5f, direction - M_PI * 0.5f);
 
 			seeds.push_back(desc);
 
-			toBeRemoved.push_back(*ei);
+			roads.graph[*ei]->valid = false;
 
-
-			/*
-			RoadVertexPtr vertex = RoadVertexPtr(new RoadVertex(roads.graph[*ei]->polyline[step]));
-
-			//MyRoadGraphVertex* vertex = new MyRoadGraphVertex(roadGraph->getEdge(edge)->getPolyLine()[step]);
-			initDirection(roads, 
-
-			vertex->initDirection(roadGraph->getEdge(edge)->getDirection());
-			RoadGraphVertexDesc desc;
-			std::pair<RoadGraphEdgeDesc, RoadGraphEdgeDesc> pair = roadGraph->splitEdge(edge, step, vertex, desc, false);
-			toBeRemoved.push_back(edge);
-
-			seeds.push_back(desc);
-			roadGraph->getSeeds().push_back(desc);
-			edge = pair.second;
-			*/
+			edge = roads.graph[e2];
+			e = e2;
 		}
-	}
-
-	for (int i = 0; i < toBeRemoved.size(); ++i) {
-		boost::remove_edge(toBeRemoved[i], roads.graph);
 	}
 }
 
@@ -259,12 +247,16 @@ void PMRoadGenerator::removeSelfIntersectingRoads(RoadGraph &roads) {
 	std::vector<RoadEdgeIter> toBeRemoved;
 	
 	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
 		a1 = roads.graph[boost::source(*ei, roads.graph)]->pt;
 		a2 = roads.graph[boost::target(*ei, roads.graph)]->pt;
 		
 		for (boost::tie(ei2, eend2) = boost::edges(roads.graph); ei2 != ei; ++ei2);
 		
 		for (++ei2; ei2 != eend2; ++ei2) {
+			if (!roads.graph[*ei2]->valid) continue;
+
 			b1 = roads.graph[boost::source(*ei2, roads.graph)]->pt;
 			b2 = roads.graph[boost::target(*ei2, roads.graph)]->pt;
 
@@ -310,10 +302,13 @@ bool PMRoadGenerator::removeIntersectingEdges(RoadGraph &roads) {
 	float ta0a1, tb0b1;
 
 	for (boost::tie(a_ei, a_ei_end) = boost::edges(roads.graph); a_ei != a_ei_end; ++a_ei) {
+		if (!roads.graph[*a_ei]->valid) continue;
+
 		a0 = roads.graph[boost::source(*a_ei, roads.graph)]->pt;
 		a1 = roads.graph[boost::target(*a_ei, roads.graph)]->pt;
 
 		for (b_ei = a_ei; b_ei != a_ei_end; ++b_ei) {
+			if (!roads.graph[*b_ei]->valid) continue;
 			if (b_ei == a_ei) continue;
 
 			b0 = roads.graph[boost::source(*b_ei, roads.graph)]->pt;
@@ -328,15 +323,11 @@ bool PMRoadGenerator::removeIntersectingEdges(RoadGraph &roads) {
 					}
 				}
 				if(addEd)
-					edgesToRemove.push_back(b_ei);
+					roads.graph[*b_ei]->valid = false;
 			}
 		}		
 	}
 	
-	for(int i=0; i<edgesToRemove.size(); ++i) {	
-		boost::remove_edge(*(edgesToRemove[i]), roads.graph);
-	}
-
 	if(edgesToRemove.size()>0){
 		return true;
 	} else {
@@ -367,8 +358,6 @@ void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float
 
 	deltaDir = 0.5f * M_PI;
 	for (int i = 0; i < 4; ++i) {
-		if (i == 2) continue;
-
 		if (i==0) {
 			tmpDir = direction;
 		} else {
@@ -382,3 +371,14 @@ void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float
 		roads.graph[desc]->angles.push_back(tmpDir);
 	}
 }
+
+void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction1, float direction2) {
+	float deltaDir;
+	float tmpDir;
+	
+	roads.graph[desc]->angles.clear();
+
+	roads.graph[desc]->angles.push_back(direction1);
+	roads.graph[desc]->angles.push_back(direction2);
+}
+

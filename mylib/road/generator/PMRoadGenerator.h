@@ -19,5 +19,6 @@ private:
 	static bool removeIntersectingEdges(RoadGraph &roads);
 	static bool isRedundantEdge(RoadGraph &roads, RoadVertexDesc desc, const Polyline2D &polyline, float threshold);
 	static void initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction);
+	static void initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction1, float direction2);
 };
 

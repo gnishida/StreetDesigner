@@ -364,9 +364,9 @@ void GraphUtil::snapVertex(RoadGraph& roads, RoadVertexDesc v1, RoadVertexDesc v
 
 		// add a new edge
 		if (v1 != v1b) {
-			addEdge(roads, v2, v1b, roads.graph[*ei]);
+			addEdge(roads, v2, v1b, RoadEdgePtr(new RoadEdge(*roads.graph[*ei])));
 		} else {	// this is for a loop edge.
-			addEdge(roads, v2, v2, roads.graph[*ei]);
+			addEdge(roads, v2, v2, RoadEdgePtr(new RoadEdge(*roads.graph[*ei])));
 		}
 	}
 
@@ -520,14 +520,11 @@ RoadEdgeDesc GraphUtil::addEdge(RoadGraph& roads, RoadVertexDesc src, RoadVertex
  * Add an edge.
  * This function creates a edge which is copied from the reference edge.
  */
-RoadEdgeDesc GraphUtil::addEdge(RoadGraph& roads, RoadVertexDesc src, RoadVertexDesc tgt, RoadEdgePtr ref_edge) {
+RoadEdgeDesc GraphUtil::addEdge(RoadGraph& roads, RoadVertexDesc src, RoadVertexDesc tgt, RoadEdgePtr edge) {
 	roads.setModified();
 
-	RoadEdgePtr e = RoadEdgePtr(new RoadEdge(*ref_edge));
-	e->valid = true;
-
 	std::pair<RoadEdgeDesc, bool> edge_pair = boost::add_edge(src, tgt, roads.graph);
-	roads.graph[edge_pair.first] = e;
+	roads.graph[edge_pair.first] = edge;
 
 	return edge_pair.first;
 }
@@ -863,6 +860,82 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	}
 	std::pair<RoadEdgeDesc, bool> edge_pair2 = boost::add_edge(v_desc, tgt, roads.graph);
 	roads.graph[edge_pair2.first] = e2;
+
+	// remove the original edge
+	roads.graph[edge_desc]->valid = false;
+
+	return v_desc;
+}
+
+/**
+ * Split the edge at the specified point.
+ * edge_descのsrc頂点に近い方のエッジをedge1、tgt頂点に近い方のエッジをedge2として返却する。
+ */
+RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt, RoadEdgeDesc &edge1, RoadEdgeDesc &edge2) {
+	RoadEdgePtr edge = roads.graph[edge_desc];
+
+	// もしエッジの端点と指定された点の座標が同じ場合は、splitしない
+	RoadVertexDesc src = boost::source(edge_desc, roads.graph);
+	RoadVertexDesc tgt = boost::target(edge_desc, roads.graph);
+	if ((roads.graph[src]->pt - pt).lengthSquared() == 0.0f) {
+		edge1 = edge_desc;
+		edge2 = edge_desc;
+		return src;
+	}
+	if ((roads.graph[tgt]->pt - pt).lengthSquared() == 0.0f) {
+		edge1 = edge_desc;
+		edge2 = edge_desc;
+		return tgt;
+	}
+
+	// find which point along the polyline is the closest to the specified split point.
+	int index;
+	QVector2D pos;
+	float min_dist = std::numeric_limits<float>::max();
+	for (int i = 0; i < roads.graph[edge_desc]->polyline.size() - 1; i++) {
+		QVector2D vec = roads.graph[edge_desc]->polyline[i + 1] - roads.graph[edge_desc]->polyline[i];
+		float length = vec.length();
+		for (int j = 0; j < length; j += 1.0f) {
+			QVector2D pt2 = roads.graph[edge_desc]->polyline[i] + vec * (float)j / length;
+			float dist = (pt2 - pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				index = i;
+				pos = pt2;
+			}
+		}
+	}
+
+	// add a new vertex at the specified point on the edge
+	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pos));
+	RoadVertexDesc v_desc = boost::add_vertex(roads.graph);
+	roads.graph[v_desc] = v;
+
+	// add the first edge
+	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
+	e1->polyline.push_back(edge->polyline[0]);
+	for (int i = 1; i < index; i++) {
+		e1->polyline.push_back(edge->polyline[i]);
+	}
+	e1->addPoint(pos);
+	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
+		edge1 = addEdge(roads, src, v_desc, e1);
+	} else {
+		edge1 = addEdge(roads, tgt, v_desc, e1);
+	}
+
+	// add the second edge
+	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
+	e2->addPoint(pos);
+	for (int i = index + 2; i < edge->polyline.size() - 1; i++) {
+		e2->polyline.push_back(edge->polyline[i]);
+	}
+	e2->polyline.push_back(edge->polyline.last());
+	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
+		edge2 = addEdge(roads, v_desc, tgt, e2);
+	} else {
+		edge2 = addEdge(roads, v_desc, src, e2);
+	}
 
 	// remove the original edge
 	roads.graph[edge_desc]->valid = false;
@@ -1252,7 +1325,7 @@ void GraphUtil::mergeRoads(RoadGraph& roads1, RoadGraph& roads2) {
 		RoadVertexDesc src1 = conv[src2];
 		RoadVertexDesc tgt1 = conv[tgt2];
 
-		addEdge(roads1, src1, tgt1, roads2.graph[*ei]);
+		addEdge(roads1, src1, tgt1, RoadEdgePtr(new RoadEdge(*roads2.graph[*ei])));
 	}
 
 	roads1.setModified();
@@ -1290,7 +1363,7 @@ void GraphUtil::connectRoads(RoadGraph& roads1, RoadGraph& roads2, float connect
 		RoadVertexDesc src1 = conv[src2];
 		RoadVertexDesc tgt1 = conv[tgt2];
 
-		addEdge(roads1, src1, tgt1, roads2.graph[*ei]);
+		addEdge(roads1, src1, tgt1, RoadEdgePtr(new RoadEdge(*roads2.graph[*ei])));
 	}
 
 	// for each roads2 vertex, try to find the close vertex of roads1 to connect
@@ -2150,7 +2223,7 @@ void GraphUtil::simplify2(RoadGraph& roads, float dist_threshold) {
 		if (hasEdge(temp2, new_src, new_tgt)) continue;
 
 		// エッジを追加
-		RoadEdgeDesc e = addEdge(temp2, new_src, new_tgt, temp.graph[*ei]);
+		RoadEdgeDesc e = addEdge(temp2, new_src, new_tgt, RoadEdgePtr(new RoadEdge(*temp.graph[*ei])));
 		moveEdge(temp2, e, temp2.graph[new_src]->pt, temp2.graph[new_tgt]->pt);
 	}
 
@@ -2270,7 +2343,7 @@ void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
 			}
 
 			// エッジを追加
-			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, RoadEdgePtr(new RoadEdge(*temp.graph[*ei])));
 			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
 		} else if (temp.graph[src]->properties["isAvenue"] == true) {
 			RoadVertexDesc new_src = conv[groups[src]];
@@ -2284,7 +2357,7 @@ void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
 			}
 
 			// エッジを追加
-			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, RoadEdgePtr(new RoadEdge(*temp.graph[*ei])));
 			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
 		} else if (temp.graph[tgt]->properties["isAvenue"] == true) {
 			RoadVertexDesc new_src = conv2[src];
@@ -2298,14 +2371,14 @@ void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
 			}
 
 			// エッジを追加
-			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, RoadEdgePtr(new RoadEdge(*temp.graph[*ei])));
 			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
 		} else {
 			RoadVertexDesc new_src = conv2[src];
 			RoadVertexDesc new_tgt = conv2[tgt];
 
 			// エッジを追加
-			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, temp.graph[*ei]);
+			RoadEdgeDesc e = addEdge(roads, new_src, new_tgt, RoadEdgePtr(new RoadEdge(*temp.graph[*ei])));
 			roads.graph[e]->polyline = temp.graph[*ei]->polyline;
 		}
 	}
@@ -2480,7 +2553,7 @@ void GraphUtil::singlify(RoadGraph& roads) {
 
 			// Add an edge
 			if (!hasEdge(new_roads, new_v_desc, new_u_desc)) {
-				addEdge(new_roads, new_v_desc, new_u_desc, roads.graph[*oei]);
+				addEdge(new_roads, new_v_desc, new_u_desc, RoadEdgePtr(new RoadEdge(*roads.graph[*oei])));
 			}
 
 			if (!conv.contains(u_desc)) {
@@ -2814,7 +2887,7 @@ void GraphUtil::snapDeadendEdges(RoadGraph& roads, float threshold) {
 				roads.graph[new_e_desc]->polyline = roads.graph[e_desc]->polyline;
 			} else {
 				// 該当頂点間にエッジがない場合は、新しいエッジを追加する
-				GraphUtil::addEdge(roads, nearest_desc, tgt, roads.graph[e_desc]);
+				GraphUtil::addEdge(roads, nearest_desc, tgt, RoadEdgePtr(new RoadEdge(*roads.graph[e_desc])));
 			}
 
 			// 古いエッジを無効にする
