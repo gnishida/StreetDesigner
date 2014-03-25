@@ -251,6 +251,16 @@ float Util::diffAngle(float angle1, float angle2, bool absolute) {
 }
 
 /**
+ * Angle between 3 points A-B-C
+ **/
+float Util::angleThreePoints(const QVector3D& pa, const QVector3D& pb, const QVector3D& pc) {
+	float a = (pb - pc).length();
+	float b = (pa - pc).length();
+	float c = (pa - pb).length();
+	return acos(0.999f * (a*a + c*c - b*b) / (2.0f*a*c));
+}
+
+/**
  * 指定された点を、反時計回りにrad回転させた位置を返却する。
  */
 QVector2D Util::rotate(const QVector2D &pt, float rad) {

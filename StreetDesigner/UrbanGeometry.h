@@ -64,6 +64,7 @@ public:
 	void clearGeometry();
 	void generateRoads(RoadFeature &rf);
 	void generateParametricRoads(RoadFeature &rf);
+	void generatePMRoads();
 	void generateBlocks();
 
 	void render(mylib::TextureManager* textureManager);

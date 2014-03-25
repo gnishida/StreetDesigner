@@ -557,7 +557,7 @@
      <string>Clear</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButtonGenerateParametric">
+   <widget class="QPushButton" name="pushButtonGeneratePM">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -567,7 +567,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Parametric</string>
+     <string>PM</string>
     </property>
    </widget>
   </widget>
