@@ -32,6 +32,7 @@ public:
 	static void snapVertex(RoadGraph& roads, RoadVertexDesc v1, RoadVertexDesc v2);
 	static RoadVertexDesc getCentralVertex(RoadGraph& roads);
 	static float getDensity(RoadGraph& roads, const QVector2D& pos, float radius);
+	static bool hasRedundantEdge(RoadGraph& roads, RoadVertexDesc desc, const Polyline2D &polyline, float threshold);
 
 	// Edge related functions
 	static RoadEdgeDesc getEdge(RoadGraph& roads, int index, bool onlyValidEdge = true);
@@ -80,6 +81,7 @@ public:
 	static void subtractRoads(RoadGraph& roads, Polygon2D& area, bool strict);
 	static void subtractRoads2(RoadGraph& roads, Polygon2D& area);
 	static void perturb(RoadGraph &roads, const Polygon2D &area, float factor);
+	static void removeSelfIntersectingRoads(RoadGraph &roads);
 
 	// Connectivity related functions
 	static std::vector<RoadVertexDesc> getNeighbors(RoadGraph& roads, RoadVertexDesc v, bool onlyValidVertex = true);

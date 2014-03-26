@@ -262,6 +262,9 @@
     <ClCompile Include="..\mylib\render\RenderablePolygon.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\road\generator\ExRoadGenerator.cpp">
+      <Filter>mylib\road\generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -472,6 +475,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderablePolygon.h">
       <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\generator\ExRoadGenerator.h">
+      <Filter>mylib\road\generator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

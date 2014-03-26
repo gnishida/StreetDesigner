@@ -30,7 +30,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 			float direction = roads.graph[id]->angles[i];
 			RoadEdgePtr edge = attemptExpansion(roads, id, direction, RoadEdge::TYPE_AVENUE);
 
-			if (edge->polyline.size() <= 3 || isRedundantEdge(roads, id, edge->polyline, roadAngleTolerance)) {
+			if (edge->polyline.size() <= 3 || GraphUtil::hasRedundantEdge(roads, id, edge->polyline, roadAngleTolerance)) {
 				continue;
 			}
 
@@ -38,7 +38,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 			if (GraphUtil::getVertex(roads, edge->polyline.last(), edge->polyline.length() * snapToClosestVertexFactor, id, id2)) {
 				GraphUtil::movePolyline(roads, edge->polyline, roads.graph[id]->pt, roads.graph[id2]->pt);
 				std::reverse(edge->polyline.begin(), edge->polyline.end());
-				if (isRedundantEdge(roads, id2, edge->polyline, roadAngleTolerance)) continue;
+				if (GraphUtil::hasRedundantEdge(roads, id2, edge->polyline, roadAngleTolerance)) continue;
 			} else {
 				RoadVertexPtr v2 = RoadVertexPtr(new RoadVertex(edge->polyline.last()));
 				id2 = boost::add_vertex(roads.graph);
@@ -54,7 +54,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		count++;
 	}
 
-	removeSelfIntersectingRoads(roads);
+	GraphUtil::removeSelfIntersectingRoads(roads);
 
 	// generate streets
 	generateInitialStreetSeeds(roads, seeds);
@@ -76,7 +76,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 				continue;
 			}
 
-			if (edge->polyline.size() <= 3 || isRedundantEdge(roads, id, edge->polyline, roadAngleTolerance)) {
+			if (edge->polyline.size() <= 3 || GraphUtil::hasRedundantEdge(roads, id, edge->polyline, roadAngleTolerance)) {
 				continue;
 			}
 
@@ -84,7 +84,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 			if (GraphUtil::getVertex(roads, edge->polyline.last(), edge->polyline.length() * snapToClosestVertexFactor, id, id2)) {
 				GraphUtil::movePolyline(roads, edge->polyline, roads.graph[id]->pt, roads.graph[id2]->pt);
 				std::reverse(edge->polyline.begin(), edge->polyline.end());
-				if (isRedundantEdge(roads, id2, edge->polyline, roadAngleTolerance)) continue;
+				if (GraphUtil::hasRedundantEdge(roads, id2, edge->polyline, roadAngleTolerance)) continue;
 			} else {
 				RoadVertexPtr v2 = RoadVertexPtr(new RoadVertex(edge->polyline.last()));
 				id2 = boost::add_vertex(roads.graph);
@@ -100,7 +100,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		count++;
 	}
 
-	removeSelfIntersectingRoads(roads);
+	GraphUtil::removeSelfIntersectingRoads(roads);
 
 	GraphUtil::removeDeadEnd(roads);
 	GraphUtil::clean(roads);
@@ -228,62 +228,7 @@ RoadEdgePtr PMRoadGenerator::attemptExpansion(RoadGraph &roads, RoadVertexDesc i
 	return edge;
 }
 
-void PMRoadGenerator::removeSelfIntersectingRoads(RoadGraph &roads) {
-	QVector2D a1, a2, b1, b2;
-	float ta, tb;
-	QVector2D intPt;
-	RoadEdgeIter ei, eend;
-	RoadEdgeIter ei2, eend2;
-
-	std::vector<RoadEdgeIter> toBeRemoved;
-	
-	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
-		if (!roads.graph[*ei]->valid) continue;
-
-		a1 = roads.graph[boost::source(*ei, roads.graph)]->pt;
-		a2 = roads.graph[boost::target(*ei, roads.graph)]->pt;
-		
-		for (boost::tie(ei2, eend2) = boost::edges(roads.graph); ei2 != ei; ++ei2);
-		
-		for (++ei2; ei2 != eend2; ++ei2) {
-			if (!roads.graph[*ei2]->valid) continue;
-
-			b1 = roads.graph[boost::source(*ei2, roads.graph)]->pt;
-			b2 = roads.graph[boost::target(*ei2, roads.graph)]->pt;
-
-			if (Util::segmentSegmentIntersectXY(a1, a2, b1, b2, &ta, &tb, true, intPt)) {
-				RoadEdgeIter r;
-				if (roads.graph[*ei]->getWidth() > roads.graph[*ei2]->getWidth()) {
-					r = ei2;
-				} else if(roads.graph[*ei]->getWidth() < roads.graph[*ei2]->getWidth()) {
-					r = ei;
-					break;
-				} else {
-					if (roads.graph[*ei]->getLength() < roads.graph[*ei2]->getLength()) {
-						r = ei2;
-					} else {
-						r = ei;
-					}
-				}
-
-				bool duplicated = false;
-				for (int i = 0; i < toBeRemoved.size(); ++i) {
-					if (toBeRemoved[i] == r) {
-						duplicated = true;
-						break;
-					}
-				}
-				if (!duplicated) toBeRemoved.push_back(r);
-			}
-		}
-	}
-
-	for (int i = 0; i < toBeRemoved.size(); ++i) {
-		boost::remove_edge(*toBeRemoved[i], roads.graph);
-	}
-}
-
-bool PMRoadGenerator::removeIntersectingEdges(RoadGraph &roads) {
+/*bool PMRoadGenerator::removeIntersectingEdges(RoadGraph &roads) {
 	std::vector<RoadEdgeIter> edgesToRemove;
 
 	QVector2D a0, a1, b0, b1;
@@ -325,21 +270,7 @@ bool PMRoadGenerator::removeIntersectingEdges(RoadGraph &roads) {
 		return false;
 	}
 }
-
-/**
- * 指定された頂点に登録済みのエッジに対して、指定されたポリラインとのなす角度がthreshold未満なら、trueを返却する。
- * 指定されたポリラインは、当該頂点の座標から順番に並ぶオーダとなっていること。
- */
-bool PMRoadGenerator::isRedundantEdge(RoadGraph &roads, RoadVertexDesc desc, const Polyline2D &polyline, float threshold) {
-	RoadOutEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::out_edges(desc, roads.graph); ei != eend; ++ei) {
-		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
-
-		if (Util::angleThreePoints(roads.graph[tgt]->pt, roads.graph[desc]->pt, polyline.last()) < threshold) return true;
-	}
-
-	return false;
-}
+*/
 
 void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction) {
 	float deltaDir;

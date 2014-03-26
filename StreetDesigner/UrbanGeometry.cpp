@@ -26,6 +26,7 @@ This file is part of QtUrban.
 #include <render/Terrain.h>
 #include <road/GraphUtil.h>
 #include <road/generator/KDERoadGenerator.h>
+#include <road/generator/ExRoadGenerator.h>
 #include <road/generator/GenericRoadGenerator.h>
 #include <road/generator/PMRoadGenerator.h>
 #include <road/feature/KDEFeature.h>
@@ -62,7 +63,7 @@ void UrbanGeometry::clearGeometry() {
 void UrbanGeometry::generateRoads(RoadFeature &rf) {
 	if (areas.selectedIndex == -1) return;
 
-	KDERoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
+	ExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }

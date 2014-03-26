@@ -402,6 +402,20 @@ float GraphUtil::getDensity(RoadGraph& roads, const QVector2D& pos, float radius
 }
 
 /**
+ * 当該頂点から、既に同じ方向のエッジがあるかどうかチェックする。
+ */
+bool GraphUtil::hasRedundantEdge(RoadGraph& roads, RoadVertexDesc desc, const Polyline2D &polyline, float threshold) {
+	RoadOutEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::out_edges(desc, roads.graph); ei != eend; ++ei) {
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+		if (Util::angleThreePoints(roads.graph[tgt]->pt, roads.graph[desc]->pt, polyline.last()) < threshold) return true;
+	}
+
+	return false;
+}
+
+/**
  * Return the index-th edge.
  */
 RoadEdgeDesc GraphUtil::getEdge(RoadGraph& roads, int index, bool onlyValidEdge) {
@@ -1676,6 +1690,64 @@ void GraphUtil::perturb(RoadGraph &roads, const Polygon2D &area, float factor) {
 	}
 
 	roads.setModified();
+}
+
+/**
+ * 交差しているエッジを探し、あればどっちかを削除する。
+ */
+void GraphUtil::removeSelfIntersectingRoads(RoadGraph &roads) {
+	QVector2D a1, a2, b1, b2;
+	float ta, tb;
+	QVector2D intPt;
+	RoadEdgeIter ei, eend;
+	RoadEdgeIter ei2, eend2;
+
+	std::vector<RoadEdgeIter> toBeRemoved;
+	
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		a1 = roads.graph[boost::source(*ei, roads.graph)]->pt;
+		a2 = roads.graph[boost::target(*ei, roads.graph)]->pt;
+		
+		for (boost::tie(ei2, eend2) = boost::edges(roads.graph); ei2 != ei; ++ei2);
+		
+		for (++ei2; ei2 != eend2; ++ei2) {
+			if (!roads.graph[*ei2]->valid) continue;
+
+			b1 = roads.graph[boost::source(*ei2, roads.graph)]->pt;
+			b2 = roads.graph[boost::target(*ei2, roads.graph)]->pt;
+
+			if (Util::segmentSegmentIntersectXY(a1, a2, b1, b2, &ta, &tb, true, intPt)) {
+				RoadEdgeIter r;
+				if (roads.graph[*ei]->getWidth() > roads.graph[*ei2]->getWidth()) {
+					r = ei2;
+				} else if(roads.graph[*ei]->getWidth() < roads.graph[*ei2]->getWidth()) {
+					r = ei;
+					break;
+				} else {
+					if (roads.graph[*ei]->getLength() < roads.graph[*ei2]->getLength()) {
+						r = ei2;
+					} else {
+						r = ei;
+					}
+				}
+
+				bool duplicated = false;
+				for (int i = 0; i < toBeRemoved.size(); ++i) {
+					if (toBeRemoved[i] == r) {
+						duplicated = true;
+						break;
+					}
+				}
+				if (!duplicated) toBeRemoved.push_back(r);
+			}
+		}
+	}
+
+	for (int i = 0; i < toBeRemoved.size(); ++i) {
+		boost::remove_edge(*toBeRemoved[i], roads.graph);
+	}
 }
 
 /**
