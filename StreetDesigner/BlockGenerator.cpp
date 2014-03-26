@@ -61,7 +61,6 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 				}
 			}
 
-			//blockContourTmp.correct();
 			if (blockContourTmp.area() > 100.0f) {
 				Block* newBlock = new Block();
 				newBlock->setContour(blockContourTmp);
@@ -139,9 +138,6 @@ void BlockGenerator::run() {
 		std::cout << "ERROR: Graph could not be planarized (generateBlocks)\n";
 	}
 
-	//mainWin->glWidget->updateGL();
-	//QTest::qWait(1);
-
 	//Create edge index property map?	
 	typedef std::map<RoadEdgeDesc, size_t> EdgeIndexMap;
 	EdgeIndexMap mapEdgeIdx;
@@ -156,8 +152,6 @@ void BlockGenerator::run() {
 	vertex_output_visitor v_vis;
 	boost::planar_face_traversal(roads->graph, &embedding[0], v_vis, pmEdgeIndex);
 
-	//mainWin->glWidget->updateGL();
-	//QTest::qWait(1);
 
 	// 最外郭のブロックを削除
 	float max_area = 0.0f;
@@ -181,10 +175,6 @@ void BlockGenerator::run() {
 		}
 		blocks->at(i)->setContour(blockContourInset);
 	}
-
-
-	//mainWin->glWidget->updateGL();
-	//QTest::qWait(1);
 
 	printf("generation done.\n");
 }

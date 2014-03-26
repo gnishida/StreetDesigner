@@ -102,6 +102,7 @@ void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 
 	removeSelfIntersectingRoads(roads);
 
+	GraphUtil::removeDeadEnd(roads);
 	GraphUtil::clean(roads);
 }
 

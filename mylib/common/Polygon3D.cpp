@@ -126,7 +126,6 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 	typedef boost::polygon::polygon_with_holes_data<double> bpolygon;
 
 	std::vector<point> pts;
-	//pts.push_back(point(at(0).x(), at(0).y()));
 	for (int i = size() - 1; i >= 0; i--) {
 		pts.push_back(point(at(i).x(), at(i).y()));
 	}
@@ -134,7 +133,6 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 	bpolygon ply;
 	boost::polygon::set_points( ply, pts.begin(), pts.end() );
 
-  //using namespace gtl::operators;
 	std::vector<bpolygon> ots;
 	polygon_set plys;
 	plys.insert(ply);
@@ -147,6 +145,7 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 			float z;
 
 			// 直近の頂点を探してZ座標を決定する
+			/*
 			float min_dist = std::numeric_limits<float>::max();
 			for (int j = 0; j < size(); ++j) {
 				float dist = SQR(at(j).x() - (*it).x()) + SQR(at(j).y() - (*it).y());
@@ -154,6 +153,22 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 					min_dist = dist;
 					z = at(j).z();
 				}
+			}*/
+
+			bool done = false;
+
+			for (int j = 0; j < size(); j++) {
+				if (at(j).x() == (*it).x() && at(j).y() == (*it).y()) {
+					z = at(j).z();
+					done = true;
+					break;
+				}
+			}
+			if (!done) {
+				int v1, v2;
+				float s;
+				findEdge((*it).x(), (*it).y(), v1, v2, s);
+				z = at(v1).z() + (at(v2).z() - at(v1).z()) * s;
 			}
 
 			trapezoid.push_back(QVector3D((*it).x(), (*it).y(), z));
@@ -169,59 +184,6 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 			trapezoids.push_back(trapezoid);
 		}
 	}
-
-	/*
-	// create 2D polygon data
-	std::vector<boost::polygon::point_data<float>  > polygon;
-	polygon.resize(size());
-	for (int i = 0; i < size(); i++) {
-		polygon[i] = boost::polygon::construct<boost::polygon::point_data<float> >(at(i).x(), at(i).y());
-	}
-
-	// create 2D polygon with holes data
-	boost::polygon::polygon_with_holes_data<float> temp;
-	boost::polygon::set_points(temp, polygon.begin(), polygon.end());
-
-	// create 2D polygon set
-	boost::polygon::polygon_set_data<float> polygonSet;
-	polygonSet.insert(temp);
-
-	// tessellation
-	std::vector<boost::polygon::polygon_with_holes_data<float> > results;
-	polygonSet.get_trapezoids(results);
-
-	for (int i = 0; i < results.size(); i++) {
-		boost::polygon::polygon_with_holes_data<float>::iterator_type it = results[i].begin();
-		Polygon3D trapezoid;
-		while (it != results[i].end()) {
-			float z = 0.0f;
-			bool done = false;
-
-			// 直近の頂点のZ座標を使ってZ座標を決定する
-			for (int j = 0; j < size(); j++) {
-				if (at(j).x() == (*it).x() && at(j).y() == (*it).y()) {
-					z = at(j).z();
-					done = true;
-					break;
-				}
-			}
-
-			if (!done) {
-				int v1, v2;
-				float s;
-				findEdge((*it).x(), (*it).y(), v1, v2, s);
-				z = at(v1).z() + (at(v2).z() - at(v1).z()) * s;
-			}
-
-			trapezoid.push_back(QVector3D((*it).x(), (*it).y(), z));
-			it++;
-		}
-
-		if (trapezoid.size() < 3) continue;
-
-		if (trapezoid.size() >= 3) trapezoids.push_back(trapezoid);
-	}
-	*/
 
 	return trapezoids;
 }
