@@ -167,6 +167,8 @@ void BlockGenerator::run() {
 		blocks->erase(blocks->begin() + max_block_id);
 	}
 
+	// insetを計算する
+	/*
 	for (int i = 0; i < blocks->size(); ++i) {
 		Polygon3D blockContourInset;
 		blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);
@@ -175,6 +177,7 @@ void BlockGenerator::run() {
 		}
 		blocks->at(i)->setContour(blockContourInset);
 	}
+	*/
 
 	printf("generation done.\n");
 }
