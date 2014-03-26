@@ -61,7 +61,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 
 void ControlWidget::showRoad(int flag) {
 	mainWin->glWidget->roads.showHighways = ui.checkBoxRoadTypeHighway->isChecked();
-	mainWin->glWidget->roads.showBoulevard = ui.checkBoxRoadTypeBoulevard->isChecked();
+	mainWin->glWidget->roads.showBoulevards = ui.checkBoxRoadTypeBoulevard->isChecked();
 	mainWin->glWidget->roads.showAvenues = ui.checkBoxRoadTypeAvenue->isChecked();
 	mainWin->glWidget->roads.showLocalStreets = ui.checkBoxRoadTypeLocalStreet->isChecked();
 	mainWin->glWidget->roads.setModified();

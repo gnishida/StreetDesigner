@@ -2,6 +2,7 @@
 #include "../../common/Util.h"
 #include "../GraphUtil.h"
 #include "PMRoadGenerator.h"
+#include "RoadGeneratorHelper.h"
 
 void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area) {
 	srand(12345);
@@ -277,21 +278,7 @@ void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float
 	float tmpDir;
 	
 	roads.graph[desc]->angles.clear();
-
-	deltaDir = 0.5f * M_PI;
-	for (int i = 0; i < 4; ++i) {
-		if (i==0) {
-			tmpDir = direction;
-		} else {
-			tmpDir = tmpDir + deltaDir;// + ucore::Util::genRand(-departingAnglesNoise, departingAnglesNoise);
-		}
-
-		if (tmpDir > 2.0 * M_PI) {
-			tmpDir = tmpDir - 2.0 * M_PI; 
-		}
-
-		roads.graph[desc]->angles.push_back(tmpDir);
-	}
+	RoadGeneratorHelper::createFourDirection(direction, roads.graph[desc]->angles);
 }
 
 void PMRoadGenerator::initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction1, float direction2) {

@@ -77,7 +77,13 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos
 			}*/
 
 			// ２つのエッジのなす角
-			float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+			//float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+			float theta;
+			if ((roads.graph[*ei]->polyline[0] - roads.graph[*vi]->pt).lengthSquared() < (roads.graph[*ei]->polyline[0] - roads.graph[v2]->pt).lengthSquared()) {
+				theta = Util::diffAngle(roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0], polyline[polyline.size() - 2] - polyline.last());
+			} else {
+				theta = Util::diffAngle(roads.graph[*ei]->polyline[roads.graph[*ei]->polyline.size() - 2] - roads.graph[*ei]->polyline.last(), polyline[polyline.size() - 2] - polyline.last());
+			}
 			if (phi > theta * 0.5f) {
 				okay = false;
 				break;
@@ -531,6 +537,55 @@ bool RoadGeneratorHelper::containsInitialSeed(const Polygon2D &targetArea, const
 	}
 
 	return true;
+}
+
+void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float> &directions) {
+	float deltaDir;
+	float tmpDir;
+	
+	deltaDir = 0.5f * M_PI;
+	for (int i = 0; i < 4; ++i) {
+		if (i==0) {
+			tmpDir = direction;
+		} else {
+			tmpDir = tmpDir + deltaDir;// + ucore::Util::genRand(-departingAnglesNoise, departingAnglesNoise);
+		}
+
+		if (tmpDir > 2.0 * M_PI) {
+			tmpDir = tmpDir - 2.0 * M_PI; 
+		}
+
+		directions.push_back(tmpDir);
+	}
+}
+
+void RoadGeneratorHelper::createFourEdges(float direction, float step, float organicFactor, std::vector<Polyline2D> &polylines) {
+	polylines.clear();
+
+	std::vector<float> directions;
+	createFourDirection(direction, directions);
+
+	for (int i = 0; i < 4; ++i) {
+		float deltaDir = 0.0f;
+
+		Polyline2D polyline;
+		QVector2D cur(0, 0);
+
+		for (int j = 0; j < 10000 && (j < step * 2 || polyline.length() < 300.0f); ++j) {
+			// Advance the current point to the next position
+			cur.setX(cur.x() + cos(directions[i]) * step);
+			cur.setY(cur.y() + sin(directions[i]) * step);
+
+			polyline.push_back(cur);
+
+			// Update the direction
+			deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
+			float newDir = directions[i] + organicFactor * deltaDir;
+			directions[i] = 0.9 * directions[i] + 0.1 * newDir;
+		}
+
+		polylines.push_back(polyline);
+	}
 }
 
 /**

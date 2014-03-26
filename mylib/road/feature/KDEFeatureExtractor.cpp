@@ -17,43 +17,22 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Avenueのみを抽出する
 	RoadGraph temp_roads;
-	time_t start = clock();
 	GraphUtil::copyRoads(roads, temp_roads);
-	time_t end = clock();
-	std::cout << "Elapsed time for copying the roads: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	if (G::getBool("exactCut")) {
 		GraphUtil::extractRoads2(temp_roads, area);
 	}
-	start = clock();
 	GraphUtil::extractRoads(temp_roads, RoadEdge::TYPE_AVENUE | RoadEdge::TYPE_BOULEVARD);
-	end = clock();
-	std::cout << "Elapsed time for extracting only the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
-	start = clock();
 	GraphUtil::clean(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for cleaning the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
-	start = clock();
-	//GraphUtil::reduce(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for reducing the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
+	GraphUtil::reduce(temp_roads);
 
 	// roundaboutを削除する
 	//GraphUtil::removeRoundabout(temp_roads);
 
 	// linkを削除する
-	start = clock();
 	GraphUtil::removeLinkEdges(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for removing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
-	start = clock();
-	//GraphUtil::reduce(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for reducing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
+	GraphUtil::reduce(temp_roads);
 	GraphUtil::removeIsolatedVertices(temp_roads);
-	start = clock();
-	//GraphUtil::clean(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for cleaning the avenues: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
+	GraphUtil::clean(temp_roads);
 
 	// 特徴量を抽出
 	int num_vertices = extractAvenueFeature(temp_roads, area, kf);
@@ -70,29 +49,17 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	// streetのみを抽出する
-	start = clock();
 	GraphUtil::copyRoads(roads, temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for copying the roads: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	if (G::getBool("exactCut")) {
 		GraphUtil::extractRoads2(temp_roads, area);
 	}
-	start = clock();
 	GraphUtil::extractRoads(temp_roads, RoadEdge::TYPE_STREET);
-	end = clock();
-	std::cout << "Elapsed time for extracting the streets: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	//GraphUtil::reduce(temp_roads);  <- わざとreduceしない
 
 	// linkを削除する
-	start = clock();
 	GraphUtil::removeLinkEdges(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for removing links: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
 	GraphUtil::removeIsolatedVertices(temp_roads);
-	start = clock();
-	//GraphUtil::clean(temp_roads);
-	end = clock();
-	std::cout << "Elapsed time for cleaning the streets: " << (double)(end-start)/CLOCKS_PER_SEC << " [sec]" << std::endl;
+	GraphUtil::clean(temp_roads);
 
 	// 特徴量を抽出
 	num_vertices = extractStreetFeature(temp_roads, area, kf);

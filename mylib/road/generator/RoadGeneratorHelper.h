@@ -30,6 +30,9 @@ public:
 	static QVector2D modulo(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt, BBox &bbox);
 	static bool containsInitialSeed(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt);
 
+	static void createFourDirection(float direction, std::vector<float> &directions);
+	static void createFourEdges(float direction, float step, float organicFactor, std::vector<Polyline2D> &polylines);
+
 	static int getRelativeDirectionInArea(const BBox &bbox, const QVector2D &pt);
 
 	static void buildGraphFromKernel(RoadGraph& roads, const KDEFeatureItem &item, const QVector2D &offset);
