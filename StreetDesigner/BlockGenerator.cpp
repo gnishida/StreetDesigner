@@ -61,7 +61,7 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 				}
 			}
 
-			blockContourTmp.correct();
+			//blockContourTmp.correct();
 			if (blockContourTmp.area() > 100.0f) {
 				Block* newBlock = new Block();
 				newBlock->setContour(blockContourTmp);
@@ -159,7 +159,19 @@ void BlockGenerator::run() {
 	//mainWin->glWidget->updateGL();
 	//QTest::qWait(1);
 
-	blocks->erase(blocks->begin());
+	// 最外郭のブロックを削除
+	float max_area = 0.0f;
+	int max_block_id = -1;
+	for (int i = 0; i < blocks->size(); ++i) {
+		float area = blocks->at(i)->getContour().area();
+		if (area > max_area) {
+			max_area = area;
+			max_block_id = i;
+		}
+	}
+	if (max_block_id >= 0) {
+		blocks->erase(blocks->begin() + max_block_id);
+	}
 
 	for (int i = 0; i < blocks->size(); ++i) {
 		Polygon3D blockContourInset;

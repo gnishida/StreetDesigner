@@ -4,6 +4,8 @@
 #include "PMRoadGenerator.h"
 
 void PMRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area) {
+	srand(12345);
+
 	roads.clear();
 
 	float snapToClosestVertexFactor = G::getFloat("snapFactor");

@@ -121,6 +121,56 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 
 	if (size() < 3) return trapezoids;
 
+	typedef boost::polygon::point_data<double> point;
+	typedef boost::polygon::polygon_set_data<double> polygon_set;
+	typedef boost::polygon::polygon_with_holes_data<double> bpolygon;
+
+	std::vector<point> pts;
+	//pts.push_back(point(at(0).x(), at(0).y()));
+	for (int i = size() - 1; i >= 0; i--) {
+		pts.push_back(point(at(i).x(), at(i).y()));
+	}
+
+	bpolygon ply;
+	boost::polygon::set_points( ply, pts.begin(), pts.end() );
+
+  //using namespace gtl::operators;
+	std::vector<bpolygon> ots;
+	polygon_set plys;
+	plys.insert(ply);
+	plys.get_trapezoids(ots);
+
+	for (int i = 0; i < ots.size(); ++i) {
+		Polygon3D trapezoid;
+
+		for (boost::polygon::polygon_with_holes_data<double>::iterator_type it = ots[i].begin(); it != ots[i].end(); ++it) {
+			float z;
+
+			// 直近の頂点を探してZ座標を決定する
+			float min_dist = std::numeric_limits<float>::max();
+			for (int j = 0; j < size(); ++j) {
+				float dist = SQR(at(j).x() - (*it).x()) + SQR(at(j).y() - (*it).y());
+				if (dist < min_dist) {
+					min_dist = dist;
+					z = at(j).z();
+				}
+			}
+
+			trapezoid.push_back(QVector3D((*it).x(), (*it).y(), z));
+		}
+
+		if (trapezoid.size() >= 4) {
+			// closedのポリゴンなので、最初の頂点を削除する
+			trapezoid.erase(trapezoid.begin());
+
+			// CWオーダなので、CCWオーダにする
+			std::reverse(trapezoid.begin(), trapezoid.end());
+
+			trapezoids.push_back(trapezoid);
+		}
+	}
+
+	/*
 	// create 2D polygon data
 	std::vector<boost::polygon::point_data<float>  > polygon;
 	polygon.resize(size());
@@ -171,6 +221,7 @@ std::vector<Polygon3D> Polygon3D::tessellate() const {
 
 		if (trapezoid.size() >= 3) trapezoids.push_back(trapezoid);
 	}
+	*/
 
 	return trapezoids;
 }

@@ -102,14 +102,14 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	renderer.render(terrain, textureManager);
 	renderer.render(&roads, textureManager);
 	for (int i = 0; i < blocks.size(); ++i) {
-		std::cout << "block render: " << i << std::endl;
+		/*std::cout << "block render: " << i << std::endl;
 
 
-		if (i == 6) {
+		if (i == 26) {
 			for (int j = 0; j < blocks[i]->getContour().size(); ++j) {
-				std::cout << "polygon.push_back(QVector3D(" << blocks[i]->getContour()[j].x() << "," << blocks[i]->getContour()[j].y() << ",5.0f))" << std::endl;
+				std::cout << "polygon.push_back(QVector3D(" << blocks[i]->getContour()[j].x() << "," << blocks[i]->getContour()[j].y() << ",5.0f));" << std::endl;
 			}
-		}
+		}*/
 
 		renderer.render(blocks[i], textureManager);
 	}

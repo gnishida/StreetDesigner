@@ -19,7 +19,51 @@ This file is part of QtUrban.
 #include "MainWindow.h"
 #include <QVector3D>
 
+
+#include <boost/polygon/polygon.hpp>
+#include <vector>
+#include <iostream>
+#include <boost/range/algorithm.hpp>
+
+namespace gtl = boost::polygon;
+typedef gtl::point_data<double> point;
+typedef gtl::polygon_set_data<double> polygon_set;
+typedef gtl::polygon_with_holes_data<double> bpolygon;
+
+
 int main(int argc, char *argv[]) {
+
+  std::vector<point> pts;
+
+  pts.push_back( point(38.1814,442.506) );
+  pts.push_back( point(38.7374,432.545 ) );
+  pts.push_back( point(39.1896,422.589 ) );
+  pts.push_back( point(39.4901,412.621 ) );
+  pts.push_back( point(39.7343,402.635 ) );
+  pts.push_back( point(39.9101,394.391) );
+  pts.push_back( point(32.5423,394.234) );
+  pts.push_back( point(22.557,394.084) );
+  pts.push_back( point(12.5696,394.027) );
+  pts.push_back( point(2.57815,394.018) );
+  pts.push_back( point(-7.41065,394.058) );
+  pts.push_back( point(-17.7988,394.181) );
+  pts.push_back( point(30.3862,449.331) );
+  pts.push_back( point(37.718,449.84) );
+
+  bpolygon ply;
+  gtl::set_points( ply, pts.begin(), pts.end() );
+
+  using namespace gtl::operators;
+  std::vector<bpolygon> ots;
+  polygon_set plys;
+  plys.insert( ply );
+  plys.get_trapezoids( ots ); 
+
+
+
+
+
+
 
 
 	// tessellation test
@@ -51,9 +95,10 @@ polygon.push_back(QVector3D(-43.0303,382.539,5.0f));
 polygon.push_back(QVector3D(-36.8084,385.421,5.0f));
 polygon.push_back(QVector3D(-30.5906,388.27,5.0f));
 polygon.push_back(QVector3D(-24.3756,391.141,5.0f));
+*/
 polygon.push_back(QVector3D(-17.7988,394.181,5.0f));
 polygon.push_back(QVector3D(-7.41065,394.058,5.0f));
-*/
+
 polygon.push_back(QVector3D(2.57815,394.018,5.0f));
 polygon.push_back(QVector3D(12.5696,394.027,5.0f));
 polygon.push_back(QVector3D(22.557,394.084,5.0f));

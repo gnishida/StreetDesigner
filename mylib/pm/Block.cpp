@@ -14,13 +14,14 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
+#include "../common/Util.h"
 #include "../render/Terrain.h"
 #include "../render/Renderable.h"
 #include "../render/RenderableConcave.h"
 #include "Block.h"
 
 Block::Block() : mylib::GeometryObject() {
-	color = QColor(255, 255, 128);
+	color = QColor(Util::genRand(200, 255), Util::genRand(200, 255), Util::genRand(100, 220));
 }
 
 Block::~Block() {
@@ -64,7 +65,7 @@ void Block::clearParcels() {
 void Block::adaptToTerrain(mylib::Terrain* terrain) {
 	for (int i = 0; i < contour.size(); ++i) {
 		float z = terrain->getValue(contour[i].x(), contour[i].y());
-		contour[i].setZ(z + 5.0f);
+		contour[i].setZ(z + 0.1f);
 	}
 
 	/*
