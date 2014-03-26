@@ -145,6 +145,7 @@
     <ClCompile Include="..\mylib\render\RenderableCircleList.cpp" />
     <ClCompile Include="..\mylib\render\RenderableConcave.cpp" />
     <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp" />
+    <ClCompile Include="..\mylib\render\RenderablePolygon.cpp" />
     <ClCompile Include="..\mylib\render\Terrain.cpp" />
     <ClCompile Include="..\mylib\render\TerrainCell.cpp" />
     <ClCompile Include="..\mylib\render\Noncopyable.cpp" />
@@ -255,6 +256,7 @@
     <ClInclude Include="..\mylib\render\RenderableCircleList.h" />
     <ClInclude Include="..\mylib\render\RenderableConcave.h" />
     <ClInclude Include="..\mylib\render\RenderableCylinderList.h" />
+    <ClInclude Include="..\mylib\render\RenderablePolygon.h" />
     <ClInclude Include="..\mylib\render\Terrain.h" />
     <ClInclude Include="..\mylib\render\TerrainCell.h" />
     <ClInclude Include="..\mylib\render\Noncopyable.h" />

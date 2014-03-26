@@ -18,6 +18,7 @@ This file is part of QtUrban.
 #include "../render/Terrain.h"
 #include "../render/Renderable.h"
 #include "../render/RenderableConcave.h"
+#include "../render/RenderablePolygon.h"
 #include "Block.h"
 
 Block::Block() : mylib::GeometryObject() {
@@ -82,4 +83,5 @@ void Block::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	if (contour.size() < 3) return;
 
 	renderables.push_back(mylib::RenderablePtr(new mylib::RenderableConcave(contour, color)));
+	//renderables.push_back(mylib::RenderablePtr(new mylib::RenderablePolygon(contour, color)));
 }

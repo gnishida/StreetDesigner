@@ -259,6 +259,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_PMControlWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderablePolygon.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -466,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_PMControlWidget.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderablePolygon.h">
+      <Filter>mylib\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
