@@ -249,14 +249,16 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
 	}
 
 	float snapFactor = 0.7f;
+	float angleTolerance = 1.2566f;
 	if (roads.graph[srcDesc]->kernel.confident) {
 		snapFactor = 0.1f;
+		angleTolerance = 0.1f;
 	}
 
 	for (int i = 0; i < roads.graph[srcDesc]->kernel.edges.size(); ++i) {
 		if (!isRedundant[i]) {
 			if (!G::getBool("multiSeeds")) {
-				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], snapFactor, seeds, additionalSeeds);
+				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], roads.graph[srcDesc]->kernel.confident, snapFactor, angleTolerance, seeds, additionalSeeds);
 			} else {
 				growRoadSegment2(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], seeds, additionalSeeds);
 			}
@@ -268,7 +270,7 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
  * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
-bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, float snapFactor, std::list<RoadVertexDesc> &seeds, std::list<RoadVertexDesc> &additionalSeeds) {
+bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, bool confident, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds, std::list<RoadVertexDesc> &additionalSeeds) {
 	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
 	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
 	BBox currentBBox;
@@ -288,6 +290,9 @@ bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 	QVector2D intPoint;
 	RoadEdgeDesc closestEdge;
 	if (RoadGeneratorHelper::intersects(roads, srcDesc, new_edge->polyline, closestEdge, intPoint)) {
+		// PM方式で生成している場合、交差したらキャンセルする
+		if (!confident) return false;
+
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, intPoint);
 	}
 
@@ -296,11 +301,11 @@ bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 	if (RoadGeneratorHelper::canSnapToVertex(roads, new_edge->polyline.last(), new_edge->polyline, new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		std::reverse(new_edge->polyline.begin(), new_edge->polyline.end());
-		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, 1.2566f)) return false;
+		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (RoadGeneratorHelper::canSnapToEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
 		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
-		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, 1.2566f)) return false;
+		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else {
 		// 頂点を追加
 		RoadVertexPtr v = RoadVertexPtr(new RoadVertex(new_edge->polyline.last()));
