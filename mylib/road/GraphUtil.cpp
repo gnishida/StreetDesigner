@@ -1719,9 +1719,9 @@ void GraphUtil::removeSelfIntersectingRoads(RoadGraph &roads) {
 				RoadEdgeDesc toBeRemoved;
 
 				if ((v1 < u1 && v1 < u2) || (v2 < u1 && v2 < u2)) {
-					roads.graph[*ei]->valid = false;
-				} else {
 					roads.graph[*ei2]->valid = false;
+				} else {
+					roads.graph[*ei]->valid = false;
 				}
 			}
 		}

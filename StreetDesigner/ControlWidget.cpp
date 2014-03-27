@@ -16,16 +16,14 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 
 	// set up the UI
 	ui.setupUi(this);
-	ui.checkBoxRoadTypeHighway->setChecked(true);
-	ui.checkBoxRoadTypeBoulevard->setChecked(true);
-	ui.checkBoxRoadTypeAvenue->setChecked(true);
-	ui.checkBoxRoadTypeLocalStreet->setChecked(true);
 	ui.lineEditNumIterations->setText("1000");
+	ui.lineEditOrganicFactor->setText("0.1");
+	ui.horizontalSliderExactSimilarityFactor->setMinimum(0);
+	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
 	ui.checkBoxLocalStreets->setChecked(false);
-	ui.checkBoxInvadingCheck->setChecked(false);
 	ui.radioButtonMultiSeeds->setChecked(true);
 	ui.checkBoxConnectAvenues->setChecked(true);
-	ui.checkBoxCropping->setChecked(true);
+	ui.checkBoxCropping->setChecked(false);
 	ui.radioButtonCartesianCoordinate->setChecked(true);
 	ui.lineEditWeightEdge->setText("1");
 	ui.lineEditWeightLocation->setText("1");
@@ -33,42 +31,17 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.lineEditPerturbationFactor->setText("0.1");
 
 	// register the event handlers
-	/*
-	connect(ui.checkBoxRoadTypeHighway, SIGNAL(stateChanged(int)), this, SLOT(showRoad(int)));
-	connect(ui.checkBoxRoadTypeBoulevard, SIGNAL(stateChanged(int)), this, SLOT(showRoad(int)));
-	connect(ui.checkBoxRoadTypeAvenue, SIGNAL(stateChanged(int)), this, SLOT(showRoad(int)));
-	connect(ui.checkBoxRoadTypeLocalStreet, SIGNAL(stateChanged(int)), this, SLOT(showRoad(int)));
-	*/
 	connect(ui.pushButtonGenerateKDE, SIGNAL(clicked()), this, SLOT(generateKDE()));
 	connect(ui.pushButtonPerturb, SIGNAL(clicked()), this, SLOT(perturb()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
-	connect(ui.pushButtonGeneratePM, SIGNAL(clicked()), this, SLOT(generatePM()));
 
 	hide();
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Event handlers
-/*
-void ControlWidget::showRoad(int flag) {
-	mainWin->glWidget->areas.roads.showHighways = ui.checkBoxRoadTypeHighway->isChecked();
-	mainWin->glWidget->areas.roads.showBoulevard = ui.checkBoxRoadTypeBoulevard->isChecked();
-	mainWin->glWidget->areas.roads.showAvenues = ui.checkBoxRoadTypeAvenue->isChecked();
-	mainWin->glWidget->areas.roads.showLocalStreets = ui.checkBoxRoadTypeLocalStreet->isChecked();
-	mainWin->glWidget->areas.roads.setModified();
-	for (int i = 0; i < mainWin->glWidget->areas.size(); ++i) {
-		mainWin->glWidget->areas[i].roads.showHighways = ui.checkBoxRoadTypeHighway->isChecked();
-		mainWin->glWidget->areas[i].roads.showBoulevard = ui.checkBoxRoadTypeBoulevard->isChecked();
-		mainWin->glWidget->areas[i].roads.showAvenues = ui.checkBoxRoadTypeAvenue->isChecked();
-		mainWin->glWidget->areas[i].roads.showLocalStreets = ui.checkBoxRoadTypeLocalStreet->isChecked();
-		mainWin->glWidget->areas[i].roads.setModified();
-	}
-
-	mainWin->glWidget->updateGL();
-}
-*/
 
 /**
  * Event handler for button [Generate KDE-base]
@@ -80,18 +53,17 @@ void ControlWidget::generateKDE() {
 
 	if (filename.isEmpty()) return;
 
-	G::global()["invadingCheck"] = ui.checkBoxInvadingCheck->isChecked();
 	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
+	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
+	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
 	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-	G::global()["saveSnappingImages"] = ui.checkBoxSaveSnappingImages->isChecked();
 	G::global()["weightEdge"] = ui.lineEditWeightEdge->text().toFloat();
 	G::global()["weightLocation"] = ui.lineEditWeightLocation->text().toFloat();
 	G::global()["weightRepetition"] = ui.lineEditWeightRepetition->text().toFloat();
 
 	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
 	G::global()["connectAvenues"] = ui.checkBoxConnectAvenues->isChecked();
-	G::global()["saveConnectingImages"] = ui.checkBoxSaveConnectingImages->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 
@@ -111,10 +83,7 @@ void ControlWidget::generateKDE() {
 		rf.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
 	}
 
-
 	mainWin->urbanGeometry->generateRoads(rf);
-	//RoadGenerator rg;
-	//rg.generateRoadNetwork(mainWin->urbanGeometry->areas.selectedArea().roads, mainWin->urbanGeometry->areas.selectedArea().area, rf);
 
 	mainWin->glWidget->updateGL();
 }
@@ -150,11 +119,4 @@ void ControlWidget::connectRoads() {
 	mainWin->glWidget->updateGL();
 }
 
-void ControlWidget::generatePM() {
-	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
-
-	mainWin->urbanGeometry->generatePMRoads();
-
-	mainWin->glWidget->updateGL();
-}
 

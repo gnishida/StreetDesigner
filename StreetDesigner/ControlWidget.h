@@ -19,14 +19,10 @@ public:
 	//void setRoadEdge(RoadEdgePtr selectedEdge);
 
 public slots:
-	/*
-	void showRoad(int flag);
-	*/
 	void generateKDE();
 	void perturb();
 	void clear();
 	void mergeRoads();
 	void connectRoads();
-	void generatePM();
 };
 

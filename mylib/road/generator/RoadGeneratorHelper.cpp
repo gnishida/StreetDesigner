@@ -619,6 +619,20 @@ int RoadGeneratorHelper::getRelativeDirectionInArea(const BBox &bbox, const QVec
 	}
 }
 
+/**
+ * エリアをfactor倍した領域に入っているかチェックする
+ */
+bool RoadGeneratorHelper::isWithinScaledArea(const Polygon2D &area, float factor, const QVector2D &pt) {
+	QVector2D center = area.envelope().midPt();
+
+	Polygon2D scaledArea;
+	for (int i = 0; i < area.size(); ++i) {
+		scaledArea.push_back((area[i] - center) * factor + center);
+	}
+
+	return scaledArea.contains(pt);
+}
+
 void RoadGeneratorHelper::buildGraphFromKernel(RoadGraph& roads, const KDEFeatureItem &item, const QVector2D &offset) {
 	roads.clear();
 
