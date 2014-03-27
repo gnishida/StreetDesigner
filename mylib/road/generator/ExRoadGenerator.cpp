@@ -258,7 +258,7 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
 	for (int i = 0; i < roads.graph[srcDesc]->kernel.edges.size(); ++i) {
 		if (!isRedundant[i]) {
 			if (!G::getBool("multiSeeds")) {
-				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], roads.graph[srcDesc]->kernel.confident, snapFactor, angleTolerance, seeds, additionalSeeds);
+				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], roads.graph[srcDesc]->kernel.confident, 0.7f, 1.2566f, seeds, additionalSeeds);
 			} else {
 				growRoadSegment2(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], seeds, additionalSeeds);
 			}
@@ -287,13 +287,19 @@ bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 	RoadVertexDesc tgtDesc;
 
 	// 交差していないかチェック
+	bool intersected = false;
 	QVector2D intPoint;
 	RoadEdgeDesc closestEdge;
 	if (RoadGeneratorHelper::intersects(roads, srcDesc, new_edge->polyline, closestEdge, intPoint)) {
-		// PM方式で生成している場合、交差したらキャンセルする
-		if (!confident) return false;
-
+		intersected = true;
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, intPoint);
+
+		confident = false;
+	}
+
+	if (confident) {
+		snapFactor = 0.1f;
+		angleTolerance = 0.1f;
 	}
 
 	// スナップできるか？
@@ -307,6 +313,8 @@ bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else {
+		if (intersected) return false;
+
 		// 頂点を追加
 		RoadVertexPtr v = RoadVertexPtr(new RoadVertex(new_edge->polyline.last()));
 		tgtDesc = GraphUtil::addVertex(roads, v);
