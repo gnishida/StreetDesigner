@@ -578,13 +578,13 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float org
 	std::vector<float> directions;
 	createFourDirection(direction, directions);
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < directions.size(); ++i) {
 		float deltaDir = 0.0f;
 
 		Polyline2D polyline;
 		QVector2D cur(0, 0);
 
-		for (int j = 0; j < 10000 && (j < step * 2 || polyline.length() < 300.0f); ++j) {
+		for (int j = 0; j < 10000 && polyline.length() < 300.0f; ++j) {
 			// Advance the current point to the next position
 			cur.setX(cur.x() + cos(directions[i]) * step);
 			cur.setY(cur.y() + sin(directions[i]) * step);
@@ -593,7 +593,7 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float org
 
 			// Update the direction
 			deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
-			float newDir = directions[i] + organicFactor * deltaDir;
+			float newDir = directions[i] + organicFactor * 8.3333f * deltaDir;
 			directions[i] = 0.9 * directions[i] + 0.1 * newDir;
 		}
 

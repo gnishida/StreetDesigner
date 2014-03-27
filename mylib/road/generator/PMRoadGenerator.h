@@ -3,6 +3,8 @@
 #include "../../common/Polygon2D.h"
 #include "../../common/Polygon2D.h"
 #include "../RoadGraph.h"
+#include "../feature/KDEFeature.h"
+#include "../feature/KDEFeatureItem.h"
 
 class PMRoadGenerator {
 public:
@@ -12,9 +14,10 @@ public:
 	static void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area);
 
 private:
-	static void generateInitialArterialSeeds(RoadGraph &roads, const Polygon2D &area, std::vector<RoadVertexDesc>& seeds);
-	static void generateInitialStreetSeeds(RoadGraph &roads, std::vector<RoadVertexDesc>& seeds);
-	static RoadEdgePtr attemptExpansion(RoadGraph &roads, RoadVertexDesc id, float& direction, int roadType);
+	static void generateInitialArterialSeeds(RoadGraph &roads, const Polygon2D &area, std::list<RoadVertexDesc>& seeds);
+	static void generateInitialStreetSeeds(RoadGraph &roads, std::list<RoadVertexDesc>& seeds);
+	static void attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc id, int roadType, std::list<RoadVertexDesc> &seeds);
+	static bool growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, float direction, float organicFactor, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
 	//static bool removeIntersectingEdges(RoadGraph &roads);
 	//static bool isRedundantEdge(RoadGraph &roads, RoadVertexDesc desc, const Polyline2D &polyline, float threshold);
 	static void initDirection(RoadGraph &roads, RoadVertexDesc desc, float direction);

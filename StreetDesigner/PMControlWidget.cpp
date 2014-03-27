@@ -36,9 +36,9 @@ void PMControlWidget::generate() {
 	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
 	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
-	G::global()["organicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
-	G::global()["snapFactor"] = ui.lineEditSnapFactor->text().toFloat();
-	G::global()["minAngle"] = ui.lineEditMinAngle->text().toFloat();
+	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
+	G::global()["roadSnapFactor"] = ui.lineEditSnapFactor->text().toFloat();
+	G::global()["roadAngleTolerance"] = ui.lineEditMinAngle->text().toFloat();
 
 	mainWin->urbanGeometry->generatePMRoads();
 

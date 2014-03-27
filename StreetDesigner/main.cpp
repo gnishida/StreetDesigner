@@ -43,7 +43,9 @@ int main(int argc, char *argv[]) {
 	G::global()["maxHeightBaseAspectRatio"] = 1.0f;
 	G::global()["minBuildingArea"] = 10.0f;
 
-	G::global()["snapToClosestVertexFactor"] = 0.7f;
+	G::global()["roadOrganicFactor"] = 0.1f;
+	G::global()["roadAngleRandomness"] = 0.1f;
+	G::global()["roadSnapFactor"] = 0.7f;
 	G::global()["roadAngleTolerance"] = 1.2566f;
 
 	QApplication a(argc, argv);
