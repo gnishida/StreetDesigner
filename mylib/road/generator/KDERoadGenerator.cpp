@@ -514,10 +514,6 @@ bool KDERoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 			}
 		}
 
-		if (G::getBool("multiSeeds") && edge.noLocationError) {
-			threshold = 1.0f;
-		}
-
 		// 近くに頂点があるか？
 		RoadVertexDesc desc;
 		RoadEdgeDesc e_desc;
@@ -688,10 +684,6 @@ bool KDERoadGenerator::growRoadSegment2(RoadGraph &roads, const Polygon2D &area,
 			} else {
 				threshold = std::min(0.25f * (float)edge.edge[j].length(), 20.0f);
 			}
-		}
-
-		if (G::getBool("multiSeeds") && edge.noLocationError) {
-			//threshold = 1.0f;
 		}
 
 		// 近くに頂点があるか？
@@ -917,9 +909,6 @@ KDEFeatureItem KDERoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area
 
 	start = clock();
 	KDEFeatureItem item = kf.items(roadType)[min_index];
-	for (int i = 0; i < item.edges.size(); ++i) {
-		item.edges[i].noLocationError = noLocationError;
-	}
 	end = clock();
 	time_getItem_6 += (double)(end-start) / CLOCKS_PER_SEC;
 

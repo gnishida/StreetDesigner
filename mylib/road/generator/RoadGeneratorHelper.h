@@ -14,6 +14,7 @@ protected:
 
 public:
 	static bool intersects(RoadGraph &roads, const QVector2D& p0, const QVector2D& p1, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt);
+	static bool intersects(RoadGraph &roads, RoadVertexDesc srcDesc, const Polyline2D &polyline, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt);
 	static bool canSnapToVertex(RoadGraph& roads, const QVector2D &pos, const Polyline2D &polyline, float threshold, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc);
 	static bool canSnapToVertex2(RoadGraph& roads, const QVector2D &pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc edge, RoadVertexDesc& snapDesc);
 	static bool canSnapToEdge(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc& snapEdge, QVector2D &closestPt);

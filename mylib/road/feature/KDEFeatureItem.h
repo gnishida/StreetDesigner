@@ -17,11 +17,12 @@ public:
 	QVector2D pt;
 	bool streetSeed;
 	float territory;
+	bool confident;
 	std::vector<KDEFeatureItemEdge> edges;
 
 public:
-	KDEFeatureItem() : id(-1) {}
-	KDEFeatureItem(int id) : id(id) {}
+	KDEFeatureItem() : id(-1), confident(false) {}
+	KDEFeatureItem(int id) : id(id), confident(false) {}
 	~KDEFeatureItem() {}
 
 	void addEdge(const Polyline2D &polyline, int lanes, bool deadend, bool onBoundary);

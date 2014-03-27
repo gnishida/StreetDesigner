@@ -248,10 +248,15 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
 		}
 	}
 
+	float snapFactor = 0.7f;
+	if (roads.graph[srcDesc]->kernel.confident) {
+		snapFactor = 0.1f;
+	}
+
 	for (int i = 0; i < roads.graph[srcDesc]->kernel.edges.size(); ++i) {
 		if (!isRedundant[i]) {
 			if (!G::getBool("multiSeeds")) {
-				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], seeds, additionalSeeds);
+				growRoadSegment(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], snapFactor, seeds, additionalSeeds);
 			} else {
 				growRoadSegment2(roads, area, srcDesc, roadType, f, roads.graph[srcDesc]->kernel.edges[i], seeds, additionalSeeds);
 			}
@@ -263,7 +268,7 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
  * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
-bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, std::list<RoadVertexDesc> &seeds, std::list<RoadVertexDesc> &additionalSeeds) {
+bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, float snapFactor, std::list<RoadVertexDesc> &seeds, std::list<RoadVertexDesc> &additionalSeeds) {
 	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
 	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
 	BBox currentBBox;
@@ -279,11 +284,22 @@ bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 
 	RoadVertexDesc tgtDesc;
 
+	// 交差していないかチェック
+	QVector2D intPoint;
+	RoadEdgeDesc closestEdge;
+	if (RoadGeneratorHelper::intersects(roads, srcDesc, new_edge->polyline, closestEdge, intPoint)) {
+		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, intPoint);
+	}
+
 	// スナップできるか？
 	//if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * 0.7f, srcDesc, tgtDesc)) {
-	if (RoadGeneratorHelper::canSnapToVertex(roads, new_edge->polyline.last(), new_edge->polyline, new_edge->polyline.length() * 0.7f, srcDesc, tgtDesc)) {
+	if (RoadGeneratorHelper::canSnapToVertex(roads, new_edge->polyline.last(), new_edge->polyline, new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		std::reverse(new_edge->polyline.begin(), new_edge->polyline.end());
+		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, 1.2566f)) return false;
+	} else if (RoadGeneratorHelper::canSnapToEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
+		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
+		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, 1.2566f)) return false;
 	} else {
 		// 頂点を追加
@@ -370,10 +386,6 @@ bool ExRoadGenerator::growRoadSegment2(RoadGraph &roads, const Polygon2D &area, 
 			} else {
 				threshold = std::min(0.25f * (float)edge.edge[j].length(), 20.0f);
 			}
-		}
-
-		if (G::getBool("multiSeeds") && edge.noLocationError) {
-			//threshold = 1.0f;
 		}
 
 		// 近くに頂点があるか？
@@ -570,9 +582,7 @@ bool ExRoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area, const KDE
 
 	if (min_index >= 0) {
 		item = kf.items(roadType)[min_index];
-		for (int i = 0; i < item.edges.size(); ++i) {
-			item.edges[i].noLocationError = noLocationError;
-		}
+		item.confident = true;
 	} else {
 		// カーネル割当なしの場合は、パラメータを合成する
 		float direction = 0.0f;
@@ -711,9 +721,6 @@ KDEFeatureItem ExRoadGenerator::getItem2(RoadGraph &roads, const Polygon2D &area
 	}
 
 	KDEFeatureItem item = kf.items(roadType)[min_index];
-	for (int i = 0; i < item.edges.size(); ++i) {
-		item.edges[i].noLocationError = noLocationError;
-	}
 
 	// 極座標系の場合は、ポリラインを変形しておく
 	if (G::g["coordiniates"] == "polar") {

@@ -40,6 +40,19 @@ bool RoadGeneratorHelper::intersects(RoadGraph &roads, const QVector2D& p0, cons
 }
 
 /**
+ * polylineは、srcDescから始まるオーダになっている前提。
+ */
+bool RoadGeneratorHelper::intersects(RoadGraph &roads, RoadVertexDesc srcDesc, const Polyline2D &polyline, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt) {
+	for (int i = 0; i < polyline.size() - 1; ++i) {
+		if (intersects(roads, polyline[i], polyline[i + 1], eiClosest, closestIntPt)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * 近くの頂点にsnapすべきか、チェックする。
  * srcDescから伸ばしてきたエッジの先端posに近い頂点を探す。
  * ただし、スナップによる変位角が、スナップ先頂点とのなす角の半分以下であること。
