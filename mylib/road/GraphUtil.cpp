@@ -1485,8 +1485,6 @@ void GraphUtil::extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadT
 		RoadVertexDesc src = boost::source(edges[e_id], roads.graph);
 		RoadVertexDesc tgt = boost::target(edges[e_id], roads.graph);
 
-		std::cout << "split: " << src << ":" << tgt << std::endl;
-
 		// 境界との交点を計算する（へたなやり方だけど）
 		Polyline2D polyline = finerEdge(roads, edges[e_id]);
 		QVector2D intPt;
