@@ -142,7 +142,7 @@ void ExRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &are
 				std::cout << "Put a seed at (" << x << ", " << y << ")" << std::endl;
 				if (!addAvenueSeed(roads, area, f, QVector2D(x, y), seeds)) {
 					// エリア外の場合は、位置を少しずらして再度トライ
-					if (x > centerTarget.x()) {
+					/*if (x > centerTarget.x()) {
 						if (y > centerTarget.y()) {
 							addAvenueSeed(roads, area, f, QVector2D(x - bboxExample.dx() * 0.5f, y - bboxExample.dy() * 0.5f), seeds);
 						} else {
@@ -154,7 +154,7 @@ void ExRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &are
 						} else {
 							addAvenueSeed(roads, area, f, QVector2D(x + bboxExample.dx() * 0.5f, y + bboxExample.dy() * 0.5f), seeds);
 						}
-					}
+					}*/
 				}
 			}
 		}
