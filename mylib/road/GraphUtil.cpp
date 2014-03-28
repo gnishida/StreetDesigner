@@ -817,76 +817,14 @@ void GraphUtil::removeIsolatedEdges(RoadGraph& roads, bool onlyValidEdge) {
  * Split the edge at the specified point.
  */
 RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt) {
-	RoadEdgePtr edge = roads.graph[edge_desc];
-
-	// find which point along the polyline is the closest to the specified split point.
-	int index;
-	QVector2D pos;
-	float min_dist = std::numeric_limits<float>::max();
-	for (int i = 0; i < roads.graph[edge_desc]->polyline.size() - 1; i++) {
-		QVector2D vec = roads.graph[edge_desc]->polyline[i + 1] - roads.graph[edge_desc]->polyline[i];
-		float length = vec.length();
-		for (int j = 0; j < length; j += 1.0f) {
-			QVector2D pt2 = roads.graph[edge_desc]->polyline[i] + vec * (float)j / length;
-			float dist = (pt2 - pt).lengthSquared();
-			if (dist < min_dist) {
-				min_dist = dist;
-				index = i;
-				pos = pt2;
-			}
-		}
-	}
-
-	RoadVertexDesc src = boost::source(edge_desc, roads.graph);
-	RoadVertexDesc tgt = boost::target(edge_desc, roads.graph);
-
-	// add a new vertex at the specified point on the edge
-	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pos));
-	RoadVertexDesc v_desc = boost::add_vertex(roads.graph);
-	roads.graph[v_desc] = v;
-
-	// add the first edge
-	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
-	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
-		for (int i = 0; i <= index; i++) {
-			e1->addPoint(edge->polyline[i]);
-		}
-		e1->addPoint(pos);
-	} else {
-		e1->addPoint(pos);
-		for (int i = index + 1; i < edge->polyline.size(); i++) {
-			e1->addPoint(edge->polyline[i]);
-		}
-	}
-	std::pair<RoadEdgeDesc, bool> edge_pair1 = boost::add_edge(src, v_desc, roads.graph);
-	roads.graph[edge_pair1.first] = e1;
-
-	// add the second edge
-	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
-	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
-		e2->addPoint(pos);
-		for (int i = index + 1; i < edge->polyline.size(); i++) {
-			e2->addPoint(edge->polyline[i]);
-		}
-	} else {
-		for (int i = 0; i <= index; i++) {
-			e2->addPoint(edge->polyline[i]);
-		}
-		e2->addPoint(pos);
-	}
-	std::pair<RoadEdgeDesc, bool> edge_pair2 = boost::add_edge(v_desc, tgt, roads.graph);
-	roads.graph[edge_pair2.first] = e2;
-
-	// remove the original edge
-	roads.graph[edge_desc]->valid = false;
-
-	return v_desc;
+	RoadEdgeDesc e1, e2;
+	
+	return splitEdge(roads, edge_desc, pt, e1, e2);
 }
 
 /**
  * Split the edge at the specified point.
  * polylineの出発点に近い方のエッジをedge1、終点に近い方のエッジをedge2として返却する。
- * めちゃんこ詳細にチェックしたので、こちらはバグなしと思う。
  */
 RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt, RoadEdgeDesc &edge1, RoadEdgeDesc &edge2) {
 	RoadEdgePtr edge = roads.graph[edge_desc];
