@@ -44,7 +44,7 @@ void ExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 	seeds.clear();
 	additionalSeeds.clear();
 
-	//GraphUtil::removeSelfIntersectingRoads(roads);
+	GraphUtil::removeSelfIntersectingRoads(roads);
 
 	// Local streetを生成
 	if (G::getBool("generateLocalStreets")) {
@@ -72,8 +72,8 @@ void ExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 		GraphUtil::extractRoads2(roads, area);
 	}
 
-	//GraphUtil::removeSelfIntersectingRoads(roads);GraphUtil::removeSelfIntersectingRoads(roads);
-	//GraphUtil::clean(roads);
+	GraphUtil::removeSelfIntersectingRoads(roads);GraphUtil::removeSelfIntersectingRoads(roads);
+/GraphUtil::clean(roads);
 }
 
 /**
