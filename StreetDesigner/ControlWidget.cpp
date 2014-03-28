@@ -16,7 +16,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 
 	// set up the UI
 	ui.setupUi(this);
-	ui.lineEditNumIterations->setText("1000");
+	ui.lineEditNumIterations->setText("5000");
 	ui.lineEditOrganicFactor->setText("0.1");
 	ui.horizontalSliderExactSimilarityFactor->setMinimum(0);
 	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);

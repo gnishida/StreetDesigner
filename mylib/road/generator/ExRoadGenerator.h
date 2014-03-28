@@ -23,8 +23,7 @@ private:
 	static bool growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
 
 	static bool getItem(RoadGraph &roads, const Polygon2D &area, const KDEFeature& kf, int roadType, RoadVertexDesc v_desc, KDEFeatureItem &item);
-	static void synthesizeItem(RoadGraph &roads, const std::vector<Polyline2D> &polylines, int roadType, float organicFactor, KDEFeatureItem &item);
-	static void synthesizeItem2(RoadGraph &roads, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item);
+	static void synthesizeItem(RoadGraph &roads, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item);
 
 public:
 	static void connectRoads(RoadGraph &roads, float dist_threshold, float angle_threshold);

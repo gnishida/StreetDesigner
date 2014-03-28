@@ -103,8 +103,6 @@ void ExRoadGenerator::generateRoadsOnBoundary(RoadGraph &roads, const Polygon2D 
  */
 void ExRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const KDEFeature& f, std::list<RoadVertexDesc>& seeds) {
 	seeds.clear();
-
-	//QVector2D center = area.centroid();
 	
 	float numExpectedVertices = f.density(RoadEdge::TYPE_AVENUE) * area.area();
 	int numSeeds = numExpectedVertices / 30 + 1;
@@ -161,21 +159,6 @@ void ExRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &are
 	} else {
 		addAvenueSeed(roads, area, f, area.envelope().midPt(), seeds);
 	}
-
-	// onBoundary頂点について、このエリア内であれば、シードとして使用する
-	/*
-	RoadVertexIter vi, vend;
-	for (boost::tie(vi, vend) = vertices(roads.graph); vi != vend; ++vi) {
-		if (!roads.graph[*vi]->valid) continue;
-
-		if (roads.graph[*vi]->onBoundary && area.contains(roads.graph[*vi]->pt)) {
-			RoadVertexPtr new_v = RoadVertexPtr(new RoadVertex(roads.graph[*vi]->pt));
-			RoadVertexDesc new_v_desc = GraphUtil::addVertex(roads, new_v);
-
-			seeds.push_back(new_v_desc);
-		}
-	}
-	*/
 }
 
 /**
@@ -283,7 +266,6 @@ void ExRoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D &ar
 				RoadVertexDesc v_desc = GraphUtil::splitEdge(roads, e, edge->polyline[index], e1, e2);
 
 				seeds.push_back(v_desc);
-				roads.graph[e]->valid = false;
 
 				edge = roads.graph[e2];
 				e = e2;
@@ -296,8 +278,6 @@ void ExRoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D &ar
 				RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
 			
 				seeds.push_back(desc);
-
-				roads.graph[e]->valid = false;
 
 				edge = roads.graph[e2];
 				e = e2;
@@ -353,7 +333,7 @@ void ExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area,
 
 	// 道路生成用のカーネルを合成する
 	KDEFeatureItem item;
-	synthesizeItem2(roads, srcDesc, roadType, G::getFloat("roadOrganicFactor"), item);
+	synthesizeItem(roads, srcDesc, roadType, G::getFloat("roadOrganicFactor"), item);
 
 	roads.graph[srcDesc]->kernel = item;
 	
@@ -370,11 +350,6 @@ void ExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area,
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
 bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
-	// srcDescを含む、Example領域のBBoxに相当するBBoxを取得
-	// (BBoxは、ターゲット領域の中心を原点とする座標系となっている）
-	//BBox currentBBox;
-	//RoadGeneratorHelper::modulo(area, f.area(), roads.graph[srcDesc]->pt, currentBBox);
-
 	// 新しいエッジを生成
 	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(roadType, ex_edge.lanes));
 	new_edge->polyline.push_back(roads.graph[srcDesc]->pt);
@@ -505,29 +480,7 @@ bool ExRoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area, const KDE
 /**
  * PMに従って、カーネルを合成する
  */
-void ExRoadGenerator::synthesizeItem(RoadGraph &roads, const std::vector<Polyline2D> &polylines, int roadType, float organicFactor, KDEFeatureItem &item) {
-	float direction = 0.0f;
-
-	if (polylines.size() > 0) {
-		QVector2D vec = polylines[0][1] - polylines[0][0];
-		direction = atan2f(vec.y(), vec.x());
-	}
-
-	// エッジ長を決定する
-	float length = roadType == RoadEdge::TYPE_AVENUE ? 300.0f : 60.0f;
-
-	std::vector<Polyline2D> new_polylines;
-	RoadGeneratorHelper::createFourEdges(direction, 10.0f, length, organicFactor, new_polylines);
-
-	for (int i = 0; i < new_polylines.size(); ++i) {
-		item.addEdge(new_polylines[i], 1, false, false);
-	}
-}
-
-/**
- * PMに従って、カーネルを合成する
- */
-void ExRoadGenerator::synthesizeItem2(RoadGraph &roads, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item) {
+void ExRoadGenerator::synthesizeItem(RoadGraph &roads, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item) {
 	// 当該頂点から出るエッジをリストアップする
 	std::vector<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;

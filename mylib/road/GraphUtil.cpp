@@ -885,7 +885,8 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 
 /**
  * Split the edge at the specified point.
- * edge_descのsrc頂点に近い方のエッジをedge1、tgt頂点に近い方のエッジをedge2として返却する。
+ * polylineの出発点に近い方のエッジをedge1、終点に近い方のエッジをedge2として返却する。
+ * めちゃんこ詳細にチェックしたので、こちらはバグなしと思う。
  */
 RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt, RoadEdgeDesc &edge1, RoadEdgeDesc &edge2) {
 	RoadEdgePtr edge = roads.graph[edge_desc];
@@ -893,12 +894,12 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	// もしエッジの端点と指定された点の座標が同じ場合は、splitしない
 	RoadVertexDesc src = boost::source(edge_desc, roads.graph);
 	RoadVertexDesc tgt = boost::target(edge_desc, roads.graph);
-	if ((roads.graph[src]->pt - pt).lengthSquared() == 0.0f) {
+	if ((roads.graph[src]->pt - pt).lengthSquared() < 0.1f) {
 		edge1 = edge_desc;
 		edge2 = edge_desc;
 		return src;
 	}
-	if ((roads.graph[tgt]->pt - pt).lengthSquared() == 0.0f) {
+	if ((roads.graph[tgt]->pt - pt).lengthSquared() < 0.1f) {
 		edge1 = edge_desc;
 		edge2 = edge_desc;
 		return tgt;
@@ -929,10 +930,11 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 
 	// add the first edge
 	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
-	for (int i = 0; i < index; i++) {
+	e1->polyline.push_back(edge->polyline[0]);
+	for (int i = 1; i < index; i++) {
 		e1->polyline.push_back(edge->polyline[i]);
 	}
-	if ((edge->polyline[index] - pos).lengthSquared() > 1.0f) {
+	if (index > 0 && (edge->polyline[index] - pos).lengthSquared() > 1.0f) {
 		e1->addPoint(edge->polyline[index]);
 	}
 	e1->addPoint(pos);
@@ -945,12 +947,13 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	// add the second edge
 	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
 	e2->addPoint(pos);
-	if ((edge->polyline[index + 1] - pos).lengthSquared() > 1.0f && index + 1 < edge->polyline.size()) {
+	if (index + 1 < edge->polyline.size() - 1 && (edge->polyline[index + 1] - pos).lengthSquared() > 1.0f) {
 		e2->addPoint(edge->polyline[index + 1]);
 	}
-	for (int i = index + 2; i < edge->polyline.size(); i++) {
+	for (int i = index + 2; i < edge->polyline.size() - 1; i++) {
 		e2->polyline.push_back(edge->polyline[i]);
 	}
+	e2->polyline.push_back(edge->polyline.last());
 	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
 		edge2 = addEdge(roads, v_desc, tgt, e2);
 	} else {
