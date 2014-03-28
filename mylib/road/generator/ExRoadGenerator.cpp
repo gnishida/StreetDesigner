@@ -313,7 +313,13 @@ void ExRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
  * これにより、短い道路セグメントができたり、むやみに交差してしまうことを防ぐ。
  */
 void ExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, std::list<RoadVertexDesc> &seeds) {
-	float snapThreshold = roadType == RoadEdge::TYPE_AVENUE ? 100.0f : 20.0f;
+	float snapThreshold;
+
+	if (roadType == RoadEdge::TYPE_AVENUE) {
+		snapThreshold = f.avgAvenueLength * 0.333f;
+	} else {
+		snapThreshold = f.avgStreetLength * 0.333f;
+	}
 
 	// 当該頂点の近くに他の頂点があれば、スナップさせる
 	RoadVertexDesc tgtDesc;
@@ -352,7 +358,6 @@ void ExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area,
 bool ExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, const KDEFeature& f, const KDEFeatureItemEdge &ex_edge, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
 	// 新しいエッジを生成
 	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(roadType, ex_edge.lanes));
-	new_edge->polyline.push_back(roads.graph[srcDesc]->pt);
 	for (int i = 0; i < ex_edge.edge.size(); ++i) {
 		QVector2D pt = roads.graph[srcDesc]->pt + ex_edge.edge[i];
 		new_edge->polyline.push_back(pt);

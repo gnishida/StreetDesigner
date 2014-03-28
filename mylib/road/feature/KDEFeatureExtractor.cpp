@@ -23,14 +23,14 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	}
 	GraphUtil::extractRoads(temp_roads, RoadEdge::TYPE_AVENUE | RoadEdge::TYPE_BOULEVARD);
 	GraphUtil::clean(temp_roads);
-	//GraphUtil::reduce(temp_roads);
+	GraphUtil::reduce(temp_roads);
 
 	// roundaboutを削除する
 	//GraphUtil::removeRoundabout(temp_roads);
 
 	// linkを削除する
 	GraphUtil::removeLinkEdges(temp_roads);
-	//GraphUtil::reduce(temp_roads);
+	GraphUtil::reduce(temp_roads);
 	GraphUtil::removeIsolatedVertices(temp_roads);
 	GraphUtil::clean(temp_roads);
 
@@ -144,9 +144,6 @@ int KDEFeatureExtractor::extractAvenueFeature(RoadGraph &orig_roads, const Polyg
 			// 当該頂点からの相対座標に変換する
 			polyline.translate(-roads.graph[*vi]->pt);
 
-			// 最初の点(0, 0)を削除する
-			polyline.erase(polyline.begin());
-
 			// 道路ユニットにエッジジオミトリを登録する
 			item.addEdge(polyline, roads.graph[*ei]->lanes, degree == 1, roads.graph[tgt]->onBoundary);
 		}
@@ -220,9 +217,6 @@ int KDEFeatureExtractor::extractStreetFeature(RoadGraph &orig_roads, const Polyg
 
 			// 当該頂点からの相対座標に変換する
 			polyline.translate(-roads.graph[*vi]->pt);
-
-			// 最初の点(0, 0)を削除する
-			polyline.erase(polyline.begin());
 
 			// 道路ユニットにエッジジオミトリを登録する
 			item.addEdge(polyline, roads.graph[*ei]->lanes, degree == 1, false);

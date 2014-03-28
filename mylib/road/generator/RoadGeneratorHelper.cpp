@@ -657,6 +657,7 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float len
 
 		Polyline2D polyline;
 		QVector2D cur(0, 0);
+		polyline.push_back(cur);
 
 		for (int j = 0; j < 10000 && polyline.length() < length; ++j) {
 			// Advance the current point to the next position
