@@ -333,7 +333,7 @@ void ExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area,
 
 	// 道路生成用のカーネルを合成する
 	KDEFeatureItem item;
-	synthesizeItem(roads, srcDesc, roadType, G::getFloat("roadOrganicFactor"), item);
+	synthesizeItem(roads, f, srcDesc, roadType, G::getFloat("roadOrganicFactor"), item);
 
 	roads.graph[srcDesc]->kernel = item;
 	
@@ -480,7 +480,7 @@ bool ExRoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area, const KDE
 /**
  * PMに従って、カーネルを合成する
  */
-void ExRoadGenerator::synthesizeItem(RoadGraph &roads, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item) {
+void ExRoadGenerator::synthesizeItem(RoadGraph &roads, const KDEFeature &f, RoadVertexDesc v_desc, int roadType, float organicFactor, KDEFeatureItem &item) {
 	// 当該頂点から出るエッジをリストアップする
 	std::vector<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;
@@ -505,7 +505,8 @@ void ExRoadGenerator::synthesizeItem(RoadGraph &roads, RoadVertexDesc v_desc, in
 	}
 
 	// エッジ長を決定する
-	float length = roadType == RoadEdge::TYPE_AVENUE ? 300.0f : 60.0f;
+	float length = f.length(roadType);
+	//float length = roadType == RoadEdge::TYPE_AVENUE ? 300.0f : 60.0f;
 
 	std::vector<Polyline2D> new_polylines;
 	RoadGeneratorHelper::createFourEdges(direction, 10.0f, length, organicFactor, new_polylines);

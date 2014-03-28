@@ -15,6 +15,10 @@ public:
 	float _streetDensity;						// how many vertices in 1km x 1km area
 	std::vector<KDEFeatureItem> _avenueItems;
 	std::vector<KDEFeatureItem> _streetItems;
+	float avgAvenueLength;
+	float varAvenueLength;
+	float avgStreetLength;
+	float varStreetLength;
 
 public:
 	KDEFeature();
@@ -31,6 +35,9 @@ public:
 
 	void rotate(float deg);
 	void scale(const Polygon2D &area);
+
+	float length(int roadType) const;
+	void computePMParameters();
 
 	void load(QDomNode& node);
 	void loadAvenue(QDomNode& node);

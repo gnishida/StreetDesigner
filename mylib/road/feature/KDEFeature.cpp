@@ -119,6 +119,54 @@ void KDEFeature::scale(const Polygon2D &area) {
 }
 
 /**
+ * PM用にエッジ長を生成する
+ */
+float KDEFeature::length(int roadType) const {
+	if (roadType == RoadEdge::TYPE_AVENUE) {
+		return Util::genRandNormal(avgAvenueLength, varAvenueLength * 0.25f);
+	} else {
+		return Util::genRandNormal(avgStreetLength, varStreetLength * 0.25f);
+	}
+}
+
+/**
+ * PM用パラメータを計算する
+ */
+void KDEFeature::computePMParameters() {
+	// Avenue用パラメータを計算
+	float totalLength = 0.0f;
+	float totalLength2 = 0.0f;
+	int num = 0;
+
+	for (int i = 0; i < _avenueItems.size(); ++i) {
+		for (int j = 0; j < _avenueItems[i].edges.size(); ++j) {
+			totalLength += _avenueItems[i].edges[j].edge.length();
+			totalLength2 += SQR(_avenueItems[i].edges[j].edge.length());
+			num++;
+		}
+	}
+
+	avgAvenueLength = totalLength / (float)num;
+	varAvenueLength = totalLength2 / (float)num - avgAvenueLength;
+
+	// Local street用パラメータを計算
+	totalLength = 0.0f;
+	totalLength2 = 0.0f;
+	num = 0;
+
+	for (int i = 0; i < _streetItems.size(); ++i) {
+		for (int j = 0; j < _streetItems[i].edges.size(); ++j) {
+			totalLength += _streetItems[i].edges[j].edge.length();
+			totalLength2 += SQR(_streetItems[i].edges[j].edge.length());
+			num++;
+		}
+	}
+
+	avgStreetLength = totalLength / (float)num;
+	varStreetLength = totalLength2 / (float)num - avgStreetLength;
+}
+
+/**
  * 与えられたfeatureノード配下のXML情報に基づいて、グリッド特徴量を設定する。
  */
 void KDEFeature::load(QDomNode& node) {
@@ -143,6 +191,8 @@ void KDEFeature::load(QDomNode& node) {
 
 		child = child.nextSibling();
 	}
+
+	computePMParameters();
 }
 
 void KDEFeature::loadAvenue(QDomNode& node) {
