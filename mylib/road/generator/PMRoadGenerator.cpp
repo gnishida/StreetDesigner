@@ -132,6 +132,7 @@ void PMRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, 
 
 bool PMRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, float direction, float organicFactor, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
 	float step = 10.0f;
+	float deltaDir = 0.0f;
 
 	float minIntersectionInterval;
 	float meanRoadGrowingQuantum;
@@ -156,7 +157,7 @@ bool PMRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, R
 		edge->polyline.push_back(cur);
 
 		// Update the direction
-		float deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
+		deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
 		float newDir = direction + organicFactor * 8.33333f * deltaDir;
 		direction = 0.9 * direction + 0.1 * newDir;
 	}

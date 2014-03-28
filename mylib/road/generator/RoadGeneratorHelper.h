@@ -17,6 +17,7 @@ public:
 	static bool intersects(RoadGraph &roads, RoadVertexDesc srcDesc, const Polyline2D &polyline, RoadEdgeDesc &eiClosest, QVector2D &closestIntPt);
 	static bool canSnapToVertex(RoadGraph& roads, const QVector2D &pos, const Polyline2D &polyline, float threshold, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc);
 	static bool canSnapToVertex2(RoadGraph& roads, const QVector2D &pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc edge, RoadVertexDesc& snapDesc);
+	static bool canSnapToVertex3(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadVertexDesc& snapDesc);
 	static bool canSnapToEdge(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc& snapEdge, QVector2D &closestPt);
 
 	static float getNearestVertex(RoadGraph& roads, const QVector2D& pos, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc);
@@ -32,7 +33,7 @@ public:
 	static bool containsInitialSeed(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt);
 
 	static void createFourDirection(float direction, std::vector<float> &directions);
-	static void createFourEdges(float direction, float step, float organicFactor, std::vector<Polyline2D> &polylines);
+	static void createFourEdges(float direction, float step, float length, float organicFactor, std::vector<Polyline2D> &polylines);
 
 	static int getRelativeDirectionInArea(const BBox &bbox, const QVector2D &pt);
 

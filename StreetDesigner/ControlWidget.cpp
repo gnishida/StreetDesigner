@@ -22,12 +22,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
 	ui.checkBoxLocalStreets->setChecked(false);
 	ui.radioButtonMultiSeeds->setChecked(true);
-	ui.checkBoxConnectAvenues->setChecked(true);
 	ui.checkBoxCropping->setChecked(false);
 	ui.radioButtonCartesianCoordinate->setChecked(true);
-	ui.lineEditWeightEdge->setText("1");
-	ui.lineEditWeightLocation->setText("1");
-	ui.lineEditWeightRepetition->setText("2000000");
 	ui.lineEditPerturbationFactor->setText("0.1");
 
 	// register the event handlers
@@ -58,12 +54,12 @@ void ControlWidget::generateKDE() {
 	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
 	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-	G::global()["weightEdge"] = ui.lineEditWeightEdge->text().toFloat();
-	G::global()["weightLocation"] = ui.lineEditWeightLocation->text().toFloat();
-	G::global()["weightRepetition"] = ui.lineEditWeightRepetition->text().toFloat();
+
+	if (G::getBool("generateLocalStreets")) {
+		std::cout << "OK" <<std::endl;
+	}
 
 	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
-	G::global()["connectAvenues"] = ui.checkBoxConnectAvenues->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 

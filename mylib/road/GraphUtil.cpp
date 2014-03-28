@@ -355,18 +355,20 @@ void GraphUtil::snapVertex(RoadGraph& roads, RoadVertexDesc v1, RoadVertexDesc v
 
 		RoadVertexDesc v1b = boost::target(*ei, roads.graph);
 
+		// create a new edge
+		RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(*roads.graph[*ei]));
+
 		// invalidate the old edge
 		roads.graph[*ei]->valid = false;
 
 		if (v1b == v2) continue;
 		if (hasEdge(roads, v2, v1b)) continue;
-		//if (hasCloseEdge(roads, v2, v1b)) continue;	// <-- In this case, snap the edge to the other instead of discard it.
 
 		// add a new edge
 		if (v1 != v1b) {
-			addEdge(roads, v2, v1b, RoadEdgePtr(new RoadEdge(*roads.graph[*ei])));
+			addEdge(roads, v2, v1b, new_edge);
 		} else {	// this is for a loop edge.
-			addEdge(roads, v2, v2, RoadEdgePtr(new RoadEdge(*roads.graph[*ei])));
+			addEdge(roads, v2, v2, new_edge);
 		}
 	}
 
@@ -927,9 +929,11 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 
 	// add the first edge
 	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
-	e1->polyline.push_back(edge->polyline[0]);
-	for (int i = 1; i < index; i++) {
+	for (int i = 0; i < index; i++) {
 		e1->polyline.push_back(edge->polyline[i]);
+	}
+	if ((edge->polyline[index] - pos).lengthSquared() > 1.0f) {
+		e1->addPoint(edge->polyline[index]);
 	}
 	e1->addPoint(pos);
 	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
@@ -941,10 +945,12 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	// add the second edge
 	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
 	e2->addPoint(pos);
-	for (int i = index + 2; i < edge->polyline.size() - 1; i++) {
+	if ((edge->polyline[index + 1] - pos).lengthSquared() > 1.0f && index + 1 < edge->polyline.size()) {
+		e2->addPoint(edge->polyline[index + 1]);
+	}
+	for (int i = index + 2; i < edge->polyline.size(); i++) {
 		e2->polyline.push_back(edge->polyline[i]);
 	}
-	e2->polyline.push_back(edge->polyline.last());
 	if ((edge->polyline[0] - roads.graph[src]->pt).lengthSquared() < (edge->polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
 		edge2 = addEdge(roads, v_desc, tgt, e2);
 	} else {
@@ -1394,7 +1400,8 @@ void GraphUtil::connectRoads(RoadGraph& roads1, RoadGraph& roads2, float connect
 		}
 
 		RoadEdgeDesc e1_desc;
-		if (getEdge(&roads1, *vi, connect_threshold, e1_desc)) {
+		QVector2D closestPt;
+		if (getEdge(roads1, *vi, connect_threshold, e1_desc, closestPt)) {
 			RoadVertexDesc src = boost::source(e1_desc, roads1.graph);
 			RoadVertexDesc tgt = boost::target(e1_desc, roads1.graph);
 
@@ -1913,7 +1920,7 @@ bool GraphUtil::getEdge(RoadGraph &roads, const QVector2D &pt, float threshold, 
 /**
  * 指定された点に近いエッジを探す。ただし、指定された頂点から出るエッジは検索対象外とする。
  */
-bool GraphUtil::getEdge(RoadGraph& roads, const QVector2D &pt, RoadVertexDesc ignore, float threshold, RoadEdgeDesc& e, bool onlyValidEdge) {
+bool GraphUtil::getEdge(RoadGraph& roads, RoadVertexDesc v, float threshold, RoadEdgeDesc& e, QVector2D &closestPt, bool onlyValidEdge) {
 	float min_dist = std::numeric_limits<float>::max();
 	RoadEdgeDesc min_e;
 
@@ -1927,49 +1934,16 @@ bool GraphUtil::getEdge(RoadGraph& roads, const QVector2D &pt, RoadVertexDesc ig
 		if (onlyValidEdge && !roads.graph[src]->valid) continue;
 		if (onlyValidEdge && !roads.graph[tgt]->valid) continue;
 
-		// 検索対象外のエッジなら、スキップ
-		if (src == ignore || tgt == ignore) continue;
+		// 当該頂点から出るエッジなら、スキップ
+		if (src == v || tgt == v) continue;
 
 		QVector2D pt2;
 		for (int i = 0; i < roads.graph[*ei]->polyline.size() - 1; i++) {
-			float dist = Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
+			float dist = Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], roads.graph[v]->pt, pt2);
 			if (dist < min_dist) {
 				min_dist = dist;
 				e = *ei;
-			}
-		}
-	}
-
-	if (min_dist < threshold) return true;
-	else return false;
-}
-
-/**
- * Find the edge which is the closest to the specified vertex.
- * If the distance is within the threshold, return true. Otherwise, return false.
- */
-bool GraphUtil::getEdge(RoadGraph* roads, RoadVertexDesc v, float threshold, RoadEdgeDesc& e, bool onlyValidEdge) {
-	float min_dist = std::numeric_limits<float>::max();
-	RoadEdgeDesc min_e;
-
-	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::edges(roads->graph); ei != eend; ++ei) {
-		if (onlyValidEdge && !roads->graph[*ei]->valid) continue;
-
-		RoadVertexDesc src = boost::source(*ei, roads->graph);
-		RoadVertexDesc tgt = boost::target(*ei, roads->graph);
-
-		if (src == v || tgt == v) continue;
-
-		if (onlyValidEdge && !roads->graph[src]->valid) continue;
-		if (onlyValidEdge && !roads->graph[tgt]->valid) continue;
-
-		QVector2D pt2;
-		for (int i = 0; i < roads->graph[*ei]->polyline.size() - 1; i++) {
-			float dist = Util::pointSegmentDistanceXY(roads->graph[*ei]->polyline[i], roads->graph[*ei]->polyline[i + 1], roads->graph[v]->pt, pt2);
-			if (dist < min_dist) {
-				min_dist = dist;
-				e = *ei;
+				closestPt = pt2;
 			}
 		}
 	}
@@ -2005,13 +1979,6 @@ RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph& roads, RoadVertexDesc v, floa
 		QVector2D pt2;
 		float d = distance(roads, roads.graph[v]->pt, *ei, pt2);
 
-		/*
-		if (onlyValidEdge && !roads->graph[src]->valid) continue;
-		if (onlyValidEdge && !roads->graph[tgt]->valid) continue;
-
-		QVector2D pt2;
-		float d = Util::pointSegmentDistanceXY(roads->graph[src]->getPt(), roads->graph[tgt]->getPt(), roads->graph[v]->getPt(), pt2);
-		*/
 		if (d < dist) {
 			dist = d;
 			min_e = *ei;

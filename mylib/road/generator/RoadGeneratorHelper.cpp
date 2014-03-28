@@ -194,6 +194,80 @@ bool RoadGeneratorHelper::canSnapToVertex2(RoadGraph& roads, const QVector2D &po
 }
 
 /**
+ * 近くの頂点にsnapすべきか、チェックする。
+ * （この関数は、ExRoadGenerator用のスナップ関数）
+ * srcDescから伸ばしてきたエッジの先端posに近い頂点を探す。
+ * ただし、スナップによる変位角は90度未満で、接続された２つのエッジのなす角は90度より大きいこと。
+ * さらに、スナップの結果、他のエッジの交差するものは除外する。
+ * また、スナップによる移動距離が閾値以下であるものの中で、最短のものを選ぶ。
+ * 
+ * @param pos				エッジ先端
+ * @param threshold			距離の閾値
+ * @param srcDesc			この頂点からエッジを延ばしている
+ * @param edge				このエッジ
+ * @param snapDesc			最も近い頂点
+ * @return					もしsnapすべき頂点があれば、trueを返却する
+ */
+bool RoadGeneratorHelper::canSnapToVertex3(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadVertexDesc& snapDesc) {
+	float min_dist = std::numeric_limits<float>::max();
+
+	// 当該頂点から出るポリラインをリストアップ
+	std::vector<Polyline2D> polylines;
+	RoadOutEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::out_edges(v_desc, roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
+			std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
+		}
+
+		polylines.push_back(roads.graph[*ei]->polyline);
+	}
+
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		bool badEdge = false;
+		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			// 自分自身にはスナップしない
+			if (*vi == v_desc) continue;
+
+			RoadVertexDesc v2 = boost::target(*ei, roads.graph);
+
+			if (v2 == v_desc) continue;
+			
+			for (int i = 0; i < polylines.size(); ++i) {
+				// スナップによる変位角
+				float phi = Util::diffAngle(polylines[i][0] - polylines[i].last(), roads.graph[*vi]->pt - polylines[i].last());
+
+				// ２つのエッジのなす角
+				float theta = Util::diffAngle(roads.graph[*vi]->pt - polylines[i].last(), roads.graph[*vi]->pt - roads.graph[v2]->pt);
+
+				// スナップによる変位角が、２つのエッジのなす角の半分より大きい場合は、スキップ
+				if (phi > theta * 0.5f) {
+					badEdge = true;
+					break;
+				}
+			}
+
+			if (badEdge) continue;
+
+			float dist2 = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
+			if (dist2 < min_dist) {
+				min_dist = dist2;
+				snapDesc = *vi;
+			}
+		}
+	}
+
+	if (min_dist <= threshold * threshold) return true;
+	else return false;
+}
+
+/**
  * 近くのエッジにsnapすべきか、チェックする。
  * ただし、スナップによる変位角は90度未満で、接続された２つのエッジのなす角は45度より大きいこと。
  * また、スナップによる移動距離が閾値以下であるものの中で、最短のものを選ぶ。
@@ -572,7 +646,7 @@ void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float
 	}
 }
 
-void RoadGeneratorHelper::createFourEdges(float direction, float step, float organicFactor, std::vector<Polyline2D> &polylines) {
+void RoadGeneratorHelper::createFourEdges(float direction, float step, float length, float organicFactor, std::vector<Polyline2D> &polylines) {
 	polylines.clear();
 
 	std::vector<float> directions;
@@ -584,7 +658,7 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float org
 		Polyline2D polyline;
 		QVector2D cur(0, 0);
 
-		for (int j = 0; j < 10000 && polyline.length() < 300.0f; ++j) {
+		for (int j = 0; j < 10000 && polyline.length() < length; ++j) {
 			// Advance the current point to the next position
 			cur.setX(cur.x() + cos(directions[i]) * step);
 			cur.setY(cur.y() + sin(directions[i]) * step);

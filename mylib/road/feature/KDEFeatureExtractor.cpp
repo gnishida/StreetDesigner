@@ -23,14 +23,14 @@ void KDEFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Road
 	}
 	GraphUtil::extractRoads(temp_roads, RoadEdge::TYPE_AVENUE | RoadEdge::TYPE_BOULEVARD);
 	GraphUtil::clean(temp_roads);
-	GraphUtil::reduce(temp_roads);
+	//GraphUtil::reduce(temp_roads);
 
 	// roundaboutを削除する
 	//GraphUtil::removeRoundabout(temp_roads);
 
 	// linkを削除する
 	GraphUtil::removeLinkEdges(temp_roads);
-	GraphUtil::reduce(temp_roads);
+	//GraphUtil::reduce(temp_roads);
 	GraphUtil::removeIsolatedVertices(temp_roads);
 	GraphUtil::clean(temp_roads);
 
