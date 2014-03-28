@@ -73,7 +73,7 @@ void ExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &are
 	}
 
 	GraphUtil::removeSelfIntersectingRoads(roads);GraphUtil::removeSelfIntersectingRoads(roads);
-/GraphUtil::clean(roads);
+	GraphUtil::clean(roads);
 }
 
 /**
