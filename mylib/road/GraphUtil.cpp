@@ -1485,8 +1485,10 @@ void GraphUtil::extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadT
 		RoadVertexDesc src = boost::source(edges[e_id], roads.graph);
 		RoadVertexDesc tgt = boost::target(edges[e_id], roads.graph);
 
-		// if either vertice is out of the range, add a vertex on the border
-		std::vector<QVector2D> polyline = finerEdge(roads, edges[e_id]);
+		std::cout << "split: " << src << ":" << tgt << std::endl;
+
+		// 境界との交点を計算する（へたなやり方だけど）
+		Polyline2D polyline = finerEdge(roads, edges[e_id]);
 		QVector2D intPt;
 		if (area.contains(polyline[0])) {
 			for (int i = 1; i < polyline.size(); i++) {
@@ -1504,14 +1506,23 @@ void GraphUtil::extractRoads2(RoadGraph& roads, const Polygon2D& area, int roadT
 			}
 		}
 
-		RoadVertexDesc v = splitEdge(roads, edges[e_id], intPt);
+		// Add a vertex on the border
+		RoadEdgeDesc e1, e2;
+		RoadVertexDesc v = splitEdge(roads, edges[e_id], intPt, e1, e2);
 		roads.graph[v]->onBoundary = true;
-		if (area.contains(roads.graph[src]->pt)) {
-			RoadEdgeDesc e = getEdge(roads, v, tgt);
-			roads.graph[e]->valid = false;
+
+		if ((polyline[0] - roads.graph[src]->pt).lengthSquared() <= (polyline[0] - roads.graph[tgt]->pt).lengthSquared()) {
+			if (area.contains(roads.graph[src]->pt)) {
+				roads.graph[e2]->valid = false;
+			} else {
+				roads.graph[e1]->valid = false;
+			}
 		} else {
-			RoadEdgeDesc e = getEdge(roads, v, src);
-			roads.graph[e]->valid = false;
+			if (area.contains(roads.graph[src]->pt)) {
+				roads.graph[e1]->valid = false;
+			} else {
+				roads.graph[e2]->valid = false;
+			}
 		}
 	}
 
