@@ -511,6 +511,7 @@ void ExRoadGenerator::synthesizeItem(RoadGraph &roads, const KDEFeature &f, Road
 
 	// エッジ長を決定する
 	float length = f.length(roadType);
+	float curvature = f.curvature(roadType);
 	//float length = roadType == RoadEdge::TYPE_AVENUE ? 300.0f : 60.0f;
 
 	std::vector<Polyline2D> new_polylines;

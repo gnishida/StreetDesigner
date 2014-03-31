@@ -136,34 +136,46 @@ void KDEFeature::computePMParameters() {
 	// Avenue用パラメータを計算
 	float totalLength = 0.0f;
 	float totalLength2 = 0.0f;
+	float totalCurvature = 0.0f;
+	float totalCurvature2 = 0.0f;
 	int num = 0;
 
 	for (int i = 0; i < _avenueItems.size(); ++i) {
 		for (int j = 0; j < _avenueItems[i].edges.size(); ++j) {
 			totalLength += _avenueItems[i].edges[j].edge.length();
 			totalLength2 += SQR(_avenueItems[i].edges[j].edge.length());
+			totalCurvature += Util::curvature(_avenueItems[i].edges[j].edge);
+			totalCurvature2 += SQR(Util::curvature(_avenueItems[i].edges[j].edge));
 			num++;
 		}
 	}
 
 	avgAvenueLength = totalLength / (float)num;
 	varAvenueLength = totalLength2 / (float)num - avgAvenueLength;
+	avgAvenueCurvature = totalCurvature / (float)num;
+	varAvenueCurvature = totalCurvature2 / (float)num - avgAvenueCurvature;
 
 	// Local street用パラメータを計算
 	totalLength = 0.0f;
 	totalLength2 = 0.0f;
+	totalCurvature = 0.0f;
+	totalCurvature2 = 0.0f;
 	num = 0;
 
 	for (int i = 0; i < _streetItems.size(); ++i) {
 		for (int j = 0; j < _streetItems[i].edges.size(); ++j) {
 			totalLength += _streetItems[i].edges[j].edge.length();
 			totalLength2 += SQR(_streetItems[i].edges[j].edge.length());
+			totalCurvature += Util::curvature(_streetItems[i].edges[j].edge);
+			totalCurvature2 += SQR(Util::curvature(_streetItems[i].edges[j].edge));
 			num++;
 		}
 	}
 
 	avgStreetLength = totalLength / (float)num;
 	varStreetLength = totalLength2 / (float)num - avgStreetLength;
+	avgStreetCurvature = totalCurvature / (float)num;
+	varStreetCurvature = totalCurvature2 / (float)num - avgStreetCurvature;
 }
 
 /**

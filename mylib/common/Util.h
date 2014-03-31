@@ -3,6 +3,7 @@
 #include <vector>
 #include <QVector3D>
 #include <QVector2D>
+#include "Polyline2D.h"
 
 class Util {
 	static const float MTC_FLOAT_TOL;
@@ -38,6 +39,9 @@ public:
 
 	// 座標系関係
 	static void cartesian2polar(const QVector2D &pt, float &radius, float &theta);
+
+	// 曲率
+	static float curvature(const Polyline2D &polyline);
 
 	// 乱数関係
 	static float genRand();

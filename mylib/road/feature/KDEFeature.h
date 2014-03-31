@@ -19,6 +19,10 @@ public:
 	float varAvenueLength;
 	float avgStreetLength;
 	float varStreetLength;
+	float avgAvenueCurvature;
+	float varAvenueCurvature;
+	float avgStreetCurvature;
+	float varStreetCurvature;
 
 public:
 	KDEFeature();

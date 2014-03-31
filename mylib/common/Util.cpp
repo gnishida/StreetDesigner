@@ -288,6 +288,25 @@ void Util::cartesian2polar(const QVector2D &pt, float &radius, float &theta) {
 }
 
 /**
+ * 曲率を計算する
+ */
+float Util::curvature(const Polyline2D &polyline) {
+	float curvature = 0.0f;
+	float length = 0.0f;
+
+	for (int i = 0; i < polyline.size() - 2; ++i) {
+		QVector2D vec1 = (polyline[i + 1] - polyline[i]).normalized();
+		QVector2D vec2 = (polyline[i + 2] - polyline[i + 1]).normalized();
+
+		curvature += (vec1 - vec2).length();
+		length += (polyline[i + 1] - polyline[i]).length();
+	}
+
+	if (length == 0.0f) return 0.0f;
+	else return curvature / length;
+}
+
+/**
  * Uniform乱数[0, 1)を生成する
  */
 float Util::genRand() {
