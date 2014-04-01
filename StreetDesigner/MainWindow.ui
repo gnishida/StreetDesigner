@@ -61,6 +61,7 @@
     <addaction name="actionAreaSelect"/>
     <addaction name="actionAreaCreate"/>
     <addaction name="actionAreaDelete"/>
+    <addaction name="actionHintLine"/>
     <addaction name="separator"/>
     <addaction name="actionHighwaySketch"/>
     <addaction name="actionBoulevardSketch"/>
@@ -490,6 +491,11 @@
    </property>
    <property name="text">
     <string>Local Street</string>
+   </property>
+  </action>
+  <action name="actionHintLine">
+   <property name="text">
+    <string>Hint Line</string>
    </property>
   </action>
  </widget>

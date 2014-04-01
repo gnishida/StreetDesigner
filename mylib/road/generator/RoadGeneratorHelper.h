@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../RoadGraph.h"
-#include "../feature/KDEFeature.h"
+//#include "../feature/KDEFeature.h"
 
 /**
  * 道路網生成のヘルパークラス。
@@ -26,20 +26,20 @@ public:
 
 	static bool invadingTerritory(RoadGraph &roads, const QVector2D &pt, RoadVertexDesc srcVertex, const QVector2D &targetPt);
 
-	static int getClosestItem(const KDEFeature &f, int roadType, const QVector2D &pt);
+	//static int getClosestItem(const KDEFeature &f, int roadType, const QVector2D &pt);
 	static bool isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_desc, const Polyline2D &polyline);
 
 	static QVector2D modulo(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt, BBox &bbox);
 	static bool containsInitialSeed(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt);
 
 	static void createFourDirection(float direction, std::vector<float> &directions);
-	static void createFourEdges(float direction, float step, float length, float curvature, std::vector<Polyline2D> &polylines);
+	static void createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges);
 
 	static int getRelativeDirectionInArea(const BBox &bbox, const QVector2D &pt);
 
 	static bool isWithinScaledArea(const Polygon2D &area, float factor, const QVector2D &pt);
 
-	static void buildGraphFromKernel(RoadGraph& roads, const KDEFeatureItem &item, const QVector2D &offset);
+	//static void buildGraphFromKernel(RoadGraph& roads, const KDEFeatureItem &item, const QVector2D &offset);
 
 	static void saveSnappingImage(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc srcDesc, const Polyline2D &old_polyline, const Polyline2D &new_polyline, RoadVertexDesc snapDesc, const QString &filename_prefix);
 };

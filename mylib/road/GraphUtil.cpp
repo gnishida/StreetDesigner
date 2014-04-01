@@ -645,9 +645,9 @@ void GraphUtil::getOrderedPolyLine(RoadGraph& roads, RoadEdgeDesc e, std::vector
 }
 
 /**
- * Sort the points of the polyline of the edge in such a way that the first point is the location of the src vertex.
+ * Sort the points of the polyline of the edge such that the first point is the location of the src vertex.
  */
-void GraphUtil::orderPolyLine(RoadGraph& roads, RoadEdgeDesc e, RoadVertexDesc src) {
+Polyline2D GraphUtil::orderPolyLine(RoadGraph& roads, RoadEdgeDesc e, RoadVertexDesc src) {
 	RoadVertexDesc tgt;
 
 	RoadVertexDesc s = boost::source(e, roads.graph);
@@ -663,6 +663,8 @@ void GraphUtil::orderPolyLine(RoadGraph& roads, RoadEdgeDesc e, RoadVertexDesc s
 	if ((roads.graph[src]->getPt() - roads.graph[e]->polyline[0]).lengthSquared() > (roads.graph[tgt]->getPt() - roads.graph[e]->polyline[0]).lengthSquared()) {
 		std::reverse(roads.graph[e]->polyline.begin(), roads.graph[e]->polyline.end());
 	}
+
+	return roads.graph[e]->polyline;
 }
 
 /**
@@ -2968,6 +2970,37 @@ void GraphUtil::removeShortDeadend(RoadGraph& roads, float threshold) {
 	}
 
 	if (actuallyDeleted) roads.setModified();
+}
+
+/**
+ * 道路の統計情報を計算する。
+ */
+void GraphUtil::computeStatistics(RoadGraph &roads, float avgEdgeLength, float varEdgeLength, float avgEdgeCurvature, float varEdgeCurvature) {
+	float totalLength = 0.0f;
+	float totalLength2 = 0.0f;
+	float totalCurvature = 0.0f;
+	float totalCurvature2 = 0.0f;
+	int num = 0;
+
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		float length = roads.graph[*ei]->polyline.length();
+		totalLength += length;
+		totalLength2 += SQR(length);
+
+		float curvature = Util::curvature(roads.graph[*ei]->polyline);
+		totalCurvature += curvature;
+		totalCurvature2 += SQR(curvature);
+
+		num++;
+	}
+
+	avgEdgeLength = totalLength / (float)num;
+	varEdgeLength = totalLength2 / (float)num - SQR(avgEdgeLength);
+	avgEdgeCurvature = totalCurvature / (float)num;
+	varEdgeCurvature = totalCurvature2 / (float)num - SQR(avgEdgeCurvature);
 }
 
 /**

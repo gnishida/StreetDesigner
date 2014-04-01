@@ -47,7 +47,7 @@ public:
 	static bool hasSimilarEdge(RoadGraph& roads, RoadVertexDesc desc1, RoadVertexDesc desc2, const Polyline2D &polyline);
 	static RoadEdgeDesc getEdge(RoadGraph& roads, RoadVertexDesc src, RoadVertexDesc tgt, bool onlyValidEdge = true);
 	static void getOrderedPolyLine(RoadGraph& roads, RoadEdgeDesc e, std::vector<QVector2D>& polyline);
-	static void orderPolyLine(RoadGraph& roads, RoadEdgeDesc e, RoadVertexDesc src);
+	static Polyline2D orderPolyLine(RoadGraph& roads, RoadEdgeDesc e, RoadVertexDesc src);
 	static void moveEdge(RoadGraph& roads, RoadEdgeDesc e, QVector2D& src_pos, QVector2D& tgt_pos);
 	static void movePolyline(RoadGraph& roads, Polyline2D &polyline, const QVector2D& src_pos, const QVector2D& tgt_pos);
 	static bool isSimilarPolyline(const Polyline2D &polyline1, const Polyline2D &polyline2);
@@ -112,6 +112,9 @@ public:
 	static void snapDeadendEdges2(RoadGraph& roads, int degree, float threshold);
 	static void removeShortDeadend(RoadGraph& roads, float threshold);
 	static void realize(RoadGraph& roads);
+
+	// statistic
+	static void computeStatistics(RoadGraph &roads, float avgEdgeLength, float varEdgeLength, float avgEdgeCurvature, float varEdgeCurvature);
 
 	// Others
 	static bool isRoadTypeMatched(int type, int ref_type);

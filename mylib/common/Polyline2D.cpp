@@ -20,6 +20,16 @@ void Polyline2D::translate(const QVector2D &offset) {
 	}
 }
 
+void Polyline2D::translate(float x, float y, Polyline2D &ret) const {
+	ret.clear();
+	ret.resize(size());
+
+	for (int i = 0; i < size(); ++i) {
+		ret[i].setX((*this)[i].x() + x);
+		ret[i].setY((*this)[i].y() + y);
+	}
+}
+
 /**
  * 指定された点を中心に、指定された角度だけ時計回りに回転したポリゴンを返却する。
  *

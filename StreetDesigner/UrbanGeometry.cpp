@@ -25,12 +25,8 @@ This file is part of QtUrban.
 #include <render/GeometryObject.h>
 #include <render/Terrain.h>
 #include <road/GraphUtil.h>
-#include <road/generator/KDERoadGenerator.h>
 #include <road/generator/ExRoadGenerator.h>
 #include <road/generator/UShapeRoadGenerator.h>
-#include <road/generator/PMRoadGenerator.h>
-#include <road/feature/KDEFeature.h>
-#include <road/feature/GenericFeature.h>
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
 #include "BlockGenerator.h"
@@ -60,26 +56,22 @@ void UrbanGeometry::clearGeometry() {
 	roads.clear();
 }
 
-void UrbanGeometry::generateRoads(RoadFeature &rf) {
+void UrbanGeometry::generateRoads(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 
-	ExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
+	if (areas.selectedArea()->hintLine.size() > 0) {
+		UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, feature);
+	} else {
+		ExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, feature);
+	}
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
-void UrbanGeometry::generateUShapeRoads(RoadFeature &rf) {
+void UrbanGeometry::generateUShapeRoads(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 
-	UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
-
-	areas.selectedArea()->roads.adaptToTerrain(terrain);
-}
-
-void UrbanGeometry::generatePMRoads() {
-	if (areas.selectedIndex == -1) return;
-
-	PMRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area);
+	//UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, feature);
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -112,10 +104,17 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 		rendererHelper.renderPolyline(areaBuilder.polyline3D(), QColor(0, 0, 255), GL_LINE_STIPPLE);
 	}
 
+	// draw a hint polyline
+	if (hintLineBuilder.selecting()) {
+		hintLineBuilder.adaptToTerrain(terrain);
+		rendererHelper.renderPolyline(hintLineBuilder.polyline3D(), QColor(255, 0, 0), GL_LINE_STIPPLE);
+	}
+
 	// draw the areas
 	for (int i = 0; i < areas.size(); ++i) {
 		if (i == areas.selectedIndex) {
 			rendererHelper.renderPolyline(areas[i]->area3D, QColor(0, 0, 255), GL_LINE_STIPPLE);
+			rendererHelper.renderPolyline(areas[i]->hintLine3D, QColor(255, 0, 0), GL_LINE_STIPPLE);
 		} else {
 			rendererHelper.renderPolyline(areas[i]->area3D, QColor(196, 196, 255), GL_LINE_STIPPLE);
 		}
@@ -144,7 +143,7 @@ void UrbanGeometry::mergeRoads() {
 }
 
 void UrbanGeometry::connectRoads() {
-	KDERoadGenerator::connectRoads(roads, 200.0f, 0.15f);
+	//KDERoadGenerator::connectRoads(roads, 200.0f, 0.15f);
 
 	roads.adaptToTerrain(terrain);
 }

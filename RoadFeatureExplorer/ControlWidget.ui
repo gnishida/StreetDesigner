@@ -52,62 +52,23 @@
       <x>10</x>
       <y>90</y>
       <width>201</width>
-      <height>141</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
-     <string>Extract KDE Feature</string>
+     <string>Extract Feature</string>
     </property>
-    <widget class="QPushButton" name="pushButtonExtractKDEFeature">
+    <widget class="QPushButton" name="pushButtonExtractFeature">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>100</y>
+       <y>30</y>
        <width>141</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
-      <string>Extract KDE Feature</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBoxPerturbation">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>50</y>
-       <width>101</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Perturbation</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBoxRotation">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>101</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Rotation</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBoxExactCut">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>30</y>
-       <width>101</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Exact Cut</string>
+      <string>Extract Feature</string>
      </property>
     </widget>
    </widget>
@@ -136,32 +97,6 @@
     <property name="text">
      <string>Boulevard</string>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>250</y>
-      <width>201</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Generic Feature</string>
-    </property>
-    <widget class="QPushButton" name="pushButtonExtractGenericFeature">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>30</y>
-       <width>141</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Extract Generic Feature</string>
-     </property>
-    </widget>
    </widget>
   </widget>
  </widget>

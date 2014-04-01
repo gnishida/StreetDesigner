@@ -67,6 +67,6 @@ void PolygonBuilder::adaptToTerrain(mylib::Terrain* terrain) {
 
 	for (int i = 0; i < _polyline.size(); ++i) {
 		float z = terrain->getValue(_polyline[i].x(), _polyline[i].y());
-		_polyline3D.push_back(QVector3D(_polyline[i].x(), _polyline[i].y(), z + 100));
+		_polyline3D.push_back(QVector3D(_polyline[i].x(), _polyline[i].y(), z + 30));
 	}
 }

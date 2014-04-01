@@ -463,7 +463,7 @@ bool RoadGeneratorHelper::invadingTerritory(RoadGraph &roads, const QVector2D &p
 /**
  * カーネルの中で、指定された位置に最も近いものを探し、そのインデックスを返却する。
  */
-int RoadGeneratorHelper::getClosestItem(const KDEFeature &f, int roadType, const QVector2D &pt) {
+/*int RoadGeneratorHelper::getClosestItem(const KDEFeature &f, int roadType, const QVector2D &pt) {
 	float min_dist = std::numeric_limits<float>::max();
 	int min_index = -1;
 	for (int i = 0; i < f.items(roadType).size(); ++i) {
@@ -475,7 +475,7 @@ int RoadGeneratorHelper::getClosestItem(const KDEFeature &f, int roadType, const
 	}
 
 	return min_index;
-}
+}*/
 
 /**
  * 指定された頂点について、指定されたエッジに似たエッジが既に登録済みかどうかチェックする。
@@ -646,8 +646,8 @@ void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float
 	}
 }
 
-void RoadGeneratorHelper::createFourEdges(float direction, float step, float length, float curvature, std::vector<Polyline2D> &polylines) {
-	polylines.clear();
+void RoadGeneratorHelper::createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges) {
+	edges.clear();
 
 	std::vector<float> directions;
 	createFourDirection(direction, directions);
@@ -659,16 +659,17 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float len
 	for (int i = 0; i < directions.size(); ++i) {
 		float deltaDir = 0.0f;
 
-		Polyline2D polyline;
-		QVector2D cur(0, 0);
-		polyline.push_back(cur);
+		RoadEdgePtr edge = RoadEdgePtr(new RoadEdge(roadType, lanes));
 
-		for (int j = 0; j < 10000 && polyline.length() < length; ++j) {
+		QVector2D cur(0, 0);
+		edge->polyline.push_back(cur);
+
+		for (int j = 0; j < 10000 && edge->polyline.length() < length; ++j) {
 			// Advance the current point to the next position
 			cur.setX(cur.x() + cos(directions[i]) * step);
 			cur.setY(cur.y() + sin(directions[i]) * step);
 
-			polyline.push_back(cur);
+			edge->polyline.push_back(cur);
 
 			// Update the direction
 			deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
@@ -681,7 +682,7 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float len
 			*/
 		}
 
-		polylines.push_back(polyline);
+		edges.push_back(edge);
 	}
 }
 
@@ -717,6 +718,7 @@ bool RoadGeneratorHelper::isWithinScaledArea(const Polygon2D &area, float factor
 	return scaledArea.contains(pt);
 }
 
+/*
 void RoadGeneratorHelper::buildGraphFromKernel(RoadGraph& roads, const KDEFeatureItem &item, const QVector2D &offset) {
 	roads.clear();
 
@@ -739,6 +741,7 @@ void RoadGeneratorHelper::buildGraphFromKernel(RoadGraph& roads, const KDEFeatur
 		roads.graph[e_desc]->bgColor = QColor(0, 0, 192);
 	}
 }
+*/
 
 /**
  * スナップの状況を画像として保存する。

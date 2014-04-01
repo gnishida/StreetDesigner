@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 This file is part of QtUrban.
 
     QtUrban is free software: you can redistribute it and/or modify
@@ -115,6 +115,24 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 		mainWin->urbanGeometry->areas.selectedIndex = -1;
 
 		break;
+	case MainWindow::MODE_HINT_LINE:
+		std::cout << pos.x() << "," << pos.y() << std::endl;
+
+		// まだエリアが選択されていない場合は、現在のマウス位置を使ってエリアを選択する
+		if (mainWin->urbanGeometry->areas.selectedIndex == -1) {
+			mainWin->urbanGeometry->areas.selectArea(pos);
+		}
+
+		if (!mainWin->urbanGeometry->hintLineBuilder.selecting()) {
+			mainWin->urbanGeometry->hintLineBuilder.start(pos);
+			setMouseTracking(true);
+		}
+		
+		if (mainWin->urbanGeometry->hintLineBuilder.selecting()) {
+			mainWin->urbanGeometry->hintLineBuilder.addPoint(pos);
+		}
+
+		break;
 	case MainWindow::MODE_DEBUG:
 		if (GraphUtil::getVertex(mainWin->urbanGeometry->roads, pos, 10, selectedVertexDesc)) {
 			selectedVertex = mainWin->urbanGeometry->roads.graph[selectedVertexDesc];
@@ -174,6 +192,12 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *event) {
 		}
 
 		break;
+	case MainWindow::MODE_HINT_LINE:
+		if (mainWin->urbanGeometry->hintLineBuilder.selecting()) {	// Move the last point of the hint line
+			mainWin->urbanGeometry->hintLineBuilder.moveLastPoint(pos);
+		}
+
+		break;
 	}
 
 	updateGL();
@@ -192,6 +216,18 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 		mainWin->mode = MainWindow::MODE_AREA_SELECT;
 		mainWin->ui.actionAreaSelect->setChecked(true);
 		mainWin->ui.actionAreaCreate->setChecked(false);
+		mainWin->ui.actionHintLine->setChecked(false);
+		break;
+	case MainWindow::MODE_HINT_LINE:
+		mainWin->urbanGeometry->hintLineBuilder.end();
+		mainWin->urbanGeometry->areas.selectedArea()->hintLine = mainWin->urbanGeometry->hintLineBuilder.polyline();
+
+		mainWin->urbanGeometry->areas.selectedArea()->adaptToTerrain(mainWin->urbanGeometry->terrain);
+
+		mainWin->mode = MainWindow::MODE_AREA_SELECT;
+		mainWin->ui.actionAreaSelect->setChecked(true);
+		mainWin->ui.actionAreaCreate->setChecked(false);
+		mainWin->ui.actionHintLine->setChecked(false);
 		break;
 	}
 }

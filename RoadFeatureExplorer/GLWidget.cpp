@@ -1,9 +1,6 @@
 ﻿#include "GLWidget.h"
 #include "MainWindow.h"
 #include <road/GraphUtil.h>
-#include <road/feature/RoadFeature.h>
-#include <road/feature/GridFeature.h>
-#include <road/feature/RadialFeature.h>
 #include <gl/GLU.h>
 #include <vector>
 
@@ -49,18 +46,6 @@ void GLWidget::drawScene() {
 	// draw the selected area
 	if (selectedAreaBuilder.selected()) {
 		renderer->renderArea(selectedArea, QColor(0, 0, 255), GL_LINE_STIPPLE, height);
-
-		// 領域を表示
-		for (int i = 0; i < mainWin->glWidget->roadFeature.features.size(); ++i) {
-			if (mainWin->glWidget->roadFeature.features[i]->type() == AbstractFeature::TYPE_GRID) {
-				GridFeature gf = dynamic_cast<GridFeature&>(*mainWin->glWidget->roadFeature.features[i]);
-				renderer->renderConcave(gf.polygon(), gf.color(), -10);
-			} else if (mainWin->glWidget->roadFeature.features[i]->type() == AbstractFeature::TYPE_RADIAL) {
-				RadialFeature rf = dynamic_cast<RadialFeature&>(*mainWin->glWidget->roadFeature.features[i]);
-				renderer->renderPoint(rf.center(), QColor(0, 0, 0), height);
-				renderer->renderConcave(rf.polygon(), rf.color(), -10);
-			}
-		}
 	} else if (selectedAreaBuilder.selecting()) {
 		renderer->renderPolyline(selectedAreaBuilder.polyline(), QColor(0, 0, 255), GL_LINE_STIPPLE, height);
 	}
@@ -213,10 +198,9 @@ void GLWidget::mouseDoubleClickEvent(QMouseEvent *e) {
 	case MainWindow::MODE_HINT_LINE:
 		hintLineBuilder.end();
 		hintLine = hintLineBuilder.polyline();
+		mainWin->mode = MainWindow::MODE_AREA_CREATE;
 		break;
 	}
-
-	roadFeature.clear();
 }
 
 void GLWidget::initializeGL() {

@@ -157,19 +157,8 @@
     <ClCompile Include="..\mylib\render\Texture.cpp" />
     <ClCompile Include="..\mylib\render\TextureManager.cpp" />
     <ClCompile Include="..\mylib\render\WaterRenderer.cpp" />
-    <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\GridFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItem.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItemEdge.cpp" />
-    <ClCompile Include="..\mylib\road\feature\RadialFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\RoadFeature.cpp" />
+    <ClCompile Include="..\mylib\road\feature\ExFeature.cpp" />
     <ClCompile Include="..\mylib\road\generator\ExRoadGenerator.cpp" />
-    <ClCompile Include="..\mylib\road\generator\GenericRoadGenerator.cpp" />
-    <ClCompile Include="..\mylib\road\generator\KDERoadGenerator.cpp" />
-    <ClCompile Include="..\mylib\road\generator\PMRoadGenerator.cpp" />
-    <ClCompile Include="..\mylib\road\generator\RoadGenerator.cpp" />
     <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp" />
     <ClCompile Include="..\mylib\road\generator\UShapeRoadGenerator.cpp" />
     <ClCompile Include="..\mylib\road\GraphUtil.cpp" />
@@ -179,16 +168,13 @@
     <ClCompile Include="..\mylib\road\RoadGraph.cpp" />
     <ClCompile Include="..\mylib\road\RoadVertex.cpp" />
     <ClCompile Include="..\mylib\util\PolygonBuilder.cpp" />
+    <ClCompile Include="..\mylib\util\PolylineBuilder.cpp" />
     <ClCompile Include="ControlWidget.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_PMControlWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -218,10 +204,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_PMControlWidget.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_PropertyWidget.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -234,7 +216,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="BlockGenerator.cpp" />
-    <ClCompile Include="PMControlWidget.cpp" />
     <ClCompile Include="TerrainSizeInputDialog.cpp" />
     <ClCompile Include="UrbanGeometry.cpp" />
     <ClCompile Include="PropertyWidget.cpp" />
@@ -270,19 +251,8 @@
     <ClInclude Include="..\mylib\render\Texture.h" />
     <ClInclude Include="..\mylib\render\TextureManager.h" />
     <ClInclude Include="..\mylib\render\WaterRenderer.h" />
-    <ClInclude Include="..\mylib\road\feature\AbstractFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\GenericFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\GridFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItem.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItemEdge.h" />
-    <ClInclude Include="..\mylib\road\feature\RadialFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\RoadFeature.h" />
+    <ClInclude Include="..\mylib\road\feature\ExFeature.h" />
     <ClInclude Include="..\mylib\road\generator\ExRoadGenerator.h" />
-    <ClInclude Include="..\mylib\road\generator\GenericRoadGenerator.h" />
-    <ClInclude Include="..\mylib\road\generator\KDERoadGenerator.h" />
-    <ClInclude Include="..\mylib\road\generator\PMRoadGenerator.h" />
-    <ClInclude Include="..\mylib\road\generator\RoadGenerator.h" />
     <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h" />
     <ClInclude Include="..\mylib\road\generator\UShapeRoadGenerator.h" />
     <ClInclude Include="..\mylib\road\GraphUtil.h" />
@@ -328,6 +298,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB  "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
     </CustomBuild>
     <ClInclude Include="..\mylib\util\PolygonBuilder.h" />
+    <ClInclude Include="..\mylib\util\PolylineBuilder.h" />
     <ClInclude Include="GeneratedFiles\ui_ControlWidget.h" />
     <ClInclude Include="GeneratedFiles\ui_MainWindow.h" />
     <CustomBuild Include="MainWindow.h">
@@ -368,24 +339,6 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing TerrainSizeInputDialog.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
-    </CustomBuild>
-    <CustomBuild Include="PMControlWidget.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing PMControlWidget.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Moc%27ing PMControlWidget.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing PMControlWidget.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I$(QTDIR)\include\QtXml" "-I.\..\opencv\include" "-I.\..\mylib"</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Moc%27ing PMControlWidget.h...</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">"$(QTDIR)\bin\moc.exe" -DBOOST_TT_HAS_OPERATOR_HPP_INCLUDED  -DBOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DQT_LARGEFILE_SUPPORT -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_OPENGL_LIB "-I$(BOOST_ROOT)\." "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtOpenGL" "-I.\..\opencv\include" "-I$(QTDIR)\include\QtXml" "-I.\..\mylib"</Command>
     </CustomBuild>

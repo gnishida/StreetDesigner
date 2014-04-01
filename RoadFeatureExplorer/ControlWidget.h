@@ -25,7 +25,6 @@ public slots:
 	void showRoad(int flag);
 	void detectGrid();
 	void detectRadial();
-	void extractKDEFeature();
-	void extractGenericFeature();
+	void extractFeature();
 };
 

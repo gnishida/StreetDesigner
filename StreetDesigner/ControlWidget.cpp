@@ -4,11 +4,8 @@
 #include "GLWidget3D.h"
 #include <common/global.h>
 #include <road/GraphUtil.h>
-//#include <road/feature/GridFeature.h>
-//#include <road/feature/RadialFeature.h>
-//#include <road/feature/GenericFeature.h>
-#include <road/generator/RoadGenerator.h>
-#include <road/generator/KDERoadGenerator.h>
+#include <road/generator/ExRoadGenerator.h>
+#include <road/feature/ExFeature.h>
 
 
 ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget", (QWidget*)mainWin) {
@@ -27,7 +24,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.lineEditPerturbationFactor->setText("0.1");
 
 	// register the event handlers
-	connect(ui.pushButtonGenerateKDE, SIGNAL(clicked()), this, SLOT(generateKDE()));
+	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
 	connect(ui.pushButtonPerturb, SIGNAL(clicked()), this, SLOT(perturb()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
@@ -42,9 +39,9 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 // Event handlers
 
 /**
- * Event handler for button [Generate KDE-base]
+ * Event handler for button [Generate Roads]
  */
-void ControlWidget::generateKDE() {
+void ControlWidget::generateRoads() {
 	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
@@ -66,18 +63,18 @@ void ControlWidget::generateKDE() {
 	int orientation = ui.dialOrientation->value() - 180;
 	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
 
-	RoadFeature rf;
-	rf.load(filename);
+	ExFeature feature;
+	feature.load(filename);
 
 	if (orientation != 0) {
-		rf.rotate(orientation);
+		//feature.rotate(orientation);
 	}
 
 	if (areaScaling) {
-		rf.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
+		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
 	}
 
-	mainWin->urbanGeometry->generateRoads(rf);
+	mainWin->urbanGeometry->generateRoads(feature);
 
 	mainWin->glWidget->updateGL();
 }
@@ -104,18 +101,18 @@ void ControlWidget::generateUShape() {
 	int orientation = ui.dialOrientation->value() - 180;
 	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
 
-	RoadFeature rf;
-	rf.load(filename);
+	ExFeature feature;
+	feature.load(filename);
 
 	if (orientation != 0) {
-		rf.rotate(orientation);
+		//feature.rotate(orientation);
 	}
 
 	if (areaScaling) {
-		rf.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
+		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
 	}
 
-	mainWin->urbanGeometry->generateRoads(rf);
+	mainWin->urbanGeometry->generateRoads(feature);
 
 	mainWin->glWidget->updateGL();
 }

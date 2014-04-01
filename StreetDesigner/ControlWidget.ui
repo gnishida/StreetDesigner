@@ -32,7 +32,7 @@
     <property name="title">
      <string>Operation</string>
     </property>
-    <widget class="QPushButton" name="pushButtonGenerateKDE">
+    <widget class="QPushButton" name="pushButtonGenerate">
      <property name="geometry">
       <rect>
        <x>20</x>

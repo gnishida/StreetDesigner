@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Mon Mar 31 15:30:05 2014
+** Created: Tue Apr 1 13:34:09 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -33,7 +33,7 @@ class Ui_ControlWidget
 public:
     QWidget *dockWidgetContents;
     QGroupBox *groupBox_8;
-    QPushButton *pushButtonGenerateKDE;
+    QPushButton *pushButtonGenerate;
     QDial *dialOrientation;
     QLabel *label_2;
     QPushButton *pushButtonPerturb;
@@ -74,9 +74,9 @@ public:
         groupBox_8 = new QGroupBox(dockWidgetContents);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
         groupBox_8->setGeometry(QRect(10, 370, 171, 201));
-        pushButtonGenerateKDE = new QPushButton(groupBox_8);
-        pushButtonGenerateKDE->setObjectName(QString::fromUtf8("pushButtonGenerateKDE"));
-        pushButtonGenerateKDE->setGeometry(QRect(20, 80, 131, 31));
+        pushButtonGenerate = new QPushButton(groupBox_8);
+        pushButtonGenerate->setObjectName(QString::fromUtf8("pushButtonGenerate"));
+        pushButtonGenerate->setGeometry(QRect(20, 80, 131, 31));
         dialOrientation = new QDial(groupBox_8);
         dialOrientation->setObjectName(QString::fromUtf8("dialOrientation"));
         dialOrientation->setGeometry(QRect(80, 20, 71, 51));
@@ -182,7 +182,7 @@ public:
     void retranslateUi(QDockWidget *ControlWidget)
     {
         groupBox_8->setTitle(QApplication::translate("ControlWidget", "Operation", 0, QApplication::UnicodeUTF8));
-        pushButtonGenerateKDE->setText(QApplication::translate("ControlWidget", "Generate", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerate->setText(QApplication::translate("ControlWidget", "Generate", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("ControlWidget", "Orientation:", 0, QApplication::UnicodeUTF8));
         pushButtonPerturb->setText(QApplication::translate("ControlWidget", "Perturb", 0, QApplication::UnicodeUTF8));
         pushButtonClear->setText(QApplication::translate("ControlWidget", "Clear", 0, QApplication::UnicodeUTF8));

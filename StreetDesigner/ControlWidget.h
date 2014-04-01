@@ -19,7 +19,7 @@ public:
 	//void setRoadEdge(RoadEdgePtr selectedEdge);
 
 public slots:
-	void generateKDE();
+	void generateRoads();
 	void generateUShape();
 	void perturb();
 	void clear();

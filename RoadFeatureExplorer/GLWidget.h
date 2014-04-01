@@ -2,10 +2,7 @@
 
 #include "Camera.h"
 #include <road/RoadGraph.h>
-#include <road/feature/RoadFeature.h>
-#include <road/feature/GridFeature.h>
-#include <road/feature/RadialFeature.h>
-#include <road/feature/GenericFeature.h>
+#include <road/feature/ExFeature.h>
 #include <render/RendererHelper.h>
 #include <util/PolygonBuilder.h>
 #include <util/PolylineBuilder.h>
@@ -31,7 +28,7 @@ public:
 	Polyline2D hintLine;
 	PolylineBuilder hintLineBuilder;
 
-	RoadFeature roadFeature;
+	ExFeature roadFeature;
 	/*
 	std::vector<GridFeature> gridFeatures;
 	std::vector<RadialFeature> radialFeatures;

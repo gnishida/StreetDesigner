@@ -115,36 +115,6 @@
     <ClCompile Include="..\mylib\common\Polyline3D.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\KDEFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\RoadFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItem.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItemEdge.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\GridFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\RadialFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\KDERoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\RoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
     <ClCompile Include="PropertyWidget.cpp">
       <Filter>Files</Filter>
     </ClCompile>
@@ -235,34 +205,25 @@
     <ClCompile Include="TerrainSizeInputDialog.cpp">
       <Filter>Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\render\RenderableCircleList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
     <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\GenericRoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\PMRoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="PMControlWidget.cpp">
-      <Filter>Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_PMControlWidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_PMControlWidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\render\RenderablePolygon.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
     <ClCompile Include="..\mylib\road\generator\ExRoadGenerator.cpp">
+      <Filter>mylib\road\generator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\feature\ExFeature.cpp">
+      <Filter>mylib\road\feature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\util\PolylineBuilder.cpp">
+      <Filter>mylib\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp">
       <Filter>mylib\road\generator</Filter>
     </ClCompile>
     <ClCompile Include="..\mylib\road\generator\UShapeRoadGenerator.cpp">
@@ -299,9 +260,6 @@
     </CustomBuild>
     <CustomBuild Include="PMControlWidget.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="PMControlWidget.h">
-      <Filter>Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -346,36 +304,6 @@
     </ClInclude>
     <ClInclude Include="..\mylib\common\Polyline3D.h">
       <Filter>mylib\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\AbstractFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\KDEFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\RoadFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItem.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItemEdge.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\GridFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\RadialFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\KDERoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\RoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h">
-      <Filter>mylib\road\generator</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_PropertyWidget.h">
       <Filter>Generated Files</Filter>
@@ -458,20 +386,11 @@
     <ClInclude Include="GeneratedFiles\ui_TerrainSizeInputDialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\GenericFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableCircleList.h">
       <Filter>mylib\render</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableCylinderList.h">
       <Filter>mylib\render</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\GenericRoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\PMRoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_PMControlWidget.h">
       <Filter>Generated Files</Filter>
@@ -480,6 +399,15 @@
       <Filter>mylib\render</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\ExRoadGenerator.h">
+      <Filter>mylib\road\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\feature\ExFeature.h">
+      <Filter>mylib\road\feature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\util\PolylineBuilder.h">
+      <Filter>mylib\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h">
       <Filter>mylib\road\generator</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\UShapeRoadGenerator.h">

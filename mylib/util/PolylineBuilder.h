@@ -11,6 +11,7 @@ class PolylineBuilder {
 private:
 	bool _selecting;
 	Polyline2D _polyline;
+	Polyline3D _polyline3D;
 
 public:
 	PolylineBuilder();
@@ -25,5 +26,9 @@ public:
 	bool selected() const;
 	bool selecting() const;
 	Polyline2D polyline() const;
+
+	const Polyline3D& polyline3D() const;
+
+	void adaptToTerrain(mylib::Terrain* terrain);
 };
 

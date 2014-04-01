@@ -148,16 +148,10 @@
     <ClCompile Include="..\mylib\render\TerrainCell.cpp" />
     <ClCompile Include="..\mylib\render\Texture.cpp" />
     <ClCompile Include="..\mylib\render\TextureManager.cpp" />
-    <ClCompile Include="..\mylib\road\feature\AbstractFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\GenericFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\GenericFeatureExtractor.cpp" />
-    <ClCompile Include="..\mylib\road\feature\GridFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureExtractor.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItem.cpp" />
-    <ClCompile Include="..\mylib\road\feature\KDEFeatureItemEdge.cpp" />
-    <ClCompile Include="..\mylib\road\feature\RadialFeature.cpp" />
-    <ClCompile Include="..\mylib\road\feature\RoadFeature.cpp" />
+    <ClCompile Include="..\mylib\road\feature\ExFeature.cpp" />
+    <ClCompile Include="..\mylib\road\feature\ExFeatureExtractor.cpp" />
+    <ClCompile Include="..\mylib\road\feature\ExFeatureItem.cpp" />
+    <ClCompile Include="..\mylib\road\feature\ExFeatureItemEdge.cpp" />
     <ClCompile Include="..\mylib\road\GraphUtil.cpp" />
     <ClCompile Include="..\mylib\road\RoadEdge.cpp" />
     <ClCompile Include="..\mylib\road\RoadGraph.cpp" />
@@ -193,10 +187,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GLWidget.cpp" />
-    <ClCompile Include="HoughTransform.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="RoadSegmentationUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -262,16 +254,10 @@
     <ClInclude Include="..\mylib\render\TerrainCell.h" />
     <ClInclude Include="..\mylib\render\Texture.h" />
     <ClInclude Include="..\mylib\render\TextureManager.h" />
-    <ClInclude Include="..\mylib\road\feature\AbstractFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\GenericFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\GenericFeatureExtractor.h" />
-    <ClInclude Include="..\mylib\road\feature\GridFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureExtractor.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItem.h" />
-    <ClInclude Include="..\mylib\road\feature\KDEFeatureItemEdge.h" />
-    <ClInclude Include="..\mylib\road\feature\RadialFeature.h" />
-    <ClInclude Include="..\mylib\road\feature\RoadFeature.h" />
+    <ClInclude Include="..\mylib\road\feature\ExFeature.h" />
+    <ClInclude Include="..\mylib\road\feature\ExFeatureExtractor.h" />
+    <ClInclude Include="..\mylib\road\feature\ExFeatureItem.h" />
+    <ClInclude Include="..\mylib\road\feature\ExFeatureItemEdge.h" />
     <ClInclude Include="..\mylib\road\GraphUtil.h" />
     <ClInclude Include="..\mylib\road\RoadEdge.h" />
     <ClInclude Include="..\mylib\road\RoadGraph.h" />
@@ -281,8 +267,6 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GeneratedFiles\ui_ControlWidget.h" />
     <ClInclude Include="GLWidget.h" />
-    <ClInclude Include="HoughTransform.h" />
-    <ClInclude Include="RoadSegmentationUtil.h" />
     <CustomBuild Include="ControlWidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing ControlWidget.h...</Message>

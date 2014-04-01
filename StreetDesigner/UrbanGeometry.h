@@ -19,6 +19,7 @@ This file is part of QtUrban.
 #include <QProgressBar>
 #include <QMatrix4x4>
 #include <util/PolygonBuilder.h>
+#include <util/PolylineBuilder.h>
 #include <render/TextureManager.h>
 #include <render/WaterRenderer.h>
 #include <render/Terrain.h>
@@ -26,7 +27,7 @@ This file is part of QtUrban.
 #include <render/RendererHelper.h>
 #include <render/Renderer.h>
 #include <road/RoadAreaSet.h>
-#include <road/feature/RoadFeature.h>
+#include <road/feature/ExFeature.h>
 #include <pm/Block.h>
 
 class MainWindow;
@@ -45,6 +46,7 @@ public:
 	mylib::WaterRenderer* waterRenderer;
 
 	PolygonBuilder areaBuilder;
+	PolylineBuilder hintLineBuilder;
 	RoadAreaSet areas;
 	int selectedAreaIndex;
 	RendererHelper rendererHelper;
@@ -62,9 +64,8 @@ public:
 
 	void clear();
 	void clearGeometry();
-	void generateRoads(RoadFeature &rf);
-	void generateUShapeRoads(RoadFeature &rf);
-	void generatePMRoads();
+	void generateRoads(ExFeature &feature);
+	void generateUShapeRoads(ExFeature &feature);
 	void generateBlocks();
 
 	void render(mylib::TextureManager* textureManager);

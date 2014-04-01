@@ -3,7 +3,6 @@
 #include <QtGui/QMainWindow>
 #include "ui_MainWindow.h"
 #include "ControlWidget.h"
-#include "PMControlWidget.h"
 #include "PropertyWidget.h"
 #include "GLWidget3D.h"
 #include "UrbanGeometry.h"
@@ -14,12 +13,11 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
-	static enum { MODE_AREA_SELECT = 0, MODE_AREA_CREATE, MODE_HIGHWAY_SKETCH, MODE_BOULEVARD_SKETCH, MODE_3DVIEW, MODE_TERRAIN, MODE_DEBUG };
+	static enum { MODE_AREA_SELECT = 0, MODE_AREA_CREATE, MODE_HINT_LINE, MODE_HIGHWAY_SKETCH, MODE_BOULEVARD_SKETCH, MODE_3DVIEW, MODE_TERRAIN, MODE_DEBUG };
 
 public:
 	Ui::MainWindow ui;
 	ControlWidget* controlWidget;
-	PMControlWidget* pmcontrolWidget;
 	PropertyWidget* propertyWidget;
 	GLWidget3D* glWidget;
 	UrbanGeometry* urbanGeometry;
@@ -47,6 +45,7 @@ public slots:
 	void onAreaSelect();
 	void onAreaCreate();
 	void onAreaDelete();
+	void onHintLine();
 	void onHighwaySketch();
 	/*
 	void onBoulevardSketch();
@@ -56,7 +55,6 @@ public slots:
 	void onGenerateParcels();
 	void onDisplayRoads();
 	void onShowControlWidget();
-	void onShowPMControlWidget();
 	void onShowPropertyWidget();
 };
 
