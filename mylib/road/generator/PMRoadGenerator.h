@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../../common/Polygon2D.h"
-#include "../../common/Polygon2D.h"
 #include "../RoadGraph.h"
 #include "../feature/KDEFeature.h"
 #include "../feature/KDEFeatureItem.h"

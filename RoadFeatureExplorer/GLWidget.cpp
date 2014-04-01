@@ -64,6 +64,13 @@ void GLWidget::drawScene() {
 	} else if (selectedAreaBuilder.selecting()) {
 		renderer->renderPolyline(selectedAreaBuilder.polyline(), QColor(0, 0, 255), GL_LINE_STIPPLE, height);
 	}
+
+	// draw a hint line
+	if (hintLineBuilder.selected()) {
+		renderer->renderPolyline(hintLine, QColor(255, 0, 0), GL_LINE_STIPPLE, height);
+	} else if (hintLineBuilder.selecting()) {
+		renderer->renderPolyline(hintLineBuilder.polyline(), QColor(255, 0, 0), GL_LINE_STIPPLE, height);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,13 +133,27 @@ void GLWidget::mousePressEvent(QMouseEvent *e) {
 	mouseTo2D(e->x(), e->y(), pos);
 
 	if (e->buttons() & Qt::LeftButton) {
-		if (!selectedAreaBuilder.selecting()) {
-			selectedAreaBuilder.start(pos);
-			setMouseTracking(true);
-		}
+		switch (mainWin->mode) {
+		case MainWindow::MODE_AREA_CREATE:
+			if (!selectedAreaBuilder.selecting()) {
+				selectedAreaBuilder.start(pos);
+				setMouseTracking(true);
+			}
 		
-		if (selectedAreaBuilder.selecting()) {
-			selectedAreaBuilder.addPoint(pos);
+			if (selectedAreaBuilder.selecting()) {
+				selectedAreaBuilder.addPoint(pos);
+			}
+			break;
+		case MainWindow::MODE_HINT_LINE:
+			if (!hintLineBuilder.selecting()) {
+				hintLineBuilder.start(pos);
+				setMouseTracking(true);
+			}
+		
+			if (hintLineBuilder.selecting()) {
+				hintLineBuilder.addPoint(pos);
+			}
+			break;
 		}
 	}
 
@@ -174,6 +195,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e) {
 		lastPos = e->pos();
 	} else if (selectedAreaBuilder.selecting()) {	// Move the last point of the selected polygonal area
 		selectedAreaBuilder.moveLastPoint(pos);
+	} else if (hintLineBuilder.selecting()) {
+		hintLineBuilder.moveLastPoint(pos);
 	}
 
 	updateGL();
@@ -182,8 +205,16 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e) {
 void GLWidget::mouseDoubleClickEvent(QMouseEvent *e) {
 	setMouseTracking(false);
 
-	selectedAreaBuilder.end();
-	selectedArea = selectedAreaBuilder.polygon();
+	switch (mainWin->mode) {
+	case MainWindow::MODE_AREA_CREATE:
+		selectedAreaBuilder.end();
+		selectedArea = selectedAreaBuilder.polygon();
+		break;
+	case MainWindow::MODE_HINT_LINE:
+		hintLineBuilder.end();
+		hintLine = hintLineBuilder.polyline();
+		break;
+	}
 
 	roadFeature.clear();
 }

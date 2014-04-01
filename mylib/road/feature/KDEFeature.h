@@ -41,6 +41,7 @@ public:
 	void scale(const Polygon2D &area);
 
 	float length(int roadType) const;
+	float curvature(int roadType) const;
 	void computePMParameters();
 
 	void load(QDomNode& node);

@@ -7,10 +7,16 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	// setup the docking widgets
 	controlWidget = new ControlWidget(this);
 
+	// setup the toolbar
+	ui.fileToolBar->addAction(ui.actionNew);
+	ui.fileToolBar->addAction(ui.actionOpen);
+	ui.areaToolBar->addAction(ui.actionHintLine);
+
 	// register the menu's action handlers
 	connect(ui.actionNew, SIGNAL(triggered()), this, SLOT(onNew()));
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(onOpen()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ui.actionHintLine, SIGNAL(triggered()), this, SLOT(onHintLine()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
 
 	// setup the GL widget
@@ -19,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	controlWidget->show();
 	addDockWidget(Qt::LeftDockWidgetArea, controlWidget);
+
+	mode = MODE_AREA_CREATE;
 }
 
 MainWindow::~MainWindow() {
@@ -60,6 +68,10 @@ void MainWindow::onOpen() {
 	GraphUtil::copyRoads(glWidget->roads, glWidget->origRoads);
 	glWidget->updateGL();
 	QApplication::restoreOverrideCursor();
+}
+
+void MainWindow::onHintLine() {
+	mode = MODE_HINT_LINE;
 }
 
 void MainWindow::onShowControlWidget() {

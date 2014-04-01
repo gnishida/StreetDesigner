@@ -27,7 +27,7 @@ This file is part of QtUrban.
 #include <road/GraphUtil.h>
 #include <road/generator/KDERoadGenerator.h>
 #include <road/generator/ExRoadGenerator.h>
-#include <road/generator/GenericRoadGenerator.h>
+#include <road/generator/UShapeRoadGenerator.h>
 #include <road/generator/PMRoadGenerator.h>
 #include <road/feature/KDEFeature.h>
 #include <road/feature/GenericFeature.h>
@@ -68,10 +68,10 @@ void UrbanGeometry::generateRoads(RoadFeature &rf) {
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
-void UrbanGeometry::generateParametricRoads(RoadFeature &rf) {
+void UrbanGeometry::generateUShapeRoads(RoadFeature &rf) {
 	if (areas.selectedIndex == -1) return;
 
-	GenericRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<GenericFeature&>(*rf.features[0]));
+	UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, dynamic_cast<KDEFeature&>(*rf.features[0]));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -204,7 +204,7 @@ void UrbanGeometry::saveTerrain(const QString &filename) {
 	}
 
 	QTextStream out(&file);
-	out << this->width << " " << this->depth << " " << terrain->getCellLength() << endl;
+	out << terrain->width << " " << terrain->depth << " " << terrain->getCellLength() << endl;
 	int count = 0;
 	for (int i = 0; i < terrain->getNumCols(); ++i) {
 		for (int j = 0; j < terrain->getNumRows(); ++j) {

@@ -10,9 +10,14 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
+	static enum { MODE_AREA_CREATE = 0, MODE_HINT_LINE };
+
+public:
 	Ui::MainWindow ui;
 	ControlWidget* controlWidget;
 	GLWidget* glWidget;
+
+	int mode;
 
 public:
 	MainWindow(QWidget *parent = 0, Qt::WFlags flags = 0);
@@ -25,6 +30,7 @@ protected:
 public slots:
 	void onNew();
 	void onOpen();
+	void onHintLine();
 	void onShowControlWidget();
 };
 

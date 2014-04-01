@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Camera.h"
-#include <util/PolygonBuilder.h>
 #include <road/RoadGraph.h>
 #include <road/feature/RoadFeature.h>
 #include <road/feature/GridFeature.h>
 #include <road/feature/RadialFeature.h>
 #include <road/feature/GenericFeature.h>
 #include <render/RendererHelper.h>
+#include <util/PolygonBuilder.h>
+#include <util/PolylineBuilder.h>
 #include <QGLWidget>
 #include <QString>
 
@@ -27,6 +28,8 @@ public:
 	QPoint lastPos;
 	Polygon2D selectedArea;
 	PolygonBuilder selectedAreaBuilder;
+	Polyline2D hintLine;
+	PolylineBuilder hintLineBuilder;
 
 	RoadFeature roadFeature;
 	/*

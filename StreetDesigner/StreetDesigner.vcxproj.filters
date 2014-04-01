@@ -265,6 +265,9 @@
     <ClCompile Include="..\mylib\road\generator\ExRoadGenerator.cpp">
       <Filter>mylib\road\generator</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\road\generator\UShapeRoadGenerator.cpp">
+      <Filter>mylib\road\generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -477,6 +480,9 @@
       <Filter>mylib\render</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\ExRoadGenerator.h">
+      <Filter>mylib\road\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\road\generator\UShapeRoadGenerator.h">
       <Filter>mylib\road\generator</Filter>
     </ClInclude>
   </ItemGroup>

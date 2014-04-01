@@ -391,6 +391,19 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="pushButtonGenerateUShape">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>690</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Generate For UShape</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

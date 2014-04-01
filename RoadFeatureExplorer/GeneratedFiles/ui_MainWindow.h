@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Fri Mar 28 09:42:21 2014
+** Created: Tue Apr 1 10:14:09 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -45,11 +45,15 @@ public:
     QAction *actionModeLayer;
     QAction *actionModeSketch;
     QAction *actionShowArea;
+    QAction *actionHint_Line;
+    QAction *actionHintLine;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuWindow;
-    QToolBar *mainToolBar;
+    QMenu *menuArea;
+    QToolBar *fileToolBar;
+    QToolBar *areaToolBar;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -121,6 +125,10 @@ public:
         actionModeSketch->setCheckable(true);
         actionShowArea = new QAction(MainWindow);
         actionShowArea->setObjectName(QString::fromUtf8("actionShowArea"));
+        actionHint_Line = new QAction(MainWindow);
+        actionHint_Line->setObjectName(QString::fromUtf8("actionHint_Line"));
+        actionHintLine = new QAction(MainWindow);
+        actionHintLine->setObjectName(QString::fromUtf8("actionHintLine"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -131,21 +139,28 @@ public:
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuWindow = new QMenu(menuBar);
         menuWindow->setObjectName(QString::fromUtf8("menuWindow"));
+        menuArea = new QMenu(menuBar);
+        menuArea->setObjectName(QString::fromUtf8("menuArea"));
         MainWindow->setMenuBar(menuBar);
-        mainToolBar = new QToolBar(MainWindow);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
-        MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
+        fileToolBar = new QToolBar(MainWindow);
+        fileToolBar->setObjectName(QString::fromUtf8("fileToolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, fileToolBar);
+        areaToolBar = new QToolBar(MainWindow);
+        areaToolBar->setObjectName(QString::fromUtf8("areaToolBar"));
+        MainWindow->addToolBar(Qt::TopToolBarArea, areaToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuArea->menuAction());
         menuBar->addAction(menuWindow->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuWindow->addAction(actionControlWidget);
+        menuArea->addAction(actionHintLine);
 
         retranslateUi(MainWindow);
 
@@ -185,8 +200,11 @@ public:
         actionModeLayer->setText(QApplication::translate("MainWindow", "Graph", 0, QApplication::UnicodeUTF8));
         actionModeSketch->setText(QApplication::translate("MainWindow", "Sketch", 0, QApplication::UnicodeUTF8));
         actionShowArea->setText(QApplication::translate("MainWindow", "Show Area", 0, QApplication::UnicodeUTF8));
+        actionHint_Line->setText(QApplication::translate("MainWindow", "Hint Line", 0, QApplication::UnicodeUTF8));
+        actionHintLine->setText(QApplication::translate("MainWindow", "Hint Line", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuWindow->setTitle(QApplication::translate("MainWindow", "Window", 0, QApplication::UnicodeUTF8));
+        menuArea->setTitle(QApplication::translate("MainWindow", "Area", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

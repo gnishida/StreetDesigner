@@ -163,6 +163,7 @@
     <ClCompile Include="..\mylib\road\RoadGraph.cpp" />
     <ClCompile Include="..\mylib\road\RoadVertex.cpp" />
     <ClCompile Include="..\mylib\util\PolygonBuilder.cpp" />
+    <ClCompile Include="..\mylib\util\PolylineBuilder.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ControlWidget.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
@@ -276,6 +277,7 @@
     <ClInclude Include="..\mylib\road\RoadGraph.h" />
     <ClInclude Include="..\mylib\road\RoadVertex.h" />
     <ClInclude Include="..\mylib\util\PolygonBuilder.h" />
+    <ClInclude Include="..\mylib\util\PolylineBuilder.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GeneratedFiles\ui_ControlWidget.h" />
     <ClInclude Include="GLWidget.h" />

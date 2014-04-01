@@ -123,9 +123,20 @@ void KDEFeature::scale(const Polygon2D &area) {
  */
 float KDEFeature::length(int roadType) const {
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		return Util::genRandNormal(avgAvenueLength, varAvenueLength * 0.25f);
+		return Util::genRandNormal(avgAvenueLength, varAvenueLength);
 	} else {
-		return Util::genRandNormal(avgStreetLength, varStreetLength * 0.25f);
+		return Util::genRandNormal(avgStreetLength, varStreetLength);
+	}
+}
+
+/**
+ * PM用にエッジの曲率を生成する
+ */
+float KDEFeature::curvature(int roadType) const {
+	if (roadType == RoadEdge::TYPE_AVENUE) {
+		return Util::genRandNormal(avgAvenueCurvature, varAvenueCurvature);
+	} else {
+		return Util::genRandNormal(avgStreetCurvature, varStreetCurvature);
 	}
 }
 
@@ -151,9 +162,11 @@ void KDEFeature::computePMParameters() {
 	}
 
 	avgAvenueLength = totalLength / (float)num;
-	varAvenueLength = totalLength2 / (float)num - avgAvenueLength;
+	varAvenueLength = totalLength2 / (float)num - SQR(avgAvenueLength);
 	avgAvenueCurvature = totalCurvature / (float)num;
-	varAvenueCurvature = totalCurvature2 / (float)num - avgAvenueCurvature;
+	varAvenueCurvature = totalCurvature2 / (float)num - SQR(avgAvenueCurvature);
+	std::cout << "avgAvenueCurvature: " << avgAvenueCurvature << std::endl;
+	std::cout << "varAvenueCurvature: " << varAvenueCurvature << std::endl;
 
 	// Local street用パラメータを計算
 	totalLength = 0.0f;
@@ -173,9 +186,9 @@ void KDEFeature::computePMParameters() {
 	}
 
 	avgStreetLength = totalLength / (float)num;
-	varStreetLength = totalLength2 / (float)num - avgStreetLength;
+	varStreetLength = totalLength2 / (float)num - SQR(avgStreetLength);
 	avgStreetCurvature = totalCurvature / (float)num;
-	varStreetCurvature = totalCurvature2 / (float)num - avgStreetCurvature;
+	varStreetCurvature = totalCurvature2 / (float)num - SQR(avgStreetCurvature);
 }
 
 /**

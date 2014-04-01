@@ -24,7 +24,7 @@ This file is part of QtUrban.
 namespace mylib {
 
 class Terrain : public GeometryObject {
-private:
+public:
 	int width;
 	int depth;
 	int numCols;

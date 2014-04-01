@@ -646,12 +646,16 @@ void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float
 	}
 }
 
-void RoadGeneratorHelper::createFourEdges(float direction, float step, float length, float organicFactor, std::vector<Polyline2D> &polylines) {
+void RoadGeneratorHelper::createFourEdges(float direction, float step, float length, float curvature, std::vector<Polyline2D> &polylines) {
 	polylines.clear();
 
 	std::vector<float> directions;
 	createFourDirection(direction, directions);
 
+	if (Util::genRand() >= 0.5f) {
+		curvature = -curvature;
+	}
+	
 	for (int i = 0; i < directions.size(); ++i) {
 		float deltaDir = 0.0f;
 
@@ -668,8 +672,13 @@ void RoadGeneratorHelper::createFourEdges(float direction, float step, float len
 
 			// Update the direction
 			deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
-			float newDir = directions[i] + organicFactor * 8.3333f * deltaDir;
+			float newDir = directions[i] + curvature * 8.3333f * deltaDir;
 			directions[i] = 0.9 * directions[i] + 0.1 * newDir;
+
+			/*
+			float theta = atan2f(curvature * step, 1.0f);
+			directions[i] = directions[i] + Util::genRandNormal(theta, 0.1f);
+			*/
 		}
 
 		polylines.push_back(polyline);

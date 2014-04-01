@@ -20,6 +20,7 @@ public:
 
 public slots:
 	void generateKDE();
+	void generateUShape();
 	void perturb();
 	void clear();
 	void mergeRoads();

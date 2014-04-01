@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Fri Mar 28 16:43:32 2014
+** Created: Mon Mar 31 15:30:05 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -58,6 +58,7 @@ public:
     QPushButton *pushButtonMerge;
     QGroupBox *groupBox_2;
     QSlider *horizontalSliderExactSimilarityFactor;
+    QPushButton *pushButtonGenerateUShape;
     QButtonGroup *buttonGroup_2;
     QButtonGroup *buttonGroup;
 
@@ -168,6 +169,9 @@ public:
         horizontalSliderExactSimilarityFactor->setGeometry(QRect(10, 30, 151, 20));
         horizontalSliderExactSimilarityFactor->setMaximum(100);
         horizontalSliderExactSimilarityFactor->setOrientation(Qt::Horizontal);
+        pushButtonGenerateUShape = new QPushButton(dockWidgetContents);
+        pushButtonGenerateUShape->setObjectName(QString::fromUtf8("pushButtonGenerateUShape"));
+        pushButtonGenerateUShape->setGeometry(QRect(30, 690, 131, 31));
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -198,6 +202,7 @@ public:
         pushButtonConnect->setText(QApplication::translate("ControlWidget", "Connect", 0, QApplication::UnicodeUTF8));
         pushButtonMerge->setText(QApplication::translate("ControlWidget", "Merge", 0, QApplication::UnicodeUTF8));
         groupBox_2->setTitle(QApplication::translate("ControlWidget", "Similarity Control:", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerateUShape->setText(QApplication::translate("ControlWidget", "Generate For UShape", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi
 

@@ -197,6 +197,9 @@
     <ClCompile Include="..\mylib\render\RenderableCylinderList.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
+    <ClCompile Include="..\mylib\util\PolylineBuilder.cpp">
+      <Filter>mylib\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.h">
@@ -344,6 +347,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableCylinderList.h">
       <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\util\PolylineBuilder.h">
+      <Filter>mylib\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

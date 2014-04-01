@@ -63,7 +63,7 @@ public:
 	void clear();
 	void clearGeometry();
 	void generateRoads(RoadFeature &rf);
-	void generateParametricRoads(RoadFeature &rf);
+	void generateUShapeRoads(RoadFeature &rf);
 	void generatePMRoads();
 	void generateBlocks();
 
