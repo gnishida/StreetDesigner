@@ -1,5 +1,6 @@
 ﻿#include <limits>
 #include "../../common/Util.h"
+#include "../../common/ConvexHull.h"
 #include "../GraphUtil.h"
 #include "RoadGeneratorHelper.h"
 
@@ -664,6 +665,109 @@ void RoadGeneratorHelper::removeDeadend(RoadGraph& roads) {
 			roads.graph[*ei]->valid = false;
 		}
 	}
+}
+
+/**
+ * Deadendの道路セグメントを、可能な限りつなぐ。
+ * エリア間の道路網をつなぐ場合に使用する。
+ */
+void RoadGeneratorHelper::connectRoads(RoadGraph& roads, float distance_threshold, float angle_threshold) {
+	// ConvexHullを計算する
+	ConvexHull convexHull;
+	Polygon2D hull;
+
+	// 境界上の頂点、エッジの組をリストアップする
+	QList<RoadVertexDesc> boundaryNodes;
+	QMap<RoadVertexDesc, RoadEdgeDesc> boundaryEdges;
+	QMap<RoadVertexDesc, RoadVertexDesc> boundaryNodesPair;
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+		
+		convexHull.addPoint(roads.graph[src]->pt);
+		convexHull.addPoint(roads.graph[tgt]->pt);
+
+		if (roads.graph[src]->onBoundary && GraphUtil::getDegree(roads, src) == 1) {
+			if (!boundaryNodes.contains(src)) boundaryNodes.push_back(src);
+			if (!boundaryEdges.contains(src)) boundaryEdges[src] = *ei;
+			if (!boundaryNodesPair.contains(src)) boundaryNodesPair[src] = tgt;
+		} else if (roads.graph[tgt]->onBoundary && GraphUtil::getDegree(roads, tgt) == 1) {
+			if (!boundaryNodes.contains(tgt)) boundaryNodes.push_back(tgt);
+			if (!boundaryEdges.contains(tgt)) boundaryEdges[tgt] = *ei;
+			if (!boundaryNodesPair.contains(tgt)) boundaryNodesPair[tgt] = src;
+		}
+	}
+
+	convexHull.convexHull(hull);
+
+	// リストアップしたエッジを、それぞれ少しずつ伸ばしていき、他のエッジにぶつかったらストップする
+	int numIterations = 50000;
+	while (!boundaryNodes.empty() && numIterations >= 0) {
+		RoadVertexDesc v_desc = boundaryNodes.front();
+		boundaryNodes.pop_front();
+
+		if (!roads.graph[v_desc]->valid) continue;
+
+		RoadVertexDesc v2_desc = boundaryNodesPair[v_desc];
+		RoadEdgeDesc e_desc = boundaryEdges[v_desc];
+
+		QVector2D step;
+		if ((roads.graph[v_desc]->pt - roads.graph[e_desc]->polyline[0]).lengthSquared() <= (roads.graph[v2_desc]->pt - roads.graph[e_desc]->polyline[0]).lengthSquared()) {
+			step = roads.graph[e_desc]->polyline[0] - roads.graph[e_desc]->polyline[1];
+		} else {
+			step = roads.graph[e_desc]->polyline.last() - roads.graph[e_desc]->polyline[roads.graph[e_desc]->polyline.size() - 2];
+		}
+		step = step.normalized() * 20.0f;
+
+		if (growRoadOneStep(roads, v_desc, step)) {
+			if (hull.contains(roads.graph[v_desc]->pt)) {
+				boundaryNodes.push_back(v_desc);
+			}
+		}
+
+		numIterations--;
+	}
+}
+
+bool RoadGeneratorHelper::growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc, const QVector2D& step) {
+	bool snapped = false;
+	bool intersected = false;
+
+	QVector2D pt = roads.graph[srcDesc]->pt + step;
+	RoadEdgeDesc closestEdge;
+
+	// INTERSECTS -- If edge intersects other edge
+	QVector2D intPoint;
+	intersected = RoadGeneratorHelper::intersects(roads, roads.graph[srcDesc]->pt, pt, closestEdge, intPoint);
+	if (intersected) {
+		pt = intPoint;
+	}
+
+	if (intersected) {
+		RoadVertexDesc splitVertex = GraphUtil::splitEdge(roads, closestEdge, pt);
+		GraphUtil::snapVertex(roads, srcDesc, splitVertex);
+
+		// 交差相手のエッジが、成長中のエッジなら、その成長をストップする
+		RoadVertexDesc src = boost::source(closestEdge, roads.graph);
+		RoadVertexDesc tgt = boost::target(closestEdge, roads.graph);
+		if (roads.graph[src]->onBoundary) {
+			RoadEdgeDesc e = GraphUtil::getEdge(roads, src, splitVertex);
+			roads.graph[e]->valid = false;
+			roads.graph[src]->valid = false;
+		} else if (roads.graph[tgt]->onBoundary) {
+			RoadEdgeDesc e = GraphUtil::getEdge(roads, tgt, splitVertex);
+			roads.graph[e]->valid = false;
+			roads.graph[tgt]->valid = false;
+		}
+
+		return false;
+	} else {
+		GraphUtil::moveVertex(roads, srcDesc, pt);
+		return true;
+	}	
 }
 
 void RoadGeneratorHelper::createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges) {

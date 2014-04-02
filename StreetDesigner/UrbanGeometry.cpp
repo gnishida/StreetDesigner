@@ -27,6 +27,7 @@ This file is part of QtUrban.
 #include <road/GraphUtil.h>
 #include <road/generator/ExRoadGenerator.h>
 #include <road/generator/UShapeRoadGenerator.h>
+#include <road/generator/RoadGeneratorHelper.h>
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
 #include "BlockGenerator.h"
@@ -60,7 +61,7 @@ void UrbanGeometry::generateRoads(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 
 	if (areas.selectedArea()->hintLine.size() > 0) {
-		UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, feature);
+		UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 	} else {
 		ExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, feature);
 	}
@@ -143,7 +144,8 @@ void UrbanGeometry::mergeRoads() {
 }
 
 void UrbanGeometry::connectRoads() {
-	//KDERoadGenerator::connectRoads(roads, 200.0f, 0.15f);
+	RoadGeneratorHelper::connectRoads(roads, 200.0f, 0.15f);
+	GraphUtil::removeDeadEnd(roads);
 
 	roads.adaptToTerrain(terrain);
 }

@@ -20,7 +20,6 @@ public:
 
 public slots:
 	void generateRoads();
-	void generateUShape();
 	void perturb();
 	void clear();
 	void mergeRoads();

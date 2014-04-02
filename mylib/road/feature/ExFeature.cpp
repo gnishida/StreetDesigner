@@ -118,7 +118,7 @@ float ExFeature::length(int roadType) const {
 		return length;
 	} else {
 		float length = Util::genRandNormal(avgStreetLength, varStreetLength);
-		if (length < 20.0f) length = 20.0f;
+		if (length < 30.0f) length = 30.0f;
 		return length;
 	}
 }

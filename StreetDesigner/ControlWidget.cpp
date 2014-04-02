@@ -30,8 +30,6 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
 
-	connect(ui.pushButtonGenerateUShape, SIGNAL(clicked()), this, SLOT(generateUShape()));
-
 	hide();
 }
 
@@ -42,44 +40,6 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
  * Event handler for button [Generate Roads]
  */
 void ControlWidget::generateRoads() {
-	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
-
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
-
-	if (filename.isEmpty()) return;
-
-	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
-	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
-	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
-	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
-	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-
-	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
-	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
-	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
-
-	G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
-
-	int orientation = ui.dialOrientation->value() - 180;
-	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
-
-	ExFeature feature;
-	feature.load(filename);
-
-	if (orientation != 0) {
-		//feature.rotate(orientation);
-	}
-
-	if (areaScaling) {
-		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
-	}
-
-	mainWin->urbanGeometry->generateRoads(feature);
-
-	mainWin->glWidget->updateGL();
-}
-
-void ControlWidget::generateUShape() {
 	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));

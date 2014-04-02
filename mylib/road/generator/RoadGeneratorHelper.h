@@ -36,7 +36,9 @@ public:
 	static void createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges);
 
 	static void removeDeadend(RoadGraph& roads);
-
+	static void connectRoads(RoadGraph& roads, float distance_threshold, float angle_threshold);
+	static bool growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc, const QVector2D& step);
+	
 	static int getRelativeDirectionInArea(const BBox &bbox, const QVector2D &pt);
 
 	static bool isWithinScaledArea(const Polygon2D &area, float factor, const QVector2D &pt);
