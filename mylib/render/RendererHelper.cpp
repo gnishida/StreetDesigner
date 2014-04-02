@@ -42,6 +42,8 @@ void RendererHelper::renderOne(mylib::RenderablePtr renderable) {
  * ただし、ポリゴンデータ自体は、閉じていなくて良い。
  */
 void RendererHelper::renderArea(const Polygon3D& area, const QColor& color, GLenum lineType) {
+	if (area.size() == 0) return;
+
 	std::vector<mylib::RenderablePtr> renderables;
 	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(lineType, 3.0f)));
 	renderables.push_back(mylib::RenderablePtr(new mylib::Renderable(GL_POINTS, 10.0f)));

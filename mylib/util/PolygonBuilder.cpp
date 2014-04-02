@@ -58,6 +58,18 @@ Polygon2D PolygonBuilder::polygon() const {
 	return area;
 }
 
+Polygon3D PolygonBuilder::polygon3D() const {
+	Polygon3D area;
+
+	for (int i = 0; i < _polyline3D.size(); ++i) {
+		area.push_back(_polyline3D[i]);
+	}
+
+	area.correct();
+
+	return area;
+}
+
 const Polyline3D& PolygonBuilder::polyline3D() const {
 	return _polyline3D;
 }

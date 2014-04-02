@@ -3,6 +3,7 @@
 #include <QVector2D>
 #include "../common/common.h"
 #include "../common/Polygon2D.h"
+#include "../common/Polygon3D.h"
 #include "../common/Polyline2D.h"
 #include "../common/Polyline3D.h"
 #include "../render/Terrain.h"
@@ -28,6 +29,7 @@ public:
 	Polyline2D polyline() const;
 	Polygon2D polygon() const;
 
+	Polygon3D polygon3D() const;
 	const Polyline3D& polyline3D() const;
 
 	void adaptToTerrain(mylib::Terrain* terrain);

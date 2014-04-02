@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>moc;h;cpp</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{799fc462-ca4c-4300-be24-08131cf975a4}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{150eac5a-8779-4132-80d4-2c5bde124c0c}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="mylib">
+      <UniqueIdentifier>{4850da03-d697-4858-adaa-5c7b9d3d7a02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\render">
+      <UniqueIdentifier>{35f04ed9-668a-48b0-9cd4-1783cada9fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h</Extensions>
+    </Filter>
+    <Filter Include="mylib\common">
+      <UniqueIdentifier>{a45cd50b-b40f-463e-8428-a335d89c1470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mylib\util">
+      <UniqueIdentifier>{bbb2e73f-b508-41d8-8d77-438e0f3c2118}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GeneratedFiles\qrc_MainWindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\camera_3d.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\GeometryObject.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Noncopyable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderable.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Renderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Terrain.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TerrainCell.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\Texture.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\TextureManager.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\WaterRenderer.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLWidget3D.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainSizeInputDialog.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlWidget.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UrbanGeometry.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ControlWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_TerrainSizeInputDialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_TerrainSizeInputDialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ElevationColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\global.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableQuadList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\ColorTable.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Util.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\util\PolygonBuilder.cpp">
+      <Filter>mylib\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RendererHelper.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polygon2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polygon3D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\BBox.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polyline2D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\Polyline3D.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="MainWindow.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainWindow.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TerrainSizeInputDialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TerrainSizeInputDialog.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ControlWidget.h">
+      <Filter>Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_MainWindow.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\camera_3d.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\GeometryObject.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Noncopyable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderable.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Renderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Terrain.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TerrainCell.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\Texture.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\TextureManager.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\WaterRenderer.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="GLWidget3D.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_TerrainSizeInputDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ControlWidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UrbanGeometry.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\common.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ElevationColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\global.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableQuadList.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\ColorTable.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Util.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\util\PolygonBuilder.h">
+      <Filter>mylib\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RendererHelper.h">
+      <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polygon2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polygon3D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\BBox.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polyline2D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\Polyline3D.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
