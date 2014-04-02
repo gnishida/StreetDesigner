@@ -46,7 +46,8 @@ int main(int argc, char *argv[]) {
 	G::global()["roadOrganicFactor"] = 0.1f;
 	G::global()["roadAngleRandomness"] = 0.1f;
 	G::global()["roadSnapFactor"] = 0.7f;
-	G::global()["roadAngleTolerance"] = 1.2566f;
+	//G::global()["roadAngleTolerance"] = 1.2566f;
+	G::global()["roadAngleTolerance"] = 1.0f;
 
 	QApplication a(argc, argv);
 	MainWindow w;

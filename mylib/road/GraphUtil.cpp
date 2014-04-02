@@ -411,7 +411,8 @@ bool GraphUtil::hasRedundantEdge(RoadGraph& roads, RoadVertexDesc desc, const Po
 	for (boost::tie(ei, eend) = boost::out_edges(desc, roads.graph); ei != eend; ++ei) {
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
-		if (Util::angleThreePoints(roads.graph[tgt]->pt, roads.graph[desc]->pt, polyline.last()) < threshold) return true;
+		//if (Util::angleThreePoints(roads.graph[tgt]->pt, roads.graph[desc]->pt, polyline.last()) < threshold) return true;
+		if (Util::angleThreePoints(roads.graph[tgt]->pt, roads.graph[desc]->pt, polyline[1]) < threshold) return true;
 	}
 
 	return false;
@@ -2975,7 +2976,7 @@ void GraphUtil::removeShortDeadend(RoadGraph& roads, float threshold) {
 /**
  * 道路の統計情報を計算する。
  */
-void GraphUtil::computeStatistics(RoadGraph &roads, float avgEdgeLength, float varEdgeLength, float avgEdgeCurvature, float varEdgeCurvature) {
+void GraphUtil::computeStatistics(RoadGraph &roads, float &avgEdgeLength, float &varEdgeLength, float &avgEdgeCurvature, float &varEdgeCurvature) {
 	float totalLength = 0.0f;
 	float totalLength2 = 0.0f;
 	float totalCurvature = 0.0f;

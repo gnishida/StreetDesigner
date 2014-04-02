@@ -31,7 +31,6 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 				additionalSeeds.push_back(desc);
 			}
 		}
-		return;
 		for (; !additionalSeeds.empty() && i < G::getInt("numIterations"); ++i) {
 			RoadVertexDesc desc = additionalSeeds.front();
 			additionalSeeds.pop_front();
@@ -45,10 +44,11 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 	additionalSeeds.clear();
 
 	GraphUtil::removeSelfIntersectingRoads(roads);
+	RoadGeneratorHelper::removeDeadend(roads);
 
 	// Local streetを生成
 	if (G::getBool("generateLocalStreets")) {
-		generateStreetSeeds2(roads, area, feature, seeds);
+		generateStreetSeeds(roads, area, feature, seeds);
 		
 		int i;
 		for (i = 0; !seeds.empty() && i < G::getInt("numIterations"); ++i) {
@@ -114,7 +114,10 @@ bool UShapeRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area,
 	return true;
 }
 
-void UShapeRoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D &area, ExFeature &f, std::list<RoadVertexDesc> &seeds) {
+/**
+ * Local Street用のシードを生成する。
+ */
+void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &area, ExFeature &f, std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
 
 	int i = 0;
@@ -132,7 +135,11 @@ void UShapeRoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
-		if (roads.graph[e]->properties.contains("example_desc")) {
+		if (roads.graph[e]->properties["byExample"] == true) {
+			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
+			RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
+			QVector2D offset = f.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
+			
 			while (edge->polyline.size() > 2) {
 
 
@@ -145,11 +152,12 @@ void UShapeRoadGenerator::generateStreetSeeds2(RoadGraph &roads, const Polygon2D
 
 					// この点の、Example座標空間での位置を計算する
 					BBox bbox;
-					QVector2D pt = RoadGeneratorHelper::modulo(area, f.area, edge->polyline[p_id], bbox);
+					QVector2D pt = edge->polyline[p_id] + offset;
 
 					
 					if (GraphUtil::getVertex(f.roads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
 						found = true;
+						index = p_id;
 						break;
 					}
 				}
@@ -292,15 +300,20 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		tgtDesc = GraphUtil::addVertex(roads, v);
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
+
+		// 対応するExampleが存在する場合は、それを設定する
+		// ※ エリア外に出てしまった頂点についても、とりあえずexampleを割り当ててしまう。
+		//    さもないと、そのexampleを、他のシードから成長した頂点が使い、へんな感じになっちゃう。（議論の余地アリ）
+		if (byExample && !f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
+			roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+			f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+		}
+
 		if (area.contains(new_edge->polyline.last())) {
 			// シードに追加する
 			seeds.push_back(tgtDesc);
-
-			// 対応するExampleが存在する場合は、それを設定する
-			if (byExample && !f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-				roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
-				f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
-			}
+		} else {
+			roads.graph[tgtDesc]->onBoundary = true;
 		}
 	}
 

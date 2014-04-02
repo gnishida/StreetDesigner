@@ -113,9 +113,13 @@ void ExFeature::scale(const Polygon2D &area) {
  */
 float ExFeature::length(int roadType) const {
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		return Util::genRandNormal(avgAvenueLength, varAvenueLength);
+		float length = Util::genRandNormal(avgAvenueLength, varAvenueLength);
+		if (length < 100.0f) length = 100.0f;
+		return length;
 	} else {
-		return Util::genRandNormal(avgStreetLength, varStreetLength);
+		float length = Util::genRandNormal(avgStreetLength, varStreetLength);
+		if (length < 20.0f) length = 20.0f;
+		return length;
 	}
 }
 

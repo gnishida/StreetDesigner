@@ -114,7 +114,7 @@ public:
 	static void realize(RoadGraph& roads);
 
 	// statistic
-	static void computeStatistics(RoadGraph &roads, float avgEdgeLength, float varEdgeLength, float avgEdgeCurvature, float varEdgeCurvature);
+	static void computeStatistics(RoadGraph &roads, float &avgEdgeLength, float &varEdgeLength, float &avgEdgeCurvature, float &varEdgeCurvature);
 
 	// Others
 	static bool isRoadTypeMatched(int type, int ref_type);
