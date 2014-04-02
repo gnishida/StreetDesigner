@@ -1653,7 +1653,7 @@ void GraphUtil::perturb(RoadGraph &roads, const Polygon2D &area, float factor) {
 }
 
 /**
- * 交差しているエッジを探し、あればどっちかを削除する。
+ * 交差しているエッジを探し、あればレベルが低い方を削除する。
  */
 void GraphUtil::removeSelfIntersectingRoads(RoadGraph &roads) {
 	float ta, tb;
@@ -1678,7 +1678,7 @@ void GraphUtil::removeSelfIntersectingRoads(RoadGraph &roads) {
 			if (Util::segmentSegmentIntersectXY(roads.graph[v1]->pt, roads.graph[v2]->pt, roads.graph[u1]->pt, roads.graph[u2]->pt, &ta, &tb, true, intPt)) {
 				RoadEdgeDesc toBeRemoved;
 
-				if ((v1 < u1 && v1 < u2) || (v2 < u1 && v2 < u2)) {
+				if (roads.graph[*ei]->type >= roads.graph[*ei2]->type) {
 					roads.graph[*ei2]->valid = false;
 				} else {
 					roads.graph[*ei]->valid = false;

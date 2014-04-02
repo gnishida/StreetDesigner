@@ -28,15 +28,8 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 			if (roads.graph[desc]->properties.contains("example_desc")) {
 				attemptExpansion(roads, area, desc, RoadEdge::TYPE_AVENUE, feature, seeds);
 			} else {
-				additionalSeeds.push_back(desc);
+				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_AVENUE, feature, seeds);
 			}
-		}
-		for (; !additionalSeeds.empty() && i < G::getInt("numIterations"); ++i) {
-			RoadVertexDesc desc = additionalSeeds.front();
-			additionalSeeds.pop_front();
-
-			std::cout << "attemptExpansion (avenue): " << i << " (Additional Seed: " << desc << ")" << std::endl;
-			attemptExpansion2(roads, area, desc, RoadEdge::TYPE_AVENUE, feature, additionalSeeds);
 		}
 	}
 
@@ -56,14 +49,11 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 			seeds.pop_front();
 
 			std::cout << "attemptExpansion (street): " << i << std::endl;
-			attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, feature, seeds);
-		}
-		for (; !additionalSeeds.empty() && i < G::getInt("numIterations"); ++i) {
-			RoadVertexDesc desc = additionalSeeds.front();
-			additionalSeeds.pop_front();
-
-			std::cout << "attemptExpansion (street): " << i << " (Additional Seed: " << desc << ")" << std::endl;
-			attemptExpansion2(roads, area, desc, RoadEdge::TYPE_STREET, feature, additionalSeeds);
+			if (roads.graph[desc]->properties.contains("example_desc")) {
+				attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, feature, seeds);
+			} else {
+				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_STREET, feature, seeds);
+			}
 		}
 	}
 
@@ -192,8 +182,7 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
 
 /**
  * このシードを使って、道路生成する。
- * シードには、既にどのExampleを使用するか、設定済みであること。
- * つまり、このメソッドは、Exampleベースでの生成を前提としている。
+ * Exampleベースで生成する。
  */
 void UShapeRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
 	RoadVertexDesc ex_v_desc = roads.graph[srcDesc]->properties["example_desc"].toUInt();
@@ -227,20 +216,34 @@ void UShapeRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &a
 		snapThreshold = f.avgStreetLength * 0.2f;
 	}
 
-	// 当該頂点の近くに他の頂点があれば、スナップさせる
-	RoadVertexDesc tgtDesc;
-	//if (RoadGeneratorHelper::canSnapToVertex3(roads, srcDesc, snapThreshold, tgtDesc)) {
-	if (GraphUtil::getVertex(roads, roads.graph[srcDesc]->pt, snapThreshold, srcDesc, tgtDesc)) {
-		GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
-		return;
+	// 当該シードに、roadTypeよりも上位レベルの道路セグメントが接続されているか、チェックする
+	bool isConnectedByUpperLevelRoadSegment = false;
+	RoadOutEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::out_edges(srcDesc, roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		if (roads.graph[*ei]->type > roadType) {
+			isConnectedByUpperLevelRoadSegment = true;
+			break;
+		}
 	}
 
-	RoadEdgeDesc closeEdge;
-	QVector2D closestPt;
-	if (GraphUtil::getEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
-		tgtDesc = GraphUtil::splitEdge(roads, closeEdge, closestPt);
-		GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
-		return;
+	if (!isConnectedByUpperLevelRoadSegment) {
+		// 当該頂点の近くに他の頂点があれば、スナップさせる
+		RoadVertexDesc tgtDesc;
+		//if (RoadGeneratorHelper::canSnapToVertex3(roads, srcDesc, snapThreshold, tgtDesc)) {
+		if (GraphUtil::getVertex(roads, roads.graph[srcDesc]->pt, snapThreshold, srcDesc, tgtDesc)) {
+			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
+			return;
+		}
+
+		RoadEdgeDesc closeEdge;
+		QVector2D closestPt;
+		if (GraphUtil::getEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
+			tgtDesc = GraphUtil::splitEdge(roads, closeEdge, closestPt);
+			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
+			return;
+		}
 	}
 
 	// 道路生成用のカーネルを合成する
@@ -273,7 +276,15 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 	// 他のエッジとの交差をチェック
 	if (!byExample) {
-		//if (GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
+		if (GraphUtil::isIntersect(roads, new_edge->polyline)) {
+			if (roadType == RoadEdge::TYPE_AVENUE) return false;
+
+			// Local Streetsの場合は、エッジにスナップさせたい
+			RoadEdgeDesc eiClosest;
+			QVector2D closestIntPt;
+			RoadGeneratorHelper::intersects(roads, srcDesc, new_edge->polyline, eiClosest, closestIntPt);
+			GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, closestIntPt);
+		}
 	}
 
 	RoadVertexDesc tgtDesc;
@@ -301,20 +312,26 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
 
-		// 対応するExampleが存在する場合は、それを設定する
-		// ※ エリア外に出てしまった頂点についても、とりあえずexampleを割り当ててしまう。
-		//    さもないと、そのexampleを、他のシードから成長した頂点が使い、へんな感じになっちゃう。（議論の余地アリ）
-		if (byExample && !f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-			roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
-			f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
-		}
-
 		if (area.contains(new_edge->polyline.last())) {
 			// シードに追加する
-			seeds.push_back(tgtDesc);
+			if (byExample) {
+				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
+					seeds.push_back(tgtDesc);
+				}
+
+				// 対応するExampleが存在する場合は、それを設定する
+				if (!f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
+					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+					f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+				}
+			} else {
+				seeds.push_back(tgtDesc);
+			}
 		} else {
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
+
+
 	}
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);

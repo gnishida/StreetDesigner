@@ -1,0 +1,20 @@
+<areas roads="small2.area.gsm">
+    <area>
+        <area/>
+        <hintLine/>
+    </area>
+    <area>
+        <area/>
+        <hintLine/>
+    </area>
+    <area>
+        <area>
+            <point x="-1074.18408203125" y="986.87353515625"/>
+            <point x="-322.7843933105469" y="986.87353515625"/>
+            <point x="-312.2012939453125" y="325.4301452636719"/>
+            <point x="-1068.892578125" y="320.1386108398438"/>
+            <point x="-1074.18408203125" y="986.87353515625"/>
+        </area>
+        <hintLine/>
+    </area>
+</areas>
