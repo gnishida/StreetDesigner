@@ -14,6 +14,7 @@ public:
 	QVector3D pt3D;
 	bool valid;
 	bool seed;
+	bool fixed;
 
 	bool onBoundary;
 	std::vector<float> angles;

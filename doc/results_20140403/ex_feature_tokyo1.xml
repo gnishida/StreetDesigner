@@ -1,0 +1,17 @@
+<feature>
+    <area>
+        <point x="-176.490234375" y="1041.292724609375"/>
+        <point x="1283.966796875" y="908.925048828125"/>
+        <point x="1133.9501953125" y="229.4375"/>
+        <point x="233.849853515625" y="-1041.292846679688"/>
+        <point x="-1283.966796875" y="-750.083740234375"/>
+        <point x="-176.490234375" y="1041.292724609375"/>
+    </area>
+    <hintLine>
+        <point x="-233.849609375" y="-750.083740234375"/>
+        <point x="-114.718505859375" y="472.111572265625"/>
+        <point x="944.22314453125" y="595.65478515625"/>
+    </hintLine>
+    <avenues filename="ex_feature_tokyo1.xml.avenues.gsm"/>
+    <streets filename="ex_feature_tokyo1.xml.streets.gsm"/>
+</feature>

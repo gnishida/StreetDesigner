@@ -1,4 +1,5 @@
-﻿#include "Util.h"
+﻿#include <random>
+#include "Util.h"
 #include "common.h"
 
 const float Util::MTC_FLOAT_TOL = 1e-6f;
@@ -324,6 +325,14 @@ float Util::genRand(float a, float b) {
  * Normal distributionを使用して乱数を生成する。
  */
 float Util::genRandNormal(float mean, float variance) {
+	/*
+	static std::default_random_engine generator;
+
+	std::normal_distribution<float> distribution(mean, sqrtf(variance));
+	return distribution(generator);
+	*/
+
+#if 1
 	float m = mean;
 	float s = sqrt(variance);
 
@@ -349,6 +358,7 @@ float Util::genRandNormal(float mean, float variance) {
 	}
 
 	return m + y1 * s;
+#endif
 }
 
 /**

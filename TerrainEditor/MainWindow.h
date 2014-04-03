@@ -33,6 +33,7 @@ public slots:
 	void onNew();
 	void onLoad();
 	void onSave();
+	void onAreaCreate();
 	void onShowControlWidget();
 };
 

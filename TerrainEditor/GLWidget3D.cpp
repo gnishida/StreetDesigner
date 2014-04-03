@@ -166,6 +166,9 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 		mainWin->urbanGeometry->areaBuilder.adaptToTerrain(mainWin->urbanGeometry->terrain);
 		mainWin->urbanGeometry->area = mainWin->urbanGeometry->areaBuilder.polygon3D();
 
+		mainWin->mode = MainWindow::MODE_DEFAULT;
+		mainWin->ui.actionAreaCreate->setChecked(false);
+
 		break;
 	}
 }
@@ -267,6 +270,12 @@ void GLWidget3D::keyPressEvent( QKeyEvent *e ){
 		break;
 	case Qt::Key_Alt:
 		altPressed=true;
+		break;
+	case Qt::Key_Escape:
+		mainWin->urbanGeometry->areaBuilder.cancel();
+		mainWin->mode = MainWindow::MODE_DEFAULT;
+		mainWin->ui.actionAreaCreate->setChecked(false);
+		updateGL();
 		break;
 	case Qt::Key_R:
 		std::cout << "Reseting camera pose\n";

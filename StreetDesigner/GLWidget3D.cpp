@@ -101,8 +101,6 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 		}
 		break;
 	case MainWindow::MODE_AREA_CREATE:
-		std::cout << pos.x() << "," << pos.y() << std::endl;
-
 		if (!mainWin->urbanGeometry->areaBuilder.selecting()) {
 			mainWin->urbanGeometry->areaBuilder.start(pos);
 			setMouseTracking(true);
@@ -116,8 +114,6 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 
 		break;
 	case MainWindow::MODE_HINT_LINE:
-		std::cout << pos.x() << "," << pos.y() << std::endl;
-
 		// まだエリアが選択されていない場合は、現在のマウス位置を使ってエリアを選択する
 		if (mainWin->urbanGeometry->areas.selectedIndex == -1) {
 			mainWin->urbanGeometry->areas.selectArea(pos);
@@ -130,6 +126,17 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 		
 		if (mainWin->urbanGeometry->hintLineBuilder.selecting()) {
 			mainWin->urbanGeometry->hintLineBuilder.addPoint(pos);
+		}
+
+		break;
+	case MainWindow::MODE_AVENUE_SKETCH:
+		if (!mainWin->urbanGeometry->avenueBuilder.selecting()) {
+			mainWin->urbanGeometry->avenueBuilder.start(pos);
+			setMouseTracking(true);
+		}
+		
+		if (mainWin->urbanGeometry->avenueBuilder.selecting()) {
+			mainWin->urbanGeometry->avenueBuilder.addPoint(pos);
 		}
 
 		break;
@@ -198,6 +205,12 @@ void GLWidget3D::mouseMoveEvent(QMouseEvent *event) {
 		}
 
 		break;
+	case MainWindow::MODE_AVENUE_SKETCH:
+		if (mainWin->urbanGeometry->avenueBuilder.selecting()) {	// Move the last point of the hint line
+			mainWin->urbanGeometry->avenueBuilder.moveLastPoint(pos);
+		}
+
+		break;
 	}
 
 	updateGL();
@@ -228,6 +241,19 @@ void GLWidget3D::mouseDoubleClickEvent(QMouseEvent *e) {
 		mainWin->ui.actionAreaSelect->setChecked(true);
 		mainWin->ui.actionAreaCreate->setChecked(false);
 		mainWin->ui.actionHintLine->setChecked(false);
+		break;
+	case MainWindow::MODE_AVENUE_SKETCH:
+		mainWin->urbanGeometry->avenueBuilder.end();
+
+		mainWin->urbanGeometry->addRoad(RoadEdge::TYPE_AVENUE, mainWin->urbanGeometry->avenueBuilder.polyline(), 2);
+
+		mainWin->mode = MainWindow::MODE_AREA_SELECT;
+		mainWin->ui.actionAreaSelect->setChecked(true);
+		mainWin->ui.actionAreaCreate->setChecked(false);
+		mainWin->ui.actionHintLine->setChecked(false);
+		mainWin->ui.actionAvenueSketch->setChecked(false);
+
+		updateGL();
 		break;
 	}
 }

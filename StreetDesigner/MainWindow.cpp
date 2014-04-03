@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	// setup the docking widgets
 	controlWidget = new ControlWidget(this);
-	//pmcontrolWidget = new PMControlWidget(this);
 	propertyWidget = new PropertyWidget(this);
 
 	// setup the toolbar
@@ -16,8 +15,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	ui.areaToolBar->addAction(ui.actionAreaSelect);
 	ui.areaToolBar->addAction(ui.actionAreaCreate);
 	ui.areaToolBar->addAction(ui.actionHintLine);
-	ui.areaToolBar->addAction(ui.actionHighwaySketch);
-	ui.areaToolBar->addAction(ui.actionBoulevardSketch);
+	ui.areaToolBar->addAction(ui.actionAvenueSketch);
 	ui.areaToolBar->addAction(ui.actionDebug);
 
 	ui.actionAreaSelect->setChecked(true);
@@ -37,8 +35,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionAreaCreate, SIGNAL(triggered()), this, SLOT(onAreaCreate()));
 	connect(ui.actionAreaDelete, SIGNAL(triggered()), this, SLOT(onAreaDelete()));
 	connect(ui.actionHintLine, SIGNAL(triggered()), this, SLOT(onHintLine()));
-	connect(ui.actionHighwaySketch, SIGNAL(triggered()), this, SLOT(onHighwaySketch()));
-	//connect(ui.actionBoulevardSketch, SIGNAL(triggered()), this, SLOT(onBoulevardSketch()));
+	connect(ui.actionAvenueSketch, SIGNAL(triggered()), this, SLOT(onAvenueSketch()));
 	connect(ui.actionDebug, SIGNAL(triggered()), this, SLOT(onDebug()));
 	connect(ui.actionGenerateBlocks, SIGNAL(triggered()), this, SLOT(onGenerateBlocks()));
 	connect(ui.actionGenerateParcels, SIGNAL(triggered()), this, SLOT(onGenerateParcels()));
@@ -47,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionDisplayAvenue, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionDisplayLocalStreet, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
-	//connect(ui.actionPMControlWidget, SIGNAL(triggered()), this, SLOT(onShowPMControlWidget()));
 	connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
 
 	// setup the GL widget
@@ -169,10 +165,7 @@ void MainWindow::onAreaMenu() {
 	ui.actionAreaSelect->setChecked(mode == MODE_AREA_SELECT);
 	ui.actionAreaCreate->setChecked(mode == MODE_AREA_CREATE);
 	ui.actionHintLine->setChecked(mode == MODE_HINT_LINE);
-	ui.actionHighwaySketch->setChecked(mode == MODE_HIGHWAY_SKETCH);
-	ui.actionBoulevardSketch->setChecked(mode == MODE_BOULEVARD_SKETCH);
-	ui.action3DView->setChecked(mode == MODE_3DVIEW);
-	ui.actionTerrain->setChecked(mode == MODE_TERRAIN);
+	ui.actionAvenueSketch->setChecked(mode == MODE_AVENUE_SKETCH);
 	ui.actionDebug->setChecked(mode == MODE_DEBUG);
 }
 
@@ -180,10 +173,7 @@ void MainWindow::onAreaSelect() {
 	mode = MODE_AREA_SELECT;
 	ui.actionAreaCreate->setChecked(false);
 	ui.actionHintLine->setChecked(false);
-	ui.actionHighwaySketch->setChecked(false);
-	ui.actionBoulevardSketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
+	ui.actionAvenueSketch->setChecked(false);
 	ui.actionDebug->setChecked(false);
 }
 
@@ -191,10 +181,7 @@ void MainWindow::onAreaCreate() {
 	mode = MODE_AREA_CREATE;
 	ui.actionAreaSelect->setChecked(false);
 	ui.actionHintLine->setChecked(false);
-	ui.actionHighwaySketch->setChecked(false);
-	ui.actionBoulevardSketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
+	ui.actionAvenueSketch->setChecked(false);
 	ui.actionDebug->setChecked(false);
 }
 
@@ -209,44 +196,24 @@ void MainWindow::onHintLine() {
 	ui.actionAreaCreate->setChecked(false);
 	ui.actionAreaSelect->setChecked(false);
 	ui.actionHighwaySketch->setChecked(false);
-	ui.actionBoulevardSketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
+	ui.actionAvenueSketch->setChecked(false);
 	ui.actionDebug->setChecked(false);
 }
 
-void MainWindow::onHighwaySketch() {
-	mode = MODE_HIGHWAY_SKETCH;
-	ui.actionAreaCreate->setChecked(false);
-	ui.actionAreaSelect->setChecked(false);
-	ui.actionHintLine->setChecked(false);
-	ui.actionBoulevardSketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
-	ui.actionDebug->setChecked(false);
-}
-
-/*
-void MainWindow::onBoulevardSketch() {
-	mode = MODE_BOULEVARD_SKETCH;
+void MainWindow::onAvenueSketch() {
+	mode = MODE_AVENUE_SKETCH;
 	ui.actionAreaCreate->setChecked(false);
 	ui.actionAreaSelect->setChecked(false);
 	ui.actionHighwaySketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
 	ui.actionDebug->setChecked(false);
 }
-*/
 
 void MainWindow::onDebug() {
 	mode = MODE_DEBUG;
 	ui.actionAreaSelect->setChecked(false);
 	ui.actionAreaCreate->setChecked(false);
 	ui.actionHintLine->setChecked(false);
-	ui.actionHighwaySketch->setChecked(false);
-	ui.actionBoulevardSketch->setChecked(false);
-	ui.action3DView->setChecked(false);
-	ui.actionTerrain->setChecked(false);
+	ui.actionAvenueSketch->setChecked(false);
 }
 
 void MainWindow::onGenerateBlocks() {

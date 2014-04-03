@@ -47,6 +47,8 @@ public:
 
 	PolygonBuilder areaBuilder;
 	PolylineBuilder hintLineBuilder;
+	PolylineBuilder avenueBuilder;
+
 	RoadAreaSet areas;
 	int selectedAreaIndex;
 	RendererHelper rendererHelper;
@@ -66,11 +68,13 @@ public:
 	void clearGeometry();
 	void generateRoads(ExFeature &feature);
 	void generateUShapeRoads(ExFeature &feature);
+	void generateRoadsMultiEx(std::vector<ExFeature> &features);
 	void generateBlocks();
 
 	void render(mylib::TextureManager* textureManager);
 	void adaptToTerrain();
 
+	void addRoad(int roadType, const Polyline2D &polyline, int lanes);
 	void mergeRoads();
 	void connectRoads();
 

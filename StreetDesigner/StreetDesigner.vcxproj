@@ -159,6 +159,7 @@
     <ClCompile Include="..\mylib\render\WaterRenderer.cpp" />
     <ClCompile Include="..\mylib\road\feature\ExFeature.cpp" />
     <ClCompile Include="..\mylib\road\generator\ExRoadGenerator.cpp" />
+    <ClCompile Include="..\mylib\road\generator\MultiExRoadGenerator.cpp" />
     <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp" />
     <ClCompile Include="..\mylib\road\generator\UShapeRoadGenerator.cpp" />
     <ClCompile Include="..\mylib\road\GraphUtil.cpp" />
@@ -253,6 +254,7 @@
     <ClInclude Include="..\mylib\render\WaterRenderer.h" />
     <ClInclude Include="..\mylib\road\feature\ExFeature.h" />
     <ClInclude Include="..\mylib\road\generator\ExRoadGenerator.h" />
+    <ClInclude Include="..\mylib\road\generator\MultiExRoadGenerator.h" />
     <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h" />
     <ClInclude Include="..\mylib\road\generator\UShapeRoadGenerator.h" />
     <ClInclude Include="..\mylib\road\GraphUtil.h" />

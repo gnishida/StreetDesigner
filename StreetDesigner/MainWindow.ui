@@ -51,7 +51,6 @@
      <string>Window</string>
     </property>
     <addaction name="actionControlWidget"/>
-    <addaction name="actionPMControlWidget"/>
     <addaction name="actionPropertyWidget"/>
    </widget>
    <widget class="QMenu" name="menuArea">
@@ -64,7 +63,7 @@
     <addaction name="actionHintLine"/>
     <addaction name="separator"/>
     <addaction name="actionHighwaySketch"/>
-    <addaction name="actionBoulevardSketch"/>
+    <addaction name="actionAvenueSketch"/>
     <addaction name="separator"/>
     <addaction name="actionDebug"/>
    </widget>
@@ -331,7 +330,7 @@
     <string>Save Highways</string>
    </property>
   </action>
-  <action name="actionBoulevardSketch">
+  <action name="actionAvenueSketch">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -340,7 +339,7 @@
      <normaloff>:/MainWindow/Resources/SketchB_24x24.png</normaloff>:/MainWindow/Resources/SketchB_24x24.png</iconset>
    </property>
    <property name="text">
-    <string>Boulevard Sketch</string>
+    <string>Avenue Sketch</string>
    </property>
   </action>
   <action name="actionPropertyWidget">
@@ -494,6 +493,13 @@
    </property>
   </action>
   <action name="actionHintLine">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Resources/Line_24x24.png</normaloff>:/MainWindow/Resources/Line_24x24.png</iconset>
+   </property>
    <property name="text">
     <string>Hint Line</string>
    </property>

@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Wed Apr 2 19:23:15 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Thu Apr 3 10:47:50 2014
+**      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -46,7 +46,6 @@ public:
     QAction *actionModeSketch;
     QAction *actionShowArea;
     QAction *actionAreaSelect;
-    QAction *actionAreaCreate;
     QAction *actionHighwaySketch;
     QAction *actionSave_2;
     QAction *actionSaveRoads;
@@ -75,10 +74,12 @@ public:
     QAction *actionDisplayAvenue;
     QAction *actionDisplayLocalStreet;
     QAction *actionHintLine;
+    QAction *actionAreaCreate;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuWindow;
+    QMenu *menuArea;
     QToolBar *fileToolBar;
     QToolBar *areaToolBar;
     QStatusBar *statusBar;
@@ -158,18 +159,12 @@ public:
         QIcon icon8;
         icon8.addFile(QString::fromUtf8(":/MainWindow/Resources/Select_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionAreaSelect->setIcon(icon8);
-        actionAreaCreate = new QAction(MainWindow);
-        actionAreaCreate->setObjectName(QString::fromUtf8("actionAreaCreate"));
-        actionAreaCreate->setCheckable(true);
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/MainWindow/Resources/Create_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionAreaCreate->setIcon(icon9);
         actionHighwaySketch = new QAction(MainWindow);
         actionHighwaySketch->setObjectName(QString::fromUtf8("actionHighwaySketch"));
         actionHighwaySketch->setCheckable(true);
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8("Resources/SketchH_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHighwaySketch->setIcon(icon10);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8("Resources/SketchH_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHighwaySketch->setIcon(icon9);
         actionSave_2 = new QAction(MainWindow);
         actionSave_2->setObjectName(QString::fromUtf8("actionSave_2"));
         actionSaveRoads = new QAction(MainWindow);
@@ -181,29 +176,29 @@ public:
         actionBoulevardSketch = new QAction(MainWindow);
         actionBoulevardSketch->setObjectName(QString::fromUtf8("actionBoulevardSketch"));
         actionBoulevardSketch->setCheckable(true);
-        QIcon icon11;
-        icon11.addFile(QString::fromUtf8(":/MainWindow/Resources/SketchB_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionBoulevardSketch->setIcon(icon11);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/MainWindow/Resources/SketchB_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionBoulevardSketch->setIcon(icon10);
         actionPropertyWidget = new QAction(MainWindow);
         actionPropertyWidget->setObjectName(QString::fromUtf8("actionPropertyWidget"));
         actionDebug = new QAction(MainWindow);
         actionDebug->setObjectName(QString::fromUtf8("actionDebug"));
         actionDebug->setCheckable(true);
-        QIcon icon12;
-        icon12.addFile(QString::fromUtf8(":/MainWindow/Resources/Debug_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionDebug->setIcon(icon12);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/MainWindow/Resources/Debug_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionDebug->setIcon(icon11);
         action3DView = new QAction(MainWindow);
         action3DView->setObjectName(QString::fromUtf8("action3DView"));
         action3DView->setCheckable(true);
-        QIcon icon13;
-        icon13.addFile(QString::fromUtf8(":/MainWindow/Resources/3DView_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        action3DView->setIcon(icon13);
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/MainWindow/Resources/3DView_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        action3DView->setIcon(icon12);
         actionTerrain = new QAction(MainWindow);
         actionTerrain->setObjectName(QString::fromUtf8("actionTerrain"));
         actionTerrain->setCheckable(true);
-        QIcon icon14;
-        icon14.addFile(QString::fromUtf8(":/MainWindow/Resources/Terrain_32x32.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionTerrain->setIcon(icon14);
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8(":/MainWindow/Resources/Terrain_32x32.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionTerrain->setIcon(icon13);
         actionLoadRoads = new QAction(MainWindow);
         actionLoadRoads->setObjectName(QString::fromUtf8("actionLoadRoads"));
         actionLoadAreas = new QAction(MainWindow);
@@ -248,6 +243,12 @@ public:
         actionDisplayLocalStreet->setChecked(true);
         actionHintLine = new QAction(MainWindow);
         actionHintLine->setObjectName(QString::fromUtf8("actionHintLine"));
+        actionAreaCreate = new QAction(MainWindow);
+        actionAreaCreate->setObjectName(QString::fromUtf8("actionAreaCreate"));
+        actionAreaCreate->setCheckable(true);
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/MainWindow/Resources/Create_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAreaCreate->setIcon(icon14);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -258,6 +259,8 @@ public:
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuWindow = new QMenu(menuBar);
         menuWindow->setObjectName(QString::fromUtf8("menuWindow"));
+        menuArea = new QMenu(menuBar);
+        menuArea->setObjectName(QString::fromUtf8("menuArea"));
         MainWindow->setMenuBar(menuBar);
         fileToolBar = new QToolBar(MainWindow);
         fileToolBar->setObjectName(QString::fromUtf8("fileToolBar"));
@@ -270,6 +273,7 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(menuFile->menuAction());
+        menuBar->addAction(menuArea->menuAction());
         menuBar->addAction(menuWindow->menuAction());
         menuFile->addAction(actionNew);
         menuFile->addAction(actionOpen);
@@ -277,6 +281,7 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuWindow->addAction(actionControlWidget);
+        menuArea->addAction(actionAreaCreate);
 
         retranslateUi(MainWindow);
 
@@ -317,7 +322,6 @@ public:
         actionModeSketch->setText(QApplication::translate("MainWindow", "Sketch", 0, QApplication::UnicodeUTF8));
         actionShowArea->setText(QApplication::translate("MainWindow", "Show Area", 0, QApplication::UnicodeUTF8));
         actionAreaSelect->setText(QApplication::translate("MainWindow", "Select", 0, QApplication::UnicodeUTF8));
-        actionAreaCreate->setText(QApplication::translate("MainWindow", "Create", 0, QApplication::UnicodeUTF8));
         actionHighwaySketch->setText(QApplication::translate("MainWindow", "Highway Sketch", 0, QApplication::UnicodeUTF8));
         actionSave_2->setText(QApplication::translate("MainWindow", "Save", 0, QApplication::UnicodeUTF8));
         actionSaveRoads->setText(QApplication::translate("MainWindow", "Save Roads", 0, QApplication::UnicodeUTF8));
@@ -346,8 +350,10 @@ public:
         actionDisplayAvenue->setText(QApplication::translate("MainWindow", "Avenue", 0, QApplication::UnicodeUTF8));
         actionDisplayLocalStreet->setText(QApplication::translate("MainWindow", "Local Street", 0, QApplication::UnicodeUTF8));
         actionHintLine->setText(QApplication::translate("MainWindow", "Hint Line", 0, QApplication::UnicodeUTF8));
+        actionAreaCreate->setText(QApplication::translate("MainWindow", "Create", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuWindow->setTitle(QApplication::translate("MainWindow", "Window", 0, QApplication::UnicodeUTF8));
+        menuArea->setTitle(QApplication::translate("MainWindow", "Area", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

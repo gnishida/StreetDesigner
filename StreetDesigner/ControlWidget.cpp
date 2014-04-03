@@ -13,7 +13,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 
 	// set up the UI
 	ui.setupUi(this);
-	ui.lineEditNumIterations->setText("5000");
+	ui.lineEditNumAvenueIterations->setText("1000");
+	ui.lineEditNumStreetIterations->setText("5000");
 	ui.lineEditOrganicFactor->setText("0.1");
 	ui.horizontalSliderExactSimilarityFactor->setMinimum(0);
 	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
@@ -29,6 +30,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
+	connect(ui.pushButtonGenerateMultiEx, SIGNAL(clicked()), this, SLOT(generateRoadsMultiEx()));
 
 	hide();
 }
@@ -46,7 +48,8 @@ void ControlWidget::generateRoads() {
 
 	if (filename.isEmpty()) return;
 
-	G::global()["numIterations"] = ui.lineEditNumIterations->text().toInt();
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
 	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
 	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
 	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
@@ -108,4 +111,46 @@ void ControlWidget::connectRoads() {
 	mainWin->glWidget->updateGL();
 }
 
+void ControlWidget::generateRoadsMultiEx() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	std::vector<ExFeature> features;
+	features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+	for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
+		QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+		if (filename.isEmpty()) return;
+	
+		features[i].load(filename);
+	}
+
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
+	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
+	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+
+	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
+
+	G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
+
+	int orientation = ui.dialOrientation->value() - 180;
+	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
+
+
+	if (orientation != 0) {
+		//feature.rotate(orientation);
+	}
+
+	if (areaScaling) {
+		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
+	}
+
+	mainWin->urbanGeometry->generateRoadsMultiEx(features);
+
+	mainWin->glWidget->updateGL();
+}
 

@@ -668,8 +668,49 @@ void RoadGeneratorHelper::removeDeadend(RoadGraph& roads) {
 }
 
 /**
+ * Dangling Edgeを少し伸ばして、他の頂点にsnapさせる。
+ * ただし、onBoundaryフラグがtrueの場合は、対象外。
+ * また、他のエッジと交差したり、角度がredundantなら、snapしないで削除する。
+ */
+void RoadGeneratorHelper::extendDanglingEdges(RoadGraph &roads) {
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		if (roads.graph[*vi]->onBoundary) continue;
+
+		if (GraphUtil::getDegree(roads, *vi) != 1) continue;
+
+
+		RoadVertexDesc snapDesc = GraphUtil::getVertex(roads, roads.graph[*vi]->pt, *vi);
+
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+			break;
+		}
+
+		Polyline2D polyline;
+		polyline.push_back(roads.graph[snapDesc]->pt);
+		polyline.push_back(roads.graph[*vi]->pt);
+
+		if (GraphUtil::hasRedundantEdge(roads, snapDesc, polyline, 1.0f)) {
+			roads.graph[*ei]->valid = false;
+		} else {
+			std::reverse(polyline.begin(), polyline.end());
+			if (GraphUtil::isIntersect(roads, polyline)) {
+				roads.graph[*ei]->valid = false;
+			} else {
+				GraphUtil::addEdge(roads, *vi, snapDesc, roads.graph[*ei]->type, roads.graph[*ei]->lanes);
+			}
+		}
+	}
+}
+
+/**
  * Deadendの道路セグメントを、可能な限りつなぐ。
  * エリア間の道路網をつなぐ場合に使用する。
+ * ただし、"fixed"フラグがtrueの頂点は、動かさない。
  */
 void RoadGeneratorHelper::connectRoads(RoadGraph& roads, float distance_threshold, float angle_threshold) {
 	// ConvexHullを計算する
@@ -690,11 +731,11 @@ void RoadGeneratorHelper::connectRoads(RoadGraph& roads, float distance_threshol
 		convexHull.addPoint(roads.graph[src]->pt);
 		convexHull.addPoint(roads.graph[tgt]->pt);
 
-		if (roads.graph[src]->onBoundary && GraphUtil::getDegree(roads, src) == 1) {
+		if (!roads.graph[src]->fixed && roads.graph[src]->onBoundary && GraphUtil::getDegree(roads, src) == 1) {
 			if (!boundaryNodes.contains(src)) boundaryNodes.push_back(src);
 			if (!boundaryEdges.contains(src)) boundaryEdges[src] = *ei;
 			if (!boundaryNodesPair.contains(src)) boundaryNodesPair[src] = tgt;
-		} else if (roads.graph[tgt]->onBoundary && GraphUtil::getDegree(roads, tgt) == 1) {
+		} else if (!roads.graph[tgt]->fixed && roads.graph[tgt]->onBoundary && GraphUtil::getDegree(roads, tgt) == 1) {
 			if (!boundaryNodes.contains(tgt)) boundaryNodes.push_back(tgt);
 			if (!boundaryEdges.contains(tgt)) boundaryEdges[tgt] = *ei;
 			if (!boundaryNodesPair.contains(tgt)) boundaryNodesPair[tgt] = src;

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Tue Apr 1 10:14:09 2014
+** Created: Thu Apr 3 12:01:00 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -129,6 +129,9 @@ public:
         actionHint_Line->setObjectName(QString::fromUtf8("actionHint_Line"));
         actionHintLine = new QAction(MainWindow);
         actionHintLine->setObjectName(QString::fromUtf8("actionHintLine"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/MainWindow/Resources/Line_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHintLine->setIcon(icon8);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);

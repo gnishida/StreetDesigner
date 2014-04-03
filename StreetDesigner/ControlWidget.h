@@ -24,5 +24,6 @@ public slots:
 	void clear();
 	void mergeRoads();
 	void connectRoads();
+	void generateRoadsMultiEx();
 };
 

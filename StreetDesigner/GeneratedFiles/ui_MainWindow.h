@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Tue Apr 1 13:34:09 2014
+** Created: Thu Apr 3 16:52:49 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -52,7 +52,7 @@ public:
     QAction *actionSaveRoads;
     QAction *actionLoad_Highways;
     QAction *actionSave_Highways;
-    QAction *actionBoulevardSketch;
+    QAction *actionAvenueSketch;
     QAction *actionPropertyWidget;
     QAction *actionDebug;
     QAction *action3DView;
@@ -182,12 +182,12 @@ public:
         actionLoad_Highways->setObjectName(QString::fromUtf8("actionLoad_Highways"));
         actionSave_Highways = new QAction(MainWindow);
         actionSave_Highways->setObjectName(QString::fromUtf8("actionSave_Highways"));
-        actionBoulevardSketch = new QAction(MainWindow);
-        actionBoulevardSketch->setObjectName(QString::fromUtf8("actionBoulevardSketch"));
-        actionBoulevardSketch->setCheckable(true);
+        actionAvenueSketch = new QAction(MainWindow);
+        actionAvenueSketch->setObjectName(QString::fromUtf8("actionAvenueSketch"));
+        actionAvenueSketch->setCheckable(true);
         QIcon icon11;
         icon11.addFile(QString::fromUtf8(":/MainWindow/Resources/SketchB_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionBoulevardSketch->setIcon(icon11);
+        actionAvenueSketch->setIcon(icon11);
         actionPropertyWidget = new QAction(MainWindow);
         actionPropertyWidget->setObjectName(QString::fromUtf8("actionPropertyWidget"));
         actionDebug = new QAction(MainWindow);
@@ -252,6 +252,10 @@ public:
         actionDisplayLocalStreet->setChecked(true);
         actionHintLine = new QAction(MainWindow);
         actionHintLine->setObjectName(QString::fromUtf8("actionHintLine"));
+        actionHintLine->setCheckable(true);
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8(":/MainWindow/Resources/Line_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHintLine->setIcon(icon15);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -299,7 +303,6 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuWindow->addAction(actionControlWidget);
-        menuWindow->addAction(actionPMControlWidget);
         menuWindow->addAction(actionPropertyWidget);
         menuArea->addAction(actionAreaSelect);
         menuArea->addAction(actionAreaCreate);
@@ -307,7 +310,7 @@ public:
         menuArea->addAction(actionHintLine);
         menuArea->addSeparator();
         menuArea->addAction(actionHighwaySketch);
-        menuArea->addAction(actionBoulevardSketch);
+        menuArea->addAction(actionAvenueSketch);
         menuArea->addSeparator();
         menuArea->addAction(actionDebug);
         menuPM->addAction(actionGenerateBlocks);
@@ -364,7 +367,7 @@ public:
         actionSaveRoads->setText(QApplication::translate("MainWindow", "Save Roads", 0, QApplication::UnicodeUTF8));
         actionLoad_Highways->setText(QApplication::translate("MainWindow", "Load Highways", 0, QApplication::UnicodeUTF8));
         actionSave_Highways->setText(QApplication::translate("MainWindow", "Save Highways", 0, QApplication::UnicodeUTF8));
-        actionBoulevardSketch->setText(QApplication::translate("MainWindow", "Boulevard Sketch", 0, QApplication::UnicodeUTF8));
+        actionAvenueSketch->setText(QApplication::translate("MainWindow", "Avenue Sketch", 0, QApplication::UnicodeUTF8));
         actionPropertyWidget->setText(QApplication::translate("MainWindow", "Property Widget", 0, QApplication::UnicodeUTF8));
         actionDebug->setText(QApplication::translate("MainWindow", "Debug", 0, QApplication::UnicodeUTF8));
         action3DView->setText(QApplication::translate("MainWindow", "3D", 0, QApplication::UnicodeUTF8));

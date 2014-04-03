@@ -2,7 +2,6 @@
 #include <boost/graph/boyer_myrvold_planar_test.hpp>
 #include "../../common/global.h"
 #include "../../common/Util.h"
-#include "../../common/TopNSearch.h"
 #include "../../common/ConvexHull.h"
 #include "../GraphUtil.h"
 #include "UShapeRoadGenerator.h"
@@ -20,7 +19,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 	// Avenueを生成
 	{
 		int i;
-		for (i = 0; !seeds.empty() && i < G::getInt("numIterations"); ++i) {
+		for (i = 0; !seeds.empty() && i < G::getInt("numAvenueIterations"); ++i) {
 			RoadVertexDesc desc = seeds.front();
 			seeds.pop_front();
 
@@ -43,6 +42,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 	additionalSeeds.clear();
 
 	GraphUtil::removeSelfIntersectingRoads(roads);
+	RoadGeneratorHelper::extendDanglingEdges(roads);
 	RoadGeneratorHelper::removeDeadend(roads);
 
 	// Local streetを生成
@@ -50,7 +50,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 		generateStreetSeeds(roads, area, feature, seeds);
 		
 		int i;
-		for (i = 0; !seeds.empty() && i < G::getInt("numIterations"); ++i) {
+		for (i = 0; !seeds.empty() && i < G::getInt("numStreetIterations"); ++i) {
 			RoadVertexDesc desc = seeds.front();
 			seeds.pop_front();
 
@@ -60,7 +60,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 				continue;
 			}
 
-			std::cout << "attemptExpansion (street): " << i << std::endl;
+			std::cout << "attemptExpansion (street): " << i << " (Seed: " << desc << ")" << std::endl;
 			if (roads.graph[desc]->properties.contains("example_desc")) {
 				attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, terrain, feature, seeds);
 			} else {
@@ -74,7 +74,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 		GraphUtil::extractRoads2(roads, area);
 	}
 
-	GraphUtil::removeSelfIntersectingRoads(roads);GraphUtil::removeSelfIntersectingRoads(roads);
+	GraphUtil::removeSelfIntersectingRoads(roads);
 	RoadGeneratorHelper::removeDeadend(roads);
 	GraphUtil::clean(roads);
 }
@@ -213,6 +213,10 @@ void UShapeRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &ar
 		QVector2D offset = polyline[0];
 		polyline.translate(offset * -1.0f);
 
+		if ((polyline.last() - QVector2D(0, 0)).lengthSquared() < 0.1f) {
+			int k = 0;
+		}
+
 		growRoadSegment(roads, area, srcDesc, roadType, terrain, f, polyline, f.roads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
@@ -285,25 +289,30 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		float z = terrain->getValue(pt.x(), pt.y());
 		if (z < 0.0f || z > 100.0f) break;
 
+		// 他のエッジと交差したら、道路生成をストップ
+		QVector2D intPoint;
+		if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline, intPoint)) {
+			new_edge->polyline.erase(new_edge->polyline.begin() + new_edge->polyline.size() - 1);
+			new_edge->polyline.push_back(intPoint);
+
+			// エッジ長が最短thresholdより短い場合は、キャンセル
+			if (new_edge->polyline.length() < 30.0f) return false;
+
+			break;
+		}
+
 		new_edge->polyline.push_back(pt);
 	}
 
+	if (new_edge->polyline.size() == 1) return false;
+
+	// 他のエッジと交差したら、道路生成をストップ
+	//if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
+	if (roadType == RoadEdge::TYPE_AVENUE && GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
+
+
 	if (GraphUtil::hasRedundantEdge(roads, srcDesc, new_edge->polyline, angleTolerance)) {
 		return false;
-	}
-
-	// 他のエッジとの交差をチェック
-	if (!byExample) {
-		if (GraphUtil::isIntersect(roads, new_edge->polyline)) {
-			if (roadType == RoadEdge::TYPE_AVENUE) return false;
-
-			// Local Streetsの場合は、エッジにスナップさせたい
-			/*RoadEdgeDesc eiClosest;
-			QVector2D closestIntPt;
-			RoadGeneratorHelper::intersects(roads, srcDesc, new_edge->polyline, eiClosest, closestIntPt);
-			GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, closestIntPt);*/
-			return false;
-		}
 	}
 
 	RoadVertexDesc tgtDesc;
@@ -316,11 +325,16 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 	// スナップできるか？
 	RoadEdgeDesc closestEdge;
 	QVector2D intPoint;
-	if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
+	if ((new_edge->polyline.last() - roads.graph[srcDesc]->pt).lengthSquared() < 0.1f) {
+		// ループエッジ
+		tgtDesc = srcDesc;
+	} else if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
+		// 他の頂点にスナップ
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		std::reverse(new_edge->polyline.begin(), new_edge->polyline.end());
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (RoadGeneratorHelper::canSnapToEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
+		// 他のエッジにスナップ
 		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;

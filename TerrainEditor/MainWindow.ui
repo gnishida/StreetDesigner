@@ -45,7 +45,14 @@
     </property>
     <addaction name="actionControlWidget"/>
    </widget>
+   <widget class="QMenu" name="menuArea">
+    <property name="title">
+     <string>Area</string>
+    </property>
+    <addaction name="actionAreaCreate"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuArea"/>
    <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="fileToolBar">
@@ -67,7 +74,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/New_24x24.png</normaloff>:/MainWindow/Resources/New_24x24.png</iconset>
    </property>
    <property name="text">
@@ -79,7 +86,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Open_24x24.png</normaloff>:/MainWindow/Resources/Open_24x24.png</iconset>
    </property>
    <property name="text">
@@ -101,7 +108,7 @@
   </action>
   <action name="actionDeleteEdge">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Delete_24x24.png</normaloff>:/MainWindow/Resources/Delete_24x24.png</iconset>
    </property>
    <property name="text">
@@ -113,7 +120,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Save_24x24.png</normaloff>:/MainWindow/Resources/Save_24x24.png</iconset>
    </property>
    <property name="text">
@@ -125,7 +132,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Undo_24x24.png</normaloff>:/MainWindow/Resources/Undo_24x24.png</iconset>
    </property>
    <property name="text">
@@ -148,7 +155,7 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Cut_24x24.png</normaloff>:/MainWindow/Resources/Cut_24x24.png</iconset>
    </property>
    <property name="text">
@@ -160,7 +167,7 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Copy_24x24.png</normaloff>:/MainWindow/Resources/Copy_24x24.png</iconset>
    </property>
    <property name="text">
@@ -172,7 +179,7 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Paste_24x24.png</normaloff>:/MainWindow/Resources/Paste_24x24.png</iconset>
    </property>
    <property name="text">
@@ -231,23 +238,11 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Select_24x24.png</normaloff>:/MainWindow/Resources/Select_24x24.png</iconset>
    </property>
    <property name="text">
     <string>Select</string>
-   </property>
-  </action>
-  <action name="actionAreaCreate">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>:/MainWindow/Resources/Create_24x24.png</normaloff>:/MainWindow/Resources/Create_24x24.png</iconset>
-   </property>
-   <property name="text">
-    <string>Create</string>
    </property>
   </action>
   <action name="actionHighwaySketch">
@@ -287,7 +282,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/SketchB_24x24.png</normaloff>:/MainWindow/Resources/SketchB_24x24.png</iconset>
    </property>
    <property name="text">
@@ -304,7 +299,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Debug_24x24.png</normaloff>:/MainWindow/Resources/Debug_24x24.png</iconset>
    </property>
    <property name="text">
@@ -316,7 +311,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/3DView_24x24.png</normaloff>:/MainWindow/Resources/3DView_24x24.png</iconset>
    </property>
    <property name="text">
@@ -328,7 +323,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="MainWindow.qrc">
      <normaloff>:/MainWindow/Resources/Terrain_32x32.png</normaloff>:/MainWindow/Resources/Terrain_32x32.png</iconset>
    </property>
    <property name="text">
@@ -447,6 +442,18 @@
   <action name="actionHintLine">
    <property name="text">
     <string>Hint Line</string>
+   </property>
+  </action>
+  <action name="actionAreaCreate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/MainWindow/Resources/Create_24x24.png</normaloff>:/MainWindow/Resources/Create_24x24.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create</string>
    </property>
   </action>
  </widget>

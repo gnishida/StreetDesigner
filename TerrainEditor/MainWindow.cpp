@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	// setup the toolbar
 	ui.fileToolBar->addAction(ui.actionNew);
 	ui.fileToolBar->addAction(ui.actionOpen);
+	ui.areaToolBar->addAction(ui.actionAreaCreate);
 
 	ui.actionAreaSelect->setChecked(true);
 
@@ -18,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionOpen, SIGNAL(triggered()), this, SLOT(onLoad()));
 	connect(ui.actionSave, SIGNAL(triggered()), this, SLOT(onSave()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ui.actionAreaCreate, SIGNAL(triggered()), this, SLOT(onAreaCreate()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
 
 	// setup the GL widget
@@ -29,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 
 	urbanGeometry = new UrbanGeometry(this);
 
-	mode = MODE_AREA_CREATE;
+	mode = MODE_DEFAULT;
 }
 
 MainWindow::~MainWindow() {
@@ -74,6 +76,10 @@ void MainWindow::onSave() {
 	}
 
 	urbanGeometry->saveTerrain(filename);
+}
+
+void MainWindow::onAreaCreate() {
+	mode = MODE_AREA_CREATE;
 }
 
 void MainWindow::onShowControlWidget() {

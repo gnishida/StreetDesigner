@@ -1,4 +1,4 @@
-/*********************************************************************
+﻿/*********************************************************************
 This file is part of QtUrban.
 
     QtUrban is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@ This file is part of QtUrban.
 #include <road/GraphUtil.h>
 #include <road/generator/ExRoadGenerator.h>
 #include <road/generator/UShapeRoadGenerator.h>
+#include <road/generator/MultiExRoadGenerator.h>
 #include <road/generator/RoadGeneratorHelper.h>
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
@@ -77,6 +78,14 @@ void UrbanGeometry::generateUShapeRoads(ExFeature &feature) {
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
+void UrbanGeometry::generateRoadsMultiEx(std::vector<ExFeature> &features) {
+	if (areas.selectedIndex == -1) return;
+
+	MultiExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
+
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
+}
+
 void UrbanGeometry::generateBlocks() {
 	BlockGenerator generator(mainWin);
 	generator.run();
@@ -111,6 +120,12 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 		rendererHelper.renderPolyline(hintLineBuilder.polyline3D(), QColor(255, 0, 0), GL_LINE_STIPPLE);
 	}
 
+	// draw a avenue sketch polyline
+	if (avenueBuilder.selecting()) {
+		avenueBuilder.adaptToTerrain(terrain);
+		rendererHelper.renderPolyline(avenueBuilder.polyline3D(), QColor(255, 255, 0), GL_LINE_STIPPLE);
+	}
+
 	// draw the areas
 	for (int i = 0; i < areas.size(); ++i) {
 		if (i == areas.selectedIndex) {
@@ -134,9 +149,43 @@ void UrbanGeometry::adaptToTerrain() {
 	roads.adaptToTerrain(terrain);
 }
 
+/**
+ * 指定された道路を追加する。
+ */
+void UrbanGeometry::addRoad(int roadType, const Polyline2D &polyline, int lanes) {
+	RoadVertexDesc v1_desc;
+	if (!GraphUtil::getVertex(roads, polyline[0], 10.0f, v1_desc)) {
+		RoadVertexPtr v1 = RoadVertexPtr(new RoadVertex(polyline[0]));
+		v1_desc = boost::add_vertex(roads.graph);
+		roads.graph[v1_desc] = v1;
+	}
+
+	RoadVertexDesc v2_desc;
+	if (!GraphUtil::getVertex(roads, polyline.last(), 10.0f, v2_desc)) {
+		RoadVertexPtr v2 = RoadVertexPtr(new RoadVertex(polyline.last()));
+		v2_desc = boost::add_vertex(roads.graph);
+		roads.graph[v2_desc] = v2;
+	}
+
+	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, v1_desc, v2_desc, roadType, lanes);
+	roads.graph[e_desc]->polyline = polyline;
+
+	GraphUtil::planarify(roads);
+
+	roads.adaptToTerrain(terrain);
+}
+
 void UrbanGeometry::mergeRoads() {
+	// もともとある道路の頂点は、すべてfixedにしておく
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		roads.graph[*vi]->fixed = true;
+	}
+
 	areas.mergeRoads();
-	GraphUtil::copyRoads(areas.roads, roads);
+	GraphUtil::mergeRoads(roads, areas.roads);
 
 	areas.roads.clear();
 	areas.selectedIndex = -1;
