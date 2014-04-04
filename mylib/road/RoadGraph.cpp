@@ -146,7 +146,7 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 /**
  * Add a mesh for the specified edge.
  */
-void RoadGraph::add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset) {
+/*void RoadGraph::add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset) {
 	int num = edge->polyline.size();
 
 	QVector3D p0, p1, p2, p3;
@@ -177,7 +177,7 @@ void RoadGraph::add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgeP
 		p0 = p3;
 		p1 = p2;
 	}
-}
+}*/
 
 void RoadGraph::generate2DMesh() {
 	if (!modified) return;

@@ -15,12 +15,12 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.setupUi(this);
 	ui.lineEditNumAvenueIterations->setText("1000");
 	ui.lineEditNumStreetIterations->setText("5000");
-	ui.lineEditOrganicFactor->setText("0.1");
 	ui.horizontalSliderExactSimilarityFactor->setMinimum(0);
 	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
+	ui.checkBoxCleanAvenues->setChecked(true);
+	ui.checkBoxCleanStreets->setChecked(true);
 	ui.checkBoxLocalStreets->setChecked(false);
-	ui.radioButtonMultiSeeds->setChecked(true);
-	ui.checkBoxCropping->setChecked(false);
+	ui.checkBoxCropping->setChecked(true);
 	ui.radioButtonCartesianCoordinate->setChecked(true);
 	ui.lineEditPerturbationFactor->setText("0.1");
 
@@ -50,12 +50,11 @@ void ControlWidget::generateRoads() {
 
 	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
 	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
-	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
 	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
-	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 
-	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 
@@ -126,12 +125,11 @@ void ControlWidget::generateRoadsMultiEx() {
 
 	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
 	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
-	G::global()["roadOrganicFactor"] = ui.lineEditOrganicFactor->text().toFloat();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
 	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
-	G::global()["addAvenuesOnBoundary"] = ui.checkBoxAddAvenuesOnBoundary->isChecked();
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 
-	G::global()["multiSeeds"] = ui.radioButtonMultiSeeds->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 

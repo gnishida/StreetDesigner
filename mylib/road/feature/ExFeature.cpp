@@ -127,11 +127,16 @@ float ExFeature::length(int roadType) const {
  * PM用にエッジの曲率を生成する
  */
 float ExFeature::curvature(int roadType) const {
+	float curvature;
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		return Util::genRandNormal(avgAvenueCurvature, varAvenueCurvature);
+		curvature = Util::genRandNormal(avgAvenueCurvature, varAvenueCurvature);
 	} else {
-		return Util::genRandNormal(avgStreetCurvature, varStreetCurvature);
+		curvature = Util::genRandNormal(avgStreetCurvature, varStreetCurvature);
 	}
+
+	if (curvature < 0.0f) curvature = 0.0f;
+	if (curvature > M_PI * 0.5f) curvature = M_PI * 0.5f;
+	return curvature;
 }
 
 /**

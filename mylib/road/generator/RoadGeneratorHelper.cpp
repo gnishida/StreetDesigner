@@ -820,6 +820,8 @@ void RoadGeneratorHelper::createFourEdges(int roadType, int lanes, float directi
 	if (Util::genRand() >= 0.5f) {
 		curvature = -curvature;
 	}
+
+	int sign = 1;
 	
 	for (int i = 0; i < directions.size(); ++i) {
 		float deltaDir = 0.0f;
@@ -837,14 +839,17 @@ void RoadGeneratorHelper::createFourEdges(int roadType, int lanes, float directi
 			edge->polyline.push_back(cur);
 
 			// Update the direction
+			/*
 			deltaDir = 0.9 * deltaDir + 0.1 * Util::genRand(-1.0, 1.0);
 			float newDir = directions[i] + curvature * 8.3333f * deltaDir;
 			directions[i] = 0.9 * directions[i] + 0.1 * newDir;
-
-			/*
-			float theta = atan2f(curvature * step, 1.0f);
-			directions[i] = directions[i] + Util::genRandNormal(theta, 0.1f);
 			*/
+
+			// 10%の確率で、曲がる方向を変える
+			if (Util::genRand() >= 0.9f) sign = -sign;
+
+			float theta = atan2f(curvature * step, 1.0f);
+			directions[i] = directions[i] + theta * (float)sign * 0.5f;
 		}
 
 		edges.push_back(edge);

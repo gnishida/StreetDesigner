@@ -877,7 +877,8 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	roads.graph[v_desc] = v;
 
 	// add the first edge
-	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
+	RoadEdgePtr e1 = RoadEdgePtr(new RoadEdge(*edge));
+	e1->polyline.clear();
 	e1->polyline.push_back(edge->polyline[0]);
 	for (int i = 1; i < index; i++) {
 		e1->polyline.push_back(edge->polyline[i]);
@@ -893,7 +894,8 @@ RoadVertexDesc GraphUtil::splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, co
 	}
 
 	// add the second edge
-	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(edge->type, edge->lanes, edge->oneWay));
+	RoadEdgePtr e2 = RoadEdgePtr(new RoadEdge(*edge));
+	e2->polyline.clear();
 	e2->addPoint(pos);
 	if (index + 1 < edge->polyline.size() - 1 && (edge->polyline[index + 1] - pos).lengthSquared() > 1.0f) {
 		e2->addPoint(edge->polyline[index + 1]);

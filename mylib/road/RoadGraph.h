@@ -58,7 +58,7 @@ public:
 	void clear();
 	void setZ(float z);
 	void adaptToTerrain(mylib::Terrain* terrain);
-	void add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset = 0.0f);
+	//void add3DMeshOfEdge(mylib::RenderableQuadList* renderable, RoadEdgePtr edge, float width, QColor color, float heightOffset = 0.0f);
 
 	void generate2DMesh();
 	void add2DMeshOfEdge(mylib::RenderablePtr renderable, RoadEdgePtr edge, float widthBase, QColor color, float height);
