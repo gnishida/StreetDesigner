@@ -41,6 +41,7 @@ public slots:
 	void onClearRoads();
 	void onLoadAreas();
 	void onSaveAreas();
+	void onSaveImage();
 	void onAreaMenu();
 	void onAreaSelect();
 	void onAreaCreate();
@@ -51,6 +52,9 @@ public slots:
 	void onGenerateBlocks();
 	void onGenerateParcels();
 	void onDisplayRoads();
+	void onRenderingDefault();
+	void onRenderingTexture();
+	void onRenderingGroupBy();
 	void onShowControlWidget();
 	void onShowPropertyWidget();
 };

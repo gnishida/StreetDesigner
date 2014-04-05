@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionClearRoads, SIGNAL(triggered()), this, SLOT(onClearRoads()));
 	connect(ui.actionLoadAreas, SIGNAL(triggered()), this, SLOT(onLoadAreas()));
 	connect(ui.actionSaveAreas, SIGNAL(triggered()), this, SLOT(onSaveAreas()));
+	connect(ui.actionSaveImage, SIGNAL(triggered()), this, SLOT(onSaveImage()));
 	connect(ui.actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui.menuArea, SIGNAL(aboutToShow()), this, SLOT(onAreaMenu()));
 	connect(ui.actionAreaSelect, SIGNAL(triggered()), this, SLOT(onAreaSelect()));
@@ -43,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionDisplayBoulevard, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionDisplayAvenue, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionDisplayLocalStreet, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
+	connect(ui.actionRenderingDefault, SIGNAL(triggered()), this, SLOT(onRenderingDefault()));
+	connect(ui.actionRenderingTexture, SIGNAL(triggered()), this, SLOT(onRenderingTexture()));
+	connect(ui.actionRenderingGroupBy, SIGNAL(triggered()), this, SLOT(onRenderingGroupBy()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
 	connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
 
@@ -161,6 +165,18 @@ void MainWindow::onSaveAreas() {
 	QApplication::restoreOverrideCursor();
 }
 
+void MainWindow::onSaveImage() {
+	QString filename = QFileDialog::getSaveFileName(this, tr("Save image file..."), "", tr("Jpeg Image (*.jpg *.jpeg)"));
+
+	if (filename.isEmpty()) {
+		printf("Unable to open file\n");
+		return;
+	}
+
+	QPixmap image = QPixmap::grabWidget(glWidget);
+	image.save(filename, "JPG");
+}
+
 void MainWindow::onAreaMenu() {
 	ui.actionAreaSelect->setChecked(mode == MODE_AREA_SELECT);
 	ui.actionAreaCreate->setChecked(mode == MODE_AREA_CREATE);
@@ -230,6 +246,36 @@ void MainWindow::onDisplayRoads() {
 	urbanGeometry->roads.showBoulevards = ui.actionDisplayBoulevard->isChecked();
 	urbanGeometry->roads.showAvenues = ui.actionDisplayAvenue->isChecked();
 	urbanGeometry->roads.showLocalStreets = ui.actionDisplayLocalStreet->isChecked();
+	urbanGeometry->roads.setModified();
+
+	glWidget->updateGL();
+}
+
+void MainWindow::onRenderingDefault() {
+	ui.actionRenderingTexture->setChecked(false);
+	ui.actionRenderingGroupBy->setChecked(false);
+
+	urbanGeometry->roads.renderMode = RoadGraph::RENDER_DEFAULT;
+	urbanGeometry->roads.setModified();
+
+	glWidget->updateGL();
+}
+
+void MainWindow::onRenderingTexture() {
+	ui.actionRenderingDefault->setChecked(false);
+	ui.actionRenderingGroupBy->setChecked(false);
+
+	urbanGeometry->roads.renderMode = RoadGraph::RENDER_TEXTURE;
+	urbanGeometry->roads.setModified();
+
+	glWidget->updateGL();
+}
+
+void MainWindow::onRenderingGroupBy() {
+	ui.actionRenderingDefault->setChecked(false);
+	ui.actionRenderingTexture->setChecked(false);
+
+	urbanGeometry->roads.renderMode = RoadGraph::RENDER_GROUPBY;
 	urbanGeometry->roads.setModified();
 
 	glWidget->updateGL();

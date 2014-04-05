@@ -44,6 +44,8 @@
     <addaction name="actionLoadAreas"/>
     <addaction name="actionSaveAreas"/>
     <addaction name="separator"/>
+    <addaction name="actionSaveImage"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
@@ -90,10 +92,19 @@
     </widget>
     <addaction name="menuRoads"/>
    </widget>
+   <widget class="QMenu" name="menuRendering">
+    <property name="title">
+     <string>Rendering</string>
+    </property>
+    <addaction name="actionRenderingDefault"/>
+    <addaction name="actionRenderingTexture"/>
+    <addaction name="actionRenderingGroupBy"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuArea"/>
    <addaction name="menuPM"/>
    <addaction name="menuDisplay"/>
+   <addaction name="menuRendering"/>
    <addaction name="menuWindow"/>
   </widget>
   <widget class="QToolBar" name="fileToolBar">
@@ -502,6 +513,26 @@
    </property>
    <property name="text">
     <string>Hint Line</string>
+   </property>
+  </action>
+  <action name="actionRenderingDefault">
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionRenderingTexture">
+   <property name="text">
+    <string>Texture</string>
+   </property>
+  </action>
+  <action name="actionRenderingGroupBy">
+   <property name="text">
+    <string>Group By</string>
+   </property>
+  </action>
+  <action name="actionSaveImage">
+   <property name="text">
+    <string>Save Image</string>
    </property>
   </action>
  </widget>

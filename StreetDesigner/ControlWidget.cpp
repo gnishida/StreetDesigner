@@ -21,16 +21,13 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.checkBoxCleanStreets->setChecked(true);
 	ui.checkBoxLocalStreets->setChecked(true);
 	ui.checkBoxCropping->setChecked(false);
-	ui.radioButtonCartesianCoordinate->setChecked(true);
-	ui.lineEditPerturbationFactor->setText("0.1");
+	ui.checkBoxAdaptiveFitting->setChecked(false);
 
 	// register the event handlers
 	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
-	connect(ui.pushButtonPerturb, SIGNAL(clicked()), this, SLOT(perturb()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
-	connect(ui.pushButtonGenerateMultiEx, SIGNAL(clicked()), this, SLOT(generateRoadsMultiEx()));
 
 	hide();
 }
@@ -44,46 +41,36 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 void ControlWidget::generateRoads() {
 	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
-	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
-
-	if (filename.isEmpty()) return;
-
 	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
 	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
 	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
 	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
 	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
-	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
 
-	G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
+	if (ui.checkBoxAdaptiveFitting->isChecked()) {
+		ExFeature feature;
 
-	int orientation = ui.dialOrientation->value() - 180;
-	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
+		QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+		if (filename.isEmpty()) return;
 
-	ExFeature feature;
-	feature.load(filename);
+		feature.load(filename);
 
-	if (orientation != 0) {
-		//feature.rotate(orientation);
+		mainWin->urbanGeometry->generateRoads(feature);
+	} else {
+		std::vector<ExFeature> features;
+		features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+		for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
+			QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+			if (filename.isEmpty()) return;
+	
+			features[i].load(filename);
+		}
+
+		mainWin->urbanGeometry->generateRoadsMultiEx(features);
 	}
-
-	if (areaScaling) {
-		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
-	}
-
-	mainWin->urbanGeometry->generateRoads(feature);
-
-	mainWin->glWidget->updateGL();
-}
-
-void ControlWidget::perturb() {
-	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
-
-	mainWin->urbanGeometry->perturbRoads(ui.lineEditPerturbationFactor->text().toFloat());
-
+	
 	mainWin->glWidget->updateGL();
 }
 
@@ -106,48 +93,6 @@ void ControlWidget::mergeRoads() {
  */
 void ControlWidget::connectRoads() {
 	mainWin->urbanGeometry->connectRoads();
-
-	mainWin->glWidget->updateGL();
-}
-
-void ControlWidget::generateRoadsMultiEx() {
-	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
-
-	std::vector<ExFeature> features;
-	features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
-	for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
-		QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
-		if (filename.isEmpty()) return;
-	
-		features[i].load(filename);
-	}
-
-
-	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
-	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
-	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
-	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
-	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
-	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
-
-	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
-	G::global()["areaScaling"] = ui.checkBoxAreaScaling->isChecked();
-
-	G::global()["coordiniates"] = ui.radioButtonCartesianCoordinate->isChecked() ? "cartesian" : "polar";
-
-	int orientation = ui.dialOrientation->value() - 180;
-	bool areaScaling = ui.checkBoxAreaScaling->isChecked();
-
-
-	if (orientation != 0) {
-		//feature.rotate(orientation);
-	}
-
-	if (areaScaling) {
-		//feature.scale(mainWin->urbanGeometry->areas.selectedArea()->area);
-	}
-
-	mainWin->urbanGeometry->generateRoadsMultiEx(features);
 
 	mainWin->glWidget->updateGL();
 }

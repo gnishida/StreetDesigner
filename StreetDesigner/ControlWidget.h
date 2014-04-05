@@ -20,10 +20,8 @@ public:
 
 public slots:
 	void generateRoads();
-	void perturb();
 	void clear();
 	void mergeRoads();
 	void connectRoads();
-	void generateRoadsMultiEx();
 };
 

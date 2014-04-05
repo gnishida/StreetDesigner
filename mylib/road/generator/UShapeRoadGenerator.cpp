@@ -142,6 +142,15 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
 
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+		
+		int group_id;
+		if (roads.graph[src]->properties.contains("group_id")) {
+			group_id = roads.graph[src]->properties["group_id"].toInt();
+		} else if (roads.graph[tgt]->properties.contains("group_id")) {
+			group_id = roads.graph[tgt]->properties["group_id"].toInt();
+		} else {
+			group_id = -1;
+		}
 
 		if (roads.graph[e]->properties["byExample"] == true) {
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
@@ -183,6 +192,7 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
 
 				// シードとして追加
 				seeds.push_back(v_desc);
+				roads.graph[v_desc]->properties["group_id"] = group_id;
 				roads.graph[v_desc]->properties["example_desc"] = seedDesc;
 
 				// エッジを更新
@@ -200,8 +210,6 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
 		
 			while (step < edge->polyline.size() - step) {
 				RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
-			
-				seeds.push_back(desc);
 
 				edge = roads.graph[e2];
 				e = e2;
@@ -357,7 +365,9 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		RoadVertexPtr v = RoadVertexPtr(new RoadVertex(new_edge->polyline.last()));
 		tgtDesc = GraphUtil::addVertex(roads, v);
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
-
+		if (roads.graph[srcDesc]->properties.contains("group_id")) {
+			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+		}
 
 		if (area.contains(new_edge->polyline.last())) {
 			// シードに追加する
@@ -383,6 +393,10 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
 	roads.graph[e_desc]->properties["byExample"] = byExample;
+	//if (roads.graph[srcDesc]->properties.contains("group_id")) {
+	if (byExample) {
+		roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+	}
 
 	return true;
 }

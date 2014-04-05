@@ -147,13 +147,15 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 
 		if (roads.graph[e]->properties["byExample"] == true) {
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
-			int group_id = roads.graph[src]->properties["group_id"].toInt();
+			int group_id;
 			QVector2D offset;
 			if (roads.graph[src]->properties.contains("example_desc")) {
 				RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
+				group_id = roads.graph[src]->properties["group_id"].toInt();
 				offset = features[group_id].roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
 			} else {
 				RoadVertexDesc ex_v_desc = roads.graph[tgt]->properties["example_desc"].toUInt();
+				group_id = roads.graph[tgt]->properties["group_id"].toInt();
 				offset = features[group_id].roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
 			}
 
@@ -200,7 +202,10 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 			while (step < edge->polyline.size() - step) {
 				RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
 			
-				seeds.push_back(desc);
+				// この点が、エリア内なら、シードとして追加
+				if (area.contains(edge->polyline[step])) {
+					seeds.push_back(desc);
+				}
 
 				edge = roads.graph[e2];
 				e = e2;
@@ -356,7 +361,9 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 		RoadVertexPtr v = RoadVertexPtr(new RoadVertex(new_edge->polyline.last()));
 		tgtDesc = GraphUtil::addVertex(roads, v);
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
-		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+		if (roads.graph[srcDesc]->properties.contains("group_id")) {
+			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+		}
 
 		if (area.contains(new_edge->polyline.last())) {
 			// シードに追加する
@@ -385,6 +392,10 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
 	roads.graph[e_desc]->properties["byExample"] = byExample;
+	//if (roads.graph[srcDesc]->properties.contains("group_id")) {
+	if (byExample) {
+		roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+	}
 
 	return true;
 }

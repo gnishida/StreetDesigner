@@ -102,7 +102,7 @@ void ControlWidget::setRoadEdge(RoadEdgePtr selectedEdge) {
 
 void ControlWidget::showRoad(int flag) {
 	mainWin->glWidget->editor->roads.showHighways = ui.checkBoxShowHighway->isChecked();
-	mainWin->glWidget->editor->roads.showBoulevard = ui.checkBoxShowBoulevard->isChecked();
+	mainWin->glWidget->editor->roads.showBoulevards = ui.checkBoxShowBoulevard->isChecked();
 	mainWin->glWidget->editor->roads.showAvenues = ui.checkBoxShowAvenue->isChecked();
 	mainWin->glWidget->editor->roads.showLocalStreets = ui.checkBoxShowLocalStreet->isChecked();
 	mainWin->glWidget->editor->roads.setModified();

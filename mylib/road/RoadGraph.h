@@ -30,6 +30,9 @@ class Terrain;
 
 class RoadGraph : public mylib::GeometryObject {
 public:
+	static enum { RENDER_DEFAULT = 0, RENDER_TEXTURE, RENDER_GROUPBY };
+
+public:
 	BGLGraph graph;
 
 	// for rendering (These variables should be updated via setZ() function only!!
@@ -46,6 +49,8 @@ public:
 	bool showBoulevards;
 	bool showAvenues;
 	bool showLocalStreets;
+
+	int renderMode;
 
 public:
 	RoadGraph();
@@ -66,6 +71,9 @@ public:
 
 private:
 	void _generateMeshVertices(mylib::TextureManager* textureManager);
+	void _generateMeshVerticesDefault(mylib::TextureManager* textureManager);
+	void _generateMeshVerticesTexture(mylib::TextureManager* textureManager);
+	void _generateMeshVerticesGroupBy(mylib::TextureManager* textureManager);
 };
 
 typedef boost::shared_ptr<RoadGraph> RoadGraphPtr;

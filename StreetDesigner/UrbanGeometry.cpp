@@ -25,7 +25,6 @@ This file is part of QtUrban.
 #include <render/GeometryObject.h>
 #include <render/Terrain.h>
 #include <road/GraphUtil.h>
-#include <road/generator/ExRoadGenerator.h>
 #include <road/generator/UShapeRoadGenerator.h>
 #include <road/generator/MultiExRoadGenerator.h>
 #include <road/generator/RoadGeneratorHelper.h>
@@ -60,26 +59,16 @@ void UrbanGeometry::clearGeometry() {
 
 void UrbanGeometry::generateRoads(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	if (areas.selectedArea()->hintLine.size() > 0) {
-		UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
-	} else {
-		ExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, feature);
-	}
-
-	areas.selectedArea()->roads.adaptToTerrain(terrain);
-}
-
-void UrbanGeometry::generateUShapeRoads(ExFeature &feature) {
-	if (areas.selectedIndex == -1) return;
-
-	//UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, feature);
+	UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
 
 void UrbanGeometry::generateRoadsMultiEx(std::vector<ExFeature> &features) {
 	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
 
 	MultiExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
 

@@ -24,9 +24,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>370</y>
+      <y>270</y>
       <width>171</width>
-      <height>201</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="title">
@@ -36,7 +36,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
+       <y>110</y>
        <width>131</width>
        <height>31</height>
       </rect>
@@ -92,40 +92,30 @@
       <string>Orientation:</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButtonPerturb">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>71</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Perturb</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lineEditPerturbationFactor">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>130</y>
-       <width>41</width>
-       <height>21</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButtonClear">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>160</y>
+       <y>150</y>
        <width>131</width>
        <height>31</height>
       </rect>
      </property>
      <property name="text">
       <string>Clear</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBoxAdaptiveFitting">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>141</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Adaptive Fitting</string>
      </property>
     </widget>
    </widget>
@@ -135,7 +125,7 @@
       <x>10</x>
       <y>10</y>
       <width>171</width>
-      <height>201</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="title">
@@ -171,7 +161,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>140</y>
+       <y>120</y>
        <width>131</width>
        <height>17</height>
       </rect>
@@ -184,7 +174,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>160</y>
+       <y>140</y>
        <width>121</width>
        <height>17</height>
       </rect>
@@ -197,7 +187,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>180</y>
+       <y>160</y>
        <width>111</width>
        <height>17</height>
       </rect>
@@ -259,56 +249,11 @@
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>290</y>
-      <width>171</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Coordinates System</string>
-    </property>
-    <widget class="QRadioButton" name="radioButtonCartesianCoordinate">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>131</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Cartesian Coordinates</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string>buttonGroup_2</string>
-     </attribute>
-    </widget>
-    <widget class="QRadioButton" name="radioButtonPolarCoordinate">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>131</width>
-       <height>17</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Polar Coordinates</string>
-     </property>
-     <attribute name="buttonGroup">
-      <string>buttonGroup_2</string>
-     </attribute>
-    </widget>
-   </widget>
    <widget class="QGroupBox" name="groupBox_5">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>580</y>
+      <y>470</y>
       <width>171</width>
       <height>101</height>
      </rect>
@@ -347,7 +292,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>220</y>
+      <y>200</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -372,24 +317,8 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButtonGenerateMultiEx">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>690</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Multi Example</string>
-    </property>
-   </widget>
   </widget>
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
- </buttongroups>
 </ui>

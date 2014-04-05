@@ -65,8 +65,6 @@ Polygon3D PolygonBuilder::polygon3D() const {
 		area.push_back(_polyline3D[i]);
 	}
 
-	area.correct();
-
 	return area;
 }
 

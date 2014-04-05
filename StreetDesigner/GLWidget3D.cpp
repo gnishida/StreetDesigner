@@ -277,7 +277,7 @@ void GLWidget3D::initializeGL() {
 	glEnable(GL_LIGHT0);
 
 	static GLfloat lightPosition[4] = { 0.0f, 0.0f, 100.0f, 0.0f };
-	static GLfloat lightAmbient[4]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+	static GLfloat lightAmbient[4]  = { 0.25f, 0.25f, 0.25f, 1.0f };
 	static GLfloat lightDiffuse[4]  = { 0.75f, 0.75f, 0.5f, 1.0f };
 
 	glEnable(GL_COLOR_MATERIAL);	

@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Fri Apr 4 13:12:13 2014
-**      by: Qt User Interface Compiler version 4.8.2
+** Created: Sat Apr 5 12:00:28 2014
+**      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -22,7 +22,6 @@
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
-#include <QtGui/QRadioButton>
 #include <QtGui/QSlider>
 #include <QtGui/QWidget>
 
@@ -36,9 +35,8 @@ public:
     QPushButton *pushButtonGenerate;
     QDial *dialOrientation;
     QLabel *label_2;
-    QPushButton *pushButtonPerturb;
-    QLineEdit *lineEditPerturbationFactor;
     QPushButton *pushButtonClear;
+    QCheckBox *checkBoxAdaptiveFitting;
     QGroupBox *groupBox;
     QLabel *label;
     QLineEdit *lineEditNumAvenueIterations;
@@ -49,16 +47,11 @@ public:
     QLineEdit *lineEditNumStreetIterations;
     QCheckBox *checkBoxCleanAvenues;
     QCheckBox *checkBoxCleanStreets;
-    QGroupBox *groupBox_4;
-    QRadioButton *radioButtonCartesianCoordinate;
-    QRadioButton *radioButtonPolarCoordinate;
     QGroupBox *groupBox_5;
     QPushButton *pushButtonConnect;
     QPushButton *pushButtonMerge;
     QGroupBox *groupBox_2;
     QSlider *horizontalSliderExactSimilarityFactor;
-    QPushButton *pushButtonGenerateMultiEx;
-    QButtonGroup *buttonGroup_2;
 
     void setupUi(QDockWidget *ControlWidget)
     {
@@ -71,10 +64,10 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox_8 = new QGroupBox(dockWidgetContents);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
-        groupBox_8->setGeometry(QRect(10, 370, 171, 201));
+        groupBox_8->setGeometry(QRect(10, 270, 171, 191));
         pushButtonGenerate = new QPushButton(groupBox_8);
         pushButtonGenerate->setObjectName(QString::fromUtf8("pushButtonGenerate"));
-        pushButtonGenerate->setGeometry(QRect(20, 80, 131, 31));
+        pushButtonGenerate->setGeometry(QRect(20, 110, 131, 31));
         dialOrientation = new QDial(groupBox_8);
         dialOrientation->setObjectName(QString::fromUtf8("dialOrientation"));
         dialOrientation->setGeometry(QRect(80, 20, 71, 51));
@@ -89,18 +82,15 @@ public:
         label_2 = new QLabel(groupBox_8);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(20, 20, 61, 16));
-        pushButtonPerturb = new QPushButton(groupBox_8);
-        pushButtonPerturb->setObjectName(QString::fromUtf8("pushButtonPerturb"));
-        pushButtonPerturb->setGeometry(QRect(20, 120, 71, 31));
-        lineEditPerturbationFactor = new QLineEdit(groupBox_8);
-        lineEditPerturbationFactor->setObjectName(QString::fromUtf8("lineEditPerturbationFactor"));
-        lineEditPerturbationFactor->setGeometry(QRect(110, 130, 41, 21));
         pushButtonClear = new QPushButton(groupBox_8);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
-        pushButtonClear->setGeometry(QRect(20, 160, 131, 31));
+        pushButtonClear->setGeometry(QRect(20, 150, 131, 31));
+        checkBoxAdaptiveFitting = new QCheckBox(groupBox_8);
+        checkBoxAdaptiveFitting->setObjectName(QString::fromUtf8("checkBoxAdaptiveFitting"));
+        checkBoxAdaptiveFitting->setGeometry(QRect(10, 80, 141, 17));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 10, 171, 201));
+        groupBox->setGeometry(QRect(10, 10, 171, 181));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 91, 21));
@@ -110,13 +100,13 @@ public:
         lineEditNumAvenueIterations->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         checkBoxLocalStreets = new QCheckBox(groupBox);
         checkBoxLocalStreets->setObjectName(QString::fromUtf8("checkBoxLocalStreets"));
-        checkBoxLocalStreets->setGeometry(QRect(10, 140, 131, 17));
+        checkBoxLocalStreets->setGeometry(QRect(10, 120, 131, 17));
         checkBoxCropping = new QCheckBox(groupBox);
         checkBoxCropping->setObjectName(QString::fromUtf8("checkBoxCropping"));
-        checkBoxCropping->setGeometry(QRect(10, 160, 121, 17));
+        checkBoxCropping->setGeometry(QRect(10, 140, 121, 17));
         checkBoxAreaScaling = new QCheckBox(groupBox);
         checkBoxAreaScaling->setObjectName(QString::fromUtf8("checkBoxAreaScaling"));
-        checkBoxAreaScaling->setGeometry(QRect(10, 180, 111, 17));
+        checkBoxAreaScaling->setGeometry(QRect(10, 160, 111, 17));
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(10, 40, 81, 21));
@@ -130,22 +120,9 @@ public:
         checkBoxCleanStreets = new QCheckBox(groupBox);
         checkBoxCleanStreets->setObjectName(QString::fromUtf8("checkBoxCleanStreets"));
         checkBoxCleanStreets->setGeometry(QRect(10, 100, 131, 17));
-        groupBox_4 = new QGroupBox(dockWidgetContents);
-        groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
-        groupBox_4->setGeometry(QRect(10, 290, 171, 71));
-        radioButtonCartesianCoordinate = new QRadioButton(groupBox_4);
-        buttonGroup_2 = new QButtonGroup(ControlWidget);
-        buttonGroup_2->setObjectName(QString::fromUtf8("buttonGroup_2"));
-        buttonGroup_2->addButton(radioButtonCartesianCoordinate);
-        radioButtonCartesianCoordinate->setObjectName(QString::fromUtf8("radioButtonCartesianCoordinate"));
-        radioButtonCartesianCoordinate->setGeometry(QRect(10, 20, 131, 17));
-        radioButtonPolarCoordinate = new QRadioButton(groupBox_4);
-        buttonGroup_2->addButton(radioButtonPolarCoordinate);
-        radioButtonPolarCoordinate->setObjectName(QString::fromUtf8("radioButtonPolarCoordinate"));
-        radioButtonPolarCoordinate->setGeometry(QRect(10, 40, 131, 17));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 580, 171, 101));
+        groupBox_5->setGeometry(QRect(10, 470, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
         pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
@@ -154,15 +131,12 @@ public:
         pushButtonMerge->setGeometry(QRect(20, 20, 131, 31));
         groupBox_2 = new QGroupBox(dockWidgetContents);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 220, 171, 61));
+        groupBox_2->setGeometry(QRect(10, 200, 171, 61));
         horizontalSliderExactSimilarityFactor = new QSlider(groupBox_2);
         horizontalSliderExactSimilarityFactor->setObjectName(QString::fromUtf8("horizontalSliderExactSimilarityFactor"));
         horizontalSliderExactSimilarityFactor->setGeometry(QRect(10, 30, 151, 20));
         horizontalSliderExactSimilarityFactor->setMaximum(100);
         horizontalSliderExactSimilarityFactor->setOrientation(Qt::Horizontal);
-        pushButtonGenerateMultiEx = new QPushButton(dockWidgetContents);
-        pushButtonGenerateMultiEx->setObjectName(QString::fromUtf8("pushButtonGenerateMultiEx"));
-        pushButtonGenerateMultiEx->setGeometry(QRect(30, 690, 131, 31));
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -175,8 +149,8 @@ public:
         groupBox_8->setTitle(QApplication::translate("ControlWidget", "Operation", 0, QApplication::UnicodeUTF8));
         pushButtonGenerate->setText(QApplication::translate("ControlWidget", "Generate", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("ControlWidget", "Orientation:", 0, QApplication::UnicodeUTF8));
-        pushButtonPerturb->setText(QApplication::translate("ControlWidget", "Perturb", 0, QApplication::UnicodeUTF8));
         pushButtonClear->setText(QApplication::translate("ControlWidget", "Clear", 0, QApplication::UnicodeUTF8));
+        checkBoxAdaptiveFitting->setText(QApplication::translate("ControlWidget", "Adaptive Fitting", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("ControlWidget", "Options", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("ControlWidget", "Avenue Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxLocalStreets->setText(QApplication::translate("ControlWidget", "Generate Local Streets", 0, QApplication::UnicodeUTF8));
@@ -185,14 +159,10 @@ public:
         label_3->setText(QApplication::translate("ControlWidget", "Street Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxCleanAvenues->setText(QApplication::translate("ControlWidget", "Clean Avenues", 0, QApplication::UnicodeUTF8));
         checkBoxCleanStreets->setText(QApplication::translate("ControlWidget", "Clean Local Streets", 0, QApplication::UnicodeUTF8));
-        groupBox_4->setTitle(QApplication::translate("ControlWidget", "Coordinates System", 0, QApplication::UnicodeUTF8));
-        radioButtonCartesianCoordinate->setText(QApplication::translate("ControlWidget", "Cartesian Coordinates", 0, QApplication::UnicodeUTF8));
-        radioButtonPolarCoordinate->setText(QApplication::translate("ControlWidget", "Polar Coordinates", 0, QApplication::UnicodeUTF8));
         groupBox_5->setTitle(QApplication::translate("ControlWidget", "Finalize", 0, QApplication::UnicodeUTF8));
         pushButtonConnect->setText(QApplication::translate("ControlWidget", "Connect", 0, QApplication::UnicodeUTF8));
         pushButtonMerge->setText(QApplication::translate("ControlWidget", "Merge", 0, QApplication::UnicodeUTF8));
         groupBox_2->setTitle(QApplication::translate("ControlWidget", "Similarity Control:", 0, QApplication::UnicodeUTF8));
-        pushButtonGenerateMultiEx->setText(QApplication::translate("ControlWidget", "Multi Example", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi
 

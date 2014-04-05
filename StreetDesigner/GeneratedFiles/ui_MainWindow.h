@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Fri Apr 4 16:36:17 2014
+** Created: Sat Apr 5 14:05:27 2014
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -75,6 +75,10 @@ public:
     QAction *actionDisplayAvenue;
     QAction *actionDisplayLocalStreet;
     QAction *actionHintLine;
+    QAction *actionRenderingDefault;
+    QAction *actionRenderingTexture;
+    QAction *actionRenderingGroupBy;
+    QAction *actionSaveImage;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -83,6 +87,7 @@ public:
     QMenu *menuPM;
     QMenu *menuDisplay;
     QMenu *menuRoads;
+    QMenu *menuRendering;
     QToolBar *fileToolBar;
     QToolBar *areaToolBar;
     QStatusBar *statusBar;
@@ -256,6 +261,14 @@ public:
         QIcon icon15;
         icon15.addFile(QString::fromUtf8(":/MainWindow/Resources/Line_24x24.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionHintLine->setIcon(icon15);
+        actionRenderingDefault = new QAction(MainWindow);
+        actionRenderingDefault->setObjectName(QString::fromUtf8("actionRenderingDefault"));
+        actionRenderingTexture = new QAction(MainWindow);
+        actionRenderingTexture->setObjectName(QString::fromUtf8("actionRenderingTexture"));
+        actionRenderingGroupBy = new QAction(MainWindow);
+        actionRenderingGroupBy->setObjectName(QString::fromUtf8("actionRenderingGroupBy"));
+        actionSaveImage = new QAction(MainWindow);
+        actionSaveImage->setObjectName(QString::fromUtf8("actionSaveImage"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -274,6 +287,8 @@ public:
         menuDisplay->setObjectName(QString::fromUtf8("menuDisplay"));
         menuRoads = new QMenu(menuDisplay);
         menuRoads->setObjectName(QString::fromUtf8("menuRoads"));
+        menuRendering = new QMenu(menuBar);
+        menuRendering->setObjectName(QString::fromUtf8("menuRendering"));
         MainWindow->setMenuBar(menuBar);
         fileToolBar = new QToolBar(MainWindow);
         fileToolBar->setObjectName(QString::fromUtf8("fileToolBar"));
@@ -289,6 +304,7 @@ public:
         menuBar->addAction(menuArea->menuAction());
         menuBar->addAction(menuPM->menuAction());
         menuBar->addAction(menuDisplay->menuAction());
+        menuBar->addAction(menuRendering->menuAction());
         menuBar->addAction(menuWindow->menuAction());
         menuFile->addAction(actionNewTerrain);
         menuFile->addAction(actionOpenTerrain);
@@ -300,6 +316,8 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionLoadAreas);
         menuFile->addAction(actionSaveAreas);
+        menuFile->addSeparator();
+        menuFile->addAction(actionSaveImage);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuWindow->addAction(actionControlWidget);
@@ -321,6 +339,9 @@ public:
         menuRoads->addAction(actionDisplayBoulevard);
         menuRoads->addAction(actionDisplayAvenue);
         menuRoads->addAction(actionDisplayLocalStreet);
+        menuRendering->addAction(actionRenderingDefault);
+        menuRendering->addAction(actionRenderingTexture);
+        menuRendering->addAction(actionRenderingGroupBy);
 
         retranslateUi(MainWindow);
 
@@ -390,12 +411,17 @@ public:
         actionDisplayAvenue->setText(QApplication::translate("MainWindow", "Avenue", 0, QApplication::UnicodeUTF8));
         actionDisplayLocalStreet->setText(QApplication::translate("MainWindow", "Local Street", 0, QApplication::UnicodeUTF8));
         actionHintLine->setText(QApplication::translate("MainWindow", "Hint Line", 0, QApplication::UnicodeUTF8));
+        actionRenderingDefault->setText(QApplication::translate("MainWindow", "Default", 0, QApplication::UnicodeUTF8));
+        actionRenderingTexture->setText(QApplication::translate("MainWindow", "Texture", 0, QApplication::UnicodeUTF8));
+        actionRenderingGroupBy->setText(QApplication::translate("MainWindow", "Group By", 0, QApplication::UnicodeUTF8));
+        actionSaveImage->setText(QApplication::translate("MainWindow", "Save Image", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuWindow->setTitle(QApplication::translate("MainWindow", "Window", 0, QApplication::UnicodeUTF8));
         menuArea->setTitle(QApplication::translate("MainWindow", "Area", 0, QApplication::UnicodeUTF8));
         menuPM->setTitle(QApplication::translate("MainWindow", "PM", 0, QApplication::UnicodeUTF8));
         menuDisplay->setTitle(QApplication::translate("MainWindow", "Display", 0, QApplication::UnicodeUTF8));
         menuRoads->setTitle(QApplication::translate("MainWindow", "Roads", 0, QApplication::UnicodeUTF8));
+        menuRendering->setTitle(QApplication::translate("MainWindow", "Rendering", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
