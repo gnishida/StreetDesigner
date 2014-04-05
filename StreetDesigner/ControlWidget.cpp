@@ -19,8 +19,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
 	ui.checkBoxCleanAvenues->setChecked(true);
 	ui.checkBoxCleanStreets->setChecked(true);
-	ui.checkBoxLocalStreets->setChecked(false);
-	ui.checkBoxCropping->setChecked(true);
+	ui.checkBoxLocalStreets->setChecked(true);
+	ui.checkBoxCropping->setChecked(false);
 	ui.radioButtonCartesianCoordinate->setChecked(true);
 	ui.lineEditPerturbationFactor->setText("0.1");
 

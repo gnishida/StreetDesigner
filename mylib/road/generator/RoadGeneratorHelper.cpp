@@ -650,6 +650,7 @@ void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float
 /**
  * Deadendの道路セグメントを削除する。
  * ただし、onBoundaryフラグがtrueの場合は、対象外。
+ * また、deadendフラグがtrueの場合も、対象外。
  */
 void RoadGeneratorHelper::removeDeadend(RoadGraph& roads) {
 	RoadEdgeIter ei, eend;
@@ -660,6 +661,8 @@ void RoadGeneratorHelper::removeDeadend(RoadGraph& roads) {
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
 		if (roads.graph[src]->onBoundary || roads.graph[tgt]->onBoundary) continue;
+		if (roads.graph[src]->properties.contains("deadend") && roads.graph[src]->properties["deadend"] == true) continue;
+		if (roads.graph[tgt]->properties.contains("deadend") && roads.graph[tgt]->properties["deadend"] == true) continue;
 
 		if (GraphUtil::getDegree(roads, src) == 1 || GraphUtil::getDegree(roads, tgt) == 1) {
 			roads.graph[*ei]->valid = false;

@@ -29,8 +29,10 @@ RoadEdge::RoadEdge(unsigned int type, unsigned int lanes, bool oneWay, bool link
 		bgColor = QColor(210, 170, 119);
 		break;
 	case TYPE_AVENUE:
-		color = QColor(247, 247, 185);
-		bgColor = QColor(203, 202, 149);
+		//color = QColor(247, 247, 185);
+		//bgColor = QColor(203, 202, 149);
+		color = QColor(255, 255, 0);
+		bgColor = QColor(128, 128, 0);
 		break;
 	case TYPE_STREET:
 		color = QColor(255, 255, 255);
@@ -63,10 +65,10 @@ void RoadEdge::addPoint(const QVector2D &pt) {
 float RoadEdge::getWidth(float widthPerLane) {
 	switch (type) {
 	case TYPE_HIGHWAY:
-		return widthPerLane * 2.0f;// * lanes;
+		return widthPerLane * 3.0f;// * lanes;
 	case TYPE_BOULEVARD:
 	case TYPE_AVENUE:
-		return widthPerLane * 1.5f;// * lanes;
+		return widthPerLane * 2.0f;// * lanes;
 	case TYPE_STREET:
 		return widthPerLane;// * lanes;
 	default:

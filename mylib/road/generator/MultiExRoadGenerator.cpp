@@ -158,8 +158,6 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 			}
 
 			while (edge->polyline.size() > 2) {
-
-
 				// このエッジ上の各点について、ほぼ同じ位置のStreetカーネルが存在するか探す
 				int index = -1;
 				bool found = false;
@@ -167,11 +165,13 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 				for (int p_id = 1; p_id < edge->polyline.size() - 1; ++p_id) {
 					found = false;
 
+					// この点が、エリア外なら、スキップ
+					if (!area.contains(edge->polyline[p_id])) continue;
+
 					// この点の、Example座標空間での位置を計算する
 					BBox bbox;
 					QVector2D pt = edge->polyline[p_id] + offset;
-
-					
+										
 					if (GraphUtil::getVertex(features[group_id].roads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
 						found = true;
 						index = p_id;
@@ -184,11 +184,12 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 
 				RoadVertexDesc v_desc = GraphUtil::splitEdge(roads, e, edge->polyline[index], e1, e2);
 
+				// シードとして追加
 				seeds.push_back(v_desc);
-
 				roads.graph[v_desc]->properties["group_id"] = group_id;
 				roads.graph[v_desc]->properties["example_desc"] = seedDesc;
 
+				// エッジを更新
 				edge = roads.graph[e2];
 				e = e2;
 			}
@@ -376,7 +377,10 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
 
-
+		// Example道路のDeadendは、Deadendとして正式に登録する
+		if (byExample && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) == 1) {
+			roads.graph[tgtDesc]->properties["deadend"] = true;
+		}
 	}
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
