@@ -111,9 +111,11 @@ bool IntRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area, Ex
 	// 頂点を追加し、シードとする
 	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
 	RoadVertexDesc desc = GraphUtil::addVertex(roads, v);
-	roads.graph[desc]->properties["example_desc"] = seedDesc;
+	if (G::getFloat("roadInterpolationFactor") > 0) {
+		roads.graph[desc]->properties["example_desc"] = seedDesc;
+	}
 	roads.graph[desc]->properties["group_id"] = group_id;
-	roads.graph[desc]->properties["used"] = true;
+	f.avenues.graph[seedDesc]->properties["used"] = true;
 	seeds.push_back(desc);
 
 	return true;
