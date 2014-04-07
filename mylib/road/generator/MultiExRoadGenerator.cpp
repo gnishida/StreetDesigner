@@ -116,7 +116,6 @@ bool MultiExRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area
 	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
 	RoadVertexDesc desc = GraphUtil::addVertex(roads, v);
 	roads.graph[desc]->properties["example_desc"] = seedDesc;
-	roads.graph[desc]->properties["initial_seed"] = true;
 	roads.graph[desc]->properties["group_id"] = group_id;
 	roads.graph[desc]->properties["used"] = true;
 	seeds.push_back(desc);
