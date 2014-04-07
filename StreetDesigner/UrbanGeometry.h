@@ -68,6 +68,7 @@ public:
 	void clearGeometry();
 	void generateRoads(ExFeature &feature);
 	void generateRoadsMultiEx(std::vector<ExFeature> &features);
+	void generateRoadsInterpolation(ExFeature &feature);
 	void generateBlocks();
 
 	void render(mylib::TextureManager* textureManager);

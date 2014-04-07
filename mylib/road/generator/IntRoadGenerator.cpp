@@ -4,10 +4,10 @@
 #include "../../common/Util.h"
 #include "../../common/ConvexHull.h"
 #include "../GraphUtil.h"
-#include "UShapeRoadGenerator.h"
+#include "IntRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 
-void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, ExFeature& feature) {
+void IntRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, ExFeature& feature) {
 	srand(12345);
 
 	std::list<RoadVertexDesc> seeds;
@@ -87,12 +87,10 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 /**
  * シード頂点を生成する。
  */
-void UShapeRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, ExFeature& f, std::list<RoadVertexDesc>& seeds) {
+void IntRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, ExFeature& f, std::list<RoadVertexDesc>& seeds) {
 	seeds.clear();
 
-	for (int i = 0; i < hintLine.size(); ++i) {
-		addAvenueSeed(roads, area, f, hintLine[i], f.hintLine[i], i, seeds);
-	}
+	addAvenueSeed(roads, area, f, area.envelope().midPt(), QVector2D(0, 0), 0, seeds);
 }
 
 /**
@@ -104,7 +102,7 @@ void UShapeRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D 
  * @param pt			シード座標
  * @param seeds			追加されたシードは、seedsに追加される。
  */
-bool UShapeRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area, ExFeature &f, const QVector2D &pt, const QVector2D &ex_pt, int group_id, std::list<RoadVertexDesc>& seeds) {
+bool IntRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area, ExFeature &f, const QVector2D &pt, const QVector2D &ex_pt, int group_id, std::list<RoadVertexDesc>& seeds) {
 	if (!area.contains(pt)) return false;
 
 	// Avenueカーネルの中で、offsetの位置に最も近いものを探す
@@ -124,7 +122,7 @@ bool UShapeRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area,
 /**
  * Local Street用のシードを生成する。
  */
-void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &area, ExFeature &f, std::list<RoadVertexDesc> &seeds) {
+void IntRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &area, ExFeature &f, std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
 
 	int i = 0;
@@ -200,7 +198,7 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
 			}
 		} else {
 			int step;
-			if (roads.graph[e]->polyline.length() > 100.0f) {
+			if (roads.graph[e]->polyline.length() > f.avgStreetLength * 5) {
 				step = roads.graph[e]->polyline.size() / 5;
 			} else {
 				step = roads.graph[e]->polyline.size() / 2;
@@ -226,7 +224,7 @@ void UShapeRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D 
  * このシードを使って、道路生成する。
  * Exampleベースで生成する。
  */
-void UShapeRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
+void IntRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
 	RoadVertexDesc ex_v_desc = roads.graph[srcDesc]->properties["example_desc"].toUInt();
 	RoadVertexPtr ex_vertex = f.roads(roadType).graph[ex_v_desc];
 
@@ -249,7 +247,7 @@ void UShapeRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &ar
 /**
  * このシードを使って、PM方式で道路生成する。
  */
-void UShapeRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
+void IntRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
 	float snapThreshold;
 
 	if (roadType == RoadEdge::TYPE_AVENUE) {
@@ -304,7 +302,7 @@ void UShapeRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &a
  * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
-bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
+bool IntRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
 	// 新しいエッジを生成
 	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(roadType, lanes));
 	for (int i = 0; i < polyline.size(); ++i) {
@@ -379,23 +377,31 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
 					seeds.push_back(tgtDesc);
 				}
-
-				// 対応するExampleが存在する場合は、それを設定する
-				if (!f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
-					f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
-				}
 			} else {
 				seeds.push_back(tgtDesc);
+			}
+
+			if (Util::genRand(0, 1) <= G::getFloat("roadInterpolationFactor")) {
+				// 設定されたinterpolation比よりも確率が下であれば、Exampleを使用して次のカーネルを決定
+				if (byExample) {
+					// 対応するExampleが存在する場合は、それを設定する
+					if (GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
+						roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+						f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+					} else {
+						// Deadendとして設定する
+						roads.graph[tgtDesc]->properties["deadend"] = true;
+					}
+				} else {
+					// 近隣頂点でExampleベースのものを探し、そこからの相対位置を使って、使用するExampleを決定する
+					roads.graph[tgtDesc]->properties["example_desc"] = getItem(roads, area, f, roadType, roads.graph[tgtDesc]->pt);
+				}
 			}
 		} else {
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
 
-		// Example道路のDeadendは、Deadendとして正式に登録する
-		if (byExample && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) == 1) {
-			roads.graph[tgtDesc]->properties["deadend"] = true;
-		}
+
 	}
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
@@ -409,9 +415,61 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 }
 
 /**
+ * 直近の頂点のexampleに基づき、そこからの相対位置を使って、この頂点のexampleカーネルを決定する。
+ *
+ * @return			Example道路の頂点desc
+ */
+RoadVertexDesc IntRoadGenerator::getItem(RoadGraph &roads, const Polygon2D &area, ExFeature &f, int roadType, const QVector2D &pt) {
+	RoadVertexDesc kernel;
+	RoadVertexDesc min_desc;
+
+	// 直近の、exampleベースの頂点を取得
+	{
+		float min_dist = std::numeric_limits<float>::max();
+		RoadVertexIter vi, vend;
+		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+			if (!roads.graph[*vi]->valid) continue;
+
+			if (!roads.graph[*vi]->properties.contains("example_desc")) continue;
+
+			float dist = (roads.graph[*vi]->pt - pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				min_desc = *vi;
+				kernel = roads.graph[*vi]->properties["example_desc"].toUInt();
+			}
+		}
+	}
+
+	// example座標空間での、この頂点の座標を計算する
+	QVector2D ex_pt = f.roads(roadType).graph[kernel]->pt + pt - roads.graph[min_desc]->pt;
+
+	// むりやり、ターゲット空間の座標に戻して、example座標空間でのモジュロ座標に変換する
+	BBox bbox;
+	QVector2D modulo_pt = RoadGeneratorHelper::modulo(area, f.area, area.envelope().midPt() + ex_pt, bbox);
+
+	// モジュロ座標に最も近いexampleを取得
+	{
+		float min_dist = std::numeric_limits<float>::max();
+		RoadVertexIter vi, vend;
+		for (boost::tie(vi, vend) = boost::vertices(f.roads(roadType).graph); vi != vend; ++vi) {
+			if (!f.roads(roadType).graph[*vi]->valid) continue;
+
+			float dist = (f.roads(roadType).graph[*vi]->pt - modulo_pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				min_desc = *vi;
+			}
+		}
+	}
+
+	return min_desc;
+}
+
+/**
  * PMに従って、カーネルを合成する
  */
-void UShapeRoadGenerator::synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVertexDesc v_desc, int roadType, std::vector<RoadEdgePtr> &edges) {
+void IntRoadGenerator::synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVertexDesc v_desc, int roadType, std::vector<RoadEdgePtr> &edges) {
 	// 当該頂点から出るエッジをリストアップする
 	std::vector<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;

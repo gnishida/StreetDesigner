@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Sat Apr 5 12:00:28 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Mon Apr 7 13:20:42 2014
+**      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -51,7 +51,8 @@ public:
     QPushButton *pushButtonConnect;
     QPushButton *pushButtonMerge;
     QGroupBox *groupBox_2;
-    QSlider *horizontalSliderExactSimilarityFactor;
+    QSlider *horizontalSliderInterpolationFactor;
+    QLabel *labelInterpolationFactor;
 
     void setupUi(QDockWidget *ControlWidget)
     {
@@ -132,11 +133,18 @@ public:
         groupBox_2 = new QGroupBox(dockWidgetContents);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(10, 200, 171, 61));
-        horizontalSliderExactSimilarityFactor = new QSlider(groupBox_2);
-        horizontalSliderExactSimilarityFactor->setObjectName(QString::fromUtf8("horizontalSliderExactSimilarityFactor"));
-        horizontalSliderExactSimilarityFactor->setGeometry(QRect(10, 30, 151, 20));
-        horizontalSliderExactSimilarityFactor->setMaximum(100);
-        horizontalSliderExactSimilarityFactor->setOrientation(Qt::Horizontal);
+        horizontalSliderInterpolationFactor = new QSlider(groupBox_2);
+        horizontalSliderInterpolationFactor->setObjectName(QString::fromUtf8("horizontalSliderInterpolationFactor"));
+        horizontalSliderInterpolationFactor->setGeometry(QRect(10, 30, 111, 20));
+        horizontalSliderInterpolationFactor->setMaximum(100);
+        horizontalSliderInterpolationFactor->setOrientation(Qt::Horizontal);
+        labelInterpolationFactor = new QLabel(groupBox_2);
+        labelInterpolationFactor->setObjectName(QString::fromUtf8("labelInterpolationFactor"));
+        labelInterpolationFactor->setGeometry(QRect(130, 30, 31, 20));
+        labelInterpolationFactor->setStyleSheet(QString::fromUtf8(""));
+        labelInterpolationFactor->setFrameShape(QFrame::NoFrame);
+        labelInterpolationFactor->setFrameShadow(QFrame::Plain);
+        labelInterpolationFactor->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -162,7 +170,8 @@ public:
         groupBox_5->setTitle(QApplication::translate("ControlWidget", "Finalize", 0, QApplication::UnicodeUTF8));
         pushButtonConnect->setText(QApplication::translate("ControlWidget", "Connect", 0, QApplication::UnicodeUTF8));
         pushButtonMerge->setText(QApplication::translate("ControlWidget", "Merge", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("ControlWidget", "Similarity Control:", 0, QApplication::UnicodeUTF8));
+        groupBox_2->setTitle(QApplication::translate("ControlWidget", "Interpolation", 0, QApplication::UnicodeUTF8));
+        labelInterpolationFactor->setText(QApplication::translate("ControlWidget", "0", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(ControlWidget);
     } // retranslateUi
 

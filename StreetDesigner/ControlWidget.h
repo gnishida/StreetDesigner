@@ -19,6 +19,7 @@ public:
 	//void setRoadEdge(RoadEdgePtr selectedEdge);
 
 public slots:
+	void updateInterpolationFactor(int value);
 	void generateRoads();
 	void clear();
 	void mergeRoads();

@@ -15,8 +15,8 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.setupUi(this);
 	ui.lineEditNumAvenueIterations->setText("1000");
 	ui.lineEditNumStreetIterations->setText("5000");
-	ui.horizontalSliderExactSimilarityFactor->setMinimum(0);
-	ui.horizontalSliderExactSimilarityFactor->setMaximum(100);
+	ui.horizontalSliderInterpolationFactor->setMinimum(0);
+	ui.horizontalSliderInterpolationFactor->setMaximum(100);
 	ui.checkBoxCleanAvenues->setChecked(true);
 	ui.checkBoxCleanStreets->setChecked(true);
 	ui.checkBoxLocalStreets->setChecked(true);
@@ -24,6 +24,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.checkBoxAdaptiveFitting->setChecked(false);
 
 	// register the event handlers
+	connect(ui.horizontalSliderInterpolationFactor, SIGNAL(valueChanged(int)), this, SLOT(updateInterpolationFactor(int)));
 	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
@@ -35,6 +36,12 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Event handlers
 
+void ControlWidget::updateInterpolationFactor(int value) {
+	QString str;
+	str.setNum(value);
+	ui.labelInterpolationFactor->setText(str);
+}
+
 /**
  * Event handler for button [Generate Roads]
  */
@@ -45,7 +52,7 @@ void ControlWidget::generateRoads() {
 	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
 	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
 	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
-	G::global()["roadExactSimilarityFactor"] = ui.horizontalSliderExactSimilarityFactor->value() * 0.01f;
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 
@@ -59,16 +66,26 @@ void ControlWidget::generateRoads() {
 
 		mainWin->urbanGeometry->generateRoads(feature);
 	} else {
-		std::vector<ExFeature> features;
-		features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
-		for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
+		if (mainWin->urbanGeometry->areas.selectedArea()->hintLine.size() > 1) {
+			std::vector<ExFeature> features;
+			features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+			for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
+				QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+				if (filename.isEmpty()) return;
+	
+				features[i].load(filename);
+			}
+
+			mainWin->urbanGeometry->generateRoadsMultiEx(features);
+		} else {
+			ExFeature feature;
 			QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
 			if (filename.isEmpty()) return;
 	
-			features[i].load(filename);
-		}
+			feature.load(filename);
 
-		mainWin->urbanGeometry->generateRoadsMultiEx(features);
+			mainWin->urbanGeometry->generateRoadsInterpolation(feature);
+		}
 	}
 	
 	mainWin->glWidget->updateGL();
