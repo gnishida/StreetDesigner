@@ -1,4 +1,5 @@
 ﻿#include <limits>
+#include "../../common/global.h"
 #include "../../common/Util.h"
 #include "../../common/ConvexHull.h"
 #include "../GraphUtil.h"
@@ -651,23 +652,31 @@ void RoadGeneratorHelper::createFourDirection(float direction, std::vector<float
  * Deadendの道路セグメントを削除する。
  * ただし、onBoundaryフラグがtrueの場合は、対象外。
  * また、deadendフラグがtrueの場合も、対象外。
+ * 処理を繰り返し、deadend道路がなくなるまで、繰り返す。
  */
 void RoadGeneratorHelper::removeDeadend(RoadGraph& roads) {
-	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
-		if (!roads.graph[*ei]->valid) continue;
+	bool removed = false;
 
-		RoadVertexDesc src = boost::source(*ei, roads.graph);
-		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+	do {
+		removed = false;
 
-		if (roads.graph[src]->onBoundary || roads.graph[tgt]->onBoundary) continue;
-		if (roads.graph[src]->properties.contains("deadend") && roads.graph[src]->properties["deadend"] == true) continue;
-		if (roads.graph[tgt]->properties.contains("deadend") && roads.graph[tgt]->properties["deadend"] == true) continue;
+		RoadEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
 
-		if (GraphUtil::getDegree(roads, src) == 1 || GraphUtil::getDegree(roads, tgt) == 1) {
-			roads.graph[*ei]->valid = false;
+			RoadVertexDesc src = boost::source(*ei, roads.graph);
+			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+			if (roads.graph[src]->onBoundary || roads.graph[tgt]->onBoundary) continue;
+			if (roads.graph[src]->properties.contains("deadend") && roads.graph[src]->properties["deadend"] == true) continue;
+			if (roads.graph[tgt]->properties.contains("deadend") && roads.graph[tgt]->properties["deadend"] == true) continue;
+
+			if (GraphUtil::getDegree(roads, src) == 1 || GraphUtil::getDegree(roads, tgt) == 1) {
+				roads.graph[*ei]->valid = false;
+				removed = true;
+			}
 		}
-	}
+	} while (removed);
 }
 
 /**
@@ -704,7 +713,11 @@ void RoadGeneratorHelper::extendDanglingEdges(RoadGraph &roads) {
 			if (GraphUtil::isIntersect(roads, polyline)) {
 				roads.graph[*ei]->valid = false;
 			} else {
-				GraphUtil::addEdge(roads, *vi, snapDesc, roads.graph[*ei]->type, roads.graph[*ei]->lanes);
+				RoadEdgeDesc e = GraphUtil::addEdge(roads, *vi, snapDesc, roads.graph[*ei]->type, roads.graph[*ei]->lanes);
+				roads.graph[e]->properties["generation_type"] = "pm";
+				if (G::getFloat("roadInterpolationFactor") == 1.0f) {
+					//roads.graph[*ei]->properties["byExample"] = true;
+				}
 			}
 		}
 	}
@@ -814,19 +827,52 @@ bool RoadGeneratorHelper::growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDe
 	}	
 }
 
-void RoadGeneratorHelper::createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges) {
+/**
+ * 指定された頂点に近くで、同じgroup_idで、example_descをプロパティに設定している頂点を探す。
+ */
+RoadVertexDesc RoadGeneratorHelper::getClosestVertexByExample(RoadGraph &roads, RoadVertexDesc v_desc) {
+	float min_dist = std::numeric_limits<float>::max();
+	RoadVertexDesc nearest_v_desc;
+
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (!roads.graph[*vi]->valid) continue;
+
+		if (roads.graph[*vi]->properties["group_id"] == roads.graph[v_desc]->properties["group_id"] && roads.graph[*vi]->properties.contains("example_desc")) {
+			float dist = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				nearest_v_desc = *vi;
+			}
+		}
+	}
+
+	return nearest_v_desc;
+}
+
+void RoadGeneratorHelper::createFourEdges(ExFeature &f, int roadType, const QVector2D &ex_pt, int lanes, float direction, float step, std::vector<RoadEdgePtr> &edges) {
 	edges.clear();
+
+	// 指定された example空間座標に基づき、エッジ長と曲率の平均、分散を計算する
+	BBox bbox = f.area.envelope();
+	float dist = (bbox.dx() + bbox.dy()) * 0.25f;
+	float avgLength, varLength, avgCurvature, varCurvature;
+	GraphUtil::computeStatistics(f.roads(roadType), ex_pt, dist, avgLength, varLength, avgCurvature, varCurvature);
 
 	std::vector<float> directions;
 	createFourDirection(direction, directions);
 
-	if (Util::genRand() >= 0.5f) {
-		curvature = -curvature;
-	}
-
 	int sign = 1;
 	
 	for (int i = 0; i < directions.size(); ++i) {
+		float length = Util::genRandNormal(avgLength, varLength);
+		float curvature = Util::genRandNormal(avgCurvature, varCurvature);
+
+		// 50%の確率で、どっちに曲がるか決定
+		if (Util::genRand() >= 0.5f) {
+			curvature = -curvature;
+		}
+
 		float deltaDir = 0.0f;
 
 		RoadEdgePtr edge = RoadEdgePtr(new RoadEdge(roadType, lanes));

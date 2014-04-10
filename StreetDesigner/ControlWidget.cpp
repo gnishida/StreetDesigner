@@ -26,6 +26,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	// register the event handlers
 	connect(ui.horizontalSliderInterpolationFactor, SIGNAL(valueChanged(int)), this, SLOT(updateInterpolationFactor(int)));
 	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
+	connect(ui.pushButtonGenerateInterpolation, SIGNAL(clicked()), this, SLOT(generateRoadsInterpolation()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
@@ -66,27 +67,42 @@ void ControlWidget::generateRoads() {
 
 		mainWin->urbanGeometry->generateRoads(feature);
 	} else {
-		if (mainWin->urbanGeometry->areas.selectedArea()->hintLine.size() > 1) {
-			std::vector<ExFeature> features;
-			features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
-			for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
-				QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
-				if (filename.isEmpty()) return;
-	
-				features[i].load(filename);
-			}
-
-			mainWin->urbanGeometry->generateRoadsMultiEx(features);
-		} else {
-			ExFeature feature;
+		std::vector<ExFeature> features;
+		features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+		for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
 			QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
 			if (filename.isEmpty()) return;
 	
-			feature.load(filename);
-
-			mainWin->urbanGeometry->generateRoadsInterpolation(feature);
+			features[i].load(filename);
 		}
+
+		mainWin->urbanGeometry->generateRoadsMultiEx(features);
 	}
+	
+	mainWin->glWidget->updateGL();
+}
+
+/**
+ * Event handler for button [Generate Roads]
+ */
+void ControlWidget::generateRoadsInterpolation() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+
+	ExFeature feature;
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+	if (filename.isEmpty()) return;
+	
+	feature.load(filename);
+
+	mainWin->urbanGeometry->generateRoadsInterpolation(feature);
 	
 	mainWin->glWidget->updateGL();
 }

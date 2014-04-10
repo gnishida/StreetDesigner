@@ -53,6 +53,7 @@ public:
 	static bool isSimilarPolyline(const Polyline2D &polyline1, const Polyline2D &polyline2);
 	static bool removeDeadEnd(RoadGraph& roads);
 	static void removeIsolatedEdges(RoadGraph& roads, bool onlyValidEdge = true);
+	static void removeLoop(RoadGraph& roads);
 	static RoadVertexDesc splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt);
 	static RoadVertexDesc splitEdge(RoadGraph &roads, RoadEdgeDesc edge_desc, const QVector2D& pt, RoadEdgeDesc &edge1, RoadEdgeDesc &edge2);
 	static bool hasCloseEdge(RoadGraph* roads, RoadVertexDesc v1, RoadVertexDesc v2, float angle_threshold = 0.3f);
@@ -91,8 +92,9 @@ public:
 	static bool isConnected(RoadGraph& roads, RoadVertexDesc desc1, RoadVertexDesc desc2, bool onlyValidEdge = true);
 	static RoadVertexDesc findConnectedNearestNeighbor(RoadGraph* roads, const QVector2D &pt, RoadVertexDesc v);
 	static bool getEdge(RoadGraph& roads, const QVector2D &pt, float threshold, RoadEdgeDesc& e, bool onlyValidEdge = true);
+	static bool getEdge(RoadGraph& roads, const QVector2D &pt, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc& e, QVector2D &closestPt, bool onlyValidEdge = true);
 	static bool getEdge(RoadGraph& roads, RoadVertexDesc v, float threshold, RoadEdgeDesc& e, QVector2D &closestPt, bool onlyValidEdge = true);
-	static RoadEdgeDesc findNearestEdge(RoadGraph& roads, RoadVertexDesc v, float& dist, QVector2D& closestPt, bool onlyValidEdge = true);
+	static RoadEdgeDesc getEdge(RoadGraph& roads, RoadVertexDesc v, QVector2D& closestPt, bool onlyValidEdge = true);
 
 	// The road graph modification functions
 	static void clean(RoadGraph& roads);
@@ -117,6 +119,7 @@ public:
 
 	// statistic
 	static void computeStatistics(RoadGraph &roads, float &avgEdgeLength, float &varEdgeLength, float &avgEdgeCurvature, float &varEdgeCurvature);
+	static void computeStatistics(RoadGraph &roads, const QVector2D &pt, float dist, float &avgEdgeLength, float &varEdgeLength, float &avgEdgeCurvature, float &varEdgeCurvature);
 
 	// Others
 	static bool isRoadTypeMatched(int type, int ref_type);

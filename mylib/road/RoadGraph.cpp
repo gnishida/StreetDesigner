@@ -301,7 +301,7 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 
 			// group_idに基づいて色を決定
 			QColor color, bgColor;							
-			if (graph[*ei]->properties.contains("group_id")) {
+			if (graph[*ei]->properties["generation_type"] == "example") {
 				if (graph[*ei]->properties["group_id"].toInt() == 0) {
 					color = QColor(255, 128, 128);
 					bgColor = QColor(128, 0, 0);
@@ -351,7 +351,6 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 
 				if (i < num - 2) {
 					QVector3D pt3 = graph[*ei]->polyline3D[i + 2];
-
 
 					Util::getIrregularBisector(pt1, pt2, pt3, halfWidth, halfWidth, p3);
 					Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
@@ -431,15 +430,20 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 		
 			// group_idに基づいて色を決定
 			QColor color, bgColor;
-			if (group_id == 0) {
-				color = QColor(255, 128, 128);
-				bgColor = QColor(128, 0, 0);
-			} else if (group_id == 1) {
-				color = QColor(128, 255, 128);
-				bgColor = QColor(0, 128, 0);
-			} else if (group_id == 2) {
-				color = QColor(128, 128, 255);
-				bgColor = QColor(0, 0, 128);
+			if (graph[*vi]->properties["generation_type"] == "example") {
+				if (group_id == 0) {
+					color = QColor(255, 128, 128);
+					bgColor = QColor(128, 0, 0);
+				} else if (group_id == 1) {
+					color = QColor(128, 255, 128);
+					bgColor = QColor(0, 128, 0);
+				} else if (group_id == 2) {
+					color = QColor(128, 128, 255);
+					bgColor = QColor(0, 0, 128);
+				} else {
+					color = QColor(255, 255, 255);
+					bgColor = QColor(128, 128, 128);
+				}
 			} else {
 				color = QColor(255, 255, 255);
 				bgColor = QColor(128, 128, 128);
@@ -704,6 +708,10 @@ void RoadGraph::adaptToTerrain(mylib::Terrain* terrain) {
 
 		float bridgeHeight = 0.0f;
 		for (int i = 0; i < graph[*ei]->polyline.size(); ++i) {
+			// たまに、同じポイントが重複していることがあり、そのせいで道路表示がねじれてしまう。
+			// 仕方がないので、同じポイントならスキップするようにした。
+			if (i > 0 && (graph[*ei]->polyline[i] - graph[*ei]->polyline[i - 1]).lengthSquared() == 0) continue;
+
 			float z = terrain->getValue(graph[*ei]->polyline[i].x(), graph[*ei]->polyline[i].y());
 			if (z < 0.0f) {
 				if (-z + 2.0f > bridgeHeight) {

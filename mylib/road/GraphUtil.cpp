@@ -332,6 +332,24 @@ void GraphUtil::removeIsolatedVertices(RoadGraph& roads, bool onlyValidVertex) {
 }
 
 /**
+ * ループエッジを削除する
+ */
+void GraphUtil::removeLoop(RoadGraph& roads) {
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+		if (src == tgt) {
+			roads.graph[*ei]->valid = false;
+		}
+	}
+
+	roads.setModified();
+}
+
+/**
  * Snap v1 to v2.
  */
 void GraphUtil::snapVertex(RoadGraph& roads, RoadVertexDesc v1, RoadVertexDesc v2) {
@@ -1803,50 +1821,6 @@ bool GraphUtil::isConnected(RoadGraph& roads, RoadVertexDesc desc1, RoadVertexDe
 }
 
 /**
- * Find the closest vertex from the specified point.
- */
-/*RoadVertexDesc GraphUtil::findNearestVertex(RoadGraph* roads, const QVector2D &pt) {
-	RoadVertexDesc nearest_desc;
-	float min_dist = std::numeric_limits<float>::max();
-
-	RoadVertexIter vi, vend;
-	for (boost::tie(vi, vend) = boost::vertices(roads->graph); vi != vend; ++vi) {
-		if (!roads->graph[*vi]->valid) continue;
-
-		float dist = (roads->graph[*vi]->getPt() - pt).length();
-		if (dist < min_dist) {
-			nearest_desc = *vi;
-			min_dist = dist;
-		}
-	}
-
-	return nearest_desc;
-}*/
-
-/**
- * Find the closest vertex from the specified point.
- * The vertex "ignore" is ignored.
- */
-/*RoadVertexDesc GraphUtil::findNearestVertex(RoadGraph* roads, const QVector2D &pt, RoadVertexDesc ignore) {
-	RoadVertexDesc nearest_desc;
-	float min_dist = std::numeric_limits<float>::max();
-
-	RoadVertexIter vi, vend;
-	for (boost::tie(vi, vend) = boost::vertices(roads->graph); vi != vend; ++vi) {
-		if (*vi == ignore) continue;
-		if (!roads->graph[*vi]->valid) continue;
-
-		float dist = (roads->graph[*vi]->getPt() - pt).length();
-		if (dist < min_dist) {
-			nearest_desc = *vi;
-			min_dist = dist;
-		}
-	}
-
-	return nearest_desc;
-}*/
-
-/**
  * 指定したノードvと接続されたノードの中で、指定した座標に最も近いノードを返却する。
  */
 RoadVertexDesc GraphUtil::findConnectedNearestNeighbor(RoadGraph* roads, const QVector2D &pt, RoadVertexDesc v) {
@@ -1920,6 +1894,41 @@ bool GraphUtil::getEdge(RoadGraph &roads, const QVector2D &pt, float threshold, 
 }
 
 /**
+ * Find the edge which is the closest to the specified point.
+ * If the distance is within the threshold, return true. Otherwise, return false.
+ */
+bool GraphUtil::getEdge(RoadGraph &roads, const QVector2D &pt, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc& e, QVector2D &closestPt, bool onlyValidEdge) {
+	float min_dist = std::numeric_limits<float>::max();
+	RoadEdgeDesc min_e;
+
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (onlyValidEdge && !roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+		if (onlyValidEdge && !roads.graph[src]->valid) continue;
+		if (onlyValidEdge && !roads.graph[tgt]->valid) continue;
+
+		if (src == srcDesc || tgt == srcDesc) continue;
+
+		QVector2D pt2;
+		for (int i = 0; i < roads.graph[*ei]->polyline.size() - 1; i++) {
+			float dist = Util::pointSegmentDistanceXY(roads.graph[*ei]->polyline[i], roads.graph[*ei]->polyline[i + 1], pt, pt2);
+			if (dist < min_dist) {
+				min_dist = dist;
+				e = *ei;
+				closestPt = pt2;
+			}
+		}
+	}
+
+	if (min_dist < threshold) return true;
+	else return false;
+}
+
+/**
  * 指定された点に近いエッジを探す。ただし、指定された頂点から出るエッジは検索対象外とする。
  */
 bool GraphUtil::getEdge(RoadGraph& roads, RoadVertexDesc v, float threshold, RoadEdgeDesc& e, QVector2D &closestPt, bool onlyValidEdge) {
@@ -1958,8 +1967,8 @@ bool GraphUtil::getEdge(RoadGraph& roads, RoadVertexDesc v, float threshold, Roa
  * 指定された頂点に最も近いエッジを返却する。
  * ただし、指定された頂点に隣接するエッジは、対象外とする。
  */
-RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph& roads, RoadVertexDesc v, float& dist, QVector2D &closestPt, bool onlyValidEdge) {
-	dist = std::numeric_limits<float>::max();
+RoadEdgeDesc GraphUtil::getEdge(RoadGraph& roads, RoadVertexDesc v, QVector2D &closestPt, bool onlyValidEdge) {
+	float min_dist = std::numeric_limits<float>::max();
 	RoadEdgeDesc min_e;
 
 	RoadEdgeIter ei, eend;
@@ -1976,13 +1985,11 @@ RoadEdgeDesc GraphUtil::findNearestEdge(RoadGraph& roads, RoadVertexDesc v, floa
 		// ループエッジにスナップさせない方が良いかなと思って。少し議論の余地があるかも
 		if (src == tgt) continue;
 
-		int k = src;
-
 		QVector2D pt2;
 		float d = distance(roads, roads.graph[v]->pt, *ei, pt2);
 
-		if (d < dist) {
-			dist = d;
+		if (d < min_dist) {
+			min_dist = d;
 			min_e = *ei;
 			closestPt = pt2;
 		}
@@ -2146,9 +2153,8 @@ void GraphUtil::simplify(RoadGraph& roads, float dist_threshold) {
 
 		// find the closest vertex
 		QVector2D closestPt;
-		float dist;
-		RoadEdgeDesc e = GraphUtil::findNearestEdge(roads, *vi, dist, closestPt);
-		if (dist < dist_threshold) {
+		RoadEdgeDesc e;
+		if (GraphUtil::getEdge(roads, *vi, dist_threshold, e, closestPt)) {
 			// move the vertex to the closest point on the edge
 			GraphUtil::moveVertex(roads, *vi, closestPt);
 
@@ -2408,8 +2414,8 @@ void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
 
 		QVector2D closestPt;
 		float dist;
-		RoadEdgeDesc e = GraphUtil::findNearestEdge(roads, *vi, dist, closestPt);
-		if (dist < dist_threshold) {
+		RoadEdgeDesc e;
+		if (GraphUtil::getEdge(roads, *vi, dist_threshold, e, closestPt)) {
 			RoadVertexDesc splitVertexDesc = splitEdge(roads, e, closestPt);
 
 			snapVertex(roads, *vi, splitVertexDesc);
@@ -3035,6 +3041,45 @@ void GraphUtil::computeStatistics(RoadGraph &roads, float &avgEdgeLength, float 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
 		if (!roads.graph[*ei]->valid) continue;
+
+		float length = roads.graph[*ei]->polyline.length();
+		totalLength += length;
+		totalLength2 += SQR(length);
+
+		float curvature = Util::curvature(roads.graph[*ei]->polyline);
+		totalCurvature += curvature;
+		totalCurvature2 += SQR(curvature);
+
+		num++;
+	}
+
+	avgEdgeLength = totalLength / (float)num;
+	varEdgeLength = totalLength2 / (float)num - SQR(avgEdgeLength);
+	avgEdgeCurvature = totalCurvature / (float)num;
+	varEdgeCurvature = totalCurvature2 / (float)num - SQR(avgEdgeCurvature);
+}
+
+/**
+ * 道路の統計情報を計算する。
+ * ただし、指定された座標から、dist距離以内の道路のみを対象とする。
+ */
+void GraphUtil::computeStatistics(RoadGraph &roads, const QVector2D &pt, float dist, float &avgEdgeLength, float &varEdgeLength, float &avgEdgeCurvature, float &varEdgeCurvature) {
+	float dist2 = SQR(dist);
+
+	float totalLength = 0.0f;
+	float totalLength2 = 0.0f;
+	float totalCurvature = 0.0f;
+	float totalCurvature2 = 0.0f;
+	int num = 0;
+
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+		if ((roads.graph[src]->pt - pt).lengthSquared() > dist2 && (roads.graph[tgt]->pt - pt).lengthSquared() > dist2) continue;
 
 		float length = roads.graph[*ei]->polyline.length();
 		totalLength += length;

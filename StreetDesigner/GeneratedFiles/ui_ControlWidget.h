@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Mon Apr 7 13:20:42 2014
+** Created: Thu Apr 10 16:45:15 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,6 +37,7 @@ public:
     QLabel *label_2;
     QPushButton *pushButtonClear;
     QCheckBox *checkBoxAdaptiveFitting;
+    QPushButton *pushButtonGenerateInterpolation;
     QGroupBox *groupBox;
     QLabel *label;
     QLineEdit *lineEditNumAvenueIterations;
@@ -65,7 +66,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox_8 = new QGroupBox(dockWidgetContents);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
-        groupBox_8->setGeometry(QRect(10, 270, 171, 191));
+        groupBox_8->setGeometry(QRect(10, 270, 171, 231));
         pushButtonGenerate = new QPushButton(groupBox_8);
         pushButtonGenerate->setObjectName(QString::fromUtf8("pushButtonGenerate"));
         pushButtonGenerate->setGeometry(QRect(20, 110, 131, 31));
@@ -85,10 +86,13 @@ public:
         label_2->setGeometry(QRect(20, 20, 61, 16));
         pushButtonClear = new QPushButton(groupBox_8);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
-        pushButtonClear->setGeometry(QRect(20, 150, 131, 31));
+        pushButtonClear->setGeometry(QRect(20, 190, 131, 31));
         checkBoxAdaptiveFitting = new QCheckBox(groupBox_8);
         checkBoxAdaptiveFitting->setObjectName(QString::fromUtf8("checkBoxAdaptiveFitting"));
         checkBoxAdaptiveFitting->setGeometry(QRect(10, 80, 141, 17));
+        pushButtonGenerateInterpolation = new QPushButton(groupBox_8);
+        pushButtonGenerateInterpolation->setObjectName(QString::fromUtf8("pushButtonGenerateInterpolation"));
+        pushButtonGenerateInterpolation->setGeometry(QRect(20, 150, 131, 31));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(10, 10, 171, 181));
@@ -123,7 +127,7 @@ public:
         checkBoxCleanStreets->setGeometry(QRect(10, 100, 131, 17));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 470, 171, 101));
+        groupBox_5->setGeometry(QRect(10, 510, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
         pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
@@ -159,6 +163,7 @@ public:
         label_2->setText(QApplication::translate("ControlWidget", "Orientation:", 0, QApplication::UnicodeUTF8));
         pushButtonClear->setText(QApplication::translate("ControlWidget", "Clear", 0, QApplication::UnicodeUTF8));
         checkBoxAdaptiveFitting->setText(QApplication::translate("ControlWidget", "Adaptive Fitting", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerateInterpolation->setText(QApplication::translate("ControlWidget", "Interpolation", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("ControlWidget", "Options", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("ControlWidget", "Avenue Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxLocalStreets->setText(QApplication::translate("ControlWidget", "Generate Local Streets", 0, QApplication::UnicodeUTF8));

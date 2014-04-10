@@ -98,6 +98,22 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 			updateGL();
 		} else {
 			mainWin->urbanGeometry->areas.selectArea(pos);
+
+			for (int i = 0; i < mainWin->urbanGeometry->areas.size(); ++i) {
+				if (GraphUtil::getVertex(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedVertexDesc)) {
+					selectedVertex = mainWin->urbanGeometry->areas[i]->roads.graph[selectedVertexDesc];
+					mainWin->propertyWidget->setRoadVertex(mainWin->urbanGeometry->areas[i]->roads, selectedVertexDesc, selectedVertex);
+					mainWin->propertyWidget->resetRoadEdge();
+					break;
+				} else {
+					if (GraphUtil::getEdge(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedEdgeDesc)) {
+						selectedEdge = mainWin->urbanGeometry->areas[i]->roads.graph[selectedEdgeDesc];
+						mainWin->propertyWidget->resetRoadVertex();
+						mainWin->propertyWidget->setRoadEdge(selectedEdge);
+					}
+					break;
+				}
+			}
 		}
 		break;
 	case MainWindow::MODE_AREA_CREATE:

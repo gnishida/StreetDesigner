@@ -293,6 +293,10 @@ void UrbanGeometry::saveRoads(const QString &filename) {
 
 void UrbanGeometry::clearRoads() {
 	roads.clear();
+	for (int i = 0; i < blocks.size(); ++i) {
+		delete blocks[i];
+	}
+	blocks.clear();
 }
 
 void UrbanGeometry::perturbRoads(float perturbationFactor) {

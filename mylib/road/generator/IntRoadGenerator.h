@@ -20,7 +20,8 @@ private:
 	static void attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds);
 	static bool growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
 
-	static RoadVertexDesc getItem(RoadGraph &roads, const Polygon2D &area, ExFeature &f, int roadType, const QVector2D &pt);
+	static RoadVertexDesc getItemByLocation(RoadGraph &roads, const Polygon2D &area, ExFeature &f, int roadType, const QVector2D &pt);
+	static RoadVertexDesc getItemByEdgeShape(RoadGraph &roads, ExFeature &f, int roadType, RoadVertexDesc tgtDesc, const Polyline2D &polyline);
 	static void synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVertexDesc v_desc, int roadType, std::vector<RoadEdgePtr> &edges);
 
 public:

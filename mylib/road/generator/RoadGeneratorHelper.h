@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../RoadGraph.h"
-//#include "../feature/KDEFeature.h"
+#include "../feature/ExFeature.h"
 
 /**
  * 道路網生成のヘルパークラス。
@@ -33,12 +33,14 @@ public:
 	static bool containsInitialSeed(const Polygon2D &targetArea, const Polygon2D &exampleArea, const QVector2D &pt);
 
 	static void createFourDirection(float direction, std::vector<float> &directions);
-	static void createFourEdges(int roadType, int lanes, float direction, float step, float length, float curvature, std::vector<RoadEdgePtr> &edges);
+	static void createFourEdges(ExFeature &f, int roadType, const QVector2D &ex_pt, int lanes, float direction, float step, std::vector<RoadEdgePtr> &edges);
 
 	static void removeDeadend(RoadGraph& roads);
 	static void extendDanglingEdges(RoadGraph &roads);
 	static void connectRoads(RoadGraph& roads, float distance_threshold, float angle_threshold);
 	static bool growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc, const QVector2D& step);
+
+	static RoadVertexDesc getClosestVertexByExample(RoadGraph &roads, RoadVertexDesc v_desc);
 	
 	static int getRelativeDirectionInArea(const BBox &bbox, const QVector2D &pt);
 
