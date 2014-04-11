@@ -14,24 +14,27 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#include "BlockGenerator.h"
-#include "Block.h"
-#include "RoadGraph.h"
+#pragma once
+
+#include <vector>
+#include <pm/Parcel.h>
 #include "UrbanGeometry.h"
-#include "Util.h"
+#include "MainWindow.h"
 
-#ifndef Q_MOC_RUN
-#include <boost/graph/planar_face_traversal.hpp>
-#include <boost/graph/boyer_myrvold_planar_test.hpp>
-#endif
+class Block;
 
-namespace ucore {
+class ParcelGenerator {
+protected:
+	MainWindow* mainWin;
 
-BlockGenerator::BlockGenerator(UrbanGeometry* urbanGeometry) {
-	this->urbanGeometry = urbanGeometry;
-}
+public:
+	ParcelGenerator(MainWindow* mainWin);
+	~ParcelGenerator();
 
-BlockGenerator::~BlockGenerator() {
-}
+	void run();
 
-} // namespace ucore
+private:
+	void subdivideBlockIntoParcels(Block* block);
+	bool subdivideParcel(Block* block, Polygon3D& contour, float areaMean, float areaStd, float splitIrregularity, std::vector<Parcel*>& outParcels);
+	//void setParcelsAsParks(std::vector<Block*>& blocks);
+};

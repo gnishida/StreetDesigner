@@ -16,22 +16,21 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include <vector>
-#include <boost/graph/adjacency_list.hpp>
+#include "../common/common.h"
 #include "../render/GeometryObject.h"
 #include "../render/Terrain.h"
 #include "../render/TextureManager.h"
 #include "../common/Polygon3D.h"
 #include "../common/BBox.h"
-//#include "Parcel.h"
+#include "Parcel.h"
 
-/*typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, Parcel*> ParcelGraph;				
+typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS, Parcel*> ParcelGraph;				
 typedef boost::graph_traits<ParcelGraph>::vertex_descriptor ParcelGraphVertexDesc;
 typedef boost::graph_traits<ParcelGraph>::vertex_iterator ParcelGraphVertexIter;
-*/
+
 
 class Block : public mylib::GeometryObject {
-protected:
+public:
 	/** Contour of the block */
 	Polygon3D contour;
 
@@ -44,7 +43,7 @@ protected:
 	/** BGL Graph of parcels into which block is subdivided */
 
 	/** Parcels */
-	//ParcelGraph parcels;
+	ParcelGraph parcels;
 
 	/** Random seed */
 	//int randSeed;
@@ -67,7 +66,7 @@ public:
 	/** getter/setter for parcels */
 	//ParcelGraph& getParcels() { return parcels; }
 	//Parcel* getParcel(ParcelGraphVertexDesc desc) { return parcels[desc]; }
-	//ParcelGraphVertexDesc addParcel(Parcel* parcel);
+	ParcelGraphVertexDesc addParcel(Parcel* parcel);
 
 	/** Clear */
 	void clear();

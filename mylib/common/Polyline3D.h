@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include <QVector3D>
-#include <boost/geometry/geometries/register/linestring.hpp>
-#include <boost/geometry/geometries/linestring.hpp>
+#include "common.h"
 
 class Polyline3D : public std::vector<QVector3D> {
 public:

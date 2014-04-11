@@ -1,11 +1,5 @@
 ﻿#pragma once
 
-#include <vector>
-#include <QVector2D>
-#include <boost/geometry/geometries/register/point.hpp>
-#include <boost/geometry/geometries/register/box.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
 #include "common.h"
 
 class BBox {

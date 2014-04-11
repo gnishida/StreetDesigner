@@ -32,6 +32,7 @@ This file is part of QtUrban.
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
 #include "BlockGenerator.h"
+#include "ParcelGenerator.h"
 
 UrbanGeometry::UrbanGeometry(MainWindow* mainWin) {
 	this->mainWin = mainWin;
@@ -94,6 +95,15 @@ void UrbanGeometry::generateBlocks() {
 	}
 }
 
+void UrbanGeometry::generateParcels() {
+	ParcelGenerator generator(mainWin);
+	generator.run();
+
+	for (int i = 0; i < blocks.size(); ++i) {
+		blocks[i]->adaptToTerrain(terrain);
+	}
+}
+
 void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 	glEnable(GL_LIGHTING);
 
@@ -101,10 +111,20 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 		waterRenderer->renderMe(textureManager);
 	}
 	
+	// draw a terrain
 	renderer.render(terrain, textureManager);
+
+	// draw a road network
 	renderer.render(&roads, textureManager);
+
+	// draw blocks and parcels
 	for (int i = 0; i < blocks.size(); ++i) {
 		renderer.render(blocks[i], textureManager);
+
+		ParcelGraphVertexIter vi, viEnd;
+		for(boost::tie(vi, viEnd) = boost::vertices(blocks[i]->parcels); vi != viEnd; ++vi) {
+			renderer.render(blocks[i]->parcels[*vi], textureManager);
+		}
 	}
 
 	// draw the area which is now being defined

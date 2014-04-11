@@ -1,14 +1,7 @@
 #pragma once
 
+#include "../common/common.h"
 #include <stdio.h>
-#include <QVector2D>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/properties.hpp>
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/graph/topological_sort.hpp>
-#include <boost/graph/graph_utility.hpp>
-#include <boost/shared_ptr.hpp>
 #include "RoadVertex.h"
 #include "RoadEdge.h"
 #include "../render/Renderable.h"

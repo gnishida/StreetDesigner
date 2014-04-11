@@ -1,6 +1,4 @@
-﻿#include <boost/geometry/geometry.hpp> 
-#include <boost/geometry/geometries/point_xy.hpp>
-#include "Polyline2D.h"
+﻿#include "Polyline2D.h"
 #include "Util.h"
 
 const QVector2D & Polyline2D::last() const {

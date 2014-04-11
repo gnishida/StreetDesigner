@@ -1,12 +1,6 @@
 ﻿#pragma once
 
-#include <vector>
-#include <QVector2D>
-#include <boost/geometry.hpp>
-#include <boost/polygon/polygon.hpp>
-#include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/register/ring.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
+#include "common.h"
 #include "BBox.h"
 
 /**

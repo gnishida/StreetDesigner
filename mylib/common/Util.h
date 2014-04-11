@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include <vector>
-#include <QVector3D>
-#include <QVector2D>
+#include "common.h"
 #include "Polyline2D.h"
 
 class Util {

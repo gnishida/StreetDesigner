@@ -130,9 +130,6 @@
     <ClCompile Include="..\mylib\common\ElevationColorTable.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\common\HeatMapColorTable.cpp">
-      <Filter>mylib\common</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\common\global.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
@@ -232,6 +229,18 @@
     <ClCompile Include="..\mylib\road\generator\IntRoadGenerator.cpp">
       <Filter>mylib\road\generator</Filter>
     </ClCompile>
+    <ClCompile Include="ParcelGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\pm\Parcel.cpp">
+      <Filter>mylib\pm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\pm\LandUse.cpp">
+      <Filter>mylib\pm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\render\RenderableLineList.cpp">
+      <Filter>mylib\render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -315,9 +324,6 @@
       <Filter>mylib\common</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\common\ElevationColorTable.h">
-      <Filter>mylib\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\common\HeatMapColorTable.h">
       <Filter>mylib\common</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\common\global.h">
@@ -418,6 +424,18 @@
     </ClInclude>
     <ClInclude Include="..\mylib\road\generator\IntRoadGenerator.h">
       <Filter>mylib\road\generator</Filter>
+    </ClInclude>
+    <ClInclude Include="ParcelGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\pm\Parcel.h">
+      <Filter>mylib\pm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\pm\LandUse.h">
+      <Filter>mylib\pm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\render\RenderableLineList.h">
+      <Filter>mylib\render</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

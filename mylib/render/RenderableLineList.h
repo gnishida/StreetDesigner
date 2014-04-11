@@ -16,22 +16,21 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include "Block.h"
-#include "../road/RoadGraph.h"
+#include <QVector3D>
+#include "Renderable.h"
+#include "../common/Polyline3D.h"
+#include "../common/Polygon3D.h"
 
-namespace pm {
+namespace mylib {
 
-class UrbanGeometry;
-
-class BlockGenerator {
-protected:
-	UrbanGeometry* urbanGeometry;
-
+class RenderableLineList : public Renderable {
 public:
-	BlockGenerator(UrbanGeometry* urbanGeometry);
-	~BlockGenerator();
+	RenderableLineList();
+	RenderableLineList(Texture* texture);
+	~RenderableLineList() {}
 
-	virtual bool generateBlocks(RoadGraph* roadGraph, std::vector<Block*>& blocks) = 0;
+	void addLine(const Polyline3D &polyline, const QVector3D &normal, const QColor& color);
+	void addLine(const Polygon3D &polygon, const QVector3D &normal, const QColor& color);
 };
-		
-} // namespace pm
+
+} // namespace mylib

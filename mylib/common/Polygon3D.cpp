@@ -1,8 +1,4 @@
-﻿#include <boost/geometry/geometry.hpp> 
-#include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
-#include <boost/geometry/multi/multi.hpp>
-#include <boost/polygon/polygon.hpp>
+﻿#include <QMatrix4x4>
 #include "Polygon3D.h"
 #include "Polyline3D.h"
 #include "Util.h"
@@ -256,5 +252,186 @@ void Polygon3D::computeInset(std::vector<float> offsetDistances, Polygon3D &pgon
 		Util::getIrregularBisector(cleanPgon[prev], cleanPgon[cur], cleanPgon[next], offsetDistances[prev], offsetDistances[cur], intPt);
 
 		pgonInset[cur] = intPt;
+	}
+}
+
+/**
+ * Only works for polygons with no holes in them
+ */
+bool Polygon3D::splitMeWithPolyline(const Polyline3D& pline, Polygon3D &pgon1, Polygon3D &pgon2) {
+	bool polylineIntersectsPolygon = false;
+
+	size_t plineSz = pline.size();
+	size_t contourSz = this->size();
+
+	if(plineSz < 2 || contourSz < 3){
+		//std::cout << "ERROR: Cannot split if polygon has fewer than three vertices of if polyline has fewer than two points\n.";
+		return false;
+	}
+
+	QVector2D tmpIntPt;
+	QVector3D firstIntPt;
+	QVector3D secondIntPt;
+	float tPline, tPgon;
+	int firstIntPlineIdx    = -1;
+	int secondIntPlineIdx   = -1;
+	int firstIntContourIdx  = -1;
+	int secondIntContourIdx = -1;
+	int intCount = 0;
+
+	//iterate along polyline
+	for (int i = 0; i < plineSz - 1; ++i) {
+		int iNext = i+1;
+
+		for (int j = 0; j < contourSz; ++j) {
+			int jNext = (j+1)%contourSz;
+
+			if (Util::segmentSegmentIntersectXY(QVector2D(pline[i]), QVector2D(pline[iNext]), QVector2D(at(j)), QVector2D(at(jNext)), &tPline, &tPgon, true, tmpIntPt)) {
+				polylineIntersectsPolygon = true;
+				float z = at(j).z() + (at(jNext).z() - at(j).z()) * tPgon;
+
+				//first intersection
+				if (intCount == 0) {
+					firstIntPlineIdx = i;
+					firstIntContourIdx = j;
+					firstIntPt = QVector3D(tmpIntPt.x(), tmpIntPt.y(), z);
+				} else if (intCount == 1) {
+					secondIntPlineIdx = i;
+					secondIntContourIdx = j;
+					secondIntPt = QVector3D(tmpIntPt.x(), tmpIntPt.y(), z);
+				} else {
+					return false;
+				}
+				intCount++;
+			}
+		}
+	}
+
+	if (intCount != 2) return false;
+
+	//Once we have intersection points and indexes, we reconstruct the two polygons
+	pgon1.clear();
+	pgon2.clear();
+	int pgonVtxIte;
+	int plineVtxIte;
+
+	//If first polygon segment intersected has an index greater
+	//	than second segment, modify indexes for correct reconstruction
+	if (firstIntContourIdx > secondIntContourIdx) {
+		secondIntContourIdx += contourSz;
+	}
+
+	//==== Reconstruct first polygon
+	//-- append polygon contour
+	pgon1.push_back(firstIntPt);
+	pgonVtxIte = firstIntContourIdx;
+	while (pgonVtxIte < secondIntContourIdx) {
+		pgon1.push_back(at((pgonVtxIte+1)%contourSz));
+		pgonVtxIte++;
+	}
+	pgon1.push_back(secondIntPt);
+	//-- append polyline points
+	plineVtxIte = secondIntPlineIdx;
+	while (plineVtxIte > firstIntPlineIdx) {
+		pgon1.push_back(pline[(plineVtxIte)]);
+		plineVtxIte--;
+	}
+
+	//==== Reconstruct second polygon
+	//-- append polygon contour
+	pgon2.push_back(secondIntPt);
+	pgonVtxIte = secondIntContourIdx;
+	while (pgonVtxIte < firstIntContourIdx + contourSz) {
+		pgon2.push_back(at((pgonVtxIte+1) % contourSz));
+		pgonVtxIte++;
+	}
+	pgon2.push_back(firstIntPt);
+	//-- append polyline points
+	plineVtxIte = firstIntPlineIdx;
+	while (plineVtxIte < secondIntPlineIdx) {
+		pgon2.push_back(pline[(plineVtxIte + 1)]);
+		plineVtxIte++;
+	}
+
+	//verify that two polygons are created after the split. If not, return false
+	if (pgon1.size() < 3 || pgon2.size() < 3) {
+		return false;
+	}
+
+	return polylineIntersectsPolygon;
+}
+
+/**
+ * this function measures the minimum distance from the vertices of a contour A
+ * to the edges of a contour B, i.e., it measures the distances from each vertex of A
+ * to all the edges in B, and returns the minimum of such distances
+ */
+float Polygon3D::distanceXYfromContourAVerticesToContourB(const Polygon3D& pB) {
+	float minDist = FLT_MAX;
+	float dist;
+
+	for (size_t i = 0; i < size(); ++i) {
+		dist = boost::geometry::distance(pB, this->at(i));
+		if (dist < minDist) {
+			minDist = dist;
+		}
+	}
+	return minDist;
+}
+
+/**
+* Get polygon oriented bounding box
+**/
+void Polygon3D::getLoopOBB(const Polygon3D& pin, QVector3D& size, QMatrix4x4& xformMat) {
+	float alpha = 0.0f;			
+	float deltaAlpha = 0.05 * M_PI;
+	float bestAlpha;
+
+	Polygon3D rotLoop;
+	QMatrix4x4 rotMat;
+	QVector3D minPt, maxPt;
+	QVector3D origMidPt;
+	QVector3D boxSz;
+	QVector3D bestBoxSz;
+	float curArea;
+	float minArea = FLT_MAX;
+
+	rotLoop = pin;
+	//Polygon3D::getLoopAABB(rotLoop, minPt, maxPt);
+	//origMidPt = 0.5f*(minPt + maxPt);
+	origMidPt = rotLoop.envelope().midPt();
+
+	int cSz = pin.size();
+	QVector3D difVec;
+	for (int i=0; i<pin.size(); ++i) {
+		difVec = (pin.at((i+1) % cSz) - pin.at(i)).normalized();
+		alpha = atan2(difVec.x(), difVec.y());
+		rotMat.setToIdentity();				
+		rotMat.rotate(Util::rad2deg(alpha), 0.0f, 0.0f, 1.0f);				
+
+		transformLoop(pin, rotLoop, rotMat);
+		//boxSz = Polygon3D::getLoopAABB(rotLoop, minPt, maxPt);
+		BBox boxSz = rotLoop.envelope();
+		curArea = boxSz.dx() * boxSz.dy();
+		if (curArea < minArea) {
+			minArea = curArea;
+			bestAlpha = alpha;
+			//bestBoxSz = boxSz;
+			bestBoxSz.setX(boxSz.dx());
+			bestBoxSz.setY(boxSz.dy());
+		}
+		//alpha += deltaAlpha;
+	}
+
+	xformMat.setToIdentity();											
+	xformMat.rotate(Util::rad2deg(bestAlpha), 0.0f, 0.0f, 1.0f);
+	xformMat.setRow(3, QVector4D(origMidPt.x(), origMidPt.y(), origMidPt.z(), 1.0f));			
+	size = bestBoxSz;
+}
+
+void Polygon3D::transformLoop(const Polygon3D& pin, Polygon3D& pout, QMatrix4x4& transformMat) {
+	pout = pin;
+	for (int i=0; i<pin.size(); ++i) {
+		pout.at(i) = transformMat * pin.at(i);
 	}
 }

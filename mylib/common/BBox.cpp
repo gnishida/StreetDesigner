@@ -1,4 +1,3 @@
-#include <boost/geometry/geometry.hpp> 
 #include "BBox.h"
 #include "Polyline2D.h"
 #include "Polygon2D.h"

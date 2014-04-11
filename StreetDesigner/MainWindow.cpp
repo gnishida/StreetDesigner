@@ -239,6 +239,9 @@ void MainWindow::onGenerateBlocks() {
 }
 
 void MainWindow::onGenerateParcels() {
+	urbanGeometry->generateParcels();
+
+	glWidget->updateGL();
 }
 
 void MainWindow::onDisplayRoads() {
@@ -286,12 +289,6 @@ void MainWindow::onShowControlWidget() {
 	controlWidget->show();
 	addDockWidget(Qt::LeftDockWidgetArea, controlWidget);
 }
-
-/*void MainWindow::onShowPMControlWidget() {
-	controlWidget->hide();
-	pmcontrolWidget->show();
-	addDockWidget(Qt::LeftDockWidgetArea, pmcontrolWidget);
-}*/
 
 void MainWindow::onShowPropertyWidget() {
 	propertyWidget->show();

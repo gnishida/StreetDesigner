@@ -1,13 +1,8 @@
 ﻿#pragma once
 
-#include <vector>
-#include <QVector3D>
-#include <boost/geometry.hpp>
-#include <boost/polygon/polygon.hpp>
-#include <boost/geometry/geometry.hpp>
-#include <boost/geometry/geometries/register/ring.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
+#include "common.h"
 #include "BBox.h"
+#include "Polyline3D.h"
 
 class Polygon3D : public std::vector<QVector3D> {
 public:
@@ -32,8 +27,13 @@ public:
 	std::vector<Polygon3D> tessellate() const;
 	void findEdge(float x, float y, int& v1, int& v2, float& s) const;
 
+
 	void computeInset(float offsetDistance, Polygon3D &pgonInset);
 	void computeInset(std::vector<float> offsetDistances, Polygon3D &pgonInset);
+	bool splitMeWithPolyline(const Polyline3D& pline, Polygon3D &pgon1, Polygon3D &pgon2);
+	float distanceXYfromContourAVerticesToContourB(const Polygon3D& pB);
+	static void getLoopOBB(const Polygon3D& pin, QVector3D& size, QMatrix4x4& xformMat);
+	static void transformLoop(const Polygon3D& pin, Polygon3D& pout, QMatrix4x4& transformMat);
 };
 
 /**

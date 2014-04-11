@@ -14,24 +14,6 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
-#pragma once
 
-#include "Renderer.h"
+#include "LandUse.h"
 
-namespace ucore {
-
-class Block;
-
-class BlockRenderer : public Renderer {
-protected:
-	Block* block;
-
-public:
-	BlockRenderer();
-	~BlockRenderer();
-
-private:
-	void _render(GeometryObject* object, TextureManager* textureManager);
-};
-
-} // namespace ucore

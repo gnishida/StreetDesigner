@@ -3,9 +3,26 @@
 #include <vector>
 #include <QVector2D>
 #include <QVector3D>
+#include <QColor>
+#include <boost/polygon/polygon.hpp>
+#include <boost/geometry.hpp>
+#include <boost/geometry/geometry.hpp> 
 #include <boost/geometry/geometries/register/point.hpp>
+#include <boost/geometry/geometries/register/linestring.hpp>
+#include <boost/geometry/geometries/register/box.hpp>
+#include <boost/geometry/geometries/register/ring.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
-#include <boost/geometry/geometries/linestring.hpp> 
+#include <boost/geometry/geometries/linestring.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
+#include <boost/geometry/multi/multi.hpp>
+#include <boost/geometry/multi/geometries/multi_point.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/properties.hpp>
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/topological_sort.hpp>
+#include <boost/graph/graph_utility.hpp>
+#include <boost/shared_ptr.hpp>
 
 #ifndef M_PI
 #define M_PI		3.141592653589793238

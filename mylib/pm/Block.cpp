@@ -22,7 +22,14 @@ This file is part of QtUrban.
 #include "Block.h"
 
 Block::Block() : mylib::GeometryObject() {
-	color = QColor(Util::genRand(200, 255), Util::genRand(200, 255), Util::genRand(100, 220));
+	//color = QColor(Util::genRand(200, 255), Util::genRand(200, 255), Util::genRand(100, 220));
+	int r = Util::genRandNormal(243, 20);
+	int g = Util::genRandNormal(244, 20);
+	int b = Util::genRandNormal(237, 20);
+	if (r > 255) r = 255;
+	if (g > 255) g = 255;
+	if (b > 255) b = 255;
+	color = QColor(r, g, b);
 }
 
 Block::~Block() {
@@ -35,13 +42,13 @@ void Block::setContour(const Polygon3D& contour) {
 	setModified();
 }
 
-/*ParcelGraphVertexDesc Block::addParcel(Parcel* parcel) {
+ParcelGraphVertexDesc Block::addParcel(Parcel* parcel) {
 	ParcelGraphVertexDesc desc;
 	desc = boost::add_vertex(parcels);
 	parcels[desc] = parcel;
 
 	return desc;
-}*/
+}
 
 /**
  * Clear
@@ -69,12 +76,10 @@ void Block::adaptToTerrain(mylib::Terrain* terrain) {
 		contour[i].setZ(z + 0.1f);
 	}
 
-	/*
 	ParcelGraphVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(parcels); vi != vend; ++vi) {
 		parcels[*vi]->adaptToTerrain(terrain);
 	}
-	*/
 
 	setModified();
 }

@@ -16,7 +16,7 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include "qvector3d.h"
+#include "../common/common.h"
 
 #include "qtextstream.h"
 

@@ -16,10 +16,8 @@ This file is part of QtUrban.
 
 #pragma once
 
-#include <QColor>
+#include "../common/common.h"
 #include <QtOpenGL>
-#include <vector>
-#include <boost/shared_ptr.hpp>
 #include "Noncopyable.h"
 
 namespace mylib {

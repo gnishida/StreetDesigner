@@ -1,7 +1,6 @@
 #pragma once
 
-#include <QColor>
-#include <vector>
+#include "common.h"
 
 namespace mylib {
 
