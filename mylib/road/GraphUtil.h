@@ -85,6 +85,7 @@ public:
 	static void subtractRoads2(RoadGraph& roads, Polygon2D& area);
 	static void perturb(RoadGraph &roads, const Polygon2D &area, float factor);
 	static void removeSelfIntersectingRoads(RoadGraph &roads);
+	static void normalizeLoop(RoadGraph &roads);
 
 	// Connectivity related functions
 	static std::vector<RoadVertexDesc> getNeighbors(RoadGraph& roads, RoadVertexDesc v, bool onlyValidVertex = true);

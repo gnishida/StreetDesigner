@@ -176,9 +176,6 @@ void BlockGenerator::run() {
 	for (int i = 0; i < blocks->size(); ++i) {
 		Polygon3D blockContourInset;
 		blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);
-		if (boost::geometry::intersects(blockContourInset)) {
-			continue;
-		}
 		blocks->at(i)->setContour(blockContourInset);
 	}
 

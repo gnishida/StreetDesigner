@@ -1758,6 +1758,35 @@ void GraphUtil::removeSelfIntersectingRoads(RoadGraph &roads) {
 }
 
 /**
+ * ループエッジがあれば、中間あたりに頂点を追加する。
+ */
+void GraphUtil::normalizeLoop(RoadGraph &roads) {
+	bool split = false;
+
+	do {
+		split = false;
+
+		RoadEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			RoadVertexDesc src = boost::source(*ei, roads.graph);
+			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+			if (src != tgt) continue;
+
+			int index = roads.graph[*ei]->polyline.size() / 2;
+			if (index == 0 || index >= roads.graph[*ei]->polyline.size() - 1) continue;
+
+			RoadVertexDesc v = splitEdge(roads, *ei, roads.graph[*ei]->polyline[index]);
+			split = true;
+		}
+	} while (split);
+
+	clean(roads);
+}
+
+/**
  * Return the neighbors of the specified vertex.
  */
 std::vector<RoadVertexDesc> GraphUtil::getNeighbors(RoadGraph& roads, RoadVertexDesc v, bool onlyValidVertex) {

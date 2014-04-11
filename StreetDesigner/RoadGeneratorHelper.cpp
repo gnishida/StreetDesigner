@@ -837,11 +837,13 @@ RoadVertexDesc RoadGeneratorHelper::getClosestVertexByExample(RoadGraph &roads, 
 	float min_dist = std::numeric_limits<float>::max();
 	RoadVertexDesc nearest_v_desc;
 
+	int group_id = roads.graph[v_desc]->properties["group_id"].toInt();
+	
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 		if (!roads.graph[*vi]->valid) continue;
 
-		if (roads.graph[*vi]->properties["group_id"] == roads.graph[v_desc]->properties["group_id"] && roads.graph[*vi]->properties.contains("example_desc")) {
+		if (roads.graph[*vi]->properties["group_id"].toInt() == group_id && roads.graph[*vi]->properties.contains("example_desc")) {
 			float dist = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
 			if (dist < min_dist) {
 				min_dist = dist;

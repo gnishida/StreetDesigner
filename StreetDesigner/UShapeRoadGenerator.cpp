@@ -100,6 +100,7 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 	}
 
 	GraphUtil::clean(roads);
+	GraphUtil::normalizeLoop(roads);
 }
 
 /**

@@ -90,7 +90,7 @@ void Block::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	if (contour.size() < 3) return;
 
 	renderables.push_back(mylib::RenderablePtr(new mylib::RenderableConcave(contour, color)));
-	
+
 	/*
 	mylib::RenderableLineList* renderable1 = new mylib::RenderableLineList();
 	renderable1->addLine(contour, QVector3D(0, 0, 1), color);

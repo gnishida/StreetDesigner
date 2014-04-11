@@ -100,6 +100,7 @@ void IntRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 	}
 
 	GraphUtil::clean(roads);
+	GraphUtil::normalizeLoop(roads);
 }
 
 /**
