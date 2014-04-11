@@ -85,7 +85,7 @@ void MultiExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D
 		RoadGeneratorHelper::removeDeadend(roads);
 	}
 
-	//GraphUtil::clean(roads);
+	GraphUtil::clean(roads);
 }
 
 /**

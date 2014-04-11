@@ -83,7 +83,7 @@ void IntRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 		RoadGeneratorHelper::removeDeadend(roads);
 	}
 
-	//GraphUtil::clean(roads);
+	GraphUtil::clean(roads);
 }
 
 /**
