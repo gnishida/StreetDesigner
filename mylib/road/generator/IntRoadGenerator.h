@@ -6,8 +6,11 @@
 #include "../feature/ExFeature.h"
 
 class IntRoadGenerator {
+private:
+	MainWindow *mainWin;
+
 public:
-	IntRoadGenerator() {}
+	IntRoadGenerator(MainWindow *mainWin) : mainWin(mainWin) {}
 	~IntRoadGenerator() {}
 
 	static void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, ExFeature& feature);

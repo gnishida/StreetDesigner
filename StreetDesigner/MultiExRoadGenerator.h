@@ -1,17 +1,18 @@
 #pragma once
 
-#include "../../common/Polygon2D.h"
-#include "../RoadGraph.h"
-#include "../RoadAreaSet.h"
-#include "../feature/ExFeature.h"
+#include <common/Polygon2D.h>
+#include <road/RoadGraph.h>
+#include <road/RoadAreaSet.h>
+#include <road/feature/ExFeature.h>
 #include "MainWindow.h"
 
 class MultiExRoadGenerator {
 private:
 	MainWindow *mainWin;
+	bool animation;
 
 public:
-	MultiExRoadGenerator(MainWindow *mainWin) : mainWin(mainWin) {}
+	MultiExRoadGenerator(MainWindow *mainWin, bool animation) : mainWin(mainWin), animation(animation) {}
 	~MultiExRoadGenerator() {}
 
 	void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, std::vector<ExFeature>& feature);

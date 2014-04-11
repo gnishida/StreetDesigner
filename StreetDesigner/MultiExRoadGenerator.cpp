@@ -1,9 +1,10 @@
-﻿#include <boost/graph/planar_face_traversal.hpp>
+﻿#include <QTest>
+#include <boost/graph/planar_face_traversal.hpp>
 #include <boost/graph/boyer_myrvold_planar_test.hpp>
-#include "../../common/global.h"
-#include "../../common/Util.h"
-#include "../../common/ConvexHull.h"
-#include "../GraphUtil.h"
+#include <common/global.h>
+#include <common/Util.h>
+#include <common/ConvexHull.h>
+#include <road/GraphUtil.h>
 #include "MultiExRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 
@@ -37,8 +38,10 @@ void MultiExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D
 				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_AVENUE, terrain, features[group_id], seeds);
 			}
 
-			urbanMain->updateGL();
-			QTest::qWait(1);
+			if (animation) {
+				mainWin->glWidget->updateGL();
+				QTest::qWait(10);
+			}
 		}
 	}
 
@@ -51,6 +54,11 @@ void MultiExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D
 		RoadGeneratorHelper::removeDeadend(roads);
 		GraphUtil::reduce(roads);
 		GraphUtil::removeLoop(roads);
+
+		if (animation) {
+			mainWin->glWidget->updateGL();
+			QTest::qWait(10);
+		}
 	}
 
 	// Local streetを生成
@@ -74,6 +82,11 @@ void MultiExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D
 				attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, terrain, features[group_id], seeds);
 			} else {
 				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_STREET, terrain, features[group_id], seeds);
+			}
+
+			if (animation) {
+				mainWin->glWidget->updateGL();
+				QTest::qWait(10);
 			}
 		}
 	}

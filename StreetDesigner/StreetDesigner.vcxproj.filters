@@ -41,9 +41,6 @@
     <Filter Include="mylib\road\feature">
       <UniqueIdentifier>{ec726995-76c7-4c65-818f-ca19a1cb2d7a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mylib\road\generator">
-      <UniqueIdentifier>{30784128-acc4-4d1d-a257-ed6f2a329b0b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mylib\render">
       <UniqueIdentifier>{495e6131-d679-4400-a137-719b41a50ae6}</UniqueIdentifier>
     </Filter>
@@ -217,18 +214,6 @@
     <ClCompile Include="..\mylib\util\PolylineBuilder.cpp">
       <Filter>mylib\util</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\RoadGeneratorHelper.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\UShapeRoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\MultiExRoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\generator\IntRoadGenerator.cpp">
-      <Filter>mylib\road\generator</Filter>
-    </ClCompile>
     <ClCompile Include="ParcelGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
@@ -240,6 +225,18 @@
     </ClCompile>
     <ClCompile Include="..\mylib\render\RenderableLineList.cpp">
       <Filter>mylib\render</Filter>
+    </ClCompile>
+    <ClCompile Include="IntRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiExRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UShapeRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadGeneratorHelper.cpp">
+      <Filter>Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -413,18 +410,6 @@
     <ClInclude Include="..\mylib\util\PolylineBuilder.h">
       <Filter>mylib\util</Filter>
     </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\RoadGeneratorHelper.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\UShapeRoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\MultiExRoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\generator\IntRoadGenerator.h">
-      <Filter>mylib\road\generator</Filter>
-    </ClInclude>
     <ClInclude Include="ParcelGenerator.h">
       <Filter>Files</Filter>
     </ClInclude>
@@ -436,6 +421,18 @@
     </ClInclude>
     <ClInclude Include="..\mylib\render\RenderableLineList.h">
       <Filter>mylib\render</Filter>
+    </ClInclude>
+    <ClInclude Include="IntRoadGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiExRoadGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UShapeRoadGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadGeneratorHelper.h">
+      <Filter>Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

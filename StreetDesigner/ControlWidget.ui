@@ -24,7 +24,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>270</y>
+      <y>290</y>
       <width>171</width>
       <height>231</height>
      </rect>
@@ -138,7 +138,7 @@
       <x>10</x>
       <y>10</y>
       <width>171</width>
-      <height>181</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="title">
@@ -196,7 +196,7 @@
       <string>Cropping</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBoxAreaScaling">
+    <widget class="QCheckBox" name="checkBoxAnimation">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -206,7 +206,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Area Scaling</string>
+      <string>Animation</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
@@ -266,7 +266,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>510</y>
+      <y>530</y>
       <width>171</width>
       <height>101</height>
      </rect>
@@ -305,7 +305,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>220</y>
       <width>171</width>
       <height>61</height>
      </rect>

@@ -553,6 +553,8 @@ RoadEdgeDesc GraphUtil::addEdge(RoadGraph& roads, RoadVertexDesc src, RoadVertex
 	std::pair<RoadEdgeDesc, bool> edge_pair = boost::add_edge(src, tgt, roads.graph);
 	roads.graph[edge_pair.first] = e;
 
+	roads.setModified();
+
 	return edge_pair.first;
 }
 

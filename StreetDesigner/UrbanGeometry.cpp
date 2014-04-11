@@ -25,10 +25,10 @@ This file is part of QtUrban.
 #include <render/GeometryObject.h>
 #include <render/Terrain.h>
 #include <road/GraphUtil.h>
-#include <road/generator/UShapeRoadGenerator.h>
-#include <road/generator/MultiExRoadGenerator.h>
-#include <road/generator/IntRoadGenerator.h>
-#include <road/generator/RoadGeneratorHelper.h>
+#include "UShapeRoadGenerator.h"
+#include "MultiExRoadGenerator.h"
+#include "IntRoadGenerator.h"
+#include "RoadGeneratorHelper.h"
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
 #include "BlockGenerator.h"
@@ -63,7 +63,8 @@ void UrbanGeometry::generateRoads(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	UShapeRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	UShapeRoadGenerator generator(mainWin, G::getBool("animation"));
+	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -72,7 +73,8 @@ void UrbanGeometry::generateRoadsMultiEx(std::vector<ExFeature> &features) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	MultiExRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
+	MultiExRoadGenerator generator(mainWin, G::getBool("animation"));
+	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -81,7 +83,8 @@ void UrbanGeometry::generateRoadsInterpolation(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	IntRoadGenerator::generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	IntRoadGenerator generator(mainWin, G::getBool("animation"));
+	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -155,6 +158,7 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 		}
 
 		// draw the road graph
+		areas[i]->roads.adaptToTerrain(terrain);
 		renderer.render(&areas[i]->roads, textureManager);
 	}
 

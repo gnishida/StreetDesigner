@@ -4,7 +4,6 @@
 #include "GLWidget3D.h"
 #include <common/global.h>
 #include <road/GraphUtil.h>
-#include <road/generator/ExRoadGenerator.h>
 #include <road/feature/ExFeature.h>
 
 
@@ -21,6 +20,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.checkBoxCleanStreets->setChecked(true);
 	ui.checkBoxLocalStreets->setChecked(true);
 	ui.checkBoxCropping->setChecked(false);
+	ui.checkBoxAnimation->setChecked(false);
 	ui.checkBoxAdaptiveFitting->setChecked(false);
 
 	// register the event handlers
@@ -56,6 +56,7 @@ void ControlWidget::generateRoads() {
 	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
 
 	if (ui.checkBoxAdaptiveFitting->isChecked()) {
 		ExFeature feature;
@@ -95,6 +96,7 @@ void ControlWidget::generateRoadsInterpolation() {
 	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
 
 	ExFeature feature;
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));

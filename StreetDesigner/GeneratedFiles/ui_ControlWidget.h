@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Fri Apr 11 14:47:47 2014
+** Created: Fri Apr 11 16:37:57 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -43,7 +43,7 @@ public:
     QLineEdit *lineEditNumAvenueIterations;
     QCheckBox *checkBoxLocalStreets;
     QCheckBox *checkBoxCropping;
-    QCheckBox *checkBoxAreaScaling;
+    QCheckBox *checkBoxAnimation;
     QLabel *label_3;
     QLineEdit *lineEditNumStreetIterations;
     QCheckBox *checkBoxCleanAvenues;
@@ -66,7 +66,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox_8 = new QGroupBox(dockWidgetContents);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
-        groupBox_8->setGeometry(QRect(10, 270, 171, 231));
+        groupBox_8->setGeometry(QRect(10, 290, 171, 231));
         pushButtonGenerate = new QPushButton(groupBox_8);
         pushButtonGenerate->setObjectName(QString::fromUtf8("pushButtonGenerate"));
         pushButtonGenerate->setGeometry(QRect(20, 110, 131, 31));
@@ -95,7 +95,7 @@ public:
         pushButtonGenerateInterpolation->setGeometry(QRect(20, 150, 131, 31));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 10, 171, 181));
+        groupBox->setGeometry(QRect(10, 10, 171, 201));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 91, 21));
@@ -109,9 +109,9 @@ public:
         checkBoxCropping = new QCheckBox(groupBox);
         checkBoxCropping->setObjectName(QString::fromUtf8("checkBoxCropping"));
         checkBoxCropping->setGeometry(QRect(10, 140, 121, 17));
-        checkBoxAreaScaling = new QCheckBox(groupBox);
-        checkBoxAreaScaling->setObjectName(QString::fromUtf8("checkBoxAreaScaling"));
-        checkBoxAreaScaling->setGeometry(QRect(10, 160, 111, 17));
+        checkBoxAnimation = new QCheckBox(groupBox);
+        checkBoxAnimation->setObjectName(QString::fromUtf8("checkBoxAnimation"));
+        checkBoxAnimation->setGeometry(QRect(10, 160, 111, 17));
         label_3 = new QLabel(groupBox);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(10, 40, 81, 21));
@@ -127,7 +127,7 @@ public:
         checkBoxCleanStreets->setGeometry(QRect(10, 100, 131, 17));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 510, 171, 101));
+        groupBox_5->setGeometry(QRect(10, 530, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
         pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
@@ -136,7 +136,7 @@ public:
         pushButtonMerge->setGeometry(QRect(20, 20, 131, 31));
         groupBox_2 = new QGroupBox(dockWidgetContents);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 200, 171, 61));
+        groupBox_2->setGeometry(QRect(10, 220, 171, 61));
         horizontalSliderInterpolationFactor = new QSlider(groupBox_2);
         horizontalSliderInterpolationFactor->setObjectName(QString::fromUtf8("horizontalSliderInterpolationFactor"));
         horizontalSliderInterpolationFactor->setGeometry(QRect(10, 30, 111, 20));
@@ -168,7 +168,7 @@ public:
         label->setText(QApplication::translate("ControlWidget", "Avenue Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxLocalStreets->setText(QApplication::translate("ControlWidget", "Generate Local Streets", 0, QApplication::UnicodeUTF8));
         checkBoxCropping->setText(QApplication::translate("ControlWidget", "Cropping", 0, QApplication::UnicodeUTF8));
-        checkBoxAreaScaling->setText(QApplication::translate("ControlWidget", "Area Scaling", 0, QApplication::UnicodeUTF8));
+        checkBoxAnimation->setText(QApplication::translate("ControlWidget", "Animation", 0, QApplication::UnicodeUTF8));
         label_3->setText(QApplication::translate("ControlWidget", "Street Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxCleanAvenues->setText(QApplication::translate("ControlWidget", "Clean Avenues", 0, QApplication::UnicodeUTF8));
         checkBoxCleanStreets->setText(QApplication::translate("ControlWidget", "Clean Local Streets", 0, QApplication::UnicodeUTF8));
