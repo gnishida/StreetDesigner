@@ -399,7 +399,7 @@ float RoadGeneratorHelper::getNearestEdge(RoadGraph& roads, const QVector2D& pt,
  * カーネル設定済みの頂点の中から、直近のものを探す。
  * 現在、KDERoadGeneratorクラスでのみ使用。KDERoadGenerator2クラスでは使用していない。
  */
-RoadVertexDesc RoadGeneratorHelper::getNearestVertexWithKernel(RoadGraph &roads, const QVector2D &pt) {
+/*RoadVertexDesc RoadGeneratorHelper::getNearestVertexWithKernel(RoadGraph &roads, const QVector2D &pt) {
 	RoadVertexDesc nearest_desc;
 	float min_dist = std::numeric_limits<float>::max();
 
@@ -419,12 +419,14 @@ RoadVertexDesc RoadGeneratorHelper::getNearestVertexWithKernel(RoadGraph &roads,
 
 	return nearest_desc;
 }
+*/
 
 /**
  * 指定された点が、いずれかの頂点のテリトリーに入っているかチェックする。
  * ただし、頂点srcVertexは除く。
  * また、対象となる頂点へ伸びていて、且つ、対象となる頂点から、頂点srcVertexへもエッジが来る場合も、除外する。
  */
+/*
 bool RoadGeneratorHelper::invadingTerritory(RoadGraph &roads, const QVector2D &pt, RoadVertexDesc srcVertex, const QVector2D &targetPt) {
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
@@ -461,6 +463,7 @@ bool RoadGeneratorHelper::invadingTerritory(RoadGraph &roads, const QVector2D &p
 
 	return false;
 }
+*/
 
 /**
  * カーネルの中で、指定された位置に最も近いものを探し、そのインデックスを返却する。

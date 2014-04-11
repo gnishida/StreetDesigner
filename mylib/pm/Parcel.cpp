@@ -150,7 +150,7 @@ bool Parcel::computeBuildingFootprintPolygon(float frontSetback, float rearSetba
 void Parcel::adaptToTerrain(mylib::Terrain* terrain) {
 	for (int i = 0; i < contour.size(); ++i) {
 		float z = terrain->getValue(contour[i].x(), contour[i].y());
-		contour[i].setZ(z + 10.5f);
+		contour[i].setZ(z + 0.5f);
 	}
 
 	setModified();

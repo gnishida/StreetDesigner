@@ -19,6 +19,7 @@ This file is part of QtUrban.
 #include "../render/Renderable.h"
 #include "../render/RenderableConcave.h"
 #include "../render/RenderablePolygon.h"
+#include "../render/RenderableLineList.h"
 #include "Block.h"
 
 Block::Block() : mylib::GeometryObject() {
@@ -30,6 +31,7 @@ Block::Block() : mylib::GeometryObject() {
 	if (g > 255) g = 255;
 	if (b > 255) b = 255;
 	color = QColor(r, g, b);
+	//color = QColor(0, 0, 0);
 }
 
 Block::~Block() {
@@ -73,7 +75,7 @@ void Block::clearParcels() {
 void Block::adaptToTerrain(mylib::Terrain* terrain) {
 	for (int i = 0; i < contour.size(); ++i) {
 		float z = terrain->getValue(contour[i].x(), contour[i].y());
-		contour[i].setZ(z + 0.1f);
+		contour[i].setZ(z + 0.3f);
 	}
 
 	ParcelGraphVertexIter vi, vend;
@@ -88,5 +90,11 @@ void Block::_generateMeshVertices(mylib::TextureManager* textureManager) {
 	if (contour.size() < 3) return;
 
 	renderables.push_back(mylib::RenderablePtr(new mylib::RenderableConcave(contour, color)));
-	//renderables.push_back(mylib::RenderablePtr(new mylib::RenderablePolygon(contour, color)));
+	
+	/*
+	mylib::RenderableLineList* renderable1 = new mylib::RenderableLineList();
+	renderable1->addLine(contour, QVector3D(0, 0, 1), color);
+
+	renderables.push_back(mylib::RenderablePtr(renderable1));
+	*/
 }

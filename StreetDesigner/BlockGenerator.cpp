@@ -44,7 +44,7 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 	}
 
 	void end_face() {
-		if (blockContourPoints.size() > 2) {
+		//if (blockContourPoints.size() > 2) {
 			blockContourTmp.clear();
 			
 			for (int i = 0; i < blockContourPoints.size(); ++i) {
@@ -61,14 +61,15 @@ struct vertex_output_visitor : public boost::planar_face_traversal_visitor {//ou
 				}
 			}
 
-			if (blockContourTmp.area() > 100.0f) {
+			//if (blockContourTmp.area() > 100.0f) {
+			if (blockContourTmp.size() >= 3) {
 				Block* newBlock = new Block();
 				newBlock->setContour(blockContourTmp);
 				newBlock->setRoadWidths(blockContourWidths);
 	
 				blocksPtr->push_back(newBlock);
 			}
-		}
+		//}
 	}
 
 	template <typename Vertex> 
@@ -114,9 +115,10 @@ void BlockGenerator::run() {
 
 	//Make sure graph is planar
 	typedef std::vector<RoadEdgeDesc > tEdgeDescriptorVector;
-	std::vector<tEdgeDescriptorVector> embedding(boost::num_vertices(roads->graph));
+	std::vector<tEdgeDescriptorVector> embedding;//(boost::num_vertices(roads->graph));
 
 	// Planarグラフにする
+	/*
 	int cont=0;
 	while (!isPlanar && converges) {	
 		if (cont>2) {
@@ -137,6 +139,10 @@ void BlockGenerator::run() {
 	if (!isPlanar) {
 		std::cout << "ERROR: Graph could not be planarized (generateBlocks)\n";
 	}
+	*/
+
+	// embeddginを手動で作成
+	buildEmbedding(*roads, embedding);
 
 	//Create edge index property map?	
 	typedef std::map<RoadEdgeDesc, size_t> EdgeIndexMap;
@@ -151,7 +157,6 @@ void BlockGenerator::run() {
 	//Extract blocks from road graph using boost graph planar_face_traversal
 	vertex_output_visitor v_vis;
 	boost::planar_face_traversal(roads->graph, &embedding[0], v_vis, pmEdgeIndex);
-
 
 	// 最外郭のブロックを削除
 	float max_area = 0.0f;
@@ -168,7 +173,6 @@ void BlockGenerator::run() {
 	}
 
 	// insetを計算する
-	/*
 	for (int i = 0; i < blocks->size(); ++i) {
 		Polygon3D blockContourInset;
 		blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);
@@ -177,7 +181,6 @@ void BlockGenerator::run() {
 		}
 		blocks->at(i)->setContour(blockContourInset);
 	}
-	*/
 
 	printf("generation done.\n");
 }
@@ -231,5 +234,29 @@ bool BlockGenerator::removeIntersectingEdges(RoadGraph* roadGraph) {
 	*/
 
 	return true;
+}
+
+void BlockGenerator::buildEmbedding(RoadGraph &roads, std::vector<std::vector<RoadEdgeDesc> > &embedding) {
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		std::map<float, RoadEdgeDesc> edges;
+
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
+			if ((roads.graph[*ei]->polyline[0] - roads.graph[*vi]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[*vi]->pt).lengthSquared()) {
+				std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
+			}
+
+			QVector2D vec = roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0];
+			edges[-atan2f(vec.y(), vec.x())] = *ei;
+		}
+
+		std::vector<RoadEdgeDesc> edge_descs;
+		for (std::map<float, RoadEdgeDesc>::iterator it = edges.begin(); it != edges.end(); ++it) {
+			edge_descs.push_back(it->second);
+		}
+
+		embedding.push_back(edge_descs);
+	}
 }
 

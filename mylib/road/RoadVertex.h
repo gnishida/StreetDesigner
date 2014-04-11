@@ -6,7 +6,6 @@
 #include <QHash>
 #include <QVariant>
 #include <boost/shared_ptr.hpp>
-#include "feature/KDEFeatureItem.h"
 
 class RoadVertex {
 public:
@@ -17,10 +16,8 @@ public:
 	bool fixed;
 
 	bool onBoundary;
-	std::vector<float> angles;
-	std::vector<float> lengths;
-
-	KDEFeatureItem kernel;
+	//std::vector<float> angles;
+	//std::vector<float> lengths;
 
 	QHash<QString, QVariant> properties;
 

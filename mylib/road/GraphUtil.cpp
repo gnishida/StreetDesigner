@@ -2413,7 +2413,6 @@ void GraphUtil::simplify3(RoadGraph& roads, float dist_threshold) {
 		if (!roads.graph[*vi]->valid) continue;
 
 		QVector2D closestPt;
-		float dist;
 		RoadEdgeDesc e;
 		if (GraphUtil::getEdge(roads, *vi, dist_threshold, e, closestPt)) {
 			RoadVertexDesc splitVertexDesc = splitEdge(roads, e, closestPt);

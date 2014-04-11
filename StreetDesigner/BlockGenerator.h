@@ -39,5 +39,6 @@ public:
 	
 private:
 	bool removeIntersectingEdges(RoadGraph* roads);
+	void buildEmbedding(RoadGraph &roads, std::vector<std::vector<RoadEdgeDesc> > &embedding);
 };
 		

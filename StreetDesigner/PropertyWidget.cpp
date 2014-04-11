@@ -43,7 +43,7 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 		if (i < n.size() - 1) neighbors += ",";
 	}
 
-	kernel.setNum(selectedVertex->kernel.id);
+	kernel.setNum(selectedVertex->properties["example_desc"].toUInt());
 
 	ui.lineEditVertexDesc->setText(desc);
 	ui.lineEditVertexPos->setText(location);

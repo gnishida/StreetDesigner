@@ -22,9 +22,9 @@ public:
 
 	static float getNearestVertex(RoadGraph& roads, const QVector2D& pos, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc);
 	static float getNearestEdge(RoadGraph& roads, const QVector2D& pt, RoadVertexDesc srcDesc, RoadEdgeDesc& snapEdge, QVector2D &closestPt);
-	static RoadVertexDesc getNearestVertexWithKernel(RoadGraph &roads, const QVector2D &pt);
+	//static RoadVertexDesc getNearestVertexWithKernel(RoadGraph &roads, const QVector2D &pt);
 
-	static bool invadingTerritory(RoadGraph &roads, const QVector2D &pt, RoadVertexDesc srcVertex, const QVector2D &targetPt);
+	//static bool invadingTerritory(RoadGraph &roads, const QVector2D &pt, RoadVertexDesc srcVertex, const QVector2D &targetPt);
 
 	//static int getClosestItem(const KDEFeature &f, int roadType, const QVector2D &pt);
 	static bool isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_desc, const Polyline2D &polyline);
