@@ -2128,7 +2128,12 @@ bool GraphUtil::reduce(RoadGraph& roads, RoadVertexDesc desc) {
 	// If the vertices form a triangle, don't remove it.
 	//if (hasEdge(roads, vd[0], vd[1])) return false;
 
-	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(edges[0]->type, edges[0]->lanes, edges[0]->oneWay));
+	// 道路エッジを、既存のエッジ情報を使って作成
+	// (コピーコンストラクタを使って、全ての情報を引き継ぐ）
+	//RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(edges[0]->type, edges[0]->lanes, edges[0]->oneWay));
+	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(*edges[0]));
+	new_edge->polyline.clear();
+
 	orderPolyLine(roads, ed[0], vd[0]);
 	orderPolyLine(roads, ed[1], desc);
 	

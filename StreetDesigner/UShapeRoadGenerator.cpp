@@ -336,6 +336,8 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		float z = terrain->getValue(pt.x(), pt.y());
 		if (z < 0.0f || z > 100.0f) break;
 
+		new_edge->polyline.push_back(pt);
+
 		// 他のエッジと交差したら、道路生成をストップ
 		QVector2D intPoint;
 		if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline, intPoint)) {
@@ -347,8 +349,6 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 			break;
 		}
-
-		new_edge->polyline.push_back(pt);
 	}
 
 	if (new_edge->polyline.size() == 1) return false;
@@ -376,11 +376,19 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		// ループエッジ
 		tgtDesc = srcDesc;
 	} else if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
+		if (byExample && roads.graph[tgtDesc]->properties["generation_type"] == "example") {
+			angleTolerance = 0.01f;
+		}
+
 		// 他の頂点にスナップ
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 		std::reverse(new_edge->polyline.begin(), new_edge->polyline.end());
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (GraphUtil::getEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
+		if (byExample && roads.graph[closestEdge]->properties["generation_type"] == "example") {
+			angleTolerance = 0.01f;
+		}
+
 		// 他のエッジにスナップ
 		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
 
