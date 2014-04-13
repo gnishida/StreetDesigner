@@ -105,6 +105,7 @@ void IntRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &ar
 
 /**
  * シード頂点を生成する。
+ * hintLineの各点が、初期シードとして使用される。つまり、マルチシードだ。
  */
 void IntRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, ExFeature& f, std::list<RoadVertexDesc>& seeds) {
 	seeds.clear();
@@ -419,6 +420,8 @@ bool IntRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
 
 		if (area.contains(new_edge->polyline.last())) {
+			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+
 			// シードに追加する
 			if (byExample && !intercepted) {
 				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
@@ -433,12 +436,14 @@ bool IntRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 				if (byExample) {
 					// 対応するExampleが存在する場合は、それを設定する
 					if (GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-						roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 						f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+						roads.graph[tgtDesc]->properties["generation_type"] = "example";
+						roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 					} else {
 						if (roadType == RoadEdge::TYPE_AVENUE && G::getFloat("roadInterpolationFactor") == 1.0f) {
 							Polyline2D pl = new_edge->polyline;
 							std::reverse(pl.begin(), pl.end());
+							roads.graph[tgtDesc]->properties["generation_type"] = "example";
 							roads.graph[tgtDesc]->properties["example_desc"] = getItemByEdgeShape(roads, f, roadType, tgtDesc, pl);
 						} else {
 							// Deadendとして設定する
@@ -447,10 +452,19 @@ bool IntRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, 
 					}
 				} else {
 					// 近隣頂点でExampleベースのものを探し、そこからの相対位置を使って、使用するExampleを決定する
+					roads.graph[tgtDesc]->properties["generation_type"] = "example";
 					roads.graph[tgtDesc]->properties["example_desc"] = getItemByLocation(roads, area, f, roadType, roads.graph[tgtDesc]->pt);
 				}
 			}
 		} else {
+			// ターゲットエリアの外に出たら
+			if (byExample) {
+				roads.graph[tgtDesc]->properties["generation_type"] = "example";
+				roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+			} else {
+				roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+			}
+
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
 	}

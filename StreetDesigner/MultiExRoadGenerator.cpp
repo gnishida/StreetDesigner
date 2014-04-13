@@ -402,10 +402,9 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 		// 新しい頂点にgroup_idを引き継ぐ
 		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
 
-		// 新しい頂点のgeneration_typeを設定
-		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
-
 		if (area.contains(new_edge->polyline.last())) {
+			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+
 			// シードに追加する
 			if (byExample && !intercepted) {
 				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
@@ -414,14 +413,28 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 
 				// 対応するExampleが存在する場合は、それを設定する
 				if (!f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
-					f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
-					
+					// 初期シード位置から離れると、pmに変わる確率が上がる
+					BBox bbox = f.area.envelope();
+					float x_ratio = f.roads(roadType).graph[next_ex_v_desc]->pt.x() / bbox.dx() * 2.0f;
+					float y_ratio = f.roads(roadType).graph[next_ex_v_desc]->pt.y() / bbox.dy() * 2.0f;					
+					if (expf(-sqrtf(SQR(x_ratio) + SQR(y_ratio))) >= Util::genRandNormal(expf(-1.0f), 0.1f)) {//Util::genRand(0, 0.65f)) {
+						f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+						roads.graph[tgtDesc]->properties["generation_type"] = "example";
+						roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+					}
 				}
 			} else {
 				seeds.push_back(tgtDesc);
 			}
 		} else {
+			// ターゲットエリアの外に出たら
+			if (byExample) {
+				roads.graph[tgtDesc]->properties["generation_type"] = "example";
+				roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+			} else {
+				roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+			}
+
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
 

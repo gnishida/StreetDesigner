@@ -414,6 +414,8 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
 
 		if (area.contains(new_edge->polyline.last())) {
+			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+
 			// シードに追加する
 			if (byExample && !intercepted) {	// Exampleベースで、且つ、途中で生成ストップしていない場合（つまり、Exampleそのまま）
 				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
@@ -422,13 +424,22 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 				// 対応するExampleが存在する場合は、それを設定する
 				if (!f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 					f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+					roads.graph[tgtDesc]->properties["generation_type"] = "example";
+					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 				}
 			} else {
 				seeds.push_back(tgtDesc);
 			}
 		} else {
+			// ターゲットエリアの外に出たら
+			if (byExample) {
+				roads.graph[tgtDesc]->properties["generation_type"] = "example";
+				roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+			} else {
+				roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+			}
+
 			roads.graph[tgtDesc]->onBoundary = true;
 		}
 

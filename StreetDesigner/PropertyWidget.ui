@@ -24,9 +24,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>350</y>
       <width>171</width>
-      <height>131</height>
+      <height>171</height>
      </rect>
     </property>
     <property name="title">
@@ -147,6 +147,52 @@
       </rect>
      </property>
     </widget>
+    <widget class="QLabel" name="label_17">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Group</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditEdgeGroupId">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>120</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_18">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Example?</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditEdgeGenerationType">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>140</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_5">
     <property name="geometry">
@@ -154,7 +200,7 @@
       <x>10</x>
       <y>10</y>
       <width>171</width>
-      <height>291</height>
+      <height>331</height>
      </rect>
     </property>
     <property name="title">
@@ -233,20 +279,20 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>260</y>
+       <y>280</y>
        <width>51</width>
        <height>16</height>
       </rect>
      </property>
      <property name="text">
-      <string>Example</string>
+      <string>Example?</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEditKernel">
+    <widget class="QLineEdit" name="lineEditVertexGenerationType">
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>260</y>
+       <y>280</y>
        <width>81</width>
        <height>20</height>
       </rect>
@@ -316,6 +362,52 @@
       <rect>
        <x>80</x>
        <y>80</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_15">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Group</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditVertexGroupId">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>260</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_16">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Example Id</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditVertexExampleDesc">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>300</y>
        <width>81</width>
        <height>20</height>
       </rect>

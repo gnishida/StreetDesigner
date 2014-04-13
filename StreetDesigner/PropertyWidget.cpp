@@ -17,8 +17,6 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	QString location("");
 	QString parent("");
 	QString uncles("");
-	QString neighbors("");
-	QString kernel("");
 
 	desc.setNum(vertexDesc);
 
@@ -34,6 +32,7 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 		uncles = roads.graph[vertexDesc]->properties["uncles"].toString();
 	}
 
+	QString neighbors;
 	std::vector<RoadVertexDesc> n = GraphUtil::getNeighbors(roads, vertexDesc);
 	for (int i = 0; i < n.size(); i++) {
 		QString str;
@@ -43,7 +42,12 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 		if (i < n.size() - 1) neighbors += ",";
 	}
 
-	kernel.setNum(selectedVertex->properties["example_desc"].toUInt());
+	QString groupId = selectedVertex->properties["group_id"].toString();
+	QString generationType = selectedVertex->properties["generation_type"].toString();
+	QString exampleDesc;
+	if (generationType == "example") {
+		exampleDesc = selectedVertex->properties["example_desc"].toString();
+	}
 
 	ui.lineEditVertexDesc->setText(desc);
 	ui.lineEditVertexPos->setText(location);
@@ -51,7 +55,9 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	ui.lineEditVertexOnBoundary->setText(onBoundary);
 	ui.textEditVertexUncles->setText(uncles);
 	ui.textEditVertexNeighbors->setText(neighbors);
-	ui.lineEditKernel->setText(kernel);
+	ui.lineEditVertexGroupId->setText(groupId);
+	ui.lineEditVertexGenerationType->setText(generationType);
+	ui.lineEditVertexExampleDesc->setText(exampleDesc);
 }
 
 /**
@@ -63,6 +69,8 @@ void PropertyWidget::setRoadEdge(RoadEdgePtr selectedEdge) {
 	QString oneWay;
 	QString link;
 	QString roundabout;
+	QString groupId;
+	QString generationType;
 
 	if (selectedEdge != NULL) {
 		switch (selectedEdge->type) {
@@ -88,6 +96,9 @@ void PropertyWidget::setRoadEdge(RoadEdgePtr selectedEdge) {
 		oneWay = selectedEdge->oneWay ? "Yes" : "No";
 		link = selectedEdge->link ? "Yes" : "No";
 		roundabout = selectedEdge->roundabout ? "Yes" : "No";
+
+		groupId = selectedEdge->properties["group_id"].toString();
+		generationType = selectedEdge->properties["generation_type"].toString();
 	}
 
 	ui.lineEditEdgeType->setText(type);
@@ -95,6 +106,8 @@ void PropertyWidget::setRoadEdge(RoadEdgePtr selectedEdge) {
 	ui.lineEditEdgeOneWay->setText(oneWay);
 	ui.lineEditEdgeLink->setText(link);
 	ui.lineEditEdgeRoundabout->setText(roundabout);
+	ui.lineEditEdgeGroupId->setText(groupId);
+	ui.lineEditEdgeGenerationType->setText(generationType);
 }
 
 void PropertyWidget::resetRoadVertex() {
@@ -104,7 +117,9 @@ void PropertyWidget::resetRoadVertex() {
 	ui.lineEditVertexOnBoundary->setText("");
 	ui.textEditVertexUncles->setText("");
 	ui.textEditVertexNeighbors->setText("");
-	ui.lineEditKernel->setText("");
+	ui.lineEditVertexGroupId->setText("");
+	ui.lineEditVertexGenerationType->setText("");
+	ui.lineEditVertexExampleDesc->setText("");
 }
 
 void PropertyWidget::resetRoadEdge() {
@@ -113,6 +128,8 @@ void PropertyWidget::resetRoadEdge() {
 	ui.lineEditEdgeOneWay->setText("");
 	ui.lineEditEdgeLink->setText("");
 	ui.lineEditEdgeRoundabout->setText("");
+	ui.lineEditEdgeGroupId->setText("");
+	ui.lineEditEdgeGenerationType->setText("");
 }
 
 
