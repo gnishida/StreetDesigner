@@ -2,6 +2,7 @@
 
 #include <road/RoadGraph.h>
 #include <road/feature/ExFeature.h>
+#include <render/Terrain.h>
 
 /**
  * 道路網生成のヘルパークラス。
@@ -39,6 +40,7 @@ public:
 	static void extendDanglingEdges(RoadGraph &roads);
 	static void connectRoads(RoadGraph& roads, float distance_threshold, float angle_threshold);
 	static bool growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDesc, const QVector2D& step);
+	static void cutEdgeBySteepElevationChange(Polyline2D &polyline, mylib::Terrain *terrain);
 
 	static RoadVertexDesc getClosestVertexByExample(RoadGraph &roads, RoadVertexDesc v_desc);
 	

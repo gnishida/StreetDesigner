@@ -51,8 +51,8 @@ void UShapeRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D 
 		GraphUtil::removeSelfIntersectingRoads(roads);
 		RoadGeneratorHelper::extendDanglingEdges(roads);
 		RoadGeneratorHelper::removeDeadend(roads);
-		GraphUtil::reduce(roads);
-		GraphUtil::removeLoop(roads);
+		//GraphUtil::reduce(roads);
+		//GraphUtil::removeLoop(roads);
 
 		if (animation) {
 			mainWin->glWidget->updateGL();
@@ -327,22 +327,35 @@ void UShapeRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &a
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
 bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
+	bool intercepted = false;
+
 	// 新しいエッジを生成
 	RoadEdgePtr new_edge = RoadEdgePtr(new RoadEdge(roadType, lanes));
 	for (int i = 0; i < polyline.size(); ++i) {
 		QVector2D pt = roads.graph[srcDesc]->pt + polyline[i];
 
+		new_edge->polyline.push_back(pt);
+
 		// 水没、または、山の上なら、道路生成をストップ
 		float z = terrain->getValue(pt.x(), pt.y());
-		if (z < 0.0f || z > 100.0f) break;
+		if (z < 0.0f || z > 100.0f) {
+			// 最初っから水没している場合は、そもそもエッジ生成をキャンセル
+			if (new_edge->polyline.size() <= 1) return false;
 
-		new_edge->polyline.push_back(pt);
+			RoadGeneratorHelper::cutEdgeBySteepElevationChange(new_edge->polyline, terrain);
+
+			intercepted = true;
+			break;
+		}
 
 		// 他のエッジと交差したら、道路生成をストップ
 		QVector2D intPoint;
-		if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline, intPoint)) {
+		//if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline, intPoint)) {
+		if (GraphUtil::isIntersect(roads, new_edge->polyline, intPoint)) {
 			new_edge->polyline.erase(new_edge->polyline.begin() + new_edge->polyline.size() - 1);
 			new_edge->polyline.push_back(intPoint);
+
+			intercepted = true;
 
 			// エッジ長が最短thresholdより短い場合は、キャンセル
 			if (new_edge->polyline.length() < 30.0f) return false;
@@ -353,11 +366,6 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 	if (new_edge->polyline.size() == 1) return false;
 
-	// 他のエッジと交差したら、道路生成をストップ
-	//if (roadType == RoadEdge::TYPE_STREET && GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
-	if (roadType == RoadEdge::TYPE_AVENUE && GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
-
-
 	if (GraphUtil::hasRedundantEdge(roads, srcDesc, new_edge->polyline, angleTolerance)) {
 		return false;
 	}
@@ -366,7 +374,6 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 
 	if (byExample) {
 		snapFactor = 0.01f;
-		angleTolerance = 0.01f;
 	}
 
 	// スナップできるか？
@@ -399,16 +406,16 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		RoadVertexPtr v = RoadVertexPtr(new RoadVertex(new_edge->polyline.last()));
 		tgtDesc = GraphUtil::addVertex(roads, v);
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
-		if (roads.graph[srcDesc]->properties.contains("group_id")) {
-			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-		}
 
-		// srcDescのgroup_idを引き継ぐ
+		// 新しい頂点にgroup_idを引き継ぐ
 		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+
+		// 新しい頂点のgeneration_typeを設定
+		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
 
 		if (area.contains(new_edge->polyline.last())) {
 			// シードに追加する
-			if (byExample) {
+			if (byExample && !intercepted) {	// Exampleベースで、且つ、途中で生成ストップしていない場合（つまり、Exampleそのまま）
 				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
 					seeds.push_back(tgtDesc);
 				}
@@ -429,20 +436,16 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 		if (byExample && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) == 1) {
 			roads.graph[tgtDesc]->properties["deadend"] = true;
 		}
-
-		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
 	}
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
 	roads.graph[e_desc]->properties["byExample"] = byExample;
 
-	if (byExample) {
-		roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-		roads.graph[e_desc]->properties["generation_type"] = "example";
-	} else {
-		roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-		roads.graph[e_desc]->properties["generation_type"] = "pm";
-	}
+	// 新しいエッジにgroup_idを引き継ぐ
+	roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+
+	// 新しいエッジのgeneration_typeを設定
+	roads.graph[e_desc]->properties["generation_type"] = byExample ? "example" : "pm";
 
 	return true;
 }

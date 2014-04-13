@@ -692,13 +692,16 @@ void RoadGeneratorHelper::extendDanglingEdges(RoadGraph &roads) {
 	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 		if (!roads.graph[*vi]->valid) continue;
 
+		// 境界の外に伸びていくエッジは、そのまま
 		if (roads.graph[*vi]->onBoundary) continue;
 
+		// Deadendじゃないエッジは、対象外
 		if (GraphUtil::getDegree(roads, *vi) != 1) continue;
 
-
+		// snap先を探す
 		RoadVertexDesc snapDesc = GraphUtil::getVertex(roads, roads.graph[*vi]->pt, *vi);
 
+		// この頂点から出る唯一のエッジ*eiを取得
 		RoadOutEdgeIter ei, eend;
 		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
 			if (!roads.graph[*ei]->valid) continue;
@@ -709,17 +712,28 @@ void RoadGeneratorHelper::extendDanglingEdges(RoadGraph &roads) {
 		polyline.push_back(roads.graph[snapDesc]->pt);
 		polyline.push_back(roads.graph[*vi]->pt);
 
+		// スナップ先の頂点にとって、redundantなら、スナップせずにエッジを削除する
 		if (GraphUtil::hasRedundantEdge(roads, snapDesc, polyline, 1.0f)) {
 			roads.graph[*ei]->valid = false;
 		} else {
 			std::reverse(polyline.begin(), polyline.end());
+
+			// スナップによって、他のエッジと交差するなら、スナップせずにエッジを削除する
 			if (GraphUtil::isIntersect(roads, polyline)) {
 				roads.graph[*ei]->valid = false;
 			} else {
+				// スナップさせる
 				RoadEdgeDesc e = GraphUtil::addEdge(roads, *vi, snapDesc, roads.graph[*ei]->type, roads.graph[*ei]->lanes);
-				roads.graph[e]->properties["generation_type"] = "pm";
+
+				// エッジを10m単位に分割する（Local Streetsのシード用に）
+				roads.graph[e]->polyline = GraphUtil::finerEdge(roads, e, 10.0f);
+
 				if (G::getFloat("roadInterpolationFactor") == 1.0f) {
+					// 100% exampleの場合は、強制的にexampleとしちゃう
+					roads.graph[e]->properties["generation_type"] = "example";
 					//roads.graph[*ei]->properties["byExample"] = true;
+				} else {
+					roads.graph[e]->properties["generation_type"] = "pm";
 				}
 			}
 		}
@@ -828,6 +842,27 @@ bool RoadGeneratorHelper::growRoadOneStep(RoadGraph& roads, RoadVertexDesc srcDe
 		GraphUtil::moveVertex(roads, srcDesc, pt);
 		return true;
 	}	
+}
+
+/**
+ * 急激な標高の変化がある場合に、エッジをその境界でカットする
+ * polylineのlast()が、カットされる側にあることを前提とする
+ */
+void RoadGeneratorHelper::cutEdgeBySteepElevationChange(Polyline2D &polyline, mylib::Terrain *terrain) {
+	// 点が2つ未満の場合は、処理不能
+	if (polyline.size() < 2) return;
+
+	// 海岸ぎりぎりの場所を探す
+	QVector2D vec = polyline.last() - polyline[polyline.size() - 2];
+	vec.normalize();
+	QVector2D pt = polyline.last();
+	while (true) {
+		pt -= vec;
+		float z = terrain->getValue(pt.x(), pt.y());
+		if (z >= 0.0f && z <= 100.0f) break;
+	}
+
+	polyline[polyline.size() - 1] = pt;
 }
 
 /**
