@@ -57,6 +57,12 @@ void UrbanGeometry::clearGeometry() {
 	if (terrain != NULL) delete terrain;
 
 	roads.clear();
+
+	// clean up memory allocated for blocks
+	for (int i = 0; i < blocks.size(); ++i) {
+		delete blocks[i];
+	}
+	blocks.clear();
 }
 
 void UrbanGeometry::generateRoads(ExFeature &feature) {
@@ -122,6 +128,7 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 
 	// draw blocks and parcels
 	for (int i = 0; i < blocks.size(); ++i) {
+		std::cout << "render blocks: " << i << std::endl;
 		renderer.render(blocks[i], textureManager);
 
 		ParcelGraphVertexIter vi, viEnd;
@@ -291,6 +298,36 @@ void UrbanGeometry::saveTerrain(const QString &filename) {
 		}
 	}
 }
+
+/*
+void UrbanGeometry::saveTerrain(const QString &filename) {
+	QFile file(filename);
+	if (!file.open(QIODevice::WriteOnly)) {
+		std::cerr << "MyUrbanGeometry::saveInfoLayers... The file is not writable: " << filename.toUtf8().constData() << endl;
+		throw "The file is not writable: " + filename;
+	}
+
+	float cellLength = terrain->getCellLength();
+	QTextStream out(&file);
+	out << terrain->width << " " << terrain->depth << " " << cellLength / 4 << endl;
+	int count = 0;
+	for (int i = 0; i < terrain->getNumCols() * 4; ++i) {
+		for (int j = 0; j < terrain->getNumRows() * 4; ++j) {
+			out << count++ << " " << i << " " << j << endl;
+			float x = i * 10 - 1000;//terrain->getCell(i / 4, j / 4).getX();
+			float y = j * 10 - 1000;//terrain->getCell(i / 4, j / 4).getY();
+
+			out << x << " " << y << endl;
+
+			float z = terrain->getValue(x, y);
+			if (z < 0.0f && z > -3) {
+				z = 0.0f;
+			}
+			out << z << endl;
+		}
+	}
+}
+*/
 
 void UrbanGeometry::loadRoads(const QString &filename) {
 	QFile file(filename);

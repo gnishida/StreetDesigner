@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Sat Apr 12 19:25:16 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Mon Apr 14 15:46:32 2014
+**      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -79,6 +79,9 @@ public:
     QAction *actionRenderingTexture;
     QAction *actionRenderingGroupBy;
     QAction *actionSaveImage;
+    QAction *actionColorByGroup;
+    QAction *actionColorDefault;
+    QAction *actionRenderingGenerationType;
     QWidget *centralWidget;
     QMenuBar *menuBar;
     QMenu *menuFile;
@@ -269,6 +272,12 @@ public:
         actionRenderingGroupBy->setObjectName(QString::fromUtf8("actionRenderingGroupBy"));
         actionSaveImage = new QAction(MainWindow);
         actionSaveImage->setObjectName(QString::fromUtf8("actionSaveImage"));
+        actionColorByGroup = new QAction(MainWindow);
+        actionColorByGroup->setObjectName(QString::fromUtf8("actionColorByGroup"));
+        actionColorDefault = new QAction(MainWindow);
+        actionColorDefault->setObjectName(QString::fromUtf8("actionColorDefault"));
+        actionRenderingGenerationType = new QAction(MainWindow);
+        actionRenderingGenerationType->setObjectName(QString::fromUtf8("actionRenderingGenerationType"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         MainWindow->setCentralWidget(centralWidget);
@@ -342,6 +351,7 @@ public:
         menuRendering->addAction(actionRenderingDefault);
         menuRendering->addAction(actionRenderingTexture);
         menuRendering->addAction(actionRenderingGroupBy);
+        menuRendering->addAction(actionRenderingGenerationType);
 
         retranslateUi(MainWindow);
 
@@ -413,8 +423,11 @@ public:
         actionHintLine->setText(QApplication::translate("MainWindow", "Hint Line", 0, QApplication::UnicodeUTF8));
         actionRenderingDefault->setText(QApplication::translate("MainWindow", "Default", 0, QApplication::UnicodeUTF8));
         actionRenderingTexture->setText(QApplication::translate("MainWindow", "Texture", 0, QApplication::UnicodeUTF8));
-        actionRenderingGroupBy->setText(QApplication::translate("MainWindow", "Group By", 0, QApplication::UnicodeUTF8));
+        actionRenderingGroupBy->setText(QApplication::translate("MainWindow", "Group", 0, QApplication::UnicodeUTF8));
         actionSaveImage->setText(QApplication::translate("MainWindow", "Save Image", 0, QApplication::UnicodeUTF8));
+        actionColorByGroup->setText(QApplication::translate("MainWindow", "By Group", 0, QApplication::UnicodeUTF8));
+        actionColorDefault->setText(QApplication::translate("MainWindow", "Default", 0, QApplication::UnicodeUTF8));
+        actionRenderingGenerationType->setText(QApplication::translate("MainWindow", "Generation Type", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuWindow->setTitle(QApplication::translate("MainWindow", "Window", 0, QApplication::UnicodeUTF8));
         menuArea->setTitle(QApplication::translate("MainWindow", "Area", 0, QApplication::UnicodeUTF8));

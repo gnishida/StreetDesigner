@@ -6,6 +6,7 @@
 #include <QFile>
 #include <boost/shared_ptr.hpp>
 #include "../../common/Polygon2D.h"
+#include "../../common/Histogram.h"
 #include "../RoadGraph.h"
 #include "ExFeatureItem.h"
 
@@ -28,6 +29,7 @@ public:
 	float varAvenueCurvature;
 	float avgStreetCurvature;
 	float varStreetCurvature;
+	Histogram streetSeedNum;
 
 public:
 	ExFeature() {}

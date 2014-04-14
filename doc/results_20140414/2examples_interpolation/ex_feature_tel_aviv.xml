@@ -1,0 +1,14 @@
+<feature>
+    <area>
+        <point x="-726.15185546875" y="760.5261840820313"/>
+        <point x="786.306640625" y="751.9326782226563"/>
+        <point x="777.713134765625" y="-760.526123046875"/>
+        <point x="-717.55859375" y="-756.2293701171875"/>
+        <point x="-700.37158203125" y="-498.4239196777344"/>
+        <point x="-786.306640625" y="-386.7081909179688"/>
+        <point x="-726.15185546875" y="760.5261840820313"/>
+    </area>
+    <hintLine/>
+    <avenues filename="ex_feature_tel_aviv.xml.avenues.gsm"/>
+    <streets filename="ex_feature_tel_aviv.xml.streets.gsm"/>
+</feature>

@@ -24,7 +24,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>350</y>
+      <y>370</y>
       <width>171</width>
       <height>171</height>
      </rect>
@@ -200,7 +200,7 @@
       <x>10</x>
       <y>10</y>
       <width>171</width>
-      <height>331</height>
+      <height>351</height>
      </rect>
     </property>
     <property name="title">
@@ -408,6 +408,29 @@
       <rect>
        <x>80</x>
        <y>300</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_19">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>320</y>
+       <width>61</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Deadend</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditVertexDeadend">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>320</y>
        <width>81</width>
        <height>20</height>
       </rect>

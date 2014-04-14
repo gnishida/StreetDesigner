@@ -111,7 +111,7 @@ void IntRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &ar
 	seeds.clear();
 
 	for (int i = 0; i < hintLine.size(); ++i) {
-		addAvenueSeed(roads, area, f, hintLine[i], QVector2D(0, 0), 0, seeds);
+		addAvenueSeed(roads, area, f, hintLine[i], QVector2D(0, 0), i, seeds);
 	}
 }
 
@@ -167,24 +167,18 @@ void IntRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &ar
 
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
-		
-		int group_id;
-		if (roads.graph[src]->properties.contains("group_id")) {
-			group_id = roads.graph[src]->properties["group_id"].toInt();
-		} else if (roads.graph[tgt]->properties.contains("group_id")) {
-			group_id = roads.graph[tgt]->properties["group_id"].toInt();
-		} else {
-			group_id = -1;
-		}
 
 		if (roads.graph[e]->properties["byExample"] == true) {
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
 			QVector2D offset;
+			int group_id;
 			if (roads.graph[src]->properties.contains("example_desc")) {
 				RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
+				group_id = roads.graph[src]->properties["group_id"].toInt();
 				offset = f.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
 			} else {
 				RoadVertexDesc ex_v_desc = roads.graph[tgt]->properties["example_desc"].toUInt();
+				group_id = roads.graph[tgt]->properties["group_id"].toInt();
 				offset = f.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
 			}
 			
@@ -215,6 +209,9 @@ void IntRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &ar
 
 				RoadVertexDesc v_desc = GraphUtil::splitEdge(roads, e, edge->polyline[index], e1, e2);
 
+				// 端点に近すぎる場合は、シードとするのを中止する
+				if (v_desc == src || v_desc == tgt) break;
+
 				// シードとして追加
 				seeds.push_back(v_desc);
 				roads.graph[v_desc]->properties["group_id"] = group_id;
@@ -226,8 +223,11 @@ void IntRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &ar
 				e = e2;
 			}
 		} else {
+			// 両端の頂点から、group_idを特定
+			int group_id = roads.graph[src]->properties["group_id"].toInt();
+
 			int step;
-			if (roads.graph[e]->polyline.length() > f.avgStreetLength * 5) {
+			if (roads.graph[e]->polyline.length() > f.length(RoadEdge::TYPE_STREET) * 5) {
 				step = roads.graph[e]->polyline.size() / 5;
 			} else {
 				step = roads.graph[e]->polyline.size() / 2;
@@ -236,6 +236,7 @@ void IntRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &ar
 		
 			while (step < edge->polyline.size() - step) {
 				RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
+				roads.graph[desc]->properties["group_id"] = group_id;
 				roads.graph[desc]->properties["generation_type"] = "pm";
 
 				// この点が、エリア内なら、シードとして追加

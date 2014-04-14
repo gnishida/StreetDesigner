@@ -27,6 +27,8 @@ void RoadGraph::_generateMeshVertices(mylib::TextureManager* textureManager) {
 		_generateMeshVerticesTexture(textureManager);
 	} else if (renderMode == RENDER_GROUPBY) {
 		_generateMeshVerticesGroupBy(textureManager);
+	} else if (renderMode == RENDER_GENERATION_TYPE) {
+		_generateMeshVerticesGenerationType(textureManager);
 	}
 }
 
@@ -323,6 +325,163 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 
 
 
+
+			float halfWidth = graph[*ei]->getWidth() / 2.0f;
+			float halfWidthBg = halfWidth * 1.2f;
+
+			QVector3D p0, p1, p2, p3;
+			QVector3D p0Bg, p1Bg, p2Bg, p3Bg;
+			for (int i = 0; i < num - 1; ++i) {
+				QVector3D pt1 = graph[*ei]->polyline3D[i];
+				QVector3D pt2 = graph[*ei]->polyline3D[i + 1];
+
+				QVector3D vec = pt2 - pt1;
+				vec = QVector3D(-vec.y(), vec.x(), 0.0f);
+				vec.normalize();
+
+				if (i == 0) {
+					p0 = pt1 + vec * halfWidth;
+					p1 = pt1 - vec * halfWidth;
+					p0Bg = pt1 + vec * halfWidthBg;
+					p1Bg = pt1 - vec * halfWidthBg;
+				}
+				p2 = pt2 - vec * halfWidth;
+				p3 = pt2 + vec * halfWidth;
+				p2Bg = pt2 - vec * halfWidthBg;
+				p3Bg = pt2 + vec * halfWidthBg;
+				QVector3D normal = Util::calculateNormal(p0, p1, p2);
+
+				if (i < num - 2) {
+					QVector3D pt3 = graph[*ei]->polyline3D[i + 2];
+
+					Util::getIrregularBisector(pt1, pt2, pt3, halfWidth, halfWidth, p3);
+					Util::getIrregularBisector(pt1, pt2, pt3, -halfWidth, -halfWidth, p2);
+					Util::getIrregularBisector(pt1, pt2, pt3, halfWidthBg, halfWidthBg, p3Bg);
+					Util::getIrregularBisector(pt1, pt2, pt3, -halfWidthBg, -halfWidthBg, p2Bg);
+				}
+
+				switch (graph[*ei]->type) {
+				case RoadEdge::TYPE_HIGHWAY:
+					if (showHighways) {
+						renderable1->addQuad(p0, p1, p2, p3, QVector3D(0, 0, 1), color, 0.7f);
+						renderable1->addQuad(p0Bg, p1Bg, p2Bg, p3Bg, QVector3D(0, 0, 1), bgColor);
+					}
+					break;
+				case RoadEdge::TYPE_BOULEVARD:
+					if (showBoulevards) {
+						renderable1->addQuad(p0, p1, p2, p3, QVector3D(0, 0, 1), color, 0.5f);
+						renderable1->addQuad(p0Bg, p1Bg, p2Bg, p3Bg, QVector3D(0, 0, 1), bgColor);
+					}
+					break;
+				case RoadEdge::TYPE_AVENUE:
+					if (showAvenues) {
+						renderable1->addQuad(p0, p1, p2, p3, QVector3D(0, 0, 1), color, 0.5f);
+						renderable1->addQuad(p0Bg, p1Bg, p2Bg, p3Bg, QVector3D(0, 0, 1), bgColor);
+					}
+					break;
+				case RoadEdge::TYPE_STREET:
+					if (showLocalStreets) {
+						renderable1->addQuad(p0, p1, p2, p3, QVector3D(0, 0, 1), color, 0.3f);
+						renderable1->addQuad(p0Bg, p1Bg, p2Bg, p3Bg, QVector3D(0, 0, 1), bgColor);
+					}
+					break;
+				}
+
+				p0 = p3;
+				p1 = p2;
+				p0Bg = p3Bg;
+				p1Bg = p2Bg;
+			}
+		}
+	}
+
+	// draw intersections
+	{
+		RoadVertexIter vi, vend;
+		for (boost::tie(vi, vend) = boost::vertices(graph); vi != vend; ++vi) {
+			if (!graph[*vi]->valid) continue;
+
+			// get the largest width of the outing edges
+			float max_width = 0;
+			int max_roadType = 0;
+			float offset = 0.3f;
+			int group_id = -1;
+			RoadOutEdgeIter oei, oeend;
+			for (boost::tie(oei, oeend) = boost::out_edges(*vi, graph); oei != oeend; ++oei) {
+				if (!graph[*oei]->valid) continue;
+
+				float width = graph[*oei]->getWidth();
+				if (width > max_width) {
+					max_width = width;
+				}
+
+				if (graph[*oei]->type > max_roadType) {
+					max_roadType = graph[*oei]->type;
+				}
+
+				if (graph[*oei]->properties.contains("group_id")) {
+					group_id = graph[*oei]->properties["group_id"].toInt();
+				}
+			}
+
+			float max_widthBg = max_width * 1.2f;
+
+			if (max_roadType == RoadEdge::TYPE_AVENUE) {
+				offset = 0.5f;
+			}
+		
+			// group_idに基づいて色を決定
+			QColor color, bgColor;
+			if (graph[*vi]->properties["generation_type"] == "example") {
+				if (group_id == 0) {
+					color = QColor(255, 128, 128);
+					bgColor = QColor(128, 0, 0);
+				} else if (group_id == 1) {
+					color = QColor(128, 255, 128);
+					bgColor = QColor(0, 128, 0);
+				} else if (group_id == 2) {
+					color = QColor(128, 128, 255);
+					bgColor = QColor(0, 0, 128);
+				} else {
+					color = QColor(255, 255, 255);
+					bgColor = QColor(128, 128, 128);
+				}
+			} else {
+				color = QColor(255, 255, 255);
+				bgColor = QColor(128, 128, 128);
+			}
+
+			renderable2->addCircle(graph[*vi]->pt3D, max_width * 0.5f, 20, color, offset);
+			renderable2->addCircle(graph[*vi]->pt3D, max_widthBg * 0.5f, 20, bgColor);
+		}
+	}
+
+	renderables.push_back(mylib::RenderablePtr(renderable1));
+	renderables.push_back(mylib::RenderablePtr(renderable2));
+}
+
+void RoadGraph::_generateMeshVerticesGenerationType(mylib::TextureManager* textureManager) {
+	mylib::RenderableQuadList* renderable1 = new mylib::RenderableQuadList();
+	mylib::RenderableCircleList* renderable2 = new mylib::RenderableCircleList();
+
+	// エッジを描画
+	{
+		RoadEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::edges(graph); ei != eend; ++ei) {
+			if (!graph[*ei]->valid) continue;
+
+			int num = graph[*ei]->polyline3D.size();
+			if (num <= 1) continue;
+
+			// generation_typeに基づいて色を決定
+			QColor color, bgColor;							
+			if (graph[*ei]->properties["generation_type"] == "example") {
+				color = QColor(255, 128, 128);
+				bgColor = QColor(128, 0, 0);
+			} else {
+				color = QColor(255, 255, 255);
+				bgColor = QColor(128, 128, 128);
+			}
 
 			float halfWidth = graph[*ei]->getWidth() / 2.0f;
 			float halfWidthBg = halfWidth * 1.2f;

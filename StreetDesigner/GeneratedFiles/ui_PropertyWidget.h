@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PropertyWidget.ui'
 **
-** Created: Sun Apr 13 16:57:25 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Mon Apr 14 15:15:17 2014
+**      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -62,6 +62,8 @@ public:
     QLineEdit *lineEditVertexGroupId;
     QLabel *label_16;
     QLineEdit *lineEditVertexExampleDesc;
+    QLabel *label_19;
+    QLineEdit *lineEditVertexDeadend;
 
     void setupUi(QDockWidget *PropertyWidget)
     {
@@ -74,7 +76,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 350, 171, 171));
+        groupBox->setGeometry(QRect(10, 370, 171, 171));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 31, 16));
@@ -119,7 +121,7 @@ public:
         lineEditEdgeGenerationType->setGeometry(QRect(80, 140, 81, 20));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 10, 171, 331));
+        groupBox_5->setGeometry(QRect(10, 10, 171, 351));
         label_6 = new QLabel(groupBox_5);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 20, 31, 16));
@@ -174,6 +176,12 @@ public:
         lineEditVertexExampleDesc = new QLineEdit(groupBox_5);
         lineEditVertexExampleDesc->setObjectName(QString::fromUtf8("lineEditVertexExampleDesc"));
         lineEditVertexExampleDesc->setGeometry(QRect(80, 300, 81, 20));
+        label_19 = new QLabel(groupBox_5);
+        label_19->setObjectName(QString::fromUtf8("label_19"));
+        label_19->setGeometry(QRect(10, 320, 61, 16));
+        lineEditVertexDeadend = new QLineEdit(groupBox_5);
+        lineEditVertexDeadend->setObjectName(QString::fromUtf8("lineEditVertexDeadend"));
+        lineEditVertexDeadend->setGeometry(QRect(80, 320, 81, 20));
         PropertyWidget->setWidget(dockWidgetContents);
 
         retranslateUi(PropertyWidget);
@@ -201,6 +209,7 @@ public:
         label_14->setText(QApplication::translate("PropertyWidget", "On boundary?", 0, QApplication::UnicodeUTF8));
         label_15->setText(QApplication::translate("PropertyWidget", "Group", 0, QApplication::UnicodeUTF8));
         label_16->setText(QApplication::translate("PropertyWidget", "Example Id", 0, QApplication::UnicodeUTF8));
+        label_19->setText(QApplication::translate("PropertyWidget", "Deadend", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(PropertyWidget);
     } // retranslateUi
 

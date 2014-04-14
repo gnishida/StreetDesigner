@@ -99,6 +99,7 @@
     <addaction name="actionRenderingDefault"/>
     <addaction name="actionRenderingTexture"/>
     <addaction name="actionRenderingGroupBy"/>
+    <addaction name="actionRenderingGenerationType"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuArea"/>
@@ -527,12 +528,27 @@
   </action>
   <action name="actionRenderingGroupBy">
    <property name="text">
-    <string>Group By</string>
+    <string>Group</string>
    </property>
   </action>
   <action name="actionSaveImage">
    <property name="text">
     <string>Save Image</string>
+   </property>
+  </action>
+  <action name="actionColorByGroup">
+   <property name="text">
+    <string>By Group</string>
+   </property>
+  </action>
+  <action name="actionColorDefault">
+   <property name="text">
+    <string>Default</string>
+   </property>
+  </action>
+  <action name="actionRenderingGenerationType">
+   <property name="text">
+    <string>Generation Type</string>
    </property>
   </action>
  </widget>

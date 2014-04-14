@@ -55,6 +55,7 @@ public slots:
 	void onRenderingDefault();
 	void onRenderingTexture();
 	void onRenderingGroupBy();
+	void onRenderingGenerationType();
 	void onShowControlWidget();
 	void onShowPropertyWidget();
 };

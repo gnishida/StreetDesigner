@@ -42,11 +42,10 @@ MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, 
 	connect(ui.actionGenerateParcels, SIGNAL(triggered()), this, SLOT(onGenerateParcels()));
 	connect(ui.actionDisplayHighway, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionDisplayBoulevard, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
-	connect(ui.actionDisplayAvenue, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
-	connect(ui.actionDisplayLocalStreet, SIGNAL(triggered()), this, SLOT(onDisplayRoads()));
 	connect(ui.actionRenderingDefault, SIGNAL(triggered()), this, SLOT(onRenderingDefault()));
 	connect(ui.actionRenderingTexture, SIGNAL(triggered()), this, SLOT(onRenderingTexture()));
 	connect(ui.actionRenderingGroupBy, SIGNAL(triggered()), this, SLOT(onRenderingGroupBy()));
+	connect(ui.actionRenderingGenerationType, SIGNAL(triggered()), this, SLOT(onRenderingGenerationType()));
 	connect(ui.actionControlWidget, SIGNAL(triggered()), this, SLOT(onShowControlWidget()));
 	connect(ui.actionPropertyWidget, SIGNAL(triggered()), this, SLOT(onShowPropertyWidget()));
 
@@ -257,6 +256,7 @@ void MainWindow::onDisplayRoads() {
 void MainWindow::onRenderingDefault() {
 	ui.actionRenderingTexture->setChecked(false);
 	ui.actionRenderingGroupBy->setChecked(false);
+	ui.actionRenderingGenerationType->setChecked(false);
 
 	urbanGeometry->roads.renderMode = RoadGraph::RENDER_DEFAULT;
 	urbanGeometry->roads.setModified();
@@ -267,6 +267,7 @@ void MainWindow::onRenderingDefault() {
 void MainWindow::onRenderingTexture() {
 	ui.actionRenderingDefault->setChecked(false);
 	ui.actionRenderingGroupBy->setChecked(false);
+	ui.actionRenderingGenerationType->setChecked(false);
 
 	urbanGeometry->roads.renderMode = RoadGraph::RENDER_TEXTURE;
 	urbanGeometry->roads.setModified();
@@ -277,8 +278,20 @@ void MainWindow::onRenderingTexture() {
 void MainWindow::onRenderingGroupBy() {
 	ui.actionRenderingDefault->setChecked(false);
 	ui.actionRenderingTexture->setChecked(false);
+	ui.actionRenderingGenerationType->setChecked(false);
 
 	urbanGeometry->roads.renderMode = RoadGraph::RENDER_GROUPBY;
+	urbanGeometry->roads.setModified();
+
+	glWidget->updateGL();
+}
+
+void MainWindow::onRenderingGenerationType() {
+	ui.actionRenderingDefault->setChecked(false);
+	ui.actionRenderingTexture->setChecked(false);
+	ui.actionRenderingGroupBy->setChecked(false);
+
+	urbanGeometry->roads.renderMode = RoadGraph::RENDER_GENERATION_TYPE;
 	urbanGeometry->roads.setModified();
 
 	glWidget->updateGL();

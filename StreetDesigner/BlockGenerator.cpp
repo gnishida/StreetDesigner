@@ -176,7 +176,12 @@ void BlockGenerator::run() {
 	for (int i = 0; i < blocks->size(); ++i) {
 		Polygon3D blockContourInset;
 		blocks->at(i)->getContour().computeInset(blocks->at(i)->getRoadWidths(), blockContourInset);
-		blocks->at(i)->setContour(blockContourInset);
+
+		// 依然として、セルフ交差するケースがあるので、その場合はinsetしない
+		// さもないと、セルフ交差したポリゴンはtesellationでエラー発生する
+		if (!boost::geometry::intersects(blockContourInset)) {
+			blocks->at(i)->setContour(blockContourInset);
+		}
 	}
 
 	printf("generation done.\n");

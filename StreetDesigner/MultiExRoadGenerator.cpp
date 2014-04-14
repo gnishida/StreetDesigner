@@ -152,7 +152,13 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 	int i = 0;
 	int num = GraphUtil::getNumEdges(roads);
 	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend && i < num; ++ei) {
+	int k = 0;
+	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend && i < num; ++ei, ++k) {
+		std::cout << k << std::endl;
+		if (k == 86) {
+			int l = 0;
+		}
+
 		if (!roads.graph[*ei]->valid) continue;
 
 		i++;
@@ -166,8 +172,8 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 
 		if (roads.graph[e]->properties["byExample"] == true) {
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
-			int group_id;
 			QVector2D offset;
+			int group_id;
 			if (roads.graph[src]->properties.contains("example_desc")) {
 				RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
 				group_id = roads.graph[src]->properties["group_id"].toInt();
@@ -205,6 +211,9 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 
 				RoadVertexDesc v_desc = GraphUtil::splitEdge(roads, e, edge->polyline[index], e1, e2);
 
+				// 端点に近すぎる場合は、シードとするのを中止する
+				if (v_desc == src || v_desc == tgt) break;
+
 				// シードとして追加
 				seeds.push_back(v_desc);
 				roads.graph[v_desc]->properties["group_id"] = group_id;
@@ -216,11 +225,20 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 				e = e2;
 			}
 		} else {
-			int step = roads.graph[e]->polyline.size() / 5;
+			// 両端の頂点から、group_idを特定
+			int group_id = roads.graph[src]->properties["group_id"].toInt();
+
+			int step;
+			if (roads.graph[e]->polyline.length() > features[group_id].length(RoadEdge::TYPE_STREET) * 5) {
+				step = roads.graph[e]->polyline.size() / 5;
+			} else {
+				step = roads.graph[e]->polyline.size() / 2;
+			}
 			if (step <= 1) continue;
 		
 			while (step < edge->polyline.size() - step) {
 				RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
+				roads.graph[desc]->properties["group_id"] = group_id;
 				roads.graph[desc]->properties["generation_type"] = "pm";
 
 				// この点が、エリア内なら、シードとして追加

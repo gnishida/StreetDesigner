@@ -143,6 +143,23 @@ float ExFeature::curvature(int roadType) const {
  * PM用パラメータを計算する
  */
 void ExFeature::computePMParameters() {
+	// Avenueをreduceする
+	GraphUtil::reduce(avenues);
+
+	// この結果、各エッジのreduced_numパラメータに、street交差点による分割数が入ったので、ヒストグラムを生成
+	/*
+	{
+		streetSeedNum.clear();
+
+		RoadEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::edges(avenues.graph); ei != eend; ++ei) {
+			if (!avenues.graph[*ei]->valid) continue;
+		
+			streetSeedNum.getBin(avenues.graph[*ei]->getLength()).vote(avenues.graph[*ei]->properties["reduced_num"].toInt());
+		}
+	}
+	*/
+
 	GraphUtil::computeStatistics(avenues, avgAvenueLength, varAvenueLength, avgAvenueCurvature, varAvenueCurvature);
 	std::cout << "avgAvenueCurvature: " << avgAvenueCurvature << std::endl;
 	std::cout << "varAvenueCurvature: " << varAvenueCurvature << std::endl;

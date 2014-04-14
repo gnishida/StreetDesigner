@@ -23,7 +23,7 @@ class Terrain;
 
 class RoadGraph : public mylib::GeometryObject {
 public:
-	static enum { RENDER_DEFAULT = 0, RENDER_TEXTURE, RENDER_GROUPBY };
+	static enum { RENDER_DEFAULT = 0, RENDER_TEXTURE, RENDER_GROUPBY, RENDER_GENERATION_TYPE };
 
 public:
 	BGLGraph graph;
@@ -67,6 +67,7 @@ private:
 	void _generateMeshVerticesDefault(mylib::TextureManager* textureManager);
 	void _generateMeshVerticesTexture(mylib::TextureManager* textureManager);
 	void _generateMeshVerticesGroupBy(mylib::TextureManager* textureManager);
+	void _generateMeshVerticesGenerationType(mylib::TextureManager* textureManager);
 };
 
 typedef boost::shared_ptr<RoadGraph> RoadGraphPtr;

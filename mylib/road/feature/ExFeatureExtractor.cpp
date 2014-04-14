@@ -17,14 +17,14 @@ void ExFeatureExtractor::extractFeature(RoadGraph& roads, Polygon2D& area, Polyl
 	GraphUtil::copyRoads(roads, feature.avenues);
 	GraphUtil::extractRoads2(feature.avenues, area, RoadEdge::TYPE_AVENUE | RoadEdge::TYPE_BOULEVARD);
 	GraphUtil::clean(feature.avenues);
-	GraphUtil::reduce(feature.avenues);
+	//GraphUtil::reduce(feature.avenues);  <- reduceは、特徴量を利用する側が、適宜実施すること！
 
 	// roundaboutを削除する
 	//GraphUtil::removeRoundabout(temp_roads);
 
 	// linkを削除する
 	GraphUtil::removeLinkEdges(feature.avenues);
-	GraphUtil::reduce(feature.avenues);
+	//GraphUtil::reduce(feature.avenues);
 	GraphUtil::removeIsolatedVertices(feature.avenues);
 	GraphUtil::clean(feature.avenues);
 
