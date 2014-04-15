@@ -301,9 +301,9 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 			int num = graph[*ei]->polyline3D.size();
 			if (num <= 1) continue;
 
-			// group_idに基づいて色を決定
 			QColor color, bgColor;							
 			if (graph[*ei]->properties["generation_type"] == "example") {
+				// group_idに基づいて色を決定
 				if (graph[*ei]->properties["group_id"].toInt() == 0) {
 					color = QColor(255, 128, 128);
 					bgColor = QColor(128, 0, 0);
@@ -313,11 +313,18 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 				} else if (graph[*ei]->properties["group_id"].toInt() == 2) {
 					color = QColor(128, 128, 255);
 					bgColor = QColor(0, 0, 128);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 3) {
+					color = QColor(255, 0, 255);
+					bgColor = QColor(128, 0, 128);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 4) {
+					color = QColor(128, 255, 255);
+					bgColor = QColor(0, 128, 128);
 				} else {
 					color = QColor(255, 255, 255);
 					bgColor = QColor(128, 128, 128);
 				}
 			} else {
+				// PMベースは、白色
 				color = QColor(255, 255, 255);
 				bgColor = QColor(128, 128, 128);
 			}

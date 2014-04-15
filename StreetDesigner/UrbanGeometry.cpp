@@ -100,8 +100,8 @@ void UrbanGeometry::generateRoadsWarp(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	WarpRoadGenerator generator(mainWin, G::getBool("animation"));
-	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	WarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }

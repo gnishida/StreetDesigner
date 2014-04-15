@@ -29,14 +29,25 @@ void Polyline2D::translate(float x, float y, Polyline2D &ret) const {
 }
 
 /**
+ * 原点を中心に、指定された角度だけ時計回りに回転したポリゴンを返却する。
+ *
+ * @param angle		時計回りの回転角度[degree]
+ */
+void Polyline2D::rotate(float degree) {
+	for (int i = 0; i < size(); ++i) {
+		(*this)[i] = Util::rotate(at(i), -Util::deg2rad(degree));
+	}
+}
+
+/**
  * 指定された点を中心に、指定された角度だけ時計回りに回転したポリゴンを返却する。
  *
  * @param angle		時計回りの回転角度[degree]
  * @param orig		回転中心
  */
-void Polyline2D::rotate(float angle, const QVector2D &orig) {
+void Polyline2D::rotate(float degree, const QVector2D &orig) {
 	for (int i = 0; i < size(); ++i) {
-		(*this)[i] = Util::rotate(at(i), -Util::deg2rad(angle), orig);
+		(*this)[i] = Util::rotate(at(i), -Util::deg2rad(degree), orig);
 	}
 }
 

@@ -8,14 +8,13 @@
 #include "WarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 
-void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, ExFeature& feature) {
+void WarpRoadGenerator::generateRoadNetwork(bool animation) {
 	srand(12345);
 
 	std::list<RoadVertexDesc> seeds;
-	std::list<RoadVertexDesc> additionalSeeds;
 
 	// Avenueのシードを生成
-	generateAvenueSeeds(roads, area, hintLine, feature, seeds);
+	generateAvenueSeeds(seeds);
 
 	// Avenueを生成
 	{
@@ -32,9 +31,9 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 
 			std::cout << "attemptExpansion (avenue): " << i << " (Seed: " << desc << ")" << std::endl;
 			if (roads.graph[desc]->properties.contains("example_desc")) {
-				attemptExpansion(roads, area, desc, RoadEdge::TYPE_AVENUE, terrain, feature, seeds);
+				attemptExpansion(RoadEdge::TYPE_AVENUE, desc, seeds);
 			} else {
-				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_AVENUE, terrain, feature, seeds);
+				attemptExpansion2(RoadEdge::TYPE_AVENUE, desc, seeds);
 			}
 
 			if (animation) {
@@ -44,9 +43,7 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 		}
 	}
 
-	seeds.clear();
-	additionalSeeds.clear();
-
+	// Avenueをクリーンナップ
 	if (G::getBool("cleanAvenues")) {
 		GraphUtil::removeSelfIntersectingRoads(roads);
 		RoadGeneratorHelper::extendDanglingEdges(roads);
@@ -60,9 +57,11 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 		}
 	}
 
+	seeds.clear();
+
 	// Local streetを生成
 	if (G::getBool("generateLocalStreets")) {
-		generateStreetSeeds(roads, area, feature, seeds);
+		generateStreetSeeds(seeds);
 		
 		int i;
 		for (i = 0; !seeds.empty() && i < G::getInt("numStreetIterations"); ++i) {
@@ -77,9 +76,9 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 
 			std::cout << "attemptExpansion (street): " << i << " (Seed: " << desc << ")" << std::endl;
 			if (roads.graph[desc]->properties.contains("example_desc")) {
-				attemptExpansion(roads, area, desc, RoadEdge::TYPE_STREET, terrain, feature, seeds);
+				attemptExpansion(RoadEdge::TYPE_STREET, desc, seeds);
 			} else {
-				attemptExpansion2(roads, area, desc, RoadEdge::TYPE_STREET, terrain, feature, seeds);
+				attemptExpansion2(RoadEdge::TYPE_STREET, desc, seeds);
 			}
 
 			if (animation) {
@@ -91,9 +90,10 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 
 	// 指定されたエリアでCropping
 	if (G::getBool("cropping")) {
-		GraphUtil::extractRoads2(roads, area);
+		GraphUtil::extractRoads2(roads, targetArea);
 	}
 
+	// Local Streetsをクリーンナップ
 	if (G::getBool("cleanStreets")) {
 		GraphUtil::removeSelfIntersectingRoads(roads);
 		RoadGeneratorHelper::removeDeadend(roads);
@@ -108,11 +108,37 @@ void WarpRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D &a
 /**
  * シード頂点を生成する。
  */
-void WarpRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, ExFeature& f, std::list<RoadVertexDesc>& seeds) {
+void WarpRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& seeds) {
 	seeds.clear();
 
 	for (int i = 0; i < hintLine.size(); ++i) {
-		addAvenueSeed(roads, area, f, hintLine[i], f.hintLine[i], i, seeds);
+		float angle;
+
+		if (i > 0 && i < hintLine.size() - 1) {
+			QVector2D ex_vec = feature.hintLine[i] - feature.hintLine[i - 1];
+			QVector2D vec = hintLine[i] - hintLine[i - 1];
+
+			float angle1 = Util::diffAngle(vec, ex_vec, false);
+
+			ex_vec = feature.hintLine[i + 1] - feature.hintLine[i];
+			vec = hintLine[i + 1] - hintLine[i];
+
+			float angle2 = Util::diffAngle(vec, ex_vec, false);
+
+			angle = (angle1 + angle2) * 0.5f;
+		} else if (i > 0) {
+			QVector2D ex_vec = feature.hintLine[i] - feature.hintLine[i - 1];
+			QVector2D vec = hintLine[i] - hintLine[i - 1];
+
+			angle = Util::diffAngle(vec, ex_vec, false);
+		} else {
+			QVector2D ex_vec = feature.hintLine[i + 1] - feature.hintLine[i];
+			QVector2D vec = hintLine[i + 1] - hintLine[i];
+
+			angle = Util::diffAngle(vec, ex_vec, false);
+		}
+
+		addAvenueSeed(hintLine[i], feature.hintLine[i], i, angle, seeds);
 	}
 }
 
@@ -125,19 +151,20 @@ void WarpRoadGenerator::generateAvenueSeeds(RoadGraph &roads, const Polygon2D &a
  * @param pt			シード座標
  * @param seeds			追加されたシードは、seedsに追加される。
  */
-bool WarpRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area, ExFeature &f, const QVector2D &pt, const QVector2D &ex_pt, int group_id, std::list<RoadVertexDesc>& seeds) {
-	if (!area.contains(pt)) return false;
+bool WarpRoadGenerator::addAvenueSeed(const QVector2D &pt, const QVector2D &ex_pt, int group_id, float angle, std::list<RoadVertexDesc>& seeds) {
+	if (!targetArea.contains(pt)) return false;
 
 	// Avenueカーネルの中で、offsetの位置に最も近いものを探す
-	RoadVertexDesc seedDesc = GraphUtil::getVertex(f.avenues, ex_pt);
+	RoadVertexDesc seedDesc = GraphUtil::getVertex(feature.avenues, ex_pt);
 
 	// 頂点を追加し、シードとする
 	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
 	RoadVertexDesc desc = GraphUtil::addVertex(roads, v);
-	roads.graph[desc]->properties["example_desc"] = seedDesc;
-	roads.graph[desc]->properties["group_id"] = group_id;
 	roads.graph[desc]->properties["used"] = true;
+	roads.graph[desc]->properties["group_id"] = group_id;
 	roads.graph[desc]->properties["generation_type"] = "example";
+	roads.graph[desc]->properties["example_desc"] = seedDesc;
+	roads.graph[desc]->properties["angle"] = angle;
 	seeds.push_back(desc);
 
 	return true;
@@ -146,7 +173,7 @@ bool WarpRoadGenerator::addAvenueSeed(RoadGraph &roads, const Polygon2D &area, E
 /**
  * Local Street用のシードを生成する。
  */
-void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &area, ExFeature &f, std::list<RoadVertexDesc> &seeds) {
+void WarpRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
 
 	int i = 0;
@@ -168,14 +195,20 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
 			QVector2D offset;
 			int group_id;
+			float angle;
+			QVector2D ex_orig;
 			if (roads.graph[src]->properties["generation_type"] == "example") {
 				RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
 				group_id = roads.graph[src]->properties["group_id"].toInt();
-				offset = f.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
+				angle = roads.graph[src]->properties["angle"].toFloat();
+				ex_orig = feature.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt;
+				offset = feature.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
 			} else {
 				RoadVertexDesc ex_v_desc = roads.graph[tgt]->properties["example_desc"].toUInt();
 				group_id = roads.graph[tgt]->properties["group_id"].toInt();
-				offset = f.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
+				angle = roads.graph[src]->properties["angle"].toFloat();
+				ex_orig = feature.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt;
+				offset = feature.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
 			}
 			
 			while (edge->polyline.size() > 2) {
@@ -187,13 +220,14 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
 					found = false;
 
 					// この点が、エリア外なら、スキップ
-					if (!area.contains(edge->polyline[p_id])) continue;
+					if (!targetArea.contains(edge->polyline[p_id])) continue;
 
 					// この点の、Example座標空間での位置を計算する
 					BBox bbox;
 					QVector2D pt = edge->polyline[p_id] + offset;
+					pt = Util::rotate(pt, -angle, ex_orig);
 										
-					if (GraphUtil::getVertex(f.roads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
+					if (GraphUtil::getVertex(feature.roads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
 						found = true;
 						index = p_id;
 						break;
@@ -213,6 +247,7 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
 				roads.graph[v_desc]->properties["group_id"] = group_id;
 				roads.graph[v_desc]->properties["example_desc"] = seedDesc;
 				roads.graph[v_desc]->properties["generation_type"] = "example";
+				roads.graph[v_desc]->properties["angle"] = angle;
 
 				// エッジを更新
 				edge = roads.graph[e2];
@@ -223,7 +258,7 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
 			int group_id = roads.graph[src]->properties["group_id"].toInt();
 
 			int step;
-			if (roads.graph[e]->polyline.length() > f.length(RoadEdge::TYPE_STREET) * 5) {
+			if (roads.graph[e]->polyline.length() > feature.length(RoadEdge::TYPE_STREET) * 5) {
 				step = roads.graph[e]->polyline.size() / 5;
 			} else {
 				step = roads.graph[e]->polyline.size() / 2;
@@ -236,7 +271,7 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
 				roads.graph[desc]->properties["generation_type"] = "pm";
 
 				// この点が、エリア内なら、シードとして追加
-				if (area.contains(edge->polyline[step])) {
+				if (targetArea.contains(edge->polyline[step])) {
 					seeds.push_back(desc);
 				}
 
@@ -251,36 +286,38 @@ void WarpRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D &a
  * このシードを使って、道路生成する。
  * Exampleベースで生成する。
  */
-void WarpRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
+void WarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
 	RoadVertexDesc ex_v_desc = roads.graph[srcDesc]->properties["example_desc"].toUInt();
-	RoadVertexPtr ex_vertex = f.roads(roadType).graph[ex_v_desc];
+	float angle = roads.graph[srcDesc]->properties["angle"].toFloat();
+	RoadVertexPtr ex_vertex = feature.roads(roadType).graph[ex_v_desc];
 
 	float roadSnapFactor = G::getFloat("roadSnapFactor");
 	float roadAngleTolerance = G::getFloat("roadAngleTolerance");
 
 	RoadOutEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::out_edges(ex_v_desc, f.roads(roadType).graph); ei != eend; ++ei) {
-		RoadVertexDesc tgt = boost::target(*ei, f.roads(roadType).graph);
+	for (boost::tie(ei, eend) = boost::out_edges(ex_v_desc, feature.roads(roadType).graph); ei != eend; ++ei) {
+		RoadVertexDesc tgt = boost::target(*ei, feature.roads(roadType).graph);
 
-		Polyline2D polyline = GraphUtil::orderPolyLine(f.roads(roadType), *ei, ex_v_desc);
+		Polyline2D polyline = GraphUtil::orderPolyLine(feature.roads(roadType), *ei, ex_v_desc);
 
 		QVector2D offset = polyline[0];
 		polyline.translate(offset * -1.0f);
+		polyline.rotate(-Util::rad2deg(angle));
 
-		growRoadSegment(roads, area, srcDesc, roadType, terrain, f, polyline, f.roads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
+		growRoadSegment(roadType, srcDesc, polyline, feature.roads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
 
 /**
  * このシードを使って、PM方式で道路生成する。
  */
-void WarpRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
+void WarpRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
 	float snapThreshold;
 
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		snapThreshold = f.avgAvenueLength * 0.2f;
+		snapThreshold = feature.avgAvenueLength * 0.2f;
 	} else {
-		snapThreshold = f.avgStreetLength * 0.2f;
+		snapThreshold = feature.avgStreetLength * 0.2f;
 	}
 
 	// 当該シードに、roadTypeよりも上位レベルの道路セグメントが接続されているか、チェックする
@@ -319,13 +356,13 @@ void WarpRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &are
 
 	// 道路生成用のカーネルを合成する
 	std::vector<RoadEdgePtr> edges;
-	synthesizeItem(roads, f, srcDesc, roadType, edges);
+	synthesizeItem(roadType, srcDesc, edges);
 	
 	float roadSnapFactor = G::getFloat("roadSnapFactor");
 	float roadAngleTolerance = G::getFloat("roadAngleTolerance");
 
 	for (int i = 0; i < edges.size(); ++i) {
-		growRoadSegment(roads, area, srcDesc, roadType, terrain, f, edges[i]->polyline, 1, 0, false, roadSnapFactor, roadAngleTolerance, seeds);
+		growRoadSegment(roadType, srcDesc, edges[i]->polyline, 1, 0, false, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
 
@@ -333,7 +370,7 @@ void WarpRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &are
  * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
-bool WarpRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
+bool WarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
 	bool intercepted = false;
 
 	// 新しいエッジを生成
@@ -422,20 +459,21 @@ bool WarpRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area,
 		// 新しい頂点のgeneration_typeを設定
 		roads.graph[tgtDesc]->properties["generation_type"] = byExample ? "example" : "pm";
 
-		if (area.contains(new_edge->polyline.last())) {
+		if (targetArea.contains(new_edge->polyline.last())) {
 			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
 
 			// シードに追加する
 			if (byExample && !intercepted) {	// Exampleベースで、且つ、途中で生成ストップしていない場合（つまり、Exampleそのまま）
-				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
+				if (roadType == RoadEdge::TYPE_AVENUE || GraphUtil::getDegree(feature.roads(roadType), next_ex_v_desc) > 1) {
 					seeds.push_back(tgtDesc);
 				}
 
 				// 対応するExampleが存在する場合は、それを設定する
-				if (!f.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) > 1) {
-					f.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
+				if (!feature.roads(roadType).graph[next_ex_v_desc]->properties.contains("used") && GraphUtil::getDegree(feature.roads(roadType), next_ex_v_desc) > 1) {
+					feature.roads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
 					roads.graph[tgtDesc]->properties["generation_type"] = "example";
 					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
+					roads.graph[tgtDesc]->properties["angle"] = roads.graph[srcDesc]->properties["angle"];
 				}
 			} else {
 				seeds.push_back(tgtDesc);
@@ -453,7 +491,7 @@ bool WarpRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area,
 		}
 
 		// Example道路のDeadendは、Deadendとして正式に登録する
-		if (byExample && GraphUtil::getDegree(f.roads(roadType), next_ex_v_desc) == 1) {
+		if (byExample && GraphUtil::getDegree(feature.roads(roadType), next_ex_v_desc) == 1) {
 			roads.graph[tgtDesc]->properties["deadend"] = true;
 		}
 	}
@@ -472,7 +510,7 @@ bool WarpRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &area,
 /**
  * PMに従って、カーネルを合成する
  */
-void WarpRoadGenerator::synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVertexDesc v_desc, int roadType, std::vector<RoadEdgePtr> &edges) {
+void WarpRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc, std::vector<RoadEdgePtr> &edges) {
 	// 当該頂点から出るエッジをリストアップする
 	std::vector<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;
@@ -499,9 +537,9 @@ void WarpRoadGenerator::synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVerte
 	// 直近の頂点で、example_descを持つ頂点を探し、そのexample空間座標からの相対座標を使って、example空間座標を計算する
 	RoadVertexDesc nearest_v_desc = RoadGeneratorHelper::getClosestVertexByExample(roads, v_desc);
 	RoadVertexDesc ex_desc = roads.graph[nearest_v_desc]->properties["example_desc"].toUInt();
-	QVector2D pt = f.roads(roadType).graph[ex_desc]->pt + roads.graph[v_desc]->pt - roads.graph[nearest_v_desc]->pt;
+	QVector2D pt = feature.roads(roadType).graph[ex_desc]->pt + roads.graph[v_desc]->pt - roads.graph[nearest_v_desc]->pt;
 
-	RoadGeneratorHelper::createFourEdges(f, roadType, pt, 1, direction, 10.0f, edges);
+	RoadGeneratorHelper::createFourEdges(feature, roadType, pt, 1, direction, 10.0f, edges);
 
 	roads.graph[v_desc]->properties["generation_type"] = "pm";
 }
