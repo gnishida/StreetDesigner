@@ -101,8 +101,10 @@ void MultiExRoadGenerator::generateRoadNetwork(RoadGraph &roads, const Polygon2D
 		RoadGeneratorHelper::removeDeadend(roads);
 	}
 
-	GraphUtil::clean(roads);
-	GraphUtil::normalizeLoop(roads);
+	//GraphUtil::clean(roads);
+	//GraphUtil::normalizeLoop(roads);
+
+	RoadGeneratorHelper::check(roads);
 }
 
 /**
@@ -152,13 +154,7 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 	int i = 0;
 	int num = GraphUtil::getNumEdges(roads);
 	RoadEdgeIter ei, eend;
-	int k = 0;
-	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend && i < num; ++ei, ++k) {
-		std::cout << k << std::endl;
-		if (k == 86) {
-			int l = 0;
-		}
-
+	for (boost::tie(ei, eend) = edges(roads.graph); ei != eend && i < num; ++ei) {
 		if (!roads.graph[*ei]->valid) continue;
 
 		i++;
@@ -170,11 +166,11 @@ void MultiExRoadGenerator::generateStreetSeeds(RoadGraph &roads, const Polygon2D
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
-		if (roads.graph[e]->properties["byExample"] == true) {
+		if (roads.graph[e]->properties["generation_type"] == "example" && (roads.graph[src]->properties["generation_type"] == "example" || roads.graph[tgt]->properties["generation_type"] == "example")) {
 			// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
 			QVector2D offset;
 			int group_id;
-			if (roads.graph[src]->properties.contains("example_desc")) {
+			if (roads.graph[src]->properties["generation_type"] == "example") {
 				RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
 				group_id = roads.graph[src]->properties["group_id"].toInt();
 				offset = features[group_id].roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
@@ -314,6 +310,10 @@ void MultiExRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &
 		QVector2D closestPt;
 		if (GraphUtil::getEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
 			tgtDesc = GraphUtil::splitEdge(roads, closeEdge, closestPt);
+			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[closeEdge]->properties["group_id"];
+			roads.graph[tgtDesc]->properties["parent"] = srcDesc;
+
 			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
 			return;
 		}
@@ -407,6 +407,9 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 
 		// 他のエッジにスナップ
 		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
+		roads.graph[tgtDesc]->properties["generation_type"] = "pm";
+		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[closestEdge]->properties["group_id"];
+		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
 
@@ -463,7 +466,6 @@ bool MultiExRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &ar
 	}
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
-	roads.graph[e_desc]->properties["byExample"] = byExample;
 
 	// 新しいエッジにgroup_idを引き継ぐ
 	roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];

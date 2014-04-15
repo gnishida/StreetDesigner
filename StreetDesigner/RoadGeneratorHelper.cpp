@@ -731,7 +731,6 @@ void RoadGeneratorHelper::extendDanglingEdges(RoadGraph &roads) {
 				if (G::getFloat("roadInterpolationFactor") == 1.0f) {
 					// 100% exampleの場合は、強制的にexampleとしちゃう
 					roads.graph[e]->properties["generation_type"] = "example";
-					//roads.graph[*ei]->properties["byExample"] = true;
 				} else {
 					roads.graph[e]->properties["generation_type"] = "pm";
 				}
@@ -1044,4 +1043,63 @@ void RoadGeneratorHelper::saveSnappingImage(RoadGraph &roads, const Polygon2D &a
 	cv::flip(mat, mat, 0);
 
 	cv::imwrite(filename.toUtf8().data(), mat);
+}
+
+/**
+ * 道路オブジェクトの整合性をチェック
+ */
+void RoadGeneratorHelper::check(RoadGraph &roads) {
+	// 全ての頂点、エッジに、group_id、generation_typeが設定されていること
+	{
+		std::cout << "*** Vertex Check ***" << std::endl;
+		RoadVertexIter vi, vend;
+		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+			if (!roads.graph[*vi]->valid) continue;
+
+			if (!roads.graph[*vi]->properties.contains("group_id")) {
+				std::cout << "ERROR: group_id is not set." << std::endl;
+			}
+
+			if (!roads.graph[*vi]->properties.contains("generation_type")) {
+				std::cout << "ERROR: generation_type is not set [" << (*vi) << "]." << std::endl;
+			} else if (roads.graph[*vi]->properties["generation_type"] != "example" && roads.graph[*vi]->properties["generation_type"] != "pm") {
+				std::cout << "ERROR: generation_type is unknown [" << roads.graph[*vi]->properties["generation_type"].toString().toUtf8().data() << "]" << std::endl;
+			}
+
+			if (roads.graph[*vi]->properties["generation_type"] == "example") {
+				if (!roads.graph[*vi]->properties.contains("example_desc")) {
+					std::cout << "ERROR: example_desc is not set." << std::endl;
+				}
+			}
+		}
+	}
+
+	{
+		std::cout << "*** Edge Check ***" << std::endl;
+		RoadEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			if (!roads.graph[*ei]->properties.contains("group_id")) {
+				std::cout << "ERROR: group_id is not set." << std::endl;
+			}
+
+			if (!roads.graph[*ei]->properties.contains("generation_type")) {
+				std::cout << "ERROR: generation_type is not set." << std::endl;
+			} else if (roads.graph[*ei]->properties["generation_type"] != "example" && roads.graph[*ei]->properties["generation_type"] != "pm") {
+				std::cout << "ERROR: generation_type is unknown [" << roads.graph[*ei]->properties["generation_type"].toString().toUtf8().data() << "]" << std::endl;
+			}
+
+			/*
+			if (roads.graph[*ei]->properties["generation_type"] == "example") {
+				RoadVertexDesc src = boost::source(*ei, roads.graph);
+				RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+				if (roads.graph[src]->properties["generation_type"] != "example" && roads.graph[tgt]->properties["generation_type"] != "example") {
+					std::cout << "ERROR: both vertices are not example." << std::endl;
+				}
+			}
+			*/
+		}
+	}
 }

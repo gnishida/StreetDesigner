@@ -22,6 +22,7 @@ public slots:
 	void updateInterpolationFactor(int value);
 	void generateRoads();
 	void generateRoadsInterpolation();
+	void generateRoadsWarp();
 	void clear();
 	void mergeRoads();
 	void connectRoads();

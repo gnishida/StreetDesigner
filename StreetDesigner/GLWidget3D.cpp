@@ -18,10 +18,10 @@ This file is part of QtUrban.
 #include <common/Util.h>
 #include <render/Terrain.h>
 #include <render/SimpleSkyBox.h>
+#include <render/RendererHelper.h>
 #include <road/GraphUtil.h>
 #include "MainWindow.h"
 #include <gl/GLU.h>
-
 
 
 GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuffers), (QWidget*)mainWin) {
@@ -40,6 +40,9 @@ GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuf
 
 	myCam.setRotation(0, 0, 0);
 	myCam.setTranslation(0, 0, 8000);
+
+	vertexSelected = false;
+	edgeSelected = false;
 }
 
 GLWidget3D::~GLWidget3D() {
@@ -84,91 +87,89 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 	lastPos = event->pos();
 	mouseTo2D(event->x(), event->y(), pos);
 
-	switch (mainWin->mode) {
-	case MainWindow::MODE_AREA_SELECT:
-		if (altPressed) {
-			float change = 5;
-			if (event->buttons() & Qt::RightButton) {
-				change = -change;
-			}
+	if (event->buttons() & Qt::LeftButton) {
+		switch (mainWin->mode) {
+		case MainWindow::MODE_AREA_SELECT:
+			if (altPressed) {
+				float change = 5;
+				if (event->buttons() & Qt::RightButton) {
+					change = -change;
+				}
 
-			mainWin->urbanGeometry->terrain->addValue(pos.x(), pos.y(), change);
-			//mainWin->urbanGeometry->adaptToTerrain();
+				mainWin->urbanGeometry->terrain->addValue(pos.x(), pos.y(), change);
+				//mainWin->urbanGeometry->adaptToTerrain();
 
-			updateGL();
-		} else {
-			mainWin->urbanGeometry->areas.selectArea(pos);
+				updateGL();
+			} else {
+				mainWin->urbanGeometry->areas.selectArea(pos);
 
-			for (int i = 0; i < mainWin->urbanGeometry->areas.size(); ++i) {
-				if (GraphUtil::getVertex(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedVertexDesc)) {
-					selectedVertex = mainWin->urbanGeometry->areas[i]->roads.graph[selectedVertexDesc];
-					mainWin->propertyWidget->setRoadVertex(mainWin->urbanGeometry->areas[i]->roads, selectedVertexDesc, selectedVertex);
-					mainWin->propertyWidget->resetRoadEdge();
-					break;
-				} else {
-					if (GraphUtil::getEdge(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedEdgeDesc)) {
-						selectedEdge = mainWin->urbanGeometry->areas[i]->roads.graph[selectedEdgeDesc];
-						mainWin->propertyWidget->resetRoadVertex();
-						mainWin->propertyWidget->setRoadEdge(selectedEdge);
+				for (int i = 0; i < mainWin->urbanGeometry->areas.size(); ++i) {
+					if (GraphUtil::getVertex(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedVertexDesc)) {
+						selectVertex(mainWin->urbanGeometry->areas[i]->roads, selectedVertexDesc);
+						break;
+					} else {
+						if (GraphUtil::getEdge(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedEdgeDesc)) {
+							selectEdge(mainWin->urbanGeometry->areas[i]->roads, selectedEdgeDesc);
+							break;
+						}
 					}
-					break;
 				}
 			}
-		}
-		break;
-	case MainWindow::MODE_AREA_CREATE:
-		if (!mainWin->urbanGeometry->areaBuilder.selecting()) {
-			mainWin->urbanGeometry->areaBuilder.start(pos);
-			setMouseTracking(true);
-		}
-		
-		if (mainWin->urbanGeometry->areaBuilder.selecting()) {
-			mainWin->urbanGeometry->areaBuilder.addPoint(pos);
-		}
-
-		mainWin->urbanGeometry->areas.selectedIndex = -1;
-
-		break;
-	case MainWindow::MODE_HINT_LINE:
-		// まだエリアが選択されていない場合は、現在のマウス位置を使ってエリアを選択する
-		if (mainWin->urbanGeometry->areas.selectedIndex == -1) {
-			mainWin->urbanGeometry->areas.selectArea(pos);
-		}
-
-		if (!mainWin->urbanGeometry->hintLineBuilder.selecting()) {
-			mainWin->urbanGeometry->hintLineBuilder.start(pos);
-			setMouseTracking(true);
-		}
-		
-		if (mainWin->urbanGeometry->hintLineBuilder.selecting()) {
-			mainWin->urbanGeometry->hintLineBuilder.addPoint(pos);
-		}
-
-		break;
-	case MainWindow::MODE_AVENUE_SKETCH:
-		if (!mainWin->urbanGeometry->avenueBuilder.selecting()) {
-			mainWin->urbanGeometry->avenueBuilder.start(pos);
-			setMouseTracking(true);
-		}
-		
-		if (mainWin->urbanGeometry->avenueBuilder.selecting()) {
-			mainWin->urbanGeometry->avenueBuilder.addPoint(pos);
-		}
-
-		break;
-	case MainWindow::MODE_DEBUG:
-		if (GraphUtil::getVertex(mainWin->urbanGeometry->roads, pos, 10, selectedVertexDesc)) {
-			selectedVertex = mainWin->urbanGeometry->roads.graph[selectedVertexDesc];
-			mainWin->propertyWidget->setRoadVertex(mainWin->urbanGeometry->roads, selectedVertexDesc, selectedVertex);
-			mainWin->propertyWidget->resetRoadEdge();
-		} else {
-			if (GraphUtil::getEdge(mainWin->urbanGeometry->roads, pos, 10, selectedEdgeDesc)) {
-				selectedEdge = mainWin->urbanGeometry->roads.graph[selectedEdgeDesc];
-				mainWin->propertyWidget->resetRoadVertex();
-				mainWin->propertyWidget->setRoadEdge(selectedEdge);
+			break;
+		case MainWindow::MODE_AREA_CREATE:
+			if (!mainWin->urbanGeometry->areaBuilder.selecting()) {
+				mainWin->urbanGeometry->areaBuilder.start(pos);
+				setMouseTracking(true);
 			}
+		
+			if (mainWin->urbanGeometry->areaBuilder.selecting()) {
+				mainWin->urbanGeometry->areaBuilder.addPoint(pos);
+			}
+
+			mainWin->urbanGeometry->areas.selectedIndex = -1;
+
+			break;
+		case MainWindow::MODE_HINT_LINE:
+			// まだエリアが選択されていない場合は、現在のマウス位置を使ってエリアを選択する
+			if (mainWin->urbanGeometry->areas.selectedIndex == -1) {
+				mainWin->urbanGeometry->areas.selectArea(pos);
+			}
+
+			if (!mainWin->urbanGeometry->hintLineBuilder.selecting()) {
+				mainWin->urbanGeometry->hintLineBuilder.start(pos);
+				setMouseTracking(true);
+			}
+		
+			if (mainWin->urbanGeometry->hintLineBuilder.selecting()) {
+				mainWin->urbanGeometry->hintLineBuilder.addPoint(pos);
+			}
+
+			break;
+		case MainWindow::MODE_AVENUE_SKETCH:
+			if (!mainWin->urbanGeometry->avenueBuilder.selecting()) {
+				mainWin->urbanGeometry->avenueBuilder.start(pos);
+				setMouseTracking(true);
+			}
+		
+			if (mainWin->urbanGeometry->avenueBuilder.selecting()) {
+				mainWin->urbanGeometry->avenueBuilder.addPoint(pos);
+			}
+
+			break;
+		case MainWindow::MODE_DEBUG:
+			if (GraphUtil::getVertex(mainWin->urbanGeometry->roads, pos, 10, selectedVertexDesc)) {
+				selectedVertex = mainWin->urbanGeometry->roads.graph[selectedVertexDesc];
+				mainWin->propertyWidget->setRoadVertex(mainWin->urbanGeometry->roads, selectedVertexDesc, selectedVertex);
+				mainWin->propertyWidget->resetRoadEdge();
+			} else {
+				if (GraphUtil::getEdge(mainWin->urbanGeometry->roads, pos, 10, selectedEdgeDesc)) {
+					selectedEdge = mainWin->urbanGeometry->roads.graph[selectedEdgeDesc];
+					mainWin->propertyWidget->resetRoadVertex();
+					mainWin->propertyWidget->setRoadEdge(selectedEdge);
+				}
+			}
+			break;
 		}
-		break;
 	}
 }
 
@@ -343,6 +344,16 @@ void GLWidget3D::drawScene() {
 
 	mainWin->urbanGeometry->render(textureManager);
 
+	// draw the selected vertex and edge
+	if (vertexSelected) {
+		RendererHelper::renderPoint(selectedVertex->pt, QColor(0, 0, 255), selectedVertex->pt3D.z() + 10.0f);
+	}
+	if (edgeSelected) {
+		Polyline3D polyline(selectedEdge->polyline3D);
+		for (int i = 0; i < polyline.size(); ++i) polyline[i].setZ(polyline[i].z() + 10.0f);
+		RendererHelper::renderPolyline(polyline, QColor(0, 0, 255), GL_LINE_STRIP);
+	}
+
 	//Sky
 	skyBox->render(&myCam, textureManager);
 
@@ -351,7 +362,28 @@ void GLWidget3D::drawScene() {
 	glDisable(GL_TEXTURE_2D);
 
 	glFlush();
-}	
+}
+
+/**
+ * 頂点を選択する
+ */
+void GLWidget3D::selectVertex(RoadGraph &roads, RoadVertexDesc v_desc) {
+	selectedVertex = roads.graph[v_desc];
+	mainWin->propertyWidget->setRoadVertex(roads, v_desc, selectedVertex);
+	mainWin->propertyWidget->resetRoadEdge();
+
+	vertexSelected = true;
+	edgeSelected = false;
+}
+
+void GLWidget3D::selectEdge(RoadGraph &roads, RoadEdgeDesc e_desc) {
+	selectedEdge = roads.graph[e_desc];
+	mainWin->propertyWidget->resetRoadVertex();
+	mainWin->propertyWidget->setRoadEdge(selectedEdge);
+
+	vertexSelected = false;
+	edgeSelected = true;
+}
 
 void GLWidget3D::keyPressEvent( QKeyEvent *e ){
 	//printf("k\n");

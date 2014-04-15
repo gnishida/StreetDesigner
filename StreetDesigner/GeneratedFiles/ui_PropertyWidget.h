@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PropertyWidget.ui'
 **
-** Created: Mon Apr 14 15:15:17 2014
+** Created: Tue Apr 15 11:24:58 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -19,6 +19,7 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 #include <QtGui/QTextEdit>
 #include <QtGui/QWidget>
 
@@ -64,6 +65,8 @@ public:
     QLineEdit *lineEditVertexExampleDesc;
     QLabel *label_19;
     QLineEdit *lineEditVertexDeadend;
+    QLineEdit *lineEditVertexSearch;
+    QPushButton *pushButtonVertexSearch;
 
     void setupUi(QDockWidget *PropertyWidget)
     {
@@ -76,7 +79,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 370, 171, 171));
+        groupBox->setGeometry(QRect(10, 420, 171, 171));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 31, 16));
@@ -121,67 +124,73 @@ public:
         lineEditEdgeGenerationType->setGeometry(QRect(80, 140, 81, 20));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 10, 171, 351));
+        groupBox_5->setGeometry(QRect(10, 10, 171, 401));
         label_6 = new QLabel(groupBox_5);
         label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(10, 20, 31, 16));
+        label_6->setGeometry(QRect(10, 60, 31, 16));
         lineEditVertexDesc = new QLineEdit(groupBox_5);
         lineEditVertexDesc->setObjectName(QString::fromUtf8("lineEditVertexDesc"));
-        lineEditVertexDesc->setGeometry(QRect(80, 20, 81, 20));
+        lineEditVertexDesc->setGeometry(QRect(80, 60, 81, 20));
         label_7 = new QLabel(groupBox_5);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(10, 40, 51, 16));
+        label_7->setGeometry(QRect(10, 80, 51, 16));
         lineEditVertexPos = new QLineEdit(groupBox_5);
         lineEditVertexPos->setObjectName(QString::fromUtf8("lineEditVertexPos"));
-        lineEditVertexPos->setGeometry(QRect(80, 40, 81, 20));
+        lineEditVertexPos->setGeometry(QRect(80, 80, 81, 20));
         label_8 = new QLabel(groupBox_5);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(10, 190, 51, 16));
+        label_8->setGeometry(QRect(10, 230, 51, 16));
         textEditVertexNeighbors = new QTextEdit(groupBox_5);
         textEditVertexNeighbors->setObjectName(QString::fromUtf8("textEditVertexNeighbors"));
-        textEditVertexNeighbors->setGeometry(QRect(80, 190, 81, 61));
+        textEditVertexNeighbors->setGeometry(QRect(80, 230, 81, 61));
         label_11 = new QLabel(groupBox_5);
         label_11->setObjectName(QString::fromUtf8("label_11"));
-        label_11->setGeometry(QRect(10, 280, 51, 16));
+        label_11->setGeometry(QRect(10, 320, 51, 16));
         lineEditVertexGenerationType = new QLineEdit(groupBox_5);
         lineEditVertexGenerationType->setObjectName(QString::fromUtf8("lineEditVertexGenerationType"));
-        lineEditVertexGenerationType->setGeometry(QRect(80, 280, 81, 20));
+        lineEditVertexGenerationType->setGeometry(QRect(80, 320, 81, 20));
         label_12 = new QLabel(groupBox_5);
         label_12->setObjectName(QString::fromUtf8("label_12"));
-        label_12->setGeometry(QRect(10, 60, 51, 16));
+        label_12->setGeometry(QRect(10, 100, 51, 16));
         label_13 = new QLabel(groupBox_5);
         label_13->setObjectName(QString::fromUtf8("label_13"));
-        label_13->setGeometry(QRect(10, 120, 51, 16));
+        label_13->setGeometry(QRect(10, 160, 51, 16));
         lineEditVertexParent = new QLineEdit(groupBox_5);
         lineEditVertexParent->setObjectName(QString::fromUtf8("lineEditVertexParent"));
-        lineEditVertexParent->setGeometry(QRect(80, 60, 81, 20));
+        lineEditVertexParent->setGeometry(QRect(80, 100, 81, 20));
         textEditVertexUncles = new QTextEdit(groupBox_5);
         textEditVertexUncles->setObjectName(QString::fromUtf8("textEditVertexUncles"));
-        textEditVertexUncles->setGeometry(QRect(80, 120, 81, 61));
+        textEditVertexUncles->setGeometry(QRect(80, 160, 81, 61));
         label_14 = new QLabel(groupBox_5);
         label_14->setObjectName(QString::fromUtf8("label_14"));
-        label_14->setGeometry(QRect(10, 80, 71, 16));
+        label_14->setGeometry(QRect(10, 120, 71, 16));
         lineEditVertexOnBoundary = new QLineEdit(groupBox_5);
         lineEditVertexOnBoundary->setObjectName(QString::fromUtf8("lineEditVertexOnBoundary"));
-        lineEditVertexOnBoundary->setGeometry(QRect(80, 80, 81, 20));
+        lineEditVertexOnBoundary->setGeometry(QRect(80, 120, 81, 20));
         label_15 = new QLabel(groupBox_5);
         label_15->setObjectName(QString::fromUtf8("label_15"));
-        label_15->setGeometry(QRect(10, 260, 51, 16));
+        label_15->setGeometry(QRect(10, 300, 51, 16));
         lineEditVertexGroupId = new QLineEdit(groupBox_5);
         lineEditVertexGroupId->setObjectName(QString::fromUtf8("lineEditVertexGroupId"));
-        lineEditVertexGroupId->setGeometry(QRect(80, 260, 81, 20));
+        lineEditVertexGroupId->setGeometry(QRect(80, 300, 81, 20));
         label_16 = new QLabel(groupBox_5);
         label_16->setObjectName(QString::fromUtf8("label_16"));
-        label_16->setGeometry(QRect(10, 300, 61, 16));
+        label_16->setGeometry(QRect(10, 340, 61, 16));
         lineEditVertexExampleDesc = new QLineEdit(groupBox_5);
         lineEditVertexExampleDesc->setObjectName(QString::fromUtf8("lineEditVertexExampleDesc"));
-        lineEditVertexExampleDesc->setGeometry(QRect(80, 300, 81, 20));
+        lineEditVertexExampleDesc->setGeometry(QRect(80, 340, 81, 20));
         label_19 = new QLabel(groupBox_5);
         label_19->setObjectName(QString::fromUtf8("label_19"));
-        label_19->setGeometry(QRect(10, 320, 61, 16));
+        label_19->setGeometry(QRect(10, 360, 61, 16));
         lineEditVertexDeadend = new QLineEdit(groupBox_5);
         lineEditVertexDeadend->setObjectName(QString::fromUtf8("lineEditVertexDeadend"));
-        lineEditVertexDeadend->setGeometry(QRect(80, 320, 81, 20));
+        lineEditVertexDeadend->setGeometry(QRect(80, 360, 81, 20));
+        lineEditVertexSearch = new QLineEdit(groupBox_5);
+        lineEditVertexSearch->setObjectName(QString::fromUtf8("lineEditVertexSearch"));
+        lineEditVertexSearch->setGeometry(QRect(10, 20, 81, 20));
+        pushButtonVertexSearch = new QPushButton(groupBox_5);
+        pushButtonVertexSearch->setObjectName(QString::fromUtf8("pushButtonVertexSearch"));
+        pushButtonVertexSearch->setGeometry(QRect(100, 20, 61, 23));
         PropertyWidget->setWidget(dockWidgetContents);
 
         retranslateUi(PropertyWidget);
@@ -210,6 +219,7 @@ public:
         label_15->setText(QApplication::translate("PropertyWidget", "Group", 0, QApplication::UnicodeUTF8));
         label_16->setText(QApplication::translate("PropertyWidget", "Example Id", 0, QApplication::UnicodeUTF8));
         label_19->setText(QApplication::translate("PropertyWidget", "Deadend", 0, QApplication::UnicodeUTF8));
+        pushButtonVertexSearch->setText(QApplication::translate("PropertyWidget", "Search", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(PropertyWidget);
     } // retranslateUi
 

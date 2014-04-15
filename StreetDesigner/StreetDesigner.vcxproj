@@ -236,6 +236,7 @@
     <ClCompile Include="UrbanGeometry.cpp" />
     <ClCompile Include="PropertyWidget.cpp" />
     <ClCompile Include="UShapeRoadGenerator.cpp" />
+    <ClCompile Include="WarpRoadGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\mylib\common\BBox.h" />
@@ -281,6 +282,7 @@
     <ClInclude Include="..\mylib\road\RoadVertex.h" />
     <ClInclude Include="RoadGeneratorHelper.h" />
     <ClInclude Include="UShapeRoadGenerator.h" />
+    <ClInclude Include="WarpRoadGenerator.h" />
     <CustomBuild Include="PropertyWidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing PropertyWidget.h...</Message>

@@ -8,19 +8,16 @@
 
 class RendererHelper {
 public:
-	unsigned int dispList;
+	static void render(std::vector<mylib::RenderablePtr> renderables);
+	static void renderOne(mylib::RenderablePtr renderable);
 
-public:
-	void render(std::vector<mylib::RenderablePtr> renderables);
-	void renderOne(mylib::RenderablePtr renderable);
-
-	void renderArea(const Polygon3D& area, const QColor& color, GLenum lineType);
-	void renderArea(const Polygon2D& area, const QColor& color, GLenum lineType, float height);
-	void renderPoint(const QVector2D& pt, const QColor& color, float height);
-	void renderPolyline(const Polyline3D& polyline, const QColor& color, GLenum lineType);
-	void renderPolyline(const Polyline2D& polyline, const QColor& color, GLenum lineType, float height);
+	static void renderArea(const Polygon3D& area, const QColor& color, GLenum lineType);
+	static void renderArea(const Polygon2D& area, const QColor& color, GLenum lineType, float height);
+	static void renderPoint(const QVector2D& pt, const QColor& color, float height);
+	static void renderPolyline(const Polyline3D& polyline, const QColor& color, GLenum lineType);
+	static void renderPolyline(const Polyline2D& polyline, const QColor& color, GLenum lineType, float height);
 
 	//void tessellate(const Loop2D& polygon);
-	void renderConcave(Polygon2D& polygon, const QColor& color, float height);
+	static void renderConcave(Polygon2D& polygon, const QColor& color, float height);
 };
 

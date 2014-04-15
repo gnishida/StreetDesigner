@@ -47,6 +47,8 @@ protected:
 	RoadVertexPtr selectedVertex;
 	RoadEdgeDesc selectedEdgeDesc;
 	RoadEdgePtr selectedEdge;
+	bool vertexSelected;
+	bool edgeSelected;
 
 public:
 	GLWidget3D(MainWindow *parent);
@@ -66,6 +68,8 @@ public:
 	void mouseTo2D(int x, int y, QVector2D &result);
 
 	void drawScene();
+	void selectVertex(RoadGraph &roads, RoadVertexDesc v_desc);
+	void selectEdge(RoadGraph &roads, RoadEdgeDesc e_desc);
 
 protected:
 	void initializeGL();

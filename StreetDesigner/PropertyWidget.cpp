@@ -9,6 +9,9 @@ PropertyWidget::PropertyWidget(MainWindow* mainWin) : QDockWidget("Property Widg
 	ui.setupUi(this);
 
 	// register the event handlers
+	connect(ui.pushButtonVertexSearch, SIGNAL(clicked()), this, SLOT(searchVertex()));
+
+	// register the event handlers
 	hide();
 }
 
@@ -23,7 +26,7 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	location = QString("(%1, %2)").arg(roads.graph[vertexDesc]->pt.x(), 0, 'f', 0).arg(roads.graph[vertexDesc]->pt.y(), 0, 'f', 0);
 
 	if (roads.graph[vertexDesc]->properties.contains("parent")) {
-		parent.setNum(roads.graph[vertexDesc]->properties["parent"].toInt());
+		parent.setNum(roads.graph[vertexDesc]->properties["parent"].toUInt());
 	}
 
 	QString onBoundary = roads.graph[vertexDesc]->onBoundary ? "Yes" : "No";
@@ -140,3 +143,14 @@ void PropertyWidget::resetRoadEdge() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Event handlers
 
+void PropertyWidget::searchVertex() {
+	RoadVertexDesc v_desc = ui.lineEditVertexSearch->text().toUInt();
+
+	if (mainWin->urbanGeometry->areas.selectedIndex >= 0) {
+		if (v_desc < boost::num_vertices(mainWin->urbanGeometry->areas.selectedArea()->roads.graph)) {
+			mainWin->glWidget->selectVertex(mainWin->urbanGeometry->areas.selectedArea()->roads, v_desc);
+
+			mainWin->glWidget->updateGL();
+		}
+	}
+}

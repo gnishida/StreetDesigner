@@ -57,14 +57,12 @@ RenderablePtr GeometryObject::getRenderable(int index) {
 void GeometryObject::newDispList() {
 	glDeleteLists(dispList, 1);
 	dispList = glGenLists(1);
-	printf("new disp list: %d\n", dispList);
 	glNewList(dispList, GL_COMPILE_AND_EXECUTE);
 }
 
 void GeometryObject::generateMeshVertices(TextureManager* textureManager) {
 	if (!modified) return;
 
-	printf("generateMeshVertices\n");
 	clearRenderables();
 	_generateMeshVertices(textureManager);
 	modified = false;

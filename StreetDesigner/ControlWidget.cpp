@@ -27,6 +27,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.horizontalSliderInterpolationFactor, SIGNAL(valueChanged(int)), this, SLOT(updateInterpolationFactor(int)));
 	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
 	connect(ui.pushButtonGenerateInterpolation, SIGNAL(clicked()), this, SLOT(generateRoadsInterpolation()));
+	connect(ui.pushButtonGenerateWarp, SIGNAL(clicked()), this, SLOT(generateRoadsWarp()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
@@ -105,6 +106,29 @@ void ControlWidget::generateRoadsInterpolation() {
 	feature.load(filename);
 
 	mainWin->urbanGeometry->generateRoadsInterpolation(feature);
+	
+	mainWin->glWidget->updateGL();
+}
+
+void ControlWidget::generateRoadsWarp() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
+
+	ExFeature feature;
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+	if (filename.isEmpty()) return;
+	
+	feature.load(filename);
+
+	mainWin->urbanGeometry->generateRoadsWarp(feature);
 	
 	mainWin->glWidget->updateGL();
 }
