@@ -66,9 +66,9 @@ public:
 
 	void clear();
 	void clearGeometry();
-	void generateRoads(ExFeature &feature);
 	void generateRoadsMultiEx(std::vector<ExFeature> &features);
 	void generateRoadsInterpolation(ExFeature &feature);
+	void generateRoadsUShape(ExFeature &feature);
 	void generateRoadsWarp(ExFeature &feature);
 	void generateBlocks();
 	void generateParcels();

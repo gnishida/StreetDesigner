@@ -14,6 +14,7 @@ class ExFeature {
 public:
 	Polygon2D area;
 	RoadGraph avenues;
+	RoadGraph reducedAvenues;
 	RoadGraph streets;
 	Polyline2D hintLine;
 
@@ -41,7 +42,8 @@ public:
 	//size_t numItems(int roadType) const;
 	//const std::vector<ExFeatureItem>& items(int roadType) const;
 	//std::vector<ExFeatureItem>& items(int roadType);
-	RoadGraph& roads(int roadTYpe);
+	RoadGraph& roads(int roadType);
+	RoadGraph& reducedRoads(int roadType);
 
 	//void rotate(float deg);
 	//void scale(const Polygon2D &area);

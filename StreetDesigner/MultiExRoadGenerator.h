@@ -9,23 +9,28 @@
 class MultiExRoadGenerator {
 private:
 	MainWindow *mainWin;
+	RoadGraph &roads;
+	Polygon2D targetArea;
+	Polyline2D hintLine;
+	mylib::Terrain *terrain;
+	std::vector<ExFeature> &features;
 	bool animation;
 
 public:
-	MultiExRoadGenerator(MainWindow *mainWin, bool animation) : mainWin(mainWin), animation(animation) {}
+	MultiExRoadGenerator(MainWindow *mainWin, RoadGraph &roads, const Polygon2D &targetArea, const Polyline2D &hintLine, mylib::Terrain* terrain, std::vector<ExFeature> &features) : mainWin(mainWin), roads(roads), targetArea(targetArea), hintLine(hintLine), terrain(terrain), features(features) {}
 	~MultiExRoadGenerator() {}
 
-	void generateRoadNetwork(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, mylib::Terrain* terrain, std::vector<ExFeature>& feature);
+	void generateRoadNetwork(bool animation = false);
 
 private:
-	void generateAvenueSeeds(RoadGraph &roads, const Polygon2D &area, const Polyline2D &hintLine, std::vector<ExFeature>& features, std::list<RoadVertexDesc>& seeds);
-	bool addAvenueSeed(RoadGraph &roads, const const Polygon2D &area, ExFeature &f, const QVector2D &pt, int group_id, std::list<RoadVertexDesc>& seeds);
-	void generateStreetSeeds(RoadGraph &roads, const Polygon2D &area, std::vector<ExFeature>& features, std::list<RoadVertexDesc> &seeds);
-	void attemptExpansion(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds);
-	void attemptExpansion2(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, std::list<RoadVertexDesc> &seeds);
-	bool growRoadSegment(RoadGraph &roads, const Polygon2D &area, RoadVertexDesc &srcDesc, int roadType, mylib::Terrain* terrain, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
+	void generateAvenueSeeds(std::list<RoadVertexDesc>& seeds);
+	bool addAvenueSeed(ExFeature &f, const QVector2D &pt, int group_id, std::list<RoadVertexDesc>& seeds);
+	void generateStreetSeeds(std::list<RoadVertexDesc> &seeds);
+	void attemptExpansion(int roadType, RoadVertexDesc srcDesc, ExFeature& f, std::list<RoadVertexDesc> &seeds);
+	void attemptExpansion2(int roadType, RoadVertexDesc srcDesc, ExFeature& f, std::list<RoadVertexDesc> &seeds);
+	bool growRoadSegment(int roadType, RoadVertexDesc srcDesc, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
 
-	void synthesizeItem(RoadGraph &roads, ExFeature &f, RoadVertexDesc v_desc, int roadType, std::vector<RoadEdgePtr> &edges);
+	void synthesizeItem(int roadType, RoadVertexDesc v_desc, ExFeature &f, std::vector<RoadEdgePtr> &edges);
 
 public:
 };

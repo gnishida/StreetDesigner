@@ -888,7 +888,7 @@ void RoadGeneratorHelper::createFourEdges(ExFeature &f, int roadType, const QVec
 	BBox bbox = f.area.envelope();
 	float dist = (bbox.dx() + bbox.dy()) * 0.25f;
 	float avgLength, varLength, avgCurvature, varCurvature;
-	GraphUtil::computeStatistics(f.roads(roadType), ex_pt, dist, avgLength, varLength, avgCurvature, varCurvature);
+	GraphUtil::computeStatistics(f.reducedRoads(roadType), ex_pt, dist, avgLength, varLength, avgCurvature, varCurvature);
 
 	std::vector<float> directions;
 	createFourDirection(direction, directions);
@@ -897,7 +897,9 @@ void RoadGeneratorHelper::createFourEdges(ExFeature &f, int roadType, const QVec
 	
 	for (int i = 0; i < directions.size(); ++i) {
 		float length = Util::genRandNormal(avgLength, varLength);
+		if (length < 0) length = 10.0f;
 		float curvature = Util::genRandNormal(avgCurvature, varCurvature);
+		if (curvature < 0) curvature = 0.0f;
 
 		// 50%の確率で、どっちに曲がるか決定
 		if (Util::genRand() >= 0.5f) {

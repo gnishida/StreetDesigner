@@ -23,6 +23,7 @@ public:
 	static bool getVertex(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc& desc, bool onlyValidVertex = true);
 	static bool getVertex(RoadGraph& roads, RoadVertexDesc v, float threshold, RoadVertexDesc& desc, bool onlyValidVertex = true);
 	static bool getVertex(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc ignore, RoadVertexDesc& desc, bool onlyValidVertex = true);
+	static bool getVertex2(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc ignore, RoadVertexDesc& desc, bool onlyValidVertex = true);
 	static bool getVertexInArea(RoadGraph& roads, const QVector2D& pos, const BBox &area, RoadVertexDesc& desc);
 	static RoadVertexDesc addVertex(RoadGraph& roads, RoadVertexPtr v);
 	static void moveVertex(RoadGraph& roads, RoadVertexDesc v, const QVector2D& pt);

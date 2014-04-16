@@ -66,22 +66,12 @@ void UrbanGeometry::clearGeometry() {
 	blocks.clear();
 }
 
-void UrbanGeometry::generateRoads(ExFeature &feature) {
-	if (areas.selectedIndex == -1) return;
-	if (areas.selectedArea()->hintLine.size() == 0) return;
-
-	UShapeRoadGenerator generator(mainWin, G::getBool("animation"));
-	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
-
-	areas.selectedArea()->roads.adaptToTerrain(terrain);
-}
-
 void UrbanGeometry::generateRoadsMultiEx(std::vector<ExFeature> &features) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	MultiExRoadGenerator generator(mainWin, G::getBool("animation"));
-	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
+	MultiExRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
+	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -90,8 +80,8 @@ void UrbanGeometry::generateRoadsInterpolation(ExFeature &feature) {
 	if (areas.selectedIndex == -1) return;
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
-	IntRoadGenerator generator(mainWin, G::getBool("animation"));
-	generator.generateRoadNetwork(areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	IntRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);
 }
@@ -101,6 +91,16 @@ void UrbanGeometry::generateRoadsWarp(ExFeature &feature) {
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
 	WarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	generator.generateRoadNetwork(G::getBool("animation"));
+
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
+}
+
+void UrbanGeometry::generateRoadsUShape(ExFeature &feature) {
+	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
+
+	UShapeRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);

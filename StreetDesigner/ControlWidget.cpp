@@ -21,12 +21,13 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	ui.checkBoxLocalStreets->setChecked(true);
 	ui.checkBoxCropping->setChecked(false);
 	ui.checkBoxAnimation->setChecked(false);
-	ui.checkBoxAdaptiveFitting->setChecked(false);
+	ui.checkBoxFadeOut->setChecked(false);
 
 	// register the event handlers
 	connect(ui.horizontalSliderInterpolationFactor, SIGNAL(valueChanged(int)), this, SLOT(updateInterpolationFactor(int)));
-	connect(ui.pushButtonGenerate, SIGNAL(clicked()), this, SLOT(generateRoads()));
+	connect(ui.pushButtonGenerateMultiEx, SIGNAL(clicked()), this, SLOT(generateRoadsMultiEx()));
 	connect(ui.pushButtonGenerateInterpolation, SIGNAL(clicked()), this, SLOT(generateRoadsInterpolation()));
+	connect(ui.pushButtonGenerateUShape, SIGNAL(clicked()), this, SLOT(generateRoadsUShape()));
 	connect(ui.pushButtonGenerateWarp, SIGNAL(clicked()), this, SLOT(generateRoadsWarp()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
@@ -47,7 +48,7 @@ void ControlWidget::updateInterpolationFactor(int value) {
 /**
  * Event handler for button [Generate Roads]
  */
-void ControlWidget::generateRoads() {
+void ControlWidget::generateRoadsMultiEx() {
 	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
 
 	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
@@ -58,28 +59,18 @@ void ControlWidget::generateRoads() {
 	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
 	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
 	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
+	G::global()["fadeOut"] = ui.checkBoxFadeOut->isChecked();
 
-	if (ui.checkBoxAdaptiveFitting->isChecked()) {
-		ExFeature feature;
-
+	std::vector<ExFeature> features;
+	features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+	for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
 		QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
 		if (filename.isEmpty()) return;
-
-		feature.load(filename);
-
-		mainWin->urbanGeometry->generateRoads(feature);
-	} else {
-		std::vector<ExFeature> features;
-		features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
-		for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
-			QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
-			if (filename.isEmpty()) return;
 	
-			features[i].load(filename);
-		}
-
-		mainWin->urbanGeometry->generateRoadsMultiEx(features);
+		features[i].load(filename);
 	}
+
+	mainWin->urbanGeometry->generateRoadsMultiEx(features);
 	
 	mainWin->glWidget->updateGL();
 }
@@ -106,6 +97,29 @@ void ControlWidget::generateRoadsInterpolation() {
 	feature.load(filename);
 
 	mainWin->urbanGeometry->generateRoadsInterpolation(feature);
+	
+	mainWin->glWidget->updateGL();
+}
+
+void ControlWidget::generateRoadsUShape() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
+
+	ExFeature feature;
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+	if (filename.isEmpty()) return;
+	
+	feature.load(filename);
+
+	mainWin->urbanGeometry->generateRoadsUShape(feature);
 	
 	mainWin->glWidget->updateGL();
 }

@@ -876,7 +876,7 @@ void RoadGraph::adaptToTerrain(mylib::Terrain* terrain) {
 		for (int i = 0; i < graph[*ei]->polyline.size(); ++i) {
 			// たまに、同じポイントが重複していることがあり、そのせいで道路表示がねじれてしまう。
 			// 仕方がないので、同じポイントならスキップするようにした。
-			if (i > 0 && (graph[*ei]->polyline[i] - graph[*ei]->polyline[i - 1]).lengthSquared() == 0) continue;
+			if (i > 0 && (graph[*ei]->polyline[i] - graph[*ei]->polyline[i - 1]).lengthSquared() < 1.0f) continue;
 
 			float z = terrain->getValue(graph[*ei]->polyline[i].x(), graph[*ei]->polyline[i].y());
 			if (z < 0.0f) {

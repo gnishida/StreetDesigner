@@ -220,6 +220,43 @@ bool GraphUtil::getVertex(RoadGraph& roads, const QVector2D& pos, float threshol
 }
 
 /**
+ * Find the closest vertex from the specified point. 
+ * ignore頂点の隣接頂点も、対象外とする。
+ * If the closet vertex is within the threshold, return true. Otherwise, return false.
+ */
+bool GraphUtil::getVertex2(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc ignore, RoadVertexDesc& desc, bool onlyValidVertex) {
+	float min_dist = std::numeric_limits<float>::max();
+
+	QHash<RoadVertexDesc, bool> neighbors;
+	{
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(ignore, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+			neighbors[tgt] = true;
+		}
+	}
+
+	RoadVertexIter vi, vend;
+	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		if (onlyValidVertex && !roads.graph[*vi]->valid) continue;
+		if (*vi == ignore) continue;
+		if (neighbors.contains(*vi)) continue;
+
+		float dist = (roads.graph[*vi]->getPt() - pos).lengthSquared();
+		if (dist < min_dist) {
+			min_dist = dist;
+			desc = *vi;
+		}
+	}
+
+	if (min_dist <= threshold * threshold) return true;
+	else return false;
+}
+
+/**
  * 指定した領域の中に、指定した位置に最も近い頂点を探す。
  * 指定した領域の中に、１つも頂点がない場合は、falseを返却する。
  */

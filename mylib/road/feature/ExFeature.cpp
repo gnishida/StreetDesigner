@@ -63,6 +63,14 @@ RoadGraph& ExFeature::roads(int roadType) {
 	}
 }
 
+RoadGraph& ExFeature::reducedRoads(int roadType) {
+	if (roadType == RoadEdge::TYPE_AVENUE) {
+		return reducedAvenues;
+	} else {
+		return streets;
+	}
+}
+
 /**
  * 指定された角度[degree]だけ、交差点カーネルを時計回りに回転する。
  */
@@ -143,10 +151,6 @@ float ExFeature::curvature(int roadType) const {
  * PM用パラメータを計算する
  */
 void ExFeature::computePMParameters() {
-	// Avenueをreduceする
-	GraphUtil::reduce(avenues);
-	GraphUtil::clean(avenues);
-
 	// この結果、各エッジのreduced_numパラメータに、street交差点による分割数が入ったので、ヒストグラムを生成
 	/*
 	{
@@ -161,7 +165,7 @@ void ExFeature::computePMParameters() {
 	}
 	*/
 
-	GraphUtil::computeStatistics(avenues, avgAvenueLength, varAvenueLength, avgAvenueCurvature, varAvenueCurvature);
+	GraphUtil::computeStatistics(reducedAvenues, avgAvenueLength, varAvenueLength, avgAvenueCurvature, varAvenueCurvature);
 	std::cout << "avgAvenueCurvature: " << avgAvenueCurvature << std::endl;
 	std::cout << "varAvenueCurvature: " << varAvenueCurvature << std::endl;
 
@@ -198,6 +202,10 @@ void ExFeature::load(QString filepath) {
 
 		node = node.nextSibling();
 	}
+
+	GraphUtil::copyRoads(avenues, reducedAvenues);
+	GraphUtil::reduce(reducedAvenues);
+	GraphUtil::clean(reducedAvenues);
 
 	computePMParameters();
 }
