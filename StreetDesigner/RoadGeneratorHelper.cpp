@@ -56,63 +56,72 @@ bool RoadGeneratorHelper::intersects(RoadGraph &roads, RoadVertexDesc srcDesc, c
 
 /**
  * 近くの頂点にsnapすべきか、チェックする。
- * srcDescから伸ばしてきたエッジの先端posに近い頂点を探す。
- * ただし、スナップによる変位角が、スナップ先頂点とのなす角の半分以下であること。
+ * （この関数は、最新！！　これ以外は、使ってないはず）
+ * v_descに近い頂点を探す。
+ * ただし、v_descとスナップ先とのなす角度が９０度以上であること。
  * また、スナップによる移動距離が閾値以下であるものの中で、最短のものを選ぶ。
  * 
  * @param pos				エッジ先端
  * @param threshold			距離の閾値
  * @param srcDesc			この頂点からエッジを延ばしている
+ * @param edge				このエッジ
  * @param snapDesc			最も近い頂点
  * @return					もしsnapすべき頂点があれば、trueを返却する
  */
-bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos, const Polyline2D &polyline, float threshold, RoadVertexDesc srcDesc, RoadVertexDesc& snapDesc) {
+bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadVertexDesc& snapDesc) {
 	float min_dist = std::numeric_limits<float>::max();
+
+	// 当該頂点から出るポリラインを取得
+	bool flag = false;
+	Polyline2D polyline;
+	RoadVertexDesc prev_desc;
+	{
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(v_desc, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			if (flag) {
+				// 当該頂点から複数のエッジが出ているので、スナップさせない
+				return false;
+			}
+
+			prev_desc = boost::target(*ei, roads.graph);
+
+			// 当該頂点から並ぶように、polylineを並べ替える
+			if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
+				std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
+			}
+			polyline = roads.graph[*ei]->polyline;
+
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		// エッジがないので、スナップさせない
+		return false;
+	}
 
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 		if (!roads.graph[*vi]->valid) continue;
 
-		if (GraphUtil::getDegree(roads, *vi) == 0) continue;
+		// 自分自身にはスナップしない
+		if (*vi == v_desc) continue;
 
-		// スナップによる変位角
-		float phi = Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
+		// 隣接頂点にもスナップしない
+		if (*vi == prev_desc) continue;
 
-		bool okay = true;
-		RoadOutEdgeIter ei, eend;
-		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
-			if (!roads.graph[*ei]->valid) continue;
+		// prev_desc - v_desc - *vi のなす角が90度未満なら、スナップしない
+		if (Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v_desc]->pt, polyline.last() - polyline[0]) < M_PI * 0.5f) continue;
 
-			RoadVertexDesc v2 = boost::target(*ei, roads.graph);
-
-			// 自分自身には、スナップしない
-			/*if (v2 == srcDesc) {
-				okay = false;
-				break;
-			}*/
-
-			// ２つのエッジのなす角
-			//float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
-			float theta;
-			if ((roads.graph[*ei]->polyline[0] - roads.graph[*vi]->pt).lengthSquared() < (roads.graph[*ei]->polyline[0] - roads.graph[v2]->pt).lengthSquared()) {
-				theta = Util::diffAngle(roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0], polyline.nextLast() - polyline.last());
-			} else {
-				theta = Util::diffAngle(roads.graph[*ei]->polyline.nextLast() - roads.graph[*ei]->polyline.last(), polyline.nextLast() - polyline.last());
-			}
-			if (phi > theta * 0.5f) {
-				okay = false;
-				break;
-			}
-		}
-
-		if (!okay) continue;
-
-		float dist2 = (roads.graph[*vi]->pt - pos).lengthSquared();
+		float dist2 = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
 		if (dist2 < min_dist) {
-			// 交差するかチェック
-			Polyline2D tempPolyline = polyline;
-			GraphUtil::movePolyline(roads, tempPolyline, roads.graph[srcDesc]->pt, roads.graph[*vi]->pt);
-			if (!GraphUtil::isIntersect(roads, tempPolyline)) {
+			// スナップすることで、他エッジと交差するかチェック
+			Polyline2D polyline;
+			polyline.push_back(roads.graph[v_desc]->pt);
+			polyline.push_back(roads.graph[*vi]->pt);
+			if (!GraphUtil::isIntersect(roads, polyline)) {
 				min_dist = dist2;
 				snapDesc = *vi;
 			}
@@ -125,10 +134,9 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos
 
 /**
  * 近くの頂点にsnapすべきか、チェックする。
- * （この関数は、additionalSeeds用のスナップ関数）
- * srcDescから伸ばしてきたエッジの先端posに近い頂点を探す。
- * ただし、スナップによる変位角は90度未満で、接続された２つのエッジのなす角は90度より大きいこと。
- * さらに、スナップの結果、他のエッジの交差するものは除外する。
+ * （この関数は、最新！！　これ以外は、使ってないはず）
+ * v_descに近い頂点を探す。
+ * ただし、v_descとスナップ先とのなす角度が９０度以上であること。
  * また、スナップによる移動距離が閾値以下であるものの中で、最短のものを選ぶ。
  * 
  * @param pos				エッジ先端
@@ -138,127 +146,60 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos
  * @param snapDesc			最も近い頂点
  * @return					もしsnapすべき頂点があれば、trueを返却する
  */
-bool RoadGeneratorHelper::canSnapToVertex2(RoadGraph& roads, const QVector2D &pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc edge, RoadVertexDesc& snapDesc) {
+bool RoadGeneratorHelper::canConnectToVertex(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadVertexDesc& snapDesc) {
 	float min_dist = std::numeric_limits<float>::max();
 
-	Polyline2D polyline = roads.graph[edge]->polyline;
-	if ((polyline[0] - roads.graph[srcDesc]->pt).lengthSquared() > (polyline.last() - roads.graph[srcDesc]->pt).lengthSquared()) {
-		std::reverse(polyline.begin(), polyline.end());
-	}
-
-	RoadVertexIter vi, vend;
-	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
-		if (!roads.graph[*vi]->valid) continue;
-
-		if (GraphUtil::getDegree(roads, *vi) != 1) continue;
-
-		// もう一方の端点を取得
-		bool isolated = true;
-		RoadVertexDesc v2;
+	// 当該頂点から出るポリラインを取得
+	bool flag = false;
+	Polyline2D polyline;
+	RoadVertexDesc prev_desc;
+	RoadEdgeDesc e_desc;
+	{
 		RoadOutEdgeIter ei, eend;
-		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
+		for (boost::tie(ei, eend) = boost::out_edges(v_desc, roads.graph); ei != eend; ++ei) {
 			if (!roads.graph[*ei]->valid) continue;
 
-			v2 = boost::target(*ei, roads.graph);
-			isolated = false;
-			break;
-		}
-
-		// もう一方の端点がない場合は、スキップ
-		if (isolated) continue;
-
-		// 自分自身には、スナップしない
-		if (v2 == srcDesc) continue;
-
-		// スナップによる変位角
-		float phi = Util::diffAngle(pos - roads.graph[srcDesc]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
-
-		// ２つのエッジのなす角
-		float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
-
-		// スナップによる変位角が、２つのエッジのなす角の半分より大きい場合は、スキップ
-		if (phi > theta * 0.5f) continue;
-
-		float dist2 = (roads.graph[*vi]->pt - pos).lengthSquared();
-		if (dist2 < min_dist) {
-			// 交差するかチェック
-			Polyline2D tempPolyline = polyline;
-			GraphUtil::movePolyline(roads, tempPolyline, roads.graph[srcDesc]->pt, roads.graph[*vi]->pt);
-			if (!GraphUtil::isIntersect(roads, tempPolyline, edge)) {
-				min_dist = dist2;
-				snapDesc = *vi;
+			if (flag) {
+				// 当該頂点から複数のエッジが出ているので、スナップさせない
+				return false;
 			}
+
+			prev_desc = boost::target(*ei, roads.graph);
+			e_desc = *ei;
+
+			// 当該頂点から並ぶように、polylineを並べ替える
+			if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
+				std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
+			}
+			polyline = roads.graph[*ei]->polyline;
+
+			flag = true;
 		}
 	}
 
-	if (min_dist <= threshold * threshold) return true;
-	else return false;
-}
-
-/**
- * 近くの頂点にsnapすべきか、チェックする。
- * （この関数は、ExRoadGenerator用のスナップ関数）
- * srcDescから伸ばしてきたエッジの先端posに近い頂点を探す。
- * ただし、スナップによる変位角は90度未満で、接続された２つのエッジのなす角は90度より大きいこと。
- * さらに、スナップの結果、他のエッジの交差するものは除外する。
- * また、スナップによる移動距離が閾値以下であるものの中で、最短のものを選ぶ。
- * 
- * @param pos				エッジ先端
- * @param threshold			距離の閾値
- * @param srcDesc			この頂点からエッジを延ばしている
- * @param edge				このエッジ
- * @param snapDesc			最も近い頂点
- * @return					もしsnapすべき頂点があれば、trueを返却する
- */
-bool RoadGeneratorHelper::canSnapToVertex3(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadVertexDesc& snapDesc) {
-	float min_dist = std::numeric_limits<float>::max();
-
-	// 当該頂点から出るポリラインをリストアップ
-	std::vector<Polyline2D> polylines;
-	RoadOutEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::out_edges(v_desc, roads.graph); ei != eend; ++ei) {
-		if (!roads.graph[*ei]->valid) continue;
-
-		if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
-			std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
-		}
-
-		polylines.push_back(roads.graph[*ei]->polyline);
+	if (!flag) {
+		// エッジがないので、スナップさせない
+		return false;
 	}
 
 	RoadVertexIter vi, vend;
 	for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
 		if (!roads.graph[*vi]->valid) continue;
 
-		bool badEdge = false;
-		for (boost::tie(ei, eend) = boost::out_edges(*vi, roads.graph); ei != eend; ++ei) {
-			if (!roads.graph[*ei]->valid) continue;
+		// 自分自身にはスナップしない
+		if (*vi == v_desc) continue;
 
-			// 自分自身にはスナップしない
-			if (*vi == v_desc) continue;
+		// 隣接頂点にもスナップしない
+		if (*vi == prev_desc) continue;
 
-			RoadVertexDesc v2 = boost::target(*ei, roads.graph);
+		// prev_desc - v_desc - *vi のなす角が90度未満なら、スナップしない
+		if (Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v_desc]->pt, polyline.last() - polyline[0]) < M_PI * 0.5f) continue;
 
-			if (v2 == v_desc) continue;
-			
-			for (int i = 0; i < polylines.size(); ++i) {
-				// スナップによる変位角
-				float phi = Util::diffAngle(polylines[i][0] - polylines[i].last(), roads.graph[*vi]->pt - polylines[i].last());
-
-				// ２つのエッジのなす角
-				float theta = Util::diffAngle(roads.graph[*vi]->pt - polylines[i].last(), roads.graph[*vi]->pt - roads.graph[v2]->pt);
-
-				// スナップによる変位角が、２つのエッジのなす角の半分より大きい場合は、スキップ
-				if (phi > theta * 0.5f) {
-					badEdge = true;
-					break;
-				}
-			}
-
-			if (badEdge) continue;
-
-			float dist2 = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
-			if (dist2 < min_dist) {
+		float dist2 = (roads.graph[*vi]->pt - roads.graph[v_desc]->pt).lengthSquared();
+		if (dist2 < min_dist) {
+			// コネクトすることで、他エッジと交差するかチェック
+			GraphUtil::movePolyline(roads, polyline, roads.graph[*vi]->pt, roads.graph[prev_desc]->pt);
+			if (!GraphUtil::isIntersect(roads, polyline, e_desc)) {
 				min_dist = dist2;
 				snapDesc = *vi;
 			}
@@ -280,42 +221,62 @@ bool RoadGeneratorHelper::canSnapToVertex3(RoadGraph& roads, RoadVertexDesc v_de
  * @param snapDesc			最も近い頂点
  * @return					もしsnapすべき頂点があれば、trueを返却する
  */
-bool RoadGeneratorHelper::canSnapToEdge(RoadGraph& roads, const QVector2D& pos, float threshold, RoadVertexDesc srcDesc, RoadEdgeDesc& snapEdge, QVector2D &closestPt) {
+bool RoadGeneratorHelper::canSnapToEdge(RoadGraph& roads, RoadVertexDesc v_desc, float threshold, RoadEdgeDesc& snapEdge, QVector2D &closestPt) {
 	float min_dist = std::numeric_limits<float>::max();
+
+	// 当該頂点から出るポリラインを取得
+	bool flag = false;
+	Polyline2D polyline;
+	RoadVertexDesc prev_desc;
+	{
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(v_desc, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			if (flag) {
+				// 当該頂点から複数のエッジが出ているので、スナップさせない
+				return false;
+			}
+
+			prev_desc = boost::target(*ei, roads.graph);
+
+			// 当該頂点から並ぶように、polylineを並べ替える
+			if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() > (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
+				std::reverse(roads.graph[*ei]->polyline.begin(), roads.graph[*ei]->polyline.end());
+			}
+			polyline = roads.graph[*ei]->polyline;
+
+			flag = true;
+		}
+	}
+
+	if (!flag) {
+		// エッジがないので、スナップさせない
+		return false;
+	}
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
 		if (!roads.graph[*ei]->valid) continue;
 
-		// Highwayとは、intersectさせない（暫定的な実装）
-		if (roads.graph[*ei]->type == RoadEdge::TYPE_HIGHWAY) continue;
-
 		RoadVertexDesc src = boost::source(*ei, roads.graph);
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
-		if (src == srcDesc || tgt == srcDesc) continue;
+		if (src == v_desc || tgt == v_desc) continue;
+		if (src == prev_desc || tgt == prev_desc) continue;
 
 		QVector2D closePt;
-		float dist = GraphUtil::distance(roads, pos, *ei, closePt);
+		float dist = GraphUtil::distance(roads, roads.graph[v_desc]->pt, *ei, closePt);
 
 		// 変位角が90度以上なら、スキップ
-		float phi = Util::diffAngle(closePt - roads.graph[srcDesc]->pt, pos - roads.graph[srcDesc]->pt);
+		float phi = Util::diffAngle(closePt - roads.graph[prev_desc]->pt, roads.graph[v_desc]->pt - roads.graph[prev_desc]->pt);
 		if (phi >= M_PI * 0.5f) continue;
 
 		// ２つのエッジのなす角が45度以下なら、スキップ
-		float theta1 = Util::diffAngle(closePt - roads.graph[src]->pt, closePt - roads.graph[srcDesc]->pt);
+		float theta1 = Util::diffAngle(closePt - roads.graph[src]->pt, closePt - roads.graph[prev_desc]->pt);
 		if (theta1 <= M_PI * 0.25f) continue;
-		float theta2 = Util::diffAngle(closePt - roads.graph[tgt]->pt, closePt - roads.graph[srcDesc]->pt);
+		float theta2 = Util::diffAngle(closePt - roads.graph[tgt]->pt, closePt - roads.graph[prev_desc]->pt);
 		if (theta2 <= M_PI * 0.25f) continue;
-
-		if (dist < 37.46f) {
-			int k = 0;
-
-			QVector2D pt1 = roads.graph[src]->pt;
-			QVector2D pt2 = roads.graph[tgt]->pt;
-			float d = GraphUtil::distance(roads, pos, *ei, closePt);
-		}
-
 
 		if (dist < min_dist) {
 			min_dist = dist;
