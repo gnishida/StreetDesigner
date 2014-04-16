@@ -145,6 +145,7 @@ float ExFeature::curvature(int roadType) const {
 void ExFeature::computePMParameters() {
 	// Avenueをreduceする
 	GraphUtil::reduce(avenues);
+	GraphUtil::clean(avenues);
 
 	// この結果、各エッジのreduced_numパラメータに、street交差点による分割数が入ったので、ヒストグラムを生成
 	/*

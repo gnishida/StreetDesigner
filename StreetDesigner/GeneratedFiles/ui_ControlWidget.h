@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Tue Apr 15 12:36:52 2014
+** Created: Wed Apr 16 09:28:12 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

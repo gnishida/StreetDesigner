@@ -27,7 +27,7 @@ void PolylineBuilder::moveLastPoint(const QVector2D& pt) {
 void PolylineBuilder::end() {
 	_selecting = false;
 
-	if (_polyline.size() >= 2 && (_polyline[_polyline.size() - 2] - _polyline.last()).lengthSquared() < 1.0f) {
+	if (_polyline.size() >= 2 && (_polyline.nextLast() - _polyline.last()).lengthSquared() < 1.0f) {
 		_polyline.pop_back();
 	}
 }

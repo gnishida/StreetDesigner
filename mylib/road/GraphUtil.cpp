@@ -434,7 +434,7 @@ bool GraphUtil::hasRedundantEdge(RoadGraph& roads, RoadVertexDesc desc, const Po
 		if ((roads.graph[*ei]->polyline[0] - roads.graph[desc]->pt).lengthSquared() <=  (roads.graph[*ei]->polyline.last() - roads.graph[desc]->pt).lengthSquared()) {
 			if (Util::angleThreePoints(roads.graph[*ei]->polyline[1], roads.graph[desc]->pt, polyline[1]) < threshold) return true;
 		} else {
-			if (Util::angleThreePoints(roads.graph[*ei]->polyline[roads.graph[*ei]->polyline.size() - 2], roads.graph[desc]->pt, polyline[1]) < threshold) return true;
+			if (Util::angleThreePoints(roads.graph[*ei]->polyline.nextLast(), roads.graph[desc]->pt, polyline[1]) < threshold) return true;
 		}
 	}
 
@@ -778,7 +778,7 @@ bool GraphUtil::isSimilarPolyline(const Polyline2D &polyline1, const Polyline2D 
 	if (Util::rad2deg(Util::diffAngle(polyline1[1] - polyline1[0], polyline2b[1] - polyline2b[0])) > 10.0f) return false;
 
 	// 最後の方向ベクトルをチェック
-	if (Util::rad2deg(Util::diffAngle(polyline1.last() - polyline1[polyline1.size() - 2], polyline2b.last() - polyline2b[polyline2b.size() - 2])) > 10.0f) return false;
+	if (Util::rad2deg(Util::diffAngle(polyline1.last() - polyline1.nextLast(), polyline2b.last() - polyline2b.nextLast())) > 10.0f) return false;
 
 	return true;
 }

@@ -267,6 +267,8 @@ void UShapeRoadGenerator::attemptExpansion(RoadGraph &roads, const Polygon2D &ar
 		QVector2D offset = polyline[0];
 		polyline.translate(offset * -1.0f);
 
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.01f)) continue;
+
 		growRoadSegment(roads, area, srcDesc, roadType, terrain, f, polyline, f.roads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
@@ -325,6 +327,7 @@ void UShapeRoadGenerator::attemptExpansion2(RoadGraph &roads, const Polygon2D &a
 	float roadAngleTolerance = G::getFloat("roadAngleTolerance");
 
 	for (int i = 0; i < edges.size(); ++i) {
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, edges[i]->polyline, roadAngleTolerance)) continue;
 		growRoadSegment(roads, area, srcDesc, roadType, terrain, f, edges[i]->polyline, 1, 0, false, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
@@ -372,10 +375,6 @@ bool UShapeRoadGenerator::growRoadSegment(RoadGraph &roads, const Polygon2D &are
 	}
 
 	if (new_edge->polyline.size() == 1) return false;
-
-	if (GraphUtil::hasRedundantEdge(roads, srcDesc, new_edge->polyline, angleTolerance)) {
-		return false;
-	}
 
 	RoadVertexDesc tgtDesc;
 

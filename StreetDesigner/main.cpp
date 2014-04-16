@@ -45,7 +45,8 @@ int main(int argc, char *argv[]) {
 
 	G::global()["roadSnapFactor"] = 0.7f;
 	//G::global()["roadAngleTolerance"] = 1.2566f;
-	G::global()["roadAngleTolerance"] = 1.0f;
+	//G::global()["roadAngleTolerance"] = 1.0f;
+	G::global()["roadAngleTolerance"] = 0.8f;
 
 	QApplication a(argc, argv);
 	MainWindow w;

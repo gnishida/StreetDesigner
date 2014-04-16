@@ -103,15 +103,29 @@ void GLWidget3D::mousePressEvent(QMouseEvent *event) {
 			} else {
 				mainWin->urbanGeometry->areas.selectArea(pos);
 
+				// 各エリアについて、マウスポインタの近くに頂点またはエッジがあるかチェックし、あれば、それを選択する
+				bool found = false;
 				for (int i = 0; i < mainWin->urbanGeometry->areas.size(); ++i) {
 					if (GraphUtil::getVertex(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedVertexDesc)) {
 						selectVertex(mainWin->urbanGeometry->areas[i]->roads, selectedVertexDesc);
+						found = true;
 						break;
+					} else if (GraphUtil::getEdge(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedEdgeDesc)) {
+						selectEdge(mainWin->urbanGeometry->areas[i]->roads, selectedEdgeDesc);
+						found = true;
+						break;
+					}
+				}
+
+				// どのエリアにも、近くに頂点またはエッジがなければ、roadsをチェック
+				if (!found) {
+					if (GraphUtil::getVertex(mainWin->urbanGeometry->roads, pos, 10, selectedVertexDesc)) {
+						selectVertex(mainWin->urbanGeometry->roads, selectedVertexDesc);
+					} else if (GraphUtil::getEdge(mainWin->urbanGeometry->roads, pos, 10, selectedEdgeDesc)) {
+						selectEdge(mainWin->urbanGeometry->roads, selectedEdgeDesc);
 					} else {
-						if (GraphUtil::getEdge(mainWin->urbanGeometry->areas[i]->roads, pos, 10, selectedEdgeDesc)) {
-							selectEdge(mainWin->urbanGeometry->areas[i]->roads, selectedEdgeDesc);
-							break;
-						}
+						vertexSelected = false;
+						edgeSelected = false;
 					}
 				}
 			}

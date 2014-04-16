@@ -95,9 +95,9 @@ bool RoadGeneratorHelper::canSnapToVertex(RoadGraph& roads, const QVector2D &pos
 			//float theta = Util::diffAngle(roads.graph[*vi]->pt - roads.graph[v2]->pt, roads.graph[*vi]->pt - roads.graph[srcDesc]->pt);
 			float theta;
 			if ((roads.graph[*ei]->polyline[0] - roads.graph[*vi]->pt).lengthSquared() < (roads.graph[*ei]->polyline[0] - roads.graph[v2]->pt).lengthSquared()) {
-				theta = Util::diffAngle(roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0], polyline[polyline.size() - 2] - polyline.last());
+				theta = Util::diffAngle(roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0], polyline.nextLast() - polyline.last());
 			} else {
-				theta = Util::diffAngle(roads.graph[*ei]->polyline[roads.graph[*ei]->polyline.size() - 2] - roads.graph[*ei]->polyline.last(), polyline[polyline.size() - 2] - polyline.last());
+				theta = Util::diffAngle(roads.graph[*ei]->polyline.nextLast() - roads.graph[*ei]->polyline.last(), polyline.nextLast() - polyline.last());
 			}
 			if (phi > theta * 0.5f) {
 				okay = false;
@@ -484,39 +484,31 @@ bool RoadGeneratorHelper::invadingTerritory(RoadGraph &roads, const QVector2D &p
 
 /**
  * 指定された頂点について、指定されたエッジに似たエッジが既に登録済みかどうかチェックする。
- * polylineには、各点の、頂点からのオフセット座標が入る。ただし、頂点自体の座標(0, 0)は含まない。
+ * polylineには、各点の、頂点からのオフセット座標が入る。
  * 登録済みのエッジに対しては、エッジの端点への方向ベクトルとpolylineの端点の方向ベクトルのなす角度が30度未満なら、trueを返却する。
  */
-bool RoadGeneratorHelper::isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_desc, const Polyline2D &polyline) {
+bool RoadGeneratorHelper::isRedundantEdge(RoadGraph& roads, RoadVertexDesc v_desc, const Polyline2D &polyline, float angleTolerance) {
 	if (polyline.size() == 0) true;
 
 	RoadOutEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = out_edges(v_desc, roads.graph); ei != eend; ++ei) {
 		if (!roads.graph[*ei]->valid) continue;
 
-		if (roads.graph[*ei]->polyline.size() <= 1) continue;
+		if (roads.graph[*ei]->polyline.size() == 0) continue;
 
 		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
+		if ((roads.graph[*ei]->polyline[0] - roads.graph[v_desc]->pt).lengthSquared() <= (roads.graph[*ei]->polyline.last() - roads.graph[v_desc]->pt).lengthSquared()) {
+			if (Util::diffAngle(roads.graph[*ei]->polyline[1] - roads.graph[*ei]->polyline[0], polyline[1]) < angleTolerance) return true;
+		} else {
+			if (Util::diffAngle(roads.graph[*ei]->polyline.nextLast() - roads.graph[*ei]->polyline.last(), polyline[1]) < angleTolerance) return true;
+		}
+
 		/*
-		Polyline2D edge = roads.graph[*ei]->polyLine;
-		if ((roads.graph[v_desc]->pt - roads.graph[*ei]->polyLine[0]).lengthSquared() > (roads.graph[tgt]->pt - roads.graph[*ei]->polyLine[0]).lengthSquared()) {
-			std::reverse(edge.begin(), edge.end());
-		}
-
-		for (int i = 1; i < 10; ++i) {
-			int index1 = (edge.size() - 1) * i / 10;
-			int index2 = polyline.size() * i/ 10;
-
-			if (index1 == 0) continue;
-
-			if (Util::diffAngle(edge[index1] - edge[0], polyline[index2]) < 0.3f) return true;
-		}
-		*/
-
-		if (Util::diffAngle(roads.graph[tgt]->pt - roads.graph[v_desc]->pt, polyline.last()) < M_PI * 30.0f / 180.0f) {
+		if (Util::diffAngle(roads.graph[tgt]->pt - roads.graph[v_desc]->pt, polyline.last()) < angleTolerance) {
 			return true;
 		}
+		*/
 	}
 
 	return false;
@@ -791,7 +783,7 @@ void RoadGeneratorHelper::connectRoads(RoadGraph& roads, float distance_threshol
 		if ((roads.graph[v_desc]->pt - roads.graph[e_desc]->polyline[0]).lengthSquared() <= (roads.graph[v2_desc]->pt - roads.graph[e_desc]->polyline[0]).lengthSquared()) {
 			step = roads.graph[e_desc]->polyline[0] - roads.graph[e_desc]->polyline[1];
 		} else {
-			step = roads.graph[e_desc]->polyline.last() - roads.graph[e_desc]->polyline[roads.graph[e_desc]->polyline.size() - 2];
+			step = roads.graph[e_desc]->polyline.last() - roads.graph[e_desc]->polyline.nextLast();
 		}
 		step = step.normalized() * 20.0f;
 
@@ -852,7 +844,7 @@ void RoadGeneratorHelper::cutEdgeBySteepElevationChange(Polyline2D &polyline, my
 	if (polyline.size() < 2) return;
 
 	// 海岸ぎりぎりの場所を探す
-	QVector2D vec = polyline.last() - polyline[polyline.size() - 2];
+	QVector2D vec = polyline.last() - polyline.nextLast();
 	vec.normalize();
 	QVector2D pt = polyline.last();
 	while (true) {

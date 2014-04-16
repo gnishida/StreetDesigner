@@ -9,7 +9,7 @@
 class WarpRoadGenerator {
 private:
 	MainWindow *mainWin;
-	RoadGraph roads;
+	RoadGraph &roads;
 	Polygon2D targetArea;
 	Polyline2D hintLine;
 	mylib::Terrain *terrain;

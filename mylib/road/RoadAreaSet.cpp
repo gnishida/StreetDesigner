@@ -112,23 +112,11 @@ void RoadAreaSet::mergeRoads() {
  * 与えられたfeatureノード配下のXML情報に基づいて、グリッド特徴量を設定する。
  */
 void RoadAreaSet::load(QString filename) {
-	// ファイル名からディレクトリ部を取得
-	QString dirname;
-	int index = filename.lastIndexOf("/");
-	if (index > 0) {
-		dirname = filename.mid(0, index);
-	}
-
 	QFile file(filename);
 
 	QDomDocument doc;
 	doc.setContent(&file, true);
 	QDomElement root = doc.documentElement();
-
-	if (root.hasAttribute("roads")) {
-		QString roadFilename = dirname + "/" + root.attribute("roads");
-		GraphUtil::loadRoads(roads, roadFilename);
-	}
 
 	QDomNode node = root.firstChild();
 	while (!node.isNull()) {
@@ -143,22 +131,9 @@ void RoadAreaSet::load(QString filename) {
 }
 
 void RoadAreaSet::save(QString filepath) {
-	// ファイルパスからファイル名を取得
-	QString name;
-	int index = filepath.lastIndexOf("/");
-	if (index >= 0) {
-		name = filepath.mid(index + 1);
-	} else {
-		name = filepath;
-	}
-
 	QDomDocument doc;
 
-	QString roadFilename = name + ".gsm";
-	GraphUtil::saveRoads(roads, filepath + ".gsm");
-
 	QDomElement root = doc.createElement("areas");
-	root.setAttribute("roads", roadFilename);
 	doc.appendChild(root);
 
 	for (int i = 0; i < areas.size(); ++i) {

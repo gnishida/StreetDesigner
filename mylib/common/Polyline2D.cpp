@@ -1,12 +1,20 @@
 ﻿#include "Polyline2D.h"
 #include "Util.h"
 
-const QVector2D & Polyline2D::last() const {
+const QVector2D& Polyline2D::last() const {
 	return at(size() - 1);
 }
 
-QVector2D & Polyline2D::last() {
+QVector2D& Polyline2D::last() {
 	return at(size() - 1);
+}
+
+const QVector2D& Polyline2D::nextLast() const {
+	return at(size() - 2);
+}
+
+QVector2D& Polyline2D::nextLast() {
+	return at(size() - 2);
 }
 
 /**
