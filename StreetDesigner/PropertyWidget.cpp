@@ -48,8 +48,12 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	QString groupId = selectedVertex->properties["group_id"].toString();
 	QString generationType = selectedVertex->properties["generation_type"].toString();
 	QString exampleDesc;
+	QString exampleStreetDesc;
 	if (generationType == "example") {
 		exampleDesc = selectedVertex->properties["example_desc"].toString();
+		if (selectedVertex->properties.contains("example_street_desc")) {
+			exampleStreetDesc = selectedVertex->properties["example_street_desc"].toString();
+		}
 	}
 
 	QString deadend = selectedVertex->properties["deadend"].toBool() ? "Yes" : "No";
@@ -63,6 +67,7 @@ void PropertyWidget::setRoadVertex(RoadGraph &roads, RoadVertexDesc vertexDesc, 
 	ui.lineEditVertexGroupId->setText(groupId);
 	ui.lineEditVertexGenerationType->setText(generationType);
 	ui.lineEditVertexExampleDesc->setText(exampleDesc);
+	ui.lineEditVertexExampleStreetDesc->setText(exampleStreetDesc);
 	ui.lineEditVertexDeadend->setText(deadend);
 }
 
@@ -126,6 +131,7 @@ void PropertyWidget::resetRoadVertex() {
 	ui.lineEditVertexGroupId->setText("");
 	ui.lineEditVertexGenerationType->setText("");
 	ui.lineEditVertexExampleDesc->setText("");
+	ui.lineEditVertexExampleStreetDesc->setText("");
 	ui.lineEditVertexDeadend->setText("");
 }
 

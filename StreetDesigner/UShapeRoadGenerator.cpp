@@ -148,6 +148,8 @@ bool UShapeRoadGenerator::addAvenueSeed(const QVector2D &pt, const QVector2D &ex
 void UShapeRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
 
+	int vertex_num = boost::num_vertices(roads.graph);
+
 	// エッジ上に、Local Street用のシードを生成する
 	{
 		int i = 0;
@@ -250,16 +252,16 @@ void UShapeRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) 
 
 	// 頂点自体を、Local streetsのシードにする
 	{
+		int i = 0;
 		RoadVertexIter vi, vend;
-		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend && i < vertex_num; ++vi, ++i) {
 			if (!roads.graph[*vi]->valid) continue;
 
 			if (roads.graph[*vi]->properties["generation_type"] == "example") {
-				int group_id = roads.graph[*vi]->properties["group_id"].toInt();
 				RoadVertexDesc ex_v_desc = roads.graph[*vi]->properties["example_desc"].toUInt();
 
 				RoadVertexDesc seedDesc;
-				if (GraphUtil::getVertex(feature.reducedRoads(RoadEdge::TYPE_STREET), feature.roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt, 1.0f, seedDesc)) {
+				if (GraphUtil::getVertex(feature.reducedRoads(RoadEdge::TYPE_STREET), feature.reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt, 1.0f, seedDesc)) {
 					// シードとして追加
 					seeds.push_back(*vi);
 					roads.graph[*vi]->properties["example_street_desc"] = seedDesc;

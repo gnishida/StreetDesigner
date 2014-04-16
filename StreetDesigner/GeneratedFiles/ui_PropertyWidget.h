@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PropertyWidget.ui'
 **
-** Created: Wed Apr 16 12:22:14 2014
+** Created: Wed Apr 16 17:04:28 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -67,6 +67,8 @@ public:
     QLineEdit *lineEditVertexDeadend;
     QLineEdit *lineEditVertexSearch;
     QPushButton *pushButtonVertexSearch;
+    QLabel *label_20;
+    QLineEdit *lineEditVertexExampleStreetDesc;
 
     void setupUi(QDockWidget *PropertyWidget)
     {
@@ -79,7 +81,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 420, 171, 171));
+        groupBox->setGeometry(QRect(10, 440, 171, 171));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 31, 16));
@@ -124,7 +126,7 @@ public:
         lineEditEdgeGenerationType->setGeometry(QRect(80, 140, 81, 20));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 10, 171, 401));
+        groupBox_5->setGeometry(QRect(10, 10, 171, 421));
         label_6 = new QLabel(groupBox_5);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 60, 31, 16));
@@ -181,16 +183,22 @@ public:
         lineEditVertexExampleDesc->setGeometry(QRect(80, 340, 81, 20));
         label_19 = new QLabel(groupBox_5);
         label_19->setObjectName(QString::fromUtf8("label_19"));
-        label_19->setGeometry(QRect(10, 360, 61, 16));
+        label_19->setGeometry(QRect(10, 380, 61, 16));
         lineEditVertexDeadend = new QLineEdit(groupBox_5);
         lineEditVertexDeadend->setObjectName(QString::fromUtf8("lineEditVertexDeadend"));
-        lineEditVertexDeadend->setGeometry(QRect(80, 360, 81, 20));
+        lineEditVertexDeadend->setGeometry(QRect(80, 380, 81, 20));
         lineEditVertexSearch = new QLineEdit(groupBox_5);
         lineEditVertexSearch->setObjectName(QString::fromUtf8("lineEditVertexSearch"));
         lineEditVertexSearch->setGeometry(QRect(10, 20, 81, 20));
         pushButtonVertexSearch = new QPushButton(groupBox_5);
         pushButtonVertexSearch->setObjectName(QString::fromUtf8("pushButtonVertexSearch"));
         pushButtonVertexSearch->setGeometry(QRect(100, 20, 61, 23));
+        label_20 = new QLabel(groupBox_5);
+        label_20->setObjectName(QString::fromUtf8("label_20"));
+        label_20->setGeometry(QRect(10, 360, 61, 16));
+        lineEditVertexExampleStreetDesc = new QLineEdit(groupBox_5);
+        lineEditVertexExampleStreetDesc->setObjectName(QString::fromUtf8("lineEditVertexExampleStreetDesc"));
+        lineEditVertexExampleStreetDesc->setGeometry(QRect(80, 360, 81, 20));
         PropertyWidget->setWidget(dockWidgetContents);
 
         retranslateUi(PropertyWidget);
@@ -220,6 +228,7 @@ public:
         label_16->setText(QApplication::translate("PropertyWidget", "Example Id", 0, QApplication::UnicodeUTF8));
         label_19->setText(QApplication::translate("PropertyWidget", "Deadend", 0, QApplication::UnicodeUTF8));
         pushButtonVertexSearch->setText(QApplication::translate("PropertyWidget", "Search", 0, QApplication::UnicodeUTF8));
+        label_20->setText(QApplication::translate("PropertyWidget", "Local Ex Id", 0, QApplication::UnicodeUTF8));
         Q_UNUSED(PropertyWidget);
     } // retranslateUi
 

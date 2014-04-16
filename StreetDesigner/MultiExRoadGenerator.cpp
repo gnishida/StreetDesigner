@@ -31,11 +31,11 @@ void MultiExRoadGenerator::generateRoadNetwork(bool animation) {
 			}
 
 			std::cout << "attemptExpansion (avenue): " << i << " (Seed: " << desc << ")" << std::endl;
-			int group_id = roads.graph[desc]->properties["group_id"].toInt();
+			int ex_id = roads.graph[desc]->properties["ex_id"].toInt();
 			if (roads.graph[desc]->properties["generation_type"] == "example") {
-				attemptExpansion(RoadEdge::TYPE_AVENUE, desc, features[group_id], seeds);
+				attemptExpansion(RoadEdge::TYPE_AVENUE, desc, features[ex_id], seeds);
 			} else {
-				attemptExpansion2(RoadEdge::TYPE_AVENUE, desc, features[group_id], seeds);
+				attemptExpansion2(RoadEdge::TYPE_AVENUE, desc, features[ex_id], seeds);
 			}
 
 			if (animation) {
@@ -77,11 +77,11 @@ void MultiExRoadGenerator::generateRoadNetwork(bool animation) {
 			}
 
 			std::cout << "attemptExpansion (street): " << i << " (Seed: " << desc << ")" << std::endl;
-			int group_id = roads.graph[desc]->properties["group_id"].toInt();
+			int ex_id = roads.graph[desc]->properties["ex_id"].toInt();
 			if (roads.graph[desc]->properties["generation_type"] == "example") {
-				attemptExpansion(RoadEdge::TYPE_STREET, desc, features[group_id], seeds);
+				attemptExpansion(RoadEdge::TYPE_STREET, desc, features[ex_id], seeds);
 			} else {
-				attemptExpansion2(RoadEdge::TYPE_STREET, desc, features[group_id], seeds);
+				attemptExpansion2(RoadEdge::TYPE_STREET, desc, features[ex_id], seeds);
 			}
 
 			if (animation) {
@@ -135,10 +135,11 @@ bool MultiExRoadGenerator::addAvenueSeed(ExFeature &f, const QVector2D &pt, int 
 	// 頂点を追加し、シードとする
 	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
 	RoadVertexDesc desc = GraphUtil::addVertex(roads, v);
-	roads.graph[desc]->properties["example_desc"] = seedDesc;
-	roads.graph[desc]->properties["group_id"] = group_id;
 	roads.graph[desc]->properties["used"] = true;
+	roads.graph[desc]->properties["group_id"] = group_id;
 	roads.graph[desc]->properties["generation_type"] = "example";
+	roads.graph[desc]->properties["ex_id"] = group_id;
+	roads.graph[desc]->properties["example_desc"] = seedDesc;
 	seeds.push_back(desc);
 
 	return true;
@@ -149,6 +150,8 @@ bool MultiExRoadGenerator::addAvenueSeed(ExFeature &f, const QVector2D &pt, int 
  */
 void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
+
+	int vertex_num = boost::num_vertices(roads.graph);
 
 	// エッジ上に、Local Street用のシードを生成する
 	{
@@ -171,14 +174,17 @@ void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds)
 				// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
 				QVector2D offset;
 				int group_id;
+				int ex_id;
 				if (roads.graph[src]->properties["generation_type"] == "example") {
 					RoadVertexDesc ex_v_desc = roads.graph[src]->properties["example_desc"].toUInt();
 					group_id = roads.graph[src]->properties["group_id"].toInt();
-					offset = features[group_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
+					ex_id = roads.graph[src]->properties["ex_id"].toInt();
+					offset = features[ex_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
 				} else {
 					RoadVertexDesc ex_v_desc = roads.graph[tgt]->properties["example_desc"].toUInt();
 					group_id = roads.graph[tgt]->properties["group_id"].toInt();
-					offset = features[group_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
+					ex_id = roads.graph[tgt]->properties["ex_id"].toInt();
+					offset = features[ex_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
 				}
 
 				while (edge->polyline.size() > 2) {
@@ -196,7 +202,7 @@ void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds)
 						BBox bbox;
 						QVector2D pt = edge->polyline[p_id] + offset;
 										
-						if (GraphUtil::getVertex(features[group_id].reducedRoads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
+						if (GraphUtil::getVertex(features[ex_id].reducedRoads(RoadEdge::TYPE_STREET), pt, 1.0f, seedDesc)) {
 							found = true;
 							index = p_id;
 							break;
@@ -214,19 +220,21 @@ void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds)
 					// シードとして追加
 					seeds.push_back(v_desc);
 					roads.graph[v_desc]->properties["group_id"] = group_id;
-					roads.graph[v_desc]->properties["example_street_desc"] = seedDesc;
 					roads.graph[v_desc]->properties["generation_type"] = "example";
+					roads.graph[v_desc]->properties["ex_id"] = ex_id;
+					roads.graph[v_desc]->properties["example_street_desc"] = seedDesc;
 
 					// エッジを更新
 					edge = roads.graph[e2];
 					e = e2;
 				}
 			} else {
-				// 両端の頂点から、group_idを特定
+				// 両端の頂点から、group_id、ex_idを特定
 				int group_id = roads.graph[src]->properties["group_id"].toInt();
+				int ex_id = roads.graph[src]->properties["ex_id"].toInt();
 
 				int step;
-				if (roads.graph[e]->polyline.length() > features[group_id].length(RoadEdge::TYPE_STREET) * 5) {
+				if (roads.graph[e]->polyline.length() > features[ex_id].length(RoadEdge::TYPE_STREET) * 5) {
 					step = roads.graph[e]->polyline.size() / 5;
 				} else {
 					step = roads.graph[e]->polyline.size() / 2;
@@ -236,6 +244,7 @@ void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds)
 				while (step < edge->polyline.size() - step) {
 					RoadVertexDesc desc = GraphUtil::splitEdge(roads, e, edge->polyline[step], e1, e2);
 					roads.graph[desc]->properties["group_id"] = group_id;
+					roads.graph[desc]->properties["ex_id"] = ex_id;
 					roads.graph[desc]->properties["generation_type"] = "pm";
 
 					// この点が、エリア内なら、シードとして追加
@@ -252,16 +261,17 @@ void MultiExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds)
 
 	// 頂点自体を、Local streetsのシードにする
 	{
+		int i = 0;
 		RoadVertexIter vi, vend;
-		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend; ++vi) {
+		for (boost::tie(vi, vend) = boost::vertices(roads.graph); vi != vend && i < vertex_num; ++vi, ++i) {
 			if (!roads.graph[*vi]->valid) continue;
 
 			if (roads.graph[*vi]->properties["generation_type"] == "example") {
-				int group_id = roads.graph[*vi]->properties["group_id"].toInt();
+				int ex_id = roads.graph[*vi]->properties["ex_id"].toInt();
 				RoadVertexDesc ex_v_desc = roads.graph[*vi]->properties["example_desc"].toUInt();
 
 				RoadVertexDesc seedDesc;
-				if (GraphUtil::getVertex(features[group_id].reducedRoads(RoadEdge::TYPE_STREET), features[group_id].roads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt, 1.0f, seedDesc)) {
+				if (GraphUtil::getVertex(features[ex_id].reducedRoads(RoadEdge::TYPE_STREET), features[ex_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt, 1.0f, seedDesc)) {
 					// シードとして追加
 					seeds.push_back(*vi);
 					roads.graph[*vi]->properties["example_street_desc"] = seedDesc;
@@ -356,6 +366,7 @@ void MultiExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDes
 			if (exampleEdge) {
 				RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
 				roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+				roads.graph[e_desc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 				roads.graph[e_desc]->properties["generatoin_type"] = "pm";
 			} else {
 				GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
@@ -369,11 +380,13 @@ void MultiExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDes
 			tgtDesc = GraphUtil::splitEdge(roads, closeEdge, closestPt);
 			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
 			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[closeEdge]->properties["group_id"];
+			roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[closeEdge]->properties["ex_id"];
 			roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
 			if (exampleEdge) {
 				RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
 				roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+				roads.graph[e_desc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 				roads.graph[e_desc]->properties["generatoin_type"] = "pm";
 			} else {
 				GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
@@ -469,6 +482,7 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 		tgtDesc = GraphUtil::splitEdge(roads, closestEdge, intPoint);
 		roads.graph[tgtDesc]->properties["generation_type"] = "pm";
 		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[closestEdge]->properties["group_id"];
+		roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[closestEdge]->properties["ex_id"];
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
@@ -480,8 +494,9 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 		tgtDesc = GraphUtil::addVertex(roads, v);
 		roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
-		// 新しい頂点にgroup_idを引き継ぐ
+		// 新しい頂点にgroup_id、ex_idを引き継ぐ
 		roads.graph[tgtDesc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+		roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 
 		if (targetArea.contains(new_edge->polyline.last())) {
 			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
@@ -501,6 +516,7 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 					if (!G::getBool("fadeOut") || expf(-sqrtf(SQR(x_ratio) + SQR(y_ratio))) >= Util::genRandNormal(expf(-1.0f), 0.1f)) {//Util::genRand(0, 0.65f)) {
 						f.reducedRoads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
 						roads.graph[tgtDesc]->properties["generation_type"] = "example";
+						roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 						if (roadType == RoadEdge::TYPE_AVENUE) {
 							roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 						} else {
@@ -515,6 +531,7 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 			// ターゲットエリアの外に出たら
 			if (byExample) {
 				roads.graph[tgtDesc]->properties["generation_type"] = "example";
+				roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 				if (roadType == RoadEdge::TYPE_AVENUE) {
 					roads.graph[tgtDesc]->properties["example_desc"] = next_ex_v_desc;
 				} else {
@@ -535,8 +552,9 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 
 	RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, new_edge);
 
-	// 新しいエッジにgroup_idを引き継ぐ
+	// 新しいエッジにgroup_id、ex_idを引き継ぐ
 	roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
+	roads.graph[e_desc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
 
 	// 新しいエッジのgeneration_typeを設定
 	roads.graph[e_desc]->properties["generation_type"] = byExample ? "example" : "pm";
