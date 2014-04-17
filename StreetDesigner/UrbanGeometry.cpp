@@ -139,7 +139,6 @@ void UrbanGeometry::render(mylib::TextureManager* textureManager) {
 
 	// draw blocks and parcels
 	for (int i = 0; i < blocks.size(); ++i) {
-		std::cout << "render blocks: " << i << std::endl;
 		renderer.render(blocks[i], textureManager);
 
 		ParcelGraphVertexIter vi, viEnd;
