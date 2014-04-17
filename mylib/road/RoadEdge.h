@@ -25,6 +25,8 @@ public:
 	QColor color;
 	QColor bgColor;
 
+	std::vector<int> localStreetsIntersections;
+
 	bool valid;			// if this edge is valid
 
 	QHash<QString, QVariant> properties;

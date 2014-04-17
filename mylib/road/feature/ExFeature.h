@@ -52,6 +52,7 @@ public:
 	float length(int roadType) const;
 	float curvature(int roadType) const;
 	void computePMParameters();
+	void findIntersectionsWithStreets(RoadGraph &avenues, RoadGraph &streets);
 
 	void load(QString filepath);
 	void load(QDomNode& node);
