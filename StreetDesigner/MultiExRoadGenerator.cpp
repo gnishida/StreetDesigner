@@ -101,8 +101,10 @@ void MultiExRoadGenerator::generateRoadNetwork(bool animation) {
 		RoadGeneratorHelper::removeDeadend(roads);
 	}
 
-	//GraphUtil::clean(roads);
-	//GraphUtil::normalizeLoop(roads);
+	// クリーンアップ
+	GraphUtil::removeSelfIntersectingRoads(roads);
+	GraphUtil::clean(roads);
+	GraphUtil::normalizeLoop(roads);
 
 	RoadGeneratorHelper::check(roads);
 }

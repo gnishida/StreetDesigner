@@ -99,6 +99,8 @@ void WarpRoadGenerator::generateRoadNetwork(bool animation) {
 		RoadGeneratorHelper::removeDeadend(roads);
 	}
 
+	// クリーンアップ
+	GraphUtil::removeSelfIntersectingRoads(roads);
 	GraphUtil::clean(roads);
 	GraphUtil::normalizeLoop(roads);
 
