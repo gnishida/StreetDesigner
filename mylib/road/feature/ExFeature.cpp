@@ -174,38 +174,6 @@ void ExFeature::computePMParameters() {
 	std::cout << "varAvenueCurvature: " << varAvenueCurvature << std::endl;
 }
 
-/**
- * Avenueのエッジ上で、Streetsとの交差点がある場合、それをエッジに記録する。
- */
-void ExFeature::findIntersectionsWithStreets(RoadGraph &avenues, RoadGraph &streets) {
-	RoadEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::edges(avenues.graph); ei != eend; ++ei) {
-		if (!avenues.graph[*ei]->valid) continue;
-
-		RoadVertexDesc src = boost::source(*ei, avenues.graph);
-		RoadVertexDesc tgt = boost::target(*ei, avenues.graph);
-
-		if (src < tgt) {
-			if ((avenues.graph[*ei]->polyline[0] - avenues.graph[src]->pt).lengthSquared() > (avenues.graph[*ei]->polyline[0] - avenues.graph[tgt]->pt).lengthSquared()) {
-				std::reverse(avenues.graph[*ei]->polyline.begin(), avenues.graph[*ei]->polyline.end());
-			}
-		} else {
-			if ((avenues.graph[*ei]->polyline[0] - avenues.graph[tgt]->pt).lengthSquared() > (avenues.graph[*ei]->polyline[0] - avenues.graph[src]->pt).lengthSquared()) {
-				std::reverse(avenues.graph[*ei]->polyline.begin(), avenues.graph[*ei]->polyline.end());
-			}
-		}
-
-		avenues.graph[*ei]->localStreetsIntersections.clear();
-
-		for (int i = 0; i < avenues.graph[*ei]->polyline.size(); ++i) {
-			RoadVertexDesc desc;
-			if (GraphUtil::getVertex(streets, avenues.graph[*ei]->polyline[i], 0.1f, desc)) {
-				avenues.graph[*ei]->localStreetsIntersections.push_back(i);
-			}
-		}
-	}
-}
-
 void ExFeature::load(QString filepath) {
 	// ファイル名からディレクトリ部を取得
 	QString dirname;
@@ -238,9 +206,6 @@ void ExFeature::load(QString filepath) {
 	GraphUtil::copyRoads(avenues, reducedAvenues);
 	GraphUtil::reduce(reducedAvenues);
 	GraphUtil::clean(reducedAvenues);
-
-	// avenueのエッジ上に、streetとの交差点を記録する
-	findIntersectionsWithStreets(reducedAvenues, streets);
 
 	computePMParameters();
 }
