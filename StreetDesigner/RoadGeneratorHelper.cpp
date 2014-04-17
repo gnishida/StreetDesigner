@@ -910,6 +910,76 @@ void RoadGeneratorHelper::chooseEdgeLengthAndCurvature(RoadGraph &roads, const Q
 	int num = 0;
 
 	std::vector<RoadEdgeDesc> edge_descs;
+	std::vector<RoadEdgeDesc> edge_descs2;
+	std::vector<RoadEdgeDesc> edge_descs3;
+	std::vector<RoadEdgeDesc> edge_descs4;
+
+	RoadEdgeIter ei, eend;
+	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
+		if (!roads.graph[*ei]->valid) continue;
+
+		RoadVertexDesc src = boost::source(*ei, roads.graph);
+		RoadVertexDesc tgt = boost::target(*ei, roads.graph);
+
+		edge_descs4.push_back(*ei);
+
+		if ((roads.graph[src]->pt - ex_pt).lengthSquared() > dist2 && (roads.graph[tgt]->pt - ex_pt).lengthSquared() > dist2) continue;
+
+		edge_descs3.push_back(*ei);
+
+		QVector2D vec = roads.graph[src]->pt - roads.graph[tgt]->pt;
+		float dir = atan2f(vec.y(), vec.x());
+
+		float angle = Util::diffAngle(direction, dir);
+
+		// 方向のずれが３０度以内なら、リストに追加
+		if (angle <= M_PI * 30.0f / 180.0f && angle <= M_PI * 150.0f / 180.0f) edge_descs.push_back(*ei);
+
+		// 方向のずれが６０度以内なら、リスト２に追加
+		if (angle <= M_PI * 60.0f / 180.0f && angle <= M_PI * 120.0f / 180.0f) edge_descs2.push_back(*ei);
+	}
+
+	if (edge_descs.size() > 0) {
+		int index = Util::genRand(0, edge_descs.size());
+		if (index >= edge_descs.size()) index = edge_descs.size() - 1;
+
+		length = roads.graph[edge_descs[index]]->polyline.length();
+		curvature = Util::curvature(roads.graph[edge_descs[index]]->polyline);
+	} else if (edge_descs2.size() > 0) {
+		int index = Util::genRand(0, edge_descs2.size());
+		if (index >= edge_descs2.size()) index = edge_descs2.size() - 1;
+
+		length = roads.graph[edge_descs2[index]]->polyline.length();
+		curvature = Util::curvature(roads.graph[edge_descs2[index]]->polyline);
+	} else if (edge_descs3.size() > 0) {
+		int index = Util::genRand(0, edge_descs3.size());
+		if (index >= edge_descs3.size()) index = edge_descs3.size() - 1;
+
+		length = roads.graph[edge_descs3[index]]->polyline.length();
+		curvature = Util::curvature(roads.graph[edge_descs3[index]]->polyline);
+	} else {
+		int index = Util::genRand(0, edge_descs4.size());
+		if (index >= edge_descs4.size()) index = edge_descs4.size() - 1;
+
+		length = roads.graph[edge_descs4[index]]->polyline.length();
+		curvature = Util::curvature(roads.graph[edge_descs4[index]]->polyline);
+	}
+}
+
+/**
+ * Example道路から、指定された座標周辺で、指定された方向に似たエッジの中から、ランダムにエッジを選択し、その長さ、曲率を取得する。
+ */
+/*
+void RoadGeneratorHelper::chooseEdgeLengthAndCurvature(RoadGraph &roads, const QVector2D &ex_pt, float distance, float direction, float &length, float &curvature) {
+	float dist2 = SQR(distance);
+
+	float totalLength = 0.0f;
+	float totalLength2 = 0.0f;
+	float totalCurvature = 0.0f;
+	float totalCurvature2 = 0.0f;
+	int num = 0;
+
+	std::vector<RoadEdgeDesc> edge_descs;
 
 	RoadEdgeIter ei, eend;
 	for (boost::tie(ei, eend) = boost::edges(roads.graph); ei != eend; ++ei) {
@@ -936,7 +1006,7 @@ void RoadGeneratorHelper::chooseEdgeLengthAndCurvature(RoadGraph &roads, const Q
 
 	length = roads.graph[edge_descs[index]]->polyline.length();
 	curvature = Util::curvature(roads.graph[edge_descs[index]]->polyline);
-}
+}*/
 
 /**
  * 位置ptが、bboxの中の上下左右、どの方向かを返却する。
