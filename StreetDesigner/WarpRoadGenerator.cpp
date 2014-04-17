@@ -375,46 +375,55 @@ void WarpRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDesc, 
 
 	// 当該シードに、roadTypeよりも上位レベルの道路セグメントが接続されているか、チェックする
 	bool isConnectedByUpperLevelRoadSegment = false;
-	RoadOutEdgeIter ei, eend;
-	for (boost::tie(ei, eend) = boost::out_edges(srcDesc, roads.graph); ei != eend; ++ei) {
-		if (!roads.graph[*ei]->valid) continue;
+	{
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(srcDesc, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
 
-		if (roads.graph[*ei]->type > roadType) {
-			isConnectedByUpperLevelRoadSegment = true;
-			break;
+			if (roads.graph[*ei]->type > roadType) {
+				isConnectedByUpperLevelRoadSegment = true;
+				break;
+			}
 		}
 	}
 
-	if (!isConnectedByUpperLevelRoadSegment) {
+	// 当該頂点に接続されたエッジが１つかどうか？また、そのエッジを取得
+	bool isConnectedByOneRoadSegment = true;
+	RoadEdgeDesc e_desc;
+	{
+		bool flag = false;
+		RoadOutEdgeIter ei, eend;
+		for (boost::tie(ei, eend) = boost::out_edges(srcDesc, roads.graph); ei != eend; ++ei) {
+			if (!roads.graph[*ei]->valid) continue;
+
+			if (flag) {
+				isConnectedByOneRoadSegment = false;
+				break;
+			} else {
+				e_desc = *ei;
+				flag = true;
+			}
+		}
+	}
+
+	if (!exampleEdge && !isConnectedByUpperLevelRoadSegment && isConnectedByOneRoadSegment) {
 		// 当該頂点の近くに他の頂点があれば、スナップさせる
 		RoadVertexDesc tgtDesc;
-		//if (RoadGeneratorHelper::canSnapToVertex3(roads, srcDesc, snapThreshold, tgtDesc)) {
-		if (GraphUtil::getVertex(roads, roads.graph[srcDesc]->pt, snapThreshold, srcDesc, tgtDesc)) {
-			if (exampleEdge) {
-				RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
-				roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-				roads.graph[e_desc]->properties["generatoin_type"] = "pm";
-			} else {
-				GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
-			}
+		if (RoadGeneratorHelper::canSnapToVertex(roads, srcDesc, snapThreshold, tgtDesc)) {
+			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
 			return;
 		}
 
+		// 近くに他のエッジがあれば、スナップさせる
 		RoadEdgeDesc closeEdge;
 		QVector2D closestPt;
-		if (GraphUtil::getEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
+		if (RoadGeneratorHelper::canSnapToEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
 			tgtDesc = GraphUtil::splitEdge(roads, closeEdge, closestPt);
 			roads.graph[tgtDesc]->properties["generation_type"] = "pm";
 			roads.graph[tgtDesc]->properties["group_id"] = roads.graph[closeEdge]->properties["group_id"];
 			roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
-			if (exampleEdge) {
-				RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
-				roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-				roads.graph[e_desc]->properties["generatoin_type"] = "pm";
-			} else {
-				GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
-			}
+			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
 			return;
 		}
 	}

@@ -326,8 +326,7 @@ void MultiExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDes
 	float snapThreshold;
 
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		//snapThreshold = f.avgAvenueLength * 0.2f;
-		snapThreshold = 100.0f;
+		snapThreshold = f.avgAvenueLength * 0.2f;
 	} else {
 		snapThreshold = f.avgStreetLength * 0.2f;
 	}
@@ -379,20 +378,15 @@ void MultiExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDes
 		}
 	}
 
-	if (!isConnectedByUpperLevelRoadSegment && isConnectedByOneRoadSegment) {
+	if (!exampleEdge && !isConnectedByUpperLevelRoadSegment && isConnectedByOneRoadSegment) {
 		// 当該頂点の近くに他の頂点があれば、スナップさせる
 		RoadVertexDesc tgtDesc;
-		if (exampleEdge && RoadGeneratorHelper::canConnectToVertex(roads, srcDesc, snapThreshold, tgtDesc)) {
-			RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
-			roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-			roads.graph[e_desc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
-			roads.graph[e_desc]->properties["generatoin_type"] = "pm";
-			return;
-		} else if (!exampleEdge && RoadGeneratorHelper::canSnapToVertex(roads, srcDesc, snapThreshold, tgtDesc)) {
+		if (RoadGeneratorHelper::canSnapToVertex(roads, srcDesc, snapThreshold, tgtDesc)) {
 			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
 			return;
 		}
 
+		// 近くに他のエッジがあれば、スナップさせる
 		RoadEdgeDesc closeEdge;
 		QVector2D closestPt;
 		if (RoadGeneratorHelper::canSnapToEdge(roads, srcDesc, snapThreshold, closeEdge, closestPt)) {
@@ -402,14 +396,7 @@ void MultiExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDes
 			roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[closeEdge]->properties["ex_id"];
 			roads.graph[tgtDesc]->properties["parent"] = srcDesc;
 
-			if (exampleEdge) {
-				RoadEdgeDesc e_desc = GraphUtil::addEdge(roads, srcDesc, tgtDesc, roadType, 1);
-				roads.graph[e_desc]->properties["group_id"] = roads.graph[srcDesc]->properties["group_id"];
-				roads.graph[e_desc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
-				roads.graph[e_desc]->properties["generatoin_type"] = "pm";
-			} else {
-				GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
-			}
+			GraphUtil::snapVertex(roads, srcDesc, tgtDesc);
 			return;
 		}
 	}

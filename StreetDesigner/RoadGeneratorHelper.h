@@ -34,6 +34,7 @@ public:
 
 	static void createFourDirection(float direction, std::vector<float> &directions);
 	static void createFourEdges(ExFeature &f, int roadType, const QVector2D &ex_pt, int lanes, float direction, float step, std::vector<RoadEdgePtr> &edges);
+	static void chooseEdgeLengthAndCurvature(RoadGraph &roads, const QVector2D &ex_pt, float distance, float direction, float &length, float &curvature);
 
 	static void removeDeadend(RoadGraph& roads);
 	static void extendDanglingEdges(RoadGraph &roads);
