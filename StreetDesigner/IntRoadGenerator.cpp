@@ -270,7 +270,7 @@ void IntRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
 				RoadVertexDesc ex_v_desc = roads.graph[*vi]->properties["example_desc"].toUInt();
 
 				RoadVertexDesc seedDesc;
-				if (GraphUtil::getVertex(feature.reducedRoads(RoadEdge::TYPE_STREET), feature.reducedRoads(RoadEdge::TYPE_AVENUE).graph[*vi]->pt, 1.0f, seedDesc)) {
+				if (GraphUtil::getVertex(feature.reducedRoads(RoadEdge::TYPE_STREET), feature.reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt, 1.0f, seedDesc)) {
 					// シードとして追加
 					seeds.push_back(*vi);
 					roads.graph[*vi]->properties["example_street_desc"] = seedDesc;
