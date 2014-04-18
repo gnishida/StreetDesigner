@@ -247,6 +247,9 @@
     <ClCompile Include="WarpRoadGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
+    <ClCompile Include="MultiIntExRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -450,6 +453,9 @@
       <Filter>mylib\common</Filter>
     </ClInclude>
     <ClInclude Include="WarpRoadGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiIntExRoadGenerator.h">
       <Filter>Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -580,6 +580,4 @@ void UShapeRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc, st
 	QVector2D pt = feature.reducedRoads(roadType).graph[ex_desc]->pt + roads.graph[v_desc]->pt - roads.graph[nearest_v_desc]->pt;
 
 	RoadGeneratorHelper::createFourEdges(feature, roadType, pt, 1, direction, 10.0f, edges);
-
-	roads.graph[v_desc]->properties["generation_type"] = "pm";
 }

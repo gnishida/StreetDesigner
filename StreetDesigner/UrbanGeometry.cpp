@@ -27,6 +27,7 @@ This file is part of QtUrban.
 #include <road/GraphUtil.h>
 #include "UShapeRoadGenerator.h"
 #include "MultiExRoadGenerator.h"
+#include "MultiIntExRoadGenerator.h"
 #include "IntRoadGenerator.h"
 #include "WarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
@@ -71,6 +72,16 @@ void UrbanGeometry::generateRoadsMultiEx(std::vector<ExFeature> &features) {
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
 	MultiExRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
+	generator.generateRoadNetwork(G::getBool("animation"));
+
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
+}
+
+void UrbanGeometry::generateRoadsMultiIntEx(std::vector<ExFeature> &features) {
+	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
+
+	MultiIntExRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, features);
 	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);

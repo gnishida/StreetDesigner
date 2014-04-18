@@ -116,7 +116,13 @@ void MultiExRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& seeds)
 	seeds.clear();
 
 	for (int i = 0; i < hintLine.size(); ++i) {
-		addAvenueSeed(features[i], hintLine[i], i, seeds);
+		if (features[i].hintLine.size() > 0) {
+			// exampleエリアの、ヒントラインの最初の点に、シードを配置
+			addAvenueSeed(features[i], hintLine[i], features[i].hintLine[0], i, seeds);
+		} else {
+			// exampleエリアの中心にシードを配置
+			addAvenueSeed(features[i], hintLine[i], QVector2D(0, 0), i, seeds);
+		}
 	}
 }
 
@@ -128,11 +134,10 @@ void MultiExRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& seeds)
  * @param pt			シード座標
  * @param seeds			追加されたシードは、seedsに追加される。
  */
-bool MultiExRoadGenerator::addAvenueSeed(ExFeature &f, const QVector2D &pt, int group_id, std::list<RoadVertexDesc>& seeds) {
+bool MultiExRoadGenerator::addAvenueSeed(ExFeature &f, const QVector2D &pt, const QVector2D &ex_pt, int group_id, std::list<RoadVertexDesc>& seeds) {
 	if (!targetArea.contains(pt)) return false;
 
-	// Avenueカーネルの中で、offsetの位置に最も近いものを探す
-	RoadVertexDesc seedDesc = GraphUtil::getVertex(f.reducedRoads(RoadEdge::TYPE_AVENUE), QVector2D(0, 0));
+	RoadVertexDesc seedDesc = GraphUtil::getVertex(f.reducedRoads(RoadEdge::TYPE_AVENUE), ex_pt);
 
 	// 頂点を追加し、シードとする
 	RoadVertexPtr v = RoadVertexPtr(new RoadVertex(pt));
@@ -519,7 +524,7 @@ bool MultiExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc,
 					BBox bbox = f.area.envelope();
 					float x_ratio = f.roads(roadType).graph[next_ex_v_desc]->pt.x() / bbox.dx() * 2.0f;
 					float y_ratio = f.roads(roadType).graph[next_ex_v_desc]->pt.y() / bbox.dy() * 2.0f;					
-					if (!G::getBool("fadeOut") || expf(-sqrtf(SQR(x_ratio) + SQR(y_ratio))) >= Util::genRandNormal(expf(-1.0f), 0.1f)) {//Util::genRand(0, 0.65f)) {
+					if (!G::getBool("fadeOut") || expf(-sqrtf(SQR(x_ratio) + SQR(y_ratio))) >= Util::genRandNormal(expf(-1.2f), 0.1f)) {//Util::genRand(0, 0.65f)) {
 						f.reducedRoads(roadType).graph[next_ex_v_desc]->properties["used"] = true;
 						roads.graph[tgtDesc]->properties["generation_type"] = "example";
 						roads.graph[tgtDesc]->properties["ex_id"] = roads.graph[srcDesc]->properties["ex_id"];
@@ -601,6 +606,4 @@ void MultiExRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc, E
 	QVector2D pt = f.reducedRoads(roadType).graph[ex_desc]->pt + roads.graph[v_desc]->pt - roads.graph[nearest_v_desc]->pt;
 
 	RoadGeneratorHelper::createFourEdges(f, roadType, pt, 1, direction, 10.0f, edges);
-
-	roads.graph[v_desc]->properties["generation_type"] = "pm";
 }

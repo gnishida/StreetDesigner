@@ -6,7 +6,7 @@
 #include <road/feature/ExFeature.h>
 #include "MainWindow.h"
 
-class MultiExRoadGenerator {
+class MultiIntExRoadGenerator {
 private:
 	MainWindow *mainWin;
 	RoadGraph &roads;
@@ -17,8 +17,8 @@ private:
 	bool animation;
 
 public:
-	MultiExRoadGenerator(MainWindow *mainWin, RoadGraph &roads, const Polygon2D &targetArea, const Polyline2D &hintLine, mylib::Terrain* terrain, std::vector<ExFeature> &features) : mainWin(mainWin), roads(roads), targetArea(targetArea), hintLine(hintLine), terrain(terrain), features(features) {}
-	~MultiExRoadGenerator() {}
+	MultiIntExRoadGenerator(MainWindow *mainWin, RoadGraph &roads, const Polygon2D &targetArea, const Polyline2D &hintLine, mylib::Terrain* terrain, std::vector<ExFeature> &features) : mainWin(mainWin), roads(roads), targetArea(targetArea), hintLine(hintLine), terrain(terrain), features(features) {}
+	~MultiIntExRoadGenerator() {}
 
 	void generateRoadNetwork(bool animation = false);
 
@@ -31,7 +31,8 @@ private:
 	bool growRoadSegment(int roadType, RoadVertexDesc srcDesc, ExFeature& f, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds);
 
 	void synthesizeItem(int roadType, RoadVertexDesc v_desc, ExFeature &f, std::vector<RoadEdgePtr> &edges);
-
+	int getClosestGroup(const QVector2D &pt);
+	void replaceEdgeByExample(ExFeature &f, int roadType, RoadEdgePtr edge);
 public:
 };
 

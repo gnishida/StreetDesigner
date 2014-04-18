@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Thu Apr 17 11:21:18 2014
+** Created: Fri Apr 18 17:52:31 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -33,6 +33,7 @@ public:
     QGroupBox *groupBox_8;
     QPushButton *pushButtonGenerateMultiEx;
     QCheckBox *checkBoxFadeOut;
+    QPushButton *pushButtonGenerateMultiIntEx;
     QGroupBox *groupBox;
     QLabel *label;
     QLineEdit *lineEditNumAvenueIterations;
@@ -66,13 +67,16 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox_8 = new QGroupBox(dockWidgetContents);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
-        groupBox_8->setGeometry(QRect(10, 320, 171, 91));
+        groupBox_8->setGeometry(QRect(10, 320, 171, 131));
         pushButtonGenerateMultiEx = new QPushButton(groupBox_8);
         pushButtonGenerateMultiEx->setObjectName(QString::fromUtf8("pushButtonGenerateMultiEx"));
         pushButtonGenerateMultiEx->setGeometry(QRect(20, 50, 131, 31));
         checkBoxFadeOut = new QCheckBox(groupBox_8);
         checkBoxFadeOut->setObjectName(QString::fromUtf8("checkBoxFadeOut"));
         checkBoxFadeOut->setGeometry(QRect(10, 20, 121, 17));
+        pushButtonGenerateMultiIntEx = new QPushButton(groupBox_8);
+        pushButtonGenerateMultiIntEx->setObjectName(QString::fromUtf8("pushButtonGenerateMultiIntEx"));
+        pushButtonGenerateMultiIntEx->setGeometry(QRect(20, 90, 131, 31));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(10, 10, 171, 191));
@@ -107,7 +111,7 @@ public:
         checkBoxCleanStreets->setGeometry(QRect(10, 100, 131, 17));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 590, 171, 101));
+        groupBox_5->setGeometry(QRect(10, 610, 171, 101));
         pushButtonConnect = new QPushButton(groupBox_5);
         pushButtonConnect->setObjectName(QString::fromUtf8("pushButtonConnect"));
         pushButtonConnect->setGeometry(QRect(20, 60, 131, 31));
@@ -134,7 +138,7 @@ public:
         pushButtonGenerateInterpolation->setGeometry(QRect(20, 60, 131, 31));
         groupBox_3 = new QGroupBox(dockWidgetContents);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        groupBox_3->setGeometry(QRect(10, 420, 171, 101));
+        groupBox_3->setGeometry(QRect(10, 460, 171, 101));
         pushButtonGenerateWarp = new QPushButton(groupBox_3);
         pushButtonGenerateWarp->setObjectName(QString::fromUtf8("pushButtonGenerateWarp"));
         pushButtonGenerateWarp->setGeometry(QRect(20, 60, 131, 31));
@@ -143,7 +147,7 @@ public:
         pushButtonGenerateUShape->setGeometry(QRect(20, 20, 131, 31));
         pushButtonClear = new QPushButton(dockWidgetContents);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
-        pushButtonClear->setGeometry(QRect(30, 540, 131, 31));
+        pushButtonClear->setGeometry(QRect(30, 570, 131, 31));
         ControlWidget->setWidget(dockWidgetContents);
 
         retranslateUi(ControlWidget);
@@ -154,8 +158,9 @@ public:
     void retranslateUi(QDockWidget *ControlWidget)
     {
         groupBox_8->setTitle(QApplication::translate("ControlWidget", "Multiple Examples", 0, QApplication::UnicodeUTF8));
-        pushButtonGenerateMultiEx->setText(QApplication::translate("ControlWidget", "Generate", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerateMultiEx->setText(QApplication::translate("ControlWidget", "Multi Ex", 0, QApplication::UnicodeUTF8));
         checkBoxFadeOut->setText(QApplication::translate("ControlWidget", "Fade out", 0, QApplication::UnicodeUTF8));
+        pushButtonGenerateMultiIntEx->setText(QApplication::translate("ControlWidget", "Multi Ex Interpolation", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("ControlWidget", "Options", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("ControlWidget", "Avenue Iteration:", 0, QApplication::UnicodeUTF8));
         checkBoxLocalStreets->setText(QApplication::translate("ControlWidget", "Generate Local Streets", 0, QApplication::UnicodeUTF8));

@@ -230,6 +230,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="BlockGenerator.cpp" />
     <ClCompile Include="MultiExRoadGenerator.cpp" />
+    <ClCompile Include="MultiIntExRoadGenerator.cpp" />
     <ClCompile Include="ParcelGenerator.cpp" />
     <ClCompile Include="RoadGeneratorHelper.cpp" />
     <ClCompile Include="TerrainSizeInputDialog.cpp" />
@@ -280,6 +281,7 @@
     <ClInclude Include="..\mylib\road\RoadEdge.h" />
     <ClInclude Include="..\mylib\road\RoadGraph.h" />
     <ClInclude Include="..\mylib\road\RoadVertex.h" />
+    <ClInclude Include="MultiIntExRoadGenerator.h" />
     <ClInclude Include="RoadGeneratorHelper.h" />
     <ClInclude Include="UShapeRoadGenerator.h" />
     <ClInclude Include="WarpRoadGenerator.h" />

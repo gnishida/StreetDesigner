@@ -26,6 +26,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	// register the event handlers
 	connect(ui.horizontalSliderInterpolationFactor, SIGNAL(valueChanged(int)), this, SLOT(updateInterpolationFactor(int)));
 	connect(ui.pushButtonGenerateMultiEx, SIGNAL(clicked()), this, SLOT(generateRoadsMultiEx()));
+	connect(ui.pushButtonGenerateMultiIntEx, SIGNAL(clicked()), this, SLOT(generateRoadsMultiIntEx()));
 	connect(ui.pushButtonGenerateInterpolation, SIGNAL(clicked()), this, SLOT(generateRoadsInterpolation()));
 	connect(ui.pushButtonGenerateUShape, SIGNAL(clicked()), this, SLOT(generateRoadsUShape()));
 	connect(ui.pushButtonGenerateWarp, SIGNAL(clicked()), this, SLOT(generateRoadsWarp()));
@@ -71,6 +72,33 @@ void ControlWidget::generateRoadsMultiEx() {
 	}
 
 	mainWin->urbanGeometry->generateRoadsMultiEx(features);
+	
+	mainWin->glWidget->updateGL();
+}
+
+void ControlWidget::generateRoadsMultiIntEx() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
+	G::global()["fadeOut"] = ui.checkBoxFadeOut->isChecked();
+
+	std::vector<ExFeature> features;
+	features.resize(mainWin->urbanGeometry->areas.selectedArea()->hintLine.size());
+	for (int i = 0; i < mainWin->urbanGeometry->areas.selectedArea()->hintLine.size(); ++i) {
+		QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+		if (filename.isEmpty()) return;
+	
+		features[i].load(filename);
+	}
+
+	mainWin->urbanGeometry->generateRoadsMultiIntEx(features);
 	
 	mainWin->glWidget->updateGL();
 }
