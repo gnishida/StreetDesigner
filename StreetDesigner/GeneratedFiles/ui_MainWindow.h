@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'MainWindow.ui'
 **
-** Created: Thu Apr 17 11:21:18 2014
+** Created: Fri Apr 18 12:47:39 2014
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -360,7 +360,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Road Designer", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Street Designer", 0, QApplication::UnicodeUTF8));
         actionNewTerrain->setText(QApplication::translate("MainWindow", "New Terrain", 0, QApplication::UnicodeUTF8));
         actionNewTerrain->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", 0, QApplication::UnicodeUTF8));
         actionOpenTerrain->setText(QApplication::translate("MainWindow", "Open Terrain", 0, QApplication::UnicodeUTF8));

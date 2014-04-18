@@ -43,6 +43,7 @@ TerrainCell& Terrain::getCell(int idxX, int idxY) {
  * Initialize the terrain with the elevation 0m.
  */
 void Terrain::init() {
+	std::cout << "Terrain::init" << std::endl;
 	this->numCols = width / cellLength;
 	this->numRows = depth / cellLength;
 
@@ -53,6 +54,8 @@ void Terrain::init() {
 			this->cells.push_back(cell);
 		}
 	}
+
+	this->setModified();
 }
 
 float Terrain::getValue(int x, int y) {

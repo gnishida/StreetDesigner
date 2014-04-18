@@ -1,8 +1,0 @@
-data/textures/grass.jpg:300.0:300.0
-data/textures/water.jpg:80.0:80.0
-data/textures/street.jpg:1:1
-data/textures/sky_topav9.jpg:512.0:512.0
-data/textures/sky_rightav9.jpg:512.0:512.0
-data/textures/sky_leftav9.jpg:512.0:512.0
-data/textures/sky_frontav9.jpg:512.0:512.0
-data/textures/sky_backav9.jpg:512.0:512.0
