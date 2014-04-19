@@ -3,6 +3,8 @@
 #include "../GraphUtil.h"
 #include "../RoadEdge.h"
 #include "ExFeature.h"
+#include "../../common/Histogram.h"
+#include <fstream>
 
 void ExFeature::setArea(const Polygon2D &area) {
 	this->area = area;

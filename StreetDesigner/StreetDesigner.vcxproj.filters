@@ -241,9 +241,6 @@
     <ClCompile Include="..\mylib\common\Histogram.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\common\HistogramBin.cpp">
-      <Filter>mylib\common</Filter>
-    </ClCompile>
     <ClCompile Include="WarpRoadGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
@@ -447,9 +444,6 @@
       <Filter>Files</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\common\Histogram.h">
-      <Filter>mylib\common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\common\HistogramBin.h">
       <Filter>mylib\common</Filter>
     </ClInclude>
     <ClInclude Include="WarpRoadGenerator.h">

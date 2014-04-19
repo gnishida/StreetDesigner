@@ -1,19 +1,22 @@
 #pragma once
 
+#include <QMap>
 #include "HistogramBin.h"
 
 class Histogram {
 public:
-	float step;
-	std::vector<HistogramBin> bins;
+	int start;
+	int end;
+	int step;
+	std::vector<int> bins;
+	//std::map<std::pair<int, int>, int> bins;
 
 public:
-	Histogram() : step(300.0f) {}
-	Histogram(float step, int num);
+	Histogram(int start, int end, int step);
 	~Histogram() {}
 
 	void clear();
-	void addBin(float min_value, float max_value);
-	HistogramBin& getBin(float value);
+	void add(int value);
+	int size();
 };
 

@@ -30,7 +30,6 @@ public:
 	float varAvenueCurvature;
 	float avgStreetCurvature;
 	float varStreetCurvature;
-	Histogram streetSeedNum;
 
 public:
 	ExFeature() {}

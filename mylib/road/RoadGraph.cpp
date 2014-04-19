@@ -306,13 +306,13 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 			if (graph[*ei]->properties["generation_type"] == "example" || mixed) {
 				// group_idに基づいて色を決定
 				if (graph[*ei]->properties["group_id"].toInt() == 0) {
-					color = QColor(255, 128, 128);
+					color = QColor(255, 0, 0);
 					bgColor = QColor(128, 0, 0);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 1) {
-					color = QColor(128, 255, 128);
-					bgColor = QColor(0, 128, 0);
+					color = QColor(0, 196, 0);
+					bgColor = QColor(0, 64, 0);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 2) {
-					color = QColor(128, 128, 255);
+					color = QColor(0, 0, 255);
 					bgColor = QColor(0, 0, 128);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 3) {
 					color = QColor(255, 0, 255);
@@ -326,8 +326,8 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 				}
 
 				if (mixed) {
-					color = color.lighter(120);
-					bgColor = bgColor.lighter(120);
+					color = color.lighter(150);
+					bgColor = bgColor.lighter(150);
 				}
 			} else {
 				// PMベースは、白色

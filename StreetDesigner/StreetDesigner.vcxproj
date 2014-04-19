@@ -145,7 +145,6 @@
     <ClCompile Include="..\mylib\common\ElevationColorTable.cpp" />
     <ClCompile Include="..\mylib\common\global.cpp" />
     <ClCompile Include="..\mylib\common\Histogram.cpp" />
-    <ClCompile Include="..\mylib\common\HistogramBin.cpp" />
     <ClCompile Include="..\mylib\common\Polygon2D.cpp" />
     <ClCompile Include="..\mylib\common\Polygon3D.cpp" />
     <ClCompile Include="..\mylib\common\Polyline2D.cpp" />
@@ -247,7 +246,6 @@
     <ClInclude Include="..\mylib\common\ElevationColorTable.h" />
     <ClInclude Include="..\mylib\common\global.h" />
     <ClInclude Include="..\mylib\common\Histogram.h" />
-    <ClInclude Include="..\mylib\common\HistogramBin.h" />
     <ClInclude Include="..\mylib\common\Polygon2D.h" />
     <ClInclude Include="..\mylib\common\Polygon3D.h" />
     <ClInclude Include="..\mylib\common\Polyline2D.h" />

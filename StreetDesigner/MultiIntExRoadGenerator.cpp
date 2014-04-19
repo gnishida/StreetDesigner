@@ -489,6 +489,10 @@ bool MultiIntExRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 
 		// 他の頂点にスナップ
 		GraphUtil::movePolyline(roads, new_edge->polyline, roads.graph[srcDesc]->pt, roads.graph[tgtDesc]->pt);
+
+		// 他のエッジと交差するか
+		if (GraphUtil::isIntersect(roads, new_edge->polyline)) return false;
+
 		std::reverse(new_edge->polyline.begin(), new_edge->polyline.end());
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (GraphUtil::getEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
