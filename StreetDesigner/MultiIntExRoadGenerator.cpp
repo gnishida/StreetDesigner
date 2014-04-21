@@ -177,7 +177,8 @@ void MultiIntExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &see
 			RoadVertexDesc src = boost::source(*ei, roads.graph);
 			RoadVertexDesc tgt = boost::target(*ei, roads.graph);
 
-			if (roads.graph[e]->properties["generation_type"] == "example" && (roads.graph[src]->properties["generation_type"] == "example" || roads.graph[tgt]->properties["generation_type"] == "example")) {
+			//if (roads.graph[e]->properties["generation_type"] == "example" && (roads.graph[src]->properties["generation_type"] == "example" || roads.graph[tgt]->properties["generation_type"] == "example")) {
+			if (roads.graph[e]->properties["generation_type"] == "example") {
 				// ターゲットエリア座標空間から、Example座標空間へのオフセットを計算
 				QVector2D offset;
 				int group_id;
@@ -187,11 +188,13 @@ void MultiIntExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &see
 					group_id = roads.graph[src]->properties["group_id"].toInt();
 					ex_id = roads.graph[src]->properties["ex_id"].toInt();
 					offset = features[ex_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[src]->pt;
-				} else {
+				} else if (roads.graph[tgt]->properties["generation_type"] == "example") {
 					RoadVertexDesc ex_v_desc = roads.graph[tgt]->properties["example_desc"].toUInt();
 					group_id = roads.graph[tgt]->properties["group_id"].toInt();
 					ex_id = roads.graph[tgt]->properties["ex_id"].toInt();
 					offset = features[ex_id].reducedRoads(RoadEdge::TYPE_AVENUE).graph[ex_v_desc]->pt - roads.graph[tgt]->pt;
+				} else {
+					continue;
 				}
 
 				while (edge->polyline.size() > 2) {
@@ -236,15 +239,15 @@ void MultiIntExRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &see
 					e = e2;
 				}
 			} else {
-				// 両端の頂点から、group_id、ex_idを特定
+				// group_id、ex_idを取得
 				int group_id = roads.graph[src]->properties["group_id"].toInt();
 				int ex_id = roads.graph[src]->properties["ex_id"].toInt();
 
 				int step;
 				if (roads.graph[e]->polyline.length() > features[ex_id].length(RoadEdge::TYPE_STREET) * 5) {
-					step = roads.graph[e]->polyline.size() / 5;
+					step = roads.graph[e]->polyline.size() / 5 + 1;
 				} else {
-					step = roads.graph[e]->polyline.size() / 2;
+					step = roads.graph[e]->polyline.size() / 2 + 1;
 				}
 				if (step <= 1) continue;
 		
@@ -330,10 +333,25 @@ void MultiIntExRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcD
 void MultiIntExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDesc, ExFeature& f, std::list<RoadVertexDesc> &seeds) {
 	float snapThreshold;
 
+	// 直近のexampleを使用する
+	int ex_id;
+	{
+		float min_dist = std::numeric_limits<float>::max();
+		for (int i = 0; i < hintLine.size(); ++i) {
+			float dist = (hintLine[i] - roads.graph[srcDesc]->pt).lengthSquared();
+			if (dist < min_dist) {
+				min_dist = dist;
+				ex_id = i;
+			}
+		}
+	}
+
 	if (roadType == RoadEdge::TYPE_AVENUE) {
 		snapThreshold = f.avgAvenueLength * 0.2f;
+		//snapThreshold = features[ex_id].avgAvenueLength * 0.2f;
 	} else {
 		snapThreshold = f.avgStreetLength * 0.2f;
+		//snapThreshold = features[ex_id].avgStreetLength * 0.2f;
 	}
 
 	// この頂点に、exampleベースのedgeが１つでもあるか？
@@ -409,6 +427,7 @@ void MultiIntExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc src
 	// 道路生成用のカーネルを合成する
 	std::vector<RoadEdgePtr> edges;
 	synthesizeItem(roadType, srcDesc, f, edges);
+	//synthesizeItem(roadType, srcDesc, features[ex_id], edges);
 	
 	float roadSnapFactor = G::getFloat("roadSnapFactor");
 	float roadAngleTolerance = G::getFloat("roadAngleTolerance");
@@ -423,6 +442,7 @@ void MultiIntExRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc src
 	for (int i = 0; i < edges.size(); ++i) {
 		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, edges[i]->polyline, roadAngleTolerance)) continue;
 		growRoadSegment(roadType, srcDesc, f, edges[i]->polyline, 1, 0, false, roadSnapFactor, roadAngleTolerance, seeds);
+		//growRoadSegment(roadType, srcDesc, features[ex_id], edges[i]->polyline, 1, 0, false, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
 
@@ -695,4 +715,6 @@ void MultiIntExRoadGenerator::replaceEdgeByExample(ExFeature &f, int roadType, R
 	edge->polyline = e->polyline;
 	edge->polyline.translate(-edge->polyline[0] + offset);
 	edge->polyline.rotate(-Util::rad2deg(angle), offset);
+
+	edge->polyline = GraphUtil::finerEdge(edge->polyline, 10.0f);
 }
