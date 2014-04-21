@@ -31,6 +31,7 @@ This file is part of QtUrban.
 #include "IntRoadGenerator.h"
 #include "WarpRoadGenerator.h"
 #include "SmoothWarpRoadGenerator.h"
+#include "VerySmoothWarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
@@ -42,7 +43,7 @@ UrbanGeometry::UrbanGeometry(MainWindow* mainWin) {
 
 	terrain = NULL;
 
-	waterRenderer = new mylib::WaterRenderer(300, 3000, -2.0f);
+	waterRenderer = new mylib::WaterRenderer(3000, 3000, -2.0f);
 
 	loadTerrain("data/default.trn");
 
@@ -113,6 +114,16 @@ void UrbanGeometry::generateRoadsSmoothWarp(ExFeature &feature) {
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
 	SmoothWarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	generator.generateRoadNetwork(G::getBool("animation"));
+
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
+}
+
+void UrbanGeometry::generateRoadsVerySmoothWarp(ExFeature &feature) {
+	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
+
+	VerySmoothWarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);

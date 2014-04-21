@@ -256,6 +256,9 @@
     <ClCompile Include="..\mylib\common\TensorField.cpp">
       <Filter>mylib\common</Filter>
     </ClCompile>
+    <ClCompile Include="VerySmoothWarpRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -469,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="..\mylib\common\TensorField.h">
       <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="VerySmoothWarpRoadGenerator.h">
+      <Filter>Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -52,7 +52,7 @@ public:
 	float curvature(int roadType) const;
 	void computePMParameters();
 
-	void load(QString filepath);
+	void load(QString filepath, bool reduce = true);
 	void load(QDomNode& node);
 	void loadAvenue(QDomNode& node);
 	void loadStreet(QDomNode& node);

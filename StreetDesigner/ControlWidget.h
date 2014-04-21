@@ -26,6 +26,7 @@ public slots:
 	void generateRoadsUShape();
 	void generateRoadsWarp();
 	void generateRoadsSmoothWarp();
+	void generateRoadsVerySmoothWarp();
 	void clear();
 	void mergeRoads();
 	void connectRoads();

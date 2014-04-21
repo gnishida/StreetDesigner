@@ -31,6 +31,7 @@ ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget"
 	connect(ui.pushButtonGenerateUShape, SIGNAL(clicked()), this, SLOT(generateRoadsUShape()));
 	connect(ui.pushButtonGenerateWarp, SIGNAL(clicked()), this, SLOT(generateRoadsWarp()));
 	connect(ui.pushButtonGenerateSmoothWarp, SIGNAL(clicked()), this, SLOT(generateRoadsSmoothWarp()));
+	connect(ui.pushButtonGenerateVerySmoothWarp, SIGNAL(clicked()), this, SLOT(generateRoadsVerySmoothWarp()));
 	connect(ui.pushButtonClear, SIGNAL(clicked()), this, SLOT(clear()));
 	connect(ui.pushButtonConnect, SIGNAL(clicked()), this, SLOT(connectRoads()));
 	connect(ui.pushButtonMerge, SIGNAL(clicked()), this, SLOT(mergeRoads()));
@@ -192,9 +193,32 @@ void ControlWidget::generateRoadsSmoothWarp() {
 	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
 	if (filename.isEmpty()) return;
 	
-	feature.load(filename);
+	feature.load(filename, false);
 
 	mainWin->urbanGeometry->generateRoadsSmoothWarp(feature);
+	
+	mainWin->glWidget->updateGL();
+}
+
+void ControlWidget::generateRoadsVerySmoothWarp() {
+	if (mainWin->urbanGeometry->areas.selectedIndex == -1) return;
+
+	G::global()["numAvenueIterations"] = ui.lineEditNumAvenueIterations->text().toInt();
+	G::global()["numStreetIterations"] = ui.lineEditNumStreetIterations->text().toInt();
+	G::global()["cleanAvenues"] = ui.checkBoxCleanAvenues->isChecked();
+	G::global()["cleanStreets"] = ui.checkBoxCleanStreets->isChecked();
+	G::global()["roadInterpolationFactor"] = ui.horizontalSliderInterpolationFactor->value() * 0.01f;
+	G::global()["generateLocalStreets"] = ui.checkBoxLocalStreets->isChecked();
+	G::global()["cropping"] = ui.checkBoxCropping->isChecked();
+	G::global()["animation"] = ui.checkBoxAnimation->isChecked();
+
+	ExFeature feature;
+	QString filename = QFileDialog::getOpenFileName(this, tr("Open Feature file..."), "", tr("StreetMap Files (*.xml)"));
+	if (filename.isEmpty()) return;
+	
+	feature.load(filename, false);
+
+	mainWin->urbanGeometry->generateRoadsVerySmoothWarp(feature);
 	
 	mainWin->glWidget->updateGL();
 }

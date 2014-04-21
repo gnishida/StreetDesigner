@@ -16,7 +16,7 @@ public:
 	TensorField() {}
 	~TensorField() {}
 
-	void init(const Polygon2D &area, const Polyline2D &hintLine);
+	void init(const Polygon2D &area, const Polyline2D &hintLine, const Polyline2D &exampleHintLine);
 	float get(const QVector2D &pt);
 	void save(const QString &filename);
 };

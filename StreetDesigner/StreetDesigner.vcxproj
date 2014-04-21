@@ -239,6 +239,7 @@
     <ClCompile Include="UrbanGeometry.cpp" />
     <ClCompile Include="PropertyWidget.cpp" />
     <ClCompile Include="UShapeRoadGenerator.cpp" />
+    <ClCompile Include="VerySmoothWarpRoadGenerator.cpp" />
     <ClCompile Include="WarpRoadGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +289,7 @@
     <ClInclude Include="RoadGeneratorHelper.h" />
     <ClInclude Include="SmoothWarpRoadGenerator.h" />
     <ClInclude Include="UShapeRoadGenerator.h" />
+    <ClInclude Include="VerySmoothWarpRoadGenerator.h" />
     <ClInclude Include="WarpRoadGenerator.h" />
     <CustomBuild Include="PropertyWidget.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

@@ -72,6 +72,7 @@ public:
 	void generateRoadsUShape(ExFeature &feature);
 	void generateRoadsWarp(ExFeature &feature);
 	void generateRoadsSmoothWarp(ExFeature &feature);
+	void generateRoadsVerySmoothWarp(ExFeature &feature);
 	void generateBlocks();
 	void generateParcels();
 

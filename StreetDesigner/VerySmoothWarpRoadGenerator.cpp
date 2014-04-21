@@ -6,10 +6,10 @@
 #include <common/ConvexHull.h>
 #include <common/TopNSearch.h>
 #include <road/GraphUtil.h>
-#include "SmoothWarpRoadGenerator.h"
+#include "VerySmoothWarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 
-void SmoothWarpRoadGenerator::generateRoadNetwork(bool animation) {
+void VerySmoothWarpRoadGenerator::generateRoadNetwork(bool animation) {
 	srand(12345);
 
 	std::list<RoadVertexDesc> seeds;
@@ -111,9 +111,19 @@ void SmoothWarpRoadGenerator::generateRoadNetwork(bool animation) {
 /**
  * シード頂点を生成する。
  */
-void SmoothWarpRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& seeds) {
+void VerySmoothWarpRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& seeds) {
 	seeds.clear();
 
+	// B-splineの位置を計算
+	Polyline2D bsplineHintLine;
+	bsplineHintLine.push_back(hintLine[0]);
+	for (int i = 1; i < hintLine.size() - 1; ++i) {
+		QVector2D pt1 = (hintLine[i - 1] + hintLine[i]) * 0.5f;
+		QVector2D pt2 = (hintLine[i] + hintLine[i + 1]) * 0.5f;
+		bsplineHintLine.push_back((pt1 + pt2) * 0.5f);
+	}
+	bsplineHintLine.push_back(hintLine.last());
+	
 	for (int i = 0; i < hintLine.size(); ++i) {
 		float angle;
 
@@ -141,11 +151,13 @@ void SmoothWarpRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& see
 			angle = Util::diffAngle(vec, ex_vec, false);
 		}
 
-		//rotationAngles.push_back(angle);
-		addAvenueSeed(hintLine[i], feature.hintLine[i], i, angle, seeds);
+		//addAvenueSeed(hintLine[i], feature.hintLine[i], i, angle, seeds);
+		addAvenueSeed(bsplineHintLine[i], feature.hintLine[i], i, angle, seeds);
 	}
 
 	initTensorField();
+
+	//hintLine = bsplineHintLine;
 }
 
 /**
@@ -157,7 +169,7 @@ void SmoothWarpRoadGenerator::generateAvenueSeeds(std::list<RoadVertexDesc>& see
  * @param pt			シード座標
  * @param seeds			追加されたシードは、seedsに追加される。
  */
-bool SmoothWarpRoadGenerator::addAvenueSeed(const QVector2D &pt, const QVector2D &ex_pt, int group_id, float angle, std::list<RoadVertexDesc>& seeds) {
+bool VerySmoothWarpRoadGenerator::addAvenueSeed(const QVector2D &pt, const QVector2D &ex_pt, int group_id, float angle, std::list<RoadVertexDesc>& seeds) {
 	if (!targetArea.contains(pt)) return false;
 
 	// Avenueカーネルの中で、offsetの位置に最も近いものを探す
@@ -179,7 +191,7 @@ bool SmoothWarpRoadGenerator::addAvenueSeed(const QVector2D &pt, const QVector2D
 /**
  * Local Street用のシードを生成する。
  */
-void SmoothWarpRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
+void VerySmoothWarpRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &seeds) {
 	seeds.clear();
 
 	int vertex_num = boost::num_vertices(roads.graph);
@@ -322,7 +334,7 @@ void SmoothWarpRoadGenerator::generateStreetSeeds(std::list<RoadVertexDesc> &see
  * このシードを使って、道路生成する。
  * Exampleベースで生成する。
  */
-void SmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
+void VerySmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
 	RoadVertexDesc ex_v_desc;
 	if (roadType == RoadEdge::TYPE_AVENUE) {
 		ex_v_desc = roads.graph[srcDesc]->properties["example_desc"].toUInt();
@@ -346,10 +358,9 @@ void SmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcD
 		QVector2D offset = polyline[0];
 		polyline.translate(offset * -1.0f);
 
-		polyline.rotate(-Util::rad2deg(angle));
+		//polyline.rotate(-Util::rad2deg(angle));
 
-		/*
-		polyline = GraphUtil::finerEdge(polyline, 10.0f);
+		polyline = GraphUtil::finerEdge(polyline, 20.0f);
 		Polyline2D rotatedPolyline;
 		rotatedPolyline.push_back(polyline[0]);
 		for (int i = 1; i < polyline.size(); ++i) {
@@ -357,22 +368,21 @@ void SmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcD
 			float angle = tensorField.get(pt);
 			rotatedPolyline.push_back(rotatedPolyline[i - 1] + Util::rotate(polyline[i] - polyline[i - 1], angle));
 		}
-		*/
 
-		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.3f)) continue;
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, rotatedPolyline, 0.3f)) continue;
 
-		growRoadSegment(roadType, srcDesc, polyline, feature.reducedRoads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
+		growRoadSegment(roadType, srcDesc, rotatedPolyline, feature.reducedRoads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
 
 /**
  * このシードを使って、PM方式で道路生成する。
  */
-void SmoothWarpRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
+void VerySmoothWarpRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc srcDesc, std::list<RoadVertexDesc> &seeds) {
 	float snapThreshold;
 
 	if (roadType == RoadEdge::TYPE_AVENUE) {
-		snapThreshold = feature.avgAvenueLength * 0.2f;
+		snapThreshold = feature.avgAvenueLength * 1.2f;
 	} else {
 		snapThreshold = feature.avgStreetLength * 0.2f;
 	}
@@ -463,7 +473,7 @@ void SmoothWarpRoadGenerator::attemptExpansion2(int roadType, RoadVertexDesc src
  * 指定されたpolylineに従って、srcDesc頂点からエッジを伸ばす。
  * エッジの端点が、srcDescとは違うセルに入る場合は、falseを返却する。
  */
-bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
+bool VerySmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, const Polyline2D &polyline, int lanes, RoadVertexDesc next_ex_v_desc, bool byExample, float snapFactor, float angleTolerance, std::list<RoadVertexDesc> &seeds) {
 	bool intercepted = false;
 
 	// 新しいエッジを生成
@@ -610,7 +620,7 @@ bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 /**
  * PMに従って、カーネルを合成する
  */
-void SmoothWarpRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc, std::vector<RoadEdgePtr> &edges) {
+void VerySmoothWarpRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc, std::vector<RoadEdgePtr> &edges) {
 	// 当該頂点から出るエッジをリストアップする
 	std::vector<Polyline2D> polylines;
 	QList<RoadVertexDesc> neighbors;
@@ -642,7 +652,7 @@ void SmoothWarpRoadGenerator::synthesizeItem(int roadType, RoadVertexDesc v_desc
 	RoadGeneratorHelper::createFourEdges(feature, roadType, pt, 1, direction, 10.0f, edges);
 }
 
-void SmoothWarpRoadGenerator::initTensorField() {
+void VerySmoothWarpRoadGenerator::initTensorField() {
 	tensorField.init(targetArea, hintLine, feature.hintLine);
 
 	tensorField.save("tensor.jpg");

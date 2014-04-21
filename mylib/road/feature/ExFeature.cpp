@@ -176,7 +176,7 @@ void ExFeature::computePMParameters() {
 	std::cout << "varAvenueCurvature: " << varAvenueCurvature << std::endl;
 }
 
-void ExFeature::load(QString filepath) {
+void ExFeature::load(QString filepath, bool reduce) {
 	// ファイル名からディレクトリ部を取得
 	QString dirname;
 	int index = filepath.lastIndexOf("/");
@@ -206,7 +206,9 @@ void ExFeature::load(QString filepath) {
 	}
 
 	GraphUtil::copyRoads(avenues, reducedAvenues);
-	GraphUtil::reduce(reducedAvenues);
+	if (reduce) {
+		GraphUtil::reduce(reducedAvenues);
+	}
 	GraphUtil::clean(reducedAvenues);
 
 	computePMParameters();
