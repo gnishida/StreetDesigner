@@ -149,6 +149,8 @@
     <ClCompile Include="..\mylib\common\Polygon3D.cpp" />
     <ClCompile Include="..\mylib\common\Polyline2D.cpp" />
     <ClCompile Include="..\mylib\common\Polyline3D.cpp" />
+    <ClCompile Include="..\mylib\common\TensorField.cpp" />
+    <ClCompile Include="..\mylib\common\TopNSearch.cpp" />
     <ClCompile Include="..\mylib\common\Util.cpp" />
     <ClCompile Include="..\mylib\pm\Block.cpp" />
     <ClCompile Include="..\mylib\pm\LandUse.cpp" />
@@ -232,6 +234,7 @@
     <ClCompile Include="MultiIntExRoadGenerator.cpp" />
     <ClCompile Include="ParcelGenerator.cpp" />
     <ClCompile Include="RoadGeneratorHelper.cpp" />
+    <ClCompile Include="SmoothWarpRoadGenerator.cpp" />
     <ClCompile Include="TerrainSizeInputDialog.cpp" />
     <ClCompile Include="UrbanGeometry.cpp" />
     <ClCompile Include="PropertyWidget.cpp" />
@@ -250,6 +253,8 @@
     <ClInclude Include="..\mylib\common\Polygon3D.h" />
     <ClInclude Include="..\mylib\common\Polyline2D.h" />
     <ClInclude Include="..\mylib\common\Polyline3D.h" />
+    <ClInclude Include="..\mylib\common\TensorField.h" />
+    <ClInclude Include="..\mylib\common\TopNSearch.h" />
     <ClInclude Include="..\mylib\common\Util.h" />
     <ClInclude Include="..\mylib\pm\Block.h" />
     <ClInclude Include="..\mylib\pm\LandUse.h" />
@@ -281,6 +286,7 @@
     <ClInclude Include="..\mylib\road\RoadVertex.h" />
     <ClInclude Include="MultiIntExRoadGenerator.h" />
     <ClInclude Include="RoadGeneratorHelper.h" />
+    <ClInclude Include="SmoothWarpRoadGenerator.h" />
     <ClInclude Include="UShapeRoadGenerator.h" />
     <ClInclude Include="WarpRoadGenerator.h" />
     <CustomBuild Include="PropertyWidget.h">

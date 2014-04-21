@@ -247,6 +247,15 @@
     <ClCompile Include="MultiIntExRoadGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
+    <ClCompile Include="SmoothWarpRoadGenerator.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\TopNSearch.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\mylib\common\TensorField.cpp">
+      <Filter>mylib\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -451,6 +460,15 @@
     </ClInclude>
     <ClInclude Include="MultiIntExRoadGenerator.h">
       <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SmoothWarpRoadGenerator.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\TopNSearch.h">
+      <Filter>mylib\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\mylib\common\TensorField.h">
+      <Filter>mylib\common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

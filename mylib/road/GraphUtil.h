@@ -67,6 +67,7 @@ public:
 	static void removeShortEdges(RoadGraph& roads, float threshold);
 	static void removeLinkEdges(RoadGraph& roads);
 	static Polyline2D finerEdge(RoadGraph& roads, RoadEdgeDesc e, float step = 1.0f);
+	static Polyline2D finerEdge(Polyline2D &polyline, float step = 1.0f);
 	static float distance(RoadGraph& roads, const QVector2D& pt, RoadEdgeDesc e, QVector2D &closestPt);
 
 	// File I/O

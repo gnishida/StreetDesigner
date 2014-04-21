@@ -30,6 +30,7 @@ This file is part of QtUrban.
 #include "MultiIntExRoadGenerator.h"
 #include "IntRoadGenerator.h"
 #include "WarpRoadGenerator.h"
+#include "SmoothWarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 #include "MainWindow.h"
 #include "UrbanGeometry.h"
@@ -102,6 +103,16 @@ void UrbanGeometry::generateRoadsWarp(ExFeature &feature) {
 	if (areas.selectedArea()->hintLine.size() == 0) return;
 
 	WarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
+	generator.generateRoadNetwork(G::getBool("animation"));
+
+	areas.selectedArea()->roads.adaptToTerrain(terrain);
+}
+
+void UrbanGeometry::generateRoadsSmoothWarp(ExFeature &feature) {
+	if (areas.selectedIndex == -1) return;
+	if (areas.selectedArea()->hintLine.size() == 0) return;
+
+	SmoothWarpRoadGenerator generator(mainWin, areas.selectedArea()->roads, areas.selectedArea()->area, areas.selectedArea()->hintLine, terrain, feature);
 	generator.generateRoadNetwork(G::getBool("animation"));
 
 	areas.selectedArea()->roads.adaptToTerrain(terrain);

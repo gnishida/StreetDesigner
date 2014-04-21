@@ -71,6 +71,7 @@ public:
 	void generateRoadsInterpolation(ExFeature &feature);
 	void generateRoadsUShape(ExFeature &feature);
 	void generateRoadsWarp(ExFeature &feature);
+	void generateRoadsSmoothWarp(ExFeature &feature);
 	void generateBlocks();
 	void generateParcels();
 

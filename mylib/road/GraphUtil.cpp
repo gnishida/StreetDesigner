@@ -1147,6 +1147,21 @@ Polyline2D GraphUtil::finerEdge(RoadGraph& roads, RoadEdgeDesc e, float step) {
 	return polyline;
 }
 
+Polyline2D GraphUtil::finerEdge(Polyline2D &polyline, float step) {
+	Polyline2D ret;
+
+	for (int i = 0; i < polyline.size() - 1; i++) {
+		QVector2D vec = polyline[i + 1] - polyline[i];
+		float length = vec.length();
+		for (int j = 0; j < length; j += step) {
+			ret.push_back(polyline[i] + vec * (float)j / length);
+		}
+	}
+	ret.push_back(polyline.last());
+
+	return ret;
+}
+
 /**
  * 指定された点から、指定されたエッジへの最短距離を返却する。
  */
