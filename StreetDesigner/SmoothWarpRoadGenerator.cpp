@@ -345,8 +345,10 @@ void SmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcD
 
 		QVector2D offset = polyline[0];
 		polyline.translate(offset * -1.0f);
-		//polyline.rotate(-Util::rad2deg(angle));
 
+		polyline.rotate(-Util::rad2deg(angle));
+
+		/*
 		polyline = GraphUtil::finerEdge(polyline, 10.0f);
 		Polyline2D rotatedPolyline;
 		rotatedPolyline.push_back(polyline[0]);
@@ -355,10 +357,12 @@ void SmoothWarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcD
 			float angle = tensorField.get(pt);
 			rotatedPolyline.push_back(rotatedPolyline[i - 1] + Util::rotate(polyline[i] - polyline[i - 1], angle));
 		}
+		*/
 
-		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, rotatedPolyline, 0.01f)) continue;
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.01f)) continue;
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.3f)) continue;
 
-		growRoadSegment(roadType, srcDesc, rotatedPolyline, feature.reducedRoads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
+		growRoadSegment(roadType, srcDesc, polyline, feature.reducedRoads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
 }
 
@@ -503,7 +507,8 @@ bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 	RoadVertexDesc tgtDesc;
 
 	if (byExample) {
-		snapFactor = 0.01f;
+		//snapFactor = 0.01f;
+		snapFactor *= 0.4f;
 	}
 
 	// スナップできるか？
@@ -514,7 +519,7 @@ bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 		tgtDesc = srcDesc;
 	} else if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
 		if (byExample && roads.graph[tgtDesc]->properties["generation_type"] == "example" && roads.graph[tgtDesc]->properties["group_id"] == roads.graph[srcDesc]->properties["group_id"]) {
-			angleTolerance = 0.01f;
+			angleTolerance = 0.3f;
 		}
 
 		// 他の頂点にスナップ
@@ -523,7 +528,7 @@ bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (GraphUtil::getEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
 		if (byExample && roads.graph[closestEdge]->properties["generation_type"] == "example" && roads.graph[tgtDesc]->properties["group_id"] == roads.graph[srcDesc]->properties["group_id"]) {
-			angleTolerance = 0.01f;
+			angleTolerance = 0.3f;
 		}
 
 		// 他のエッジにスナップ
@@ -563,7 +568,7 @@ bool SmoothWarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDe
 					} else {
 						roads.graph[tgtDesc]->properties["example_street_desc"] = next_ex_v_desc;
 					}
-					roads.graph[tgtDesc]->properties["angle"] = roads.graph[srcDesc]->properties["angle"];
+					roads.graph[tgtDesc]->properties["angle"] = tensorField.get(roads.graph[srcDesc]->pt);
 				}
 			} else {
 				seeds.push_back(tgtDesc);

@@ -341,7 +341,7 @@ void WarpRoadGenerator::attemptExpansion(int roadType, RoadVertexDesc srcDesc, s
 		polyline.translate(offset * -1.0f);
 		polyline.rotate(-Util::rad2deg(angle));
 
-		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.01f)) continue;
+		if (RoadGeneratorHelper::isRedundantEdge(roads, srcDesc, polyline, 0.3f)) continue;
 
 		growRoadSegment(roadType, srcDesc, polyline, feature.reducedRoads(roadType).graph[*ei]->lanes, tgt, true, roadSnapFactor, roadAngleTolerance, seeds);
 	}
@@ -488,7 +488,8 @@ bool WarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, co
 	RoadVertexDesc tgtDesc;
 
 	if (byExample) {
-		snapFactor = 0.01f;
+		//snapFactor = 0.01f;
+		snapFactor *= 0.4f;
 	}
 
 	// スナップできるか？
@@ -499,7 +500,7 @@ bool WarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, co
 		tgtDesc = srcDesc;
 	} else if (GraphUtil::getVertex(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, tgtDesc)) {
 		if (byExample && roads.graph[tgtDesc]->properties["generation_type"] == "example" && roads.graph[tgtDesc]->properties["group_id"] == roads.graph[srcDesc]->properties["group_id"]) {
-			angleTolerance = 0.01f;
+			angleTolerance = 0.3f;
 		}
 
 		// 他の頂点にスナップ
@@ -508,7 +509,7 @@ bool WarpRoadGenerator::growRoadSegment(int roadType, RoadVertexDesc srcDesc, co
 		if (GraphUtil::hasRedundantEdge(roads, tgtDesc, new_edge->polyline, angleTolerance)) return false;
 	} else if (GraphUtil::getEdge(roads, new_edge->polyline.last(), new_edge->polyline.length() * snapFactor, srcDesc, closestEdge, intPoint)) {
 		if (byExample && roads.graph[closestEdge]->properties["generation_type"] == "example" && roads.graph[tgtDesc]->properties["group_id"] == roads.graph[srcDesc]->properties["group_id"]) {
-			angleTolerance = 0.01f;
+			angleTolerance = 0.3f;
 		}
 
 		// 他のエッジにスナップ

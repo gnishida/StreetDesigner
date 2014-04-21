@@ -309,17 +309,26 @@ void RoadGraph::_generateMeshVerticesGroupBy(mylib::TextureManager* textureManag
 					color = QColor(255, 0, 0);
 					bgColor = QColor(128, 0, 0);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 1) {
-					color = QColor(0, 196, 0);
-					bgColor = QColor(0, 64, 0);
-				} else if (graph[*ei]->properties["group_id"].toInt() == 2) {
 					color = QColor(0, 0, 255);
 					bgColor = QColor(0, 0, 128);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 2) {
+					color = QColor(0, 196, 0);
+					bgColor = QColor(0, 64, 0);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 3) {
 					color = QColor(255, 0, 255);
 					bgColor = QColor(128, 0, 128);
 				} else if (graph[*ei]->properties["group_id"].toInt() == 4) {
 					color = QColor(128, 255, 255);
 					bgColor = QColor(0, 128, 128);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 5) {
+					color = QColor(255, 0, 0);
+					bgColor = QColor(128, 0, 0);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 6) {
+					color = QColor(0, 0, 255);
+					bgColor = QColor(0, 0, 128);
+				} else if (graph[*ei]->properties["group_id"].toInt() == 7) {
+					color = QColor(0, 196, 0);
+					bgColor = QColor(0, 64, 0);
 				} else {
 					color = QColor(255, 255, 255);
 					bgColor = QColor(128, 128, 128);
