@@ -16,12 +16,11 @@ This file is part of QtUrban.
 
 #pragma once
 
+#include "glew.h"
+
 #include "../common/common.h"
-
 #include "qtextstream.h"
-
 #include <QtOpenGL>
-
 
 namespace mylib {
 

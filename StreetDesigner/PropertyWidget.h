@@ -1,8 +1,10 @@
 #pragma once
 
+#include "glew.h"
+
 #include <QDockWidget>
 #include "ui_PropertyWidget.h"
-#include <road/RoadGraph.h>
+#include "RoadGraph.h"
 
 class MainWindow;
 

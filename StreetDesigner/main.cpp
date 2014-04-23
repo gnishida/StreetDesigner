@@ -14,10 +14,9 @@ This file is part of QtUrban.
     along with QtUrban.  If not, see <http://www.gnu.org/licenses/>.
 ***********************************************************************/
 
+#include "MainWindow.h"
 #include <QtGui/QApplication>
 #include <common/global.h>
-#include "MainWindow.h"
-#include <QVector3D>
 
 
 int main(int argc, char *argv[]) {

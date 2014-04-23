@@ -1,5 +1,7 @@
 #pragma once
 
+#include "glew.h"
+
 #include <QDockWidget>
 #include "ui_ControlWidget.h"
 

@@ -5,7 +5,7 @@
 #include <common/Util.h>
 #include <common/ConvexHull.h>
 #include <common/TopNSearch.h>
-#include <road/GraphUtil.h>
+#include "GraphUtil.h"
 #include "VerySmoothWarpRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 

@@ -26,8 +26,8 @@ This file is part of QtUrban.
 #include <render/Renderer.h>
 #include <render/RendererHelper.h>
 #include <render/Renderer.h>
-#include <road/RoadAreaSet.h>
-#include <road/feature/ExFeature.h>
+#include "RoadAreaSet.h"
+#include "ExFeature.h"
 #include <pm/Block.h>
 
 class MainWindow;

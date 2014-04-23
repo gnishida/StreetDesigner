@@ -1,10 +1,12 @@
-﻿#include <QTest>
+﻿#include "glew.h"
+
+#include <QTest>
 #include <boost/graph/planar_face_traversal.hpp>
 #include <boost/graph/boyer_myrvold_planar_test.hpp>
 #include <common/global.h>
 #include <common/Util.h>
 #include <common/ConvexHull.h>
-#include <road/GraphUtil.h>
+#include "GraphUtil.h"
 #include "IntRoadGenerator.h"
 #include "RoadGeneratorHelper.h"
 

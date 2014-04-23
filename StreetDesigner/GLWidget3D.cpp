@@ -15,13 +15,13 @@ This file is part of QtUrban.
 ***********************************************************************/
 
 #include "GLWidget3D.h"
+#include "MainWindow.h"
+#include "GraphUtil.h"
+#include <gl/GLU.h>
 #include <common/Util.h>
 #include <render/Terrain.h>
 #include <render/SimpleSkyBox.h>
 #include <render/RendererHelper.h>
-#include <road/GraphUtil.h>
-#include "MainWindow.h"
-#include <gl/GLU.h>
 
 
 GLWidget3D::GLWidget3D(MainWindow* mainWin) : QGLWidget(QGLFormat(QGL::SampleBuffers), (QWidget*)mainWin) {

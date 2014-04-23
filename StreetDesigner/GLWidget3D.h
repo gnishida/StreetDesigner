@@ -16,13 +16,15 @@ This file is part of QtUrban.
 
 #pragma once
 
+#include "VBORenderManager.h"
+
 #include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <render/camera_3d.h>
 #include <render/TextureManager.h>
 #include <render/SimpleSkyBox.h>
-#include <road/RoadAreaSet.h>
+#include "RoadAreaSet.h"
 
 
 class MainWindow;

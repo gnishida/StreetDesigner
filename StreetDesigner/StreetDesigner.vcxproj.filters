@@ -35,12 +35,6 @@
     <Filter Include="mylib\common">
       <UniqueIdentifier>{7dadc957-1804-45f4-9f0e-39dcae2e76be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mylib\road">
-      <UniqueIdentifier>{15db3bff-2bd6-4397-8ee1-f80779a039cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="mylib\road\feature">
-      <UniqueIdentifier>{ec726995-76c7-4c65-818f-ca19a1cb2d7a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mylib\render">
       <UniqueIdentifier>{495e6131-d679-4400-a137-719b41a50ae6}</UniqueIdentifier>
     </Filter>
@@ -49,6 +43,12 @@
     </Filter>
     <Filter Include="mylib\pm">
       <UniqueIdentifier>{a4abef06-b3ea-48cd-a035-7ef4acdb9268}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="render">
+      <UniqueIdentifier>{eca9c950-ce30-4dba-9e0d-9dd7c9f4076d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render PM">
+      <UniqueIdentifier>{3922a751-7090-4178-8e56-b21624550dac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,24 +66,6 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_MainWindow.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\GraphUtil.cpp">
-      <Filter>mylib\road</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\RoadArea.cpp">
-      <Filter>mylib\road</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\RoadAreaSet.cpp">
-      <Filter>mylib\road</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\RoadEdge.cpp">
-      <Filter>mylib\road</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\RoadGraph.cpp">
-      <Filter>mylib\road</Filter>
-    </ClCompile>
-    <ClCompile Include="..\mylib\road\RoadVertex.cpp">
-      <Filter>mylib\road</Filter>
     </ClCompile>
     <ClCompile Include="..\mylib\common\BBox.cpp">
       <Filter>mylib\common</Filter>
@@ -208,9 +190,6 @@
     <ClCompile Include="..\mylib\render\RenderablePolygon.cpp">
       <Filter>mylib\render</Filter>
     </ClCompile>
-    <ClCompile Include="..\mylib\road\feature\ExFeature.cpp">
-      <Filter>mylib\road\feature</Filter>
-    </ClCompile>
     <ClCompile Include="..\mylib\util\PolylineBuilder.cpp">
       <Filter>mylib\util</Filter>
     </ClCompile>
@@ -259,6 +238,39 @@
     <ClCompile Include="VerySmoothWarpRoadGenerator.cpp">
       <Filter>Files</Filter>
     </ClCompile>
+    <ClCompile Include="ExFeature.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphUtil.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadArea.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadAreaSet.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadEdge.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadGraph.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadVertex.cpp">
+      <Filter>Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VBORenderManager.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="VBORoadGraph.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="VBOShader.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
+    <ClCompile Include="VBOUtil.cpp">
+      <Filter>render</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MainWindow.ui">
@@ -298,24 +310,6 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_ControlWidget.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\GraphUtil.h">
-      <Filter>mylib\road</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\RoadArea.h">
-      <Filter>mylib\road</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\RoadAreaSet.h">
-      <Filter>mylib\road</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\RoadEdge.h">
-      <Filter>mylib\road</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\RoadGraph.h">
-      <Filter>mylib\road</Filter>
-    </ClInclude>
-    <ClInclude Include="..\mylib\road\RoadVertex.h">
-      <Filter>mylib\road</Filter>
     </ClInclude>
     <ClInclude Include="..\mylib\common\BBox.h">
       <Filter>mylib\common</Filter>
@@ -425,9 +419,6 @@
     <ClInclude Include="..\mylib\render\RenderablePolygon.h">
       <Filter>mylib\render</Filter>
     </ClInclude>
-    <ClInclude Include="..\mylib\road\feature\ExFeature.h">
-      <Filter>mylib\road\feature</Filter>
-    </ClInclude>
     <ClInclude Include="..\mylib\util\PolylineBuilder.h">
       <Filter>mylib\util</Filter>
     </ClInclude>
@@ -476,5 +467,46 @@
     <ClInclude Include="VerySmoothWarpRoadGenerator.h">
       <Filter>Files</Filter>
     </ClInclude>
+    <ClInclude Include="ExFeature.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphUtil.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadArea.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadAreaSet.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadEdge.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadGraph.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RoadVertex.h">
+      <Filter>Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VBORenderManager.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="VBORoadGraph.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="VBOShader.h">
+      <Filter>render</Filter>
+    </ClInclude>
+    <ClInclude Include="VBOUtil.h">
+      <Filter>render</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\data\shaders\lc_fragment_sk.glsl">
+      <Filter>render</Filter>
+    </None>
+    <None Include="..\data\shaders\lc_vertex_sk.glsl">
+      <Filter>render</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -16,6 +16,8 @@ This file is part of QtUrban.
 
 #pragma once
 
+#include "glew.h"
+
 #include <render/GeometryObject.h>
 #include "TerrainCell.h"
 #include <render/TextureManager.h>

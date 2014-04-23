@@ -16,6 +16,7 @@ This file is part of QtUrban.
 
 #pragma once
 
+#include "glew.h"
 #include <vector>
 #include "camera_3d.h"
 #include "TextureManager.h"

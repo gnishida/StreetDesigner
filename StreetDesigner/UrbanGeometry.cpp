@@ -24,7 +24,7 @@ This file is part of QtUrban.
 #include <render/Texture.h>
 #include <render/GeometryObject.h>
 #include <render/Terrain.h>
-#include <road/GraphUtil.h>
+#include "GraphUtil.h"
 #include "UShapeRoadGenerator.h"
 #include "MultiExRoadGenerator.h"
 #include "MultiIntExRoadGenerator.h"

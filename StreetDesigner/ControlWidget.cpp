@@ -3,8 +3,8 @@
 #include "UrbanGeometry.h"
 #include "GLWidget3D.h"
 #include <common/global.h>
-#include <road/GraphUtil.h>
-#include <road/feature/ExFeature.h>
+#include "GraphUtil.h"
+#include "ExFeature.h"
 
 
 ControlWidget::ControlWidget(MainWindow* mainWin) : QDockWidget("Control Widget", (QWidget*)mainWin) {

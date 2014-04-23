@@ -1,13 +1,14 @@
 #pragma once
 
+#include "glew.h"
+
 #include <QtGui/QMainWindow>
 #include "ui_MainWindow.h"
+#include "GLWidget3D.h"
 #include "ControlWidget.h"
 #include "PropertyWidget.h"
-#include "GLWidget3D.h"
 #include "UrbanGeometry.h"
 #include <QToolBar>
-
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

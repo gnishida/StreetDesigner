@@ -1,5 +1,5 @@
-#include <road/GraphUtil.h>
 #include "MainWindow.h"
+#include "GraphUtil.h"
 #include "TerrainSizeInputDialog.h"
 
 MainWindow::MainWindow(QWidget *parent, Qt::WFlags flags) : QMainWindow(parent, flags) {

@@ -2,7 +2,7 @@
 #include <common/global.h>
 #include <common/Util.h>
 #include <common/ConvexHull.h>
-#include <road/GraphUtil.h>
+#include "GraphUtil.h"
 #include "RoadGeneratorHelper.h"
 
 /**
