@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include "glew.h"
-
 #include <vector>
 #include <QVector2D>
 #include <QVector3D>

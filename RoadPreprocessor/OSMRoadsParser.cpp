@@ -91,9 +91,9 @@ void OSMRoadsParser::handleTag(const QXmlAttributes &atts) {
 			way.type = RoadEdge::TYPE_HIGHWAY;
 			way.link = true;
 		} else if (value=="primary") {
-			way.type = RoadEdge::TYPE_BOULEVARD;
+			way.type = RoadEdge::TYPE_AVENUE;
 		} else if (value=="primary_link") {
-			way.type = RoadEdge::TYPE_BOULEVARD;
+			way.type = RoadEdge::TYPE_AVENUE;
 			way.link = true;
 		} else if (value=="secondary") {
 			way.type = RoadEdge::TYPE_AVENUE;
