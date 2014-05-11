@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'ControlWidget.ui'
 **
-** Created: Sat Apr 12 19:22:08 2014
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Sun May 11 17:31:17 2014
+**      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -57,6 +57,8 @@ public:
     QLineEdit *lineEditVertexPos;
     QLabel *label_8;
     QLineEdit *lineEditVertexNeighbors;
+    QLabel *label_11;
+    QLineEdit *lineEditVertexOnBoundary;
     QGroupBox *groupBox_6;
     QPushButton *pushButtonReduce;
     QCheckBox *checkBoxShowHighway;
@@ -75,7 +77,7 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         groupBox = new QGroupBox(dockWidgetContents);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(10, 180, 171, 131));
+        groupBox->setGeometry(QRect(10, 200, 171, 131));
         label = new QLabel(groupBox);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 20, 31, 16));
@@ -139,7 +141,7 @@ public:
         pushButtonClean->setStyleSheet(QString::fromUtf8(""));
         groupBox_5 = new QGroupBox(dockWidgetContents);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(10, 80, 171, 91));
+        groupBox_5->setGeometry(QRect(10, 80, 171, 111));
         label_6 = new QLabel(groupBox_5);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 20, 31, 16));
@@ -154,10 +156,16 @@ public:
         lineEditVertexPos->setGeometry(QRect(80, 40, 81, 20));
         label_8 = new QLabel(groupBox_5);
         label_8->setObjectName(QString::fromUtf8("label_8"));
-        label_8->setGeometry(QRect(10, 60, 51, 16));
+        label_8->setGeometry(QRect(10, 80, 51, 16));
         lineEditVertexNeighbors = new QLineEdit(groupBox_5);
         lineEditVertexNeighbors->setObjectName(QString::fromUtf8("lineEditVertexNeighbors"));
-        lineEditVertexNeighbors->setGeometry(QRect(80, 60, 81, 20));
+        lineEditVertexNeighbors->setGeometry(QRect(80, 80, 81, 20));
+        label_11 = new QLabel(groupBox_5);
+        label_11->setObjectName(QString::fromUtf8("label_11"));
+        label_11->setGeometry(QRect(10, 60, 51, 16));
+        lineEditVertexOnBoundary = new QLineEdit(groupBox_5);
+        lineEditVertexOnBoundary->setObjectName(QString::fromUtf8("lineEditVertexOnBoundary"));
+        lineEditVertexOnBoundary->setGeometry(QRect(80, 60, 81, 20));
         groupBox_6 = new QGroupBox(dockWidgetContents);
         groupBox_6->setObjectName(QString::fromUtf8("groupBox_6"));
         groupBox_6->setGeometry(QRect(10, 420, 171, 61));
@@ -203,6 +211,7 @@ public:
         label_6->setText(QApplication::translate("ControlWidget", "ID", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("ControlWidget", "Location", 0, QApplication::UnicodeUTF8));
         label_8->setText(QApplication::translate("ControlWidget", "Neighbors", 0, QApplication::UnicodeUTF8));
+        label_11->setText(QApplication::translate("ControlWidget", "Boundary?", 0, QApplication::UnicodeUTF8));
         groupBox_6->setTitle(QApplication::translate("ControlWidget", "Reduce", 0, QApplication::UnicodeUTF8));
         pushButtonReduce->setText(QApplication::translate("ControlWidget", "Reduce", 0, QApplication::UnicodeUTF8));
         checkBoxShowHighway->setText(QApplication::translate("ControlWidget", "Highways", 0, QApplication::UnicodeUTF8));

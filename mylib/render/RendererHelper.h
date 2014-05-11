@@ -1,7 +1,5 @@
 #pragma once
 
-#include "glew.h"
-
 #include "../common/Polygon2D.h"
 #include "../common/Polygon3D.h"
 #include "../common/Polyline2D.h"

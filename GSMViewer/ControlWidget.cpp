@@ -33,11 +33,14 @@ void ControlWidget::setRoadVertex(RoadVertexDesc vertexDesc, RoadVertexPtr selec
 	QString desc("");
 	QString location("");
 	QString neighbors("");
+	QString onBoundary("");
 
 	if (selectedVertex != NULL) {
 		desc.setNum(vertexDesc);
 
 		location = QString("(%1, %2)").arg(selectedVertex->pt.x(), 0, 'f', 0).arg(selectedVertex->pt.y(), 0, 'f', 0);
+
+		onBoundary = selectedVertex->onBoundary ? "true" : "false";
 
 		std::vector<RoadVertexDesc> n = GraphUtil::getNeighbors(mainWin->glWidget->editor->roads, vertexDesc);
 		for (int i = 0; i < n.size(); i++) {
@@ -52,6 +55,7 @@ void ControlWidget::setRoadVertex(RoadVertexDesc vertexDesc, RoadVertexPtr selec
 	ui.lineEditVertexDesc->setText(desc);
 	ui.lineEditVertexPos->setText(location);
 	ui.lineEditVertexNeighbors->setText(neighbors);
+	ui.lineEditVertexOnBoundary->setText(onBoundary);
 }
 
 /**

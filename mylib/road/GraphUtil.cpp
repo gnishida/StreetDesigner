@@ -1198,11 +1198,14 @@ void GraphUtil::loadRoads(RoadGraph& roads, const QString& filename, int roadTyp
 	for (int i = 0; i < nVertices; i++) {
 		RoadVertexDesc id;
 		float x, y;
+		unsigned int onBoundary;
 		fread(&id, sizeof(RoadVertexDesc), 1, fp);
 		fread(&x, sizeof(float), 1, fp);
 		fread(&y, sizeof(float), 1, fp);
+		fread(&onBoundary, sizeof(unsigned int), 1, fp);
 
 		RoadVertexPtr vertex = RoadVertexPtr(new RoadVertex(QVector2D(x, y)));
+		vertex->onBoundary = onBoundary == 1;
 
 		RoadVertexDesc desc = boost::add_vertex(roads.graph);
 		roads.graph[desc] = vertex;
@@ -1270,7 +1273,7 @@ void GraphUtil::saveRoads(RoadGraph& roads, const QString& filename) {
 		if (!roads.graph[*vi]->valid) continue;
 
 		// isolatedの頂点は、保存しない
-		if (getDegree(roads, *vi) == 0) continue;
+		//if (getDegree(roads, *vi) == 0) continue;
 
 		RoadVertexPtr v = roads.graph[*vi];
 	
@@ -1280,6 +1283,10 @@ void GraphUtil::saveRoads(RoadGraph& roads, const QString& filename) {
 		fwrite(&desc, sizeof(RoadVertexDesc), 1, fp);
 		fwrite(&x, sizeof(float), 1, fp);
 		fwrite(&y, sizeof(float), 1, fp);
+
+		// onBoundary? (1/0)
+		unsigned int onBoundary = v->onBoundary ? 1 : 0;
+		fwrite(&onBoundary, sizeof(unsigned int), 1, fp);
 	}
 
 	int nEdges = getNumEdges(roads);//boost::num_edges(roads.graph);

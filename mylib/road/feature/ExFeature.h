@@ -7,7 +7,7 @@
 #include <boost/shared_ptr.hpp>
 #include <common/Polygon2D.h>
 #include <common/Histogram.h>
-#include "RoadGraph.h"
+#include "../RoadGraph.h"
 
 class ExFeature {
 public:

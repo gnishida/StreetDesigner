@@ -24,7 +24,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>180</y>
+      <y>200</y>
       <width>171</width>
       <height>131</height>
      </rect>
@@ -281,7 +281,7 @@
       <x>10</x>
       <y>80</y>
       <width>171</width>
-      <height>91</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="title">
@@ -337,7 +337,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>80</y>
        <width>51</width>
        <height>16</height>
       </rect>
@@ -347,6 +347,29 @@
      </property>
     </widget>
     <widget class="QLineEdit" name="lineEditVertexNeighbors">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>80</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>51</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Boundary?</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEditVertexOnBoundary">
      <property name="geometry">
       <rect>
        <x>80</x>
